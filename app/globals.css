@@ -1,0 +1,435 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Background & Surfaces */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 10%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+
+    /* Primary - Canva Purple */
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary */
+    --secondary: 240 10% 96%;
+    --secondary-foreground: 240 10% 25%;
+
+    /* Muted */
+    --muted: 240 10% 96%;
+    --muted-foreground: 240 5% 46%;
+
+    /* Accent - Cyan */
+    --accent: 187 85% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 25%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 10% 96%;
+    --sidebar-accent-foreground: 240 10% 25%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 262 83% 58%;
+
+    /* Brand Colors - Purple accent to match hero image */
+    --gradient-start: 262 83% 58%;
+    --gradient-middle: 270 75% 55%;
+    --gradient-end: 280 70% 60%;
+    
+    --purple: 262 83% 58%;
+    --purple-light: 262 83% 95%;
+    
+    --cyan: 187 85% 53%;
+    --cyan-light: 187 85% 95%;
+    
+    --magenta: 300 70% 55%;
+    --magenta-light: 300 70% 95%;
+    
+    --orange: 25 95% 60%;
+    --orange-light: 25 95% 95%;
+    
+    --yellow: 45 95% 55%;
+    --yellow-light: 45 95% 95%;
+
+    /* Surface Variants */
+    --surface-elevated: 0 0% 100%;
+    --surface-overlay: 240 10% 98%;
+  }
+
+  .dark {
+    --background: 240 10% 6%;
+    --foreground: 0 0% 98%;
+    
+    --card: 240 10% 10%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 10% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 262 83% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 240 10% 15%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 55%;
+
+    --accent: 187 85% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 262 83% 65%;
+
+    --sidebar-background: 240 10% 8%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 262 83% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 10% 15%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 240 10% 18%;
+    --sidebar-ring: 262 83% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Professional Hero Gradient - lighter, sophisticated */
+  .gradient-hero-canva {
+    background: hsl(220, 60%, 97%);
+    background-image: 
+      linear-gradient(0deg, #fff 15%, transparent 50%),
+      linear-gradient(135deg, hsl(220, 70%, 96%) 0%, hsl(240, 50%, 94%) 30%, hsl(260, 40%, 92%) 60%, hsl(200, 50%, 95%) 100%);
+  }
+
+  /* Gradient Text - updated to match Canva */
+  .gradient-text {
+    background: linear-gradient(90deg, #08c2cc, #5a32fa 34%, #7d2ae8 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-white {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.9) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Floating Cards */
+  .floating-card {
+    @apply rounded-2xl overflow-hidden shadow-2xl;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .floating-card-1 {
+    background: linear-gradient(135deg, #00D4FF 0%, #7B2FF7 100%);
+  }
+
+  .floating-card-2 {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+  }
+
+  .floating-card-3 {
+    background: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%);
+  }
+
+  .floating-card-4 {
+    background: linear-gradient(135deg, #FFB347 0%, #FFCC33 100%);
+  }
+
+  .floating-card-5 {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  }
+
+  /* Cards */
+  .card-elevated {
+    @apply bg-card rounded-2xl border border-border/50 shadow-lg shadow-black/5;
+  }
+
+  .card-interactive {
+    @apply card-elevated transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/30;
+  }
+
+  .card-glass {
+    @apply bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20;
+  }
+
+  /* Buttons */
+  .btn-gradient {
+    @apply relative overflow-hidden rounded-full px-8 py-4 font-semibold text-white transition-all duration-300;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gradient-start)) 0%,
+      hsl(var(--gradient-end)) 100%
+    );
+  }
+
+  .btn-gradient:hover {
+    @apply shadow-xl scale-105;
+    box-shadow: 0 20px 40px -10px hsl(var(--primary) / 0.5);
+  }
+
+  .btn-white {
+    @apply bg-white text-foreground rounded-full px-8 py-4 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105;
+  }
+
+  .btn-outline-white {
+    @apply border-2 border-white/30 bg-white/10 text-white rounded-full px-8 py-4 font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50;
+  }
+
+  /* Feature Icon */
+  .feature-icon {
+    @apply w-16 h-16 rounded-2xl flex items-center justify-center;
+  }
+
+  .feature-icon-purple {
+    @apply feature-icon;
+    background: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(280, 70%, 50%) 100%);
+  }
+
+  .feature-icon-cyan {
+    @apply feature-icon;
+    background: linear-gradient(135deg, hsl(187, 85%, 53%) 0%, hsl(200, 80%, 50%) 100%);
+  }
+
+  .feature-icon-orange {
+    @apply feature-icon;
+    background: linear-gradient(135deg, hsl(25, 95%, 60%) 0%, hsl(45, 95%, 55%) 100%);
+  }
+
+  .feature-icon-magenta {
+    @apply feature-icon;
+    background: linear-gradient(135deg, hsl(300, 70%, 55%) 0%, hsl(330, 80%, 60%) 100%);
+  }
+
+  /* Badge */
+  .badge-new {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+    background: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(187, 85%, 53%) 100%);
+    color: white;
+  }
+
+  /* Section backgrounds */
+  .section-light {
+    @apply bg-gradient-to-b from-background to-secondary/30;
+  }
+
+  .section-gradient {
+    background: linear-gradient(
+      180deg,
+      hsl(262, 83%, 98%) 0%,
+      hsl(187, 85%, 98%) 100%
+    );
+  }
+}
+
+@layer utilities {
+  /* Canva-style Animations */
+  .animate-float-slow {
+    animation: floatSlow 8s ease-in-out infinite;
+  }
+
+  .animate-float-medium {
+    animation: floatMedium 6s ease-in-out infinite;
+  }
+
+  .animate-float-fast {
+    animation: floatFast 4s ease-in-out infinite;
+  }
+
+  .animate-float-delayed-1 {
+    animation: floatSlow 8s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  .animate-float-delayed-2 {
+    animation: floatMedium 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+
+  .animate-float-delayed-3 {
+    animation: floatFast 4s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-up-delayed {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes floatSlow {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-30px) rotate(2deg);
+    }
+  }
+
+  @keyframes floatMedium {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(-2deg);
+    }
+  }
+
+  @keyframes floatFast {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(262, 83%, 58% / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(262, 83%, 58% / 0.5);
+    }
+  }
+
+  /* Stagger animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, hsl(262, 83%, 58%), hsl(187, 85%, 53%)) border-box;
+    border: 2px solid transparent;
+  }
+
+  /* Text shadow for hero */
+  .text-shadow-hero {
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  }
+}
