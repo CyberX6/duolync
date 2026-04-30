@@ -35,7 +35,7 @@ const MagicExpandSection = () => {
           style={{ opacity: imageOpacity }}
         >
           <Image
-            src={expandHeroImage}
+            src={expandHeroImage.src}
             alt="Creator with phone"
             fill
             className="object-cover"

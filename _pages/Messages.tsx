@@ -36,7 +36,7 @@ const Messages = () => {
   const { profile } = useAuth();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const toProfileId = searchParams.get("to");
+  const toProfileId = searchParams?.get("to");
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);

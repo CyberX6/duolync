@@ -87,6 +87,8 @@ const HeroSection = () => {
               className="w-full h-auto max-h-[500px] lg:max-h-[550px] object-cover object-top lg:rounded-l-3xl"
               sizes="(max-width: 1024px) 100vw, 55vw"
               priority
+              width="1000"
+              height="1000"
             />
           </motion.div>
         </div>

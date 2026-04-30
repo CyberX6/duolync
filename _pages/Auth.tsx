@@ -13,8 +13,8 @@ type AuthMode = "select" | "login" | "signup";
 const Auth = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initialType = searchParams.get("type") as UserType;
-  const initialMode = searchParams.get("mode") as AuthMode | null;
+  const initialType = searchParams?.get("type") as UserType;
+  const initialMode = searchParams?.get("mode") as AuthMode | null;
 
   const [userType, setUserType] = useState<UserType>(initialType);
   const [mode, setMode] = useState<AuthMode>(
