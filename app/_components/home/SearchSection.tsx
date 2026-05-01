@@ -34,8 +34,8 @@ export function SearchSection() {
     : creators;
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.09) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -47,7 +47,7 @@ export function SearchSection() {
         >
           {/* Left: content */}
           <div>
-            <motion.div variants={fadeUp} transition={{ duration: 0.65 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.35)", color: PURPLE }}>
+            <motion.div variants={fadeUp} transition={{ duration: 0.65 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.35)", color: PURPLE }}>
               <Search size={11} />
               AI Influencer Search
             </motion.div>
@@ -98,10 +98,10 @@ export function SearchSection() {
 
           {/* Right: interactive mockup */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }}>
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Search bar */}
-              <div className="p-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="p-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
+                <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                   <Search size={15} className="text-slate-600 shrink-0" />
                   <input
                     type="text"
@@ -141,7 +141,7 @@ export function SearchSection() {
                       animate={isInView ? { opacity: 1, scale: 1 } : {}}
                       transition={{ delay: 0.4 + i * 0.1 }}
                       className="rounded-2xl overflow-hidden transition-all hover:scale-[1.03] cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+                      style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}
                     >
                       <div className={`h-20 w-full bg-gradient-to-br ${c.color} relative`}>
                         <div className="absolute top-2 right-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white" style={{ background: "rgba(0,0,0,0.5)" }}>
@@ -161,7 +161,7 @@ export function SearchSection() {
                 </div>
 
                 {/* Platform row */}
-                <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid var(--bg-card-hover)" }}>
                   <div className="text-[10px] text-slate-600">Platforms</div>
                   <div className="flex gap-2">
                     {[

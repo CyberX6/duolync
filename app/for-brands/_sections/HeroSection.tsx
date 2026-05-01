@@ -22,16 +22,16 @@ export function HeroSection() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#09090f]">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[var(--bg-page)]">
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/3 w-[700px] h-[700px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]" style={{ background: "radial-gradient(circle, rgba(8,194,204,0.08) 0%, transparent 70%)" }} />
+        <div className="absolute top-0 left-1/3 w-[700px] h-[700px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]" style={{ background: "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" }} />
         {/* Dot grid */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, var(--bg-card-hover) 1px, transparent 1px)",
             backgroundSize: "36px 36px",
           }}
         />
@@ -52,7 +52,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm font-medium mb-8 backdrop-blur-sm"
             style={{
               borderColor: "rgba(124,58,237,0.4)",
-              background: "rgba(124,58,237,0.1)",
+              background: "var(--glow-purple)",
               color: "#c4b5fd",
             }}
           >
@@ -106,11 +106,11 @@ export function HeroSection() {
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
               style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                background: "var(--bg-card-hover)",
+                border: "1px solid var(--border-card-strong)",
               }}
               onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(124,58,237,0.5)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
             />
             <button
               className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]"
@@ -133,7 +133,7 @@ export function HeroSection() {
                 <div
                   key={i}
                   className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2`}
-                  style={{ borderColor: "#09090f" }}
+                  style={{ borderColor: "var(--bg-page)" }}
                 />
               ))}
             </div>
@@ -155,8 +155,8 @@ export function HeroSection() {
               key={stat.label}
               className="text-center p-5 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03]"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--bg-card-subtle)",
+                border: "1px solid var(--bg-card-hover)",
               }}
             >
               <div

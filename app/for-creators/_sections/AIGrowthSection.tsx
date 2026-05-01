@@ -62,8 +62,8 @@ export function AIGrowthSection() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
-      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(52,211,153,0.07) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
+      <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-emerald) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -97,8 +97,8 @@ export function AIGrowthSection() {
                   onClick={() => setActiveTab(i)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200"
                   style={{
-                    background: activeTab === i ? cat.bg : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${activeTab === i ? cat.border : "rgba(255,255,255,0.07)"}`,
+                    background: activeTab === i ? cat.bg : "var(--bg-card-hover)",
+                    border: `1px solid ${activeTab === i ? cat.border : "var(--border-card)"}`,
                     color: activeTab === i ? cat.color : "#64748b",
                   }}
                 >
@@ -142,9 +142,9 @@ export function AIGrowthSection() {
 
           {/* Right: AI dashboard visual */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }}>
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Header */}
-              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)", background: "rgba(255,255,255,0.02)" }}>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #059669, #0891b2)" }}>
                   <Brain size={14} className="text-white" />
                 </div>
@@ -158,9 +158,9 @@ export function AIGrowthSection() {
               </div>
 
               {/* Stats row */}
-              <div className="grid grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.04)" }}>
+              <div className="grid grid-cols-3 gap-px" style={{ background: "var(--bg-card-hover)" }}>
                 {audienceStats.map((s, i) => (
-                  <div key={i} className="p-4 text-center" style={{ background: "#07080f" }}>
+                  <div key={i} className="p-4 text-center" style={{ background: "var(--bg-page-alt)" }}>
                     <div className="text-lg font-bold font-display" style={{ color: s.color }}>{s.value}</div>
                     <div className="text-[9px] text-slate-500 mb-0.5">{s.label}</div>
                     <div className="text-[9px] font-medium" style={{ color: s.positive ? "#34d399" : "#f87171" }}>{s.change}</div>
@@ -183,7 +183,7 @@ export function AIGrowthSection() {
                         <span className="text-slate-500">{item.label}</span>
                         <span className="font-medium" style={{ color: item.color }}>{item.value}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+                      <div className="h-1.5 rounded-full" style={{ background: "var(--bg-card-hover)" }}>
                         <motion.div
                           className="h-1.5 rounded-full"
                           initial={{ width: 0 }}

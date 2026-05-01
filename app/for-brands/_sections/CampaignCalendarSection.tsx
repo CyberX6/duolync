@@ -29,8 +29,8 @@ export function CampaignCalendarSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -43,9 +43,9 @@ export function CampaignCalendarSection() {
           {/* Left: Dashboard visual */}
           <motion.div variants={fadeUp} className="order-2 lg:order-1">
             {/* Month header */}
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card-strong)" }}>
               {/* Top bar */}
-              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <div className="flex items-center gap-2">
                   <Calendar size={16} style={{ color: "#67e8f9" }} />
                   <span className="text-white font-semibold text-sm">May 2026 — Campaign Timeline</span>
@@ -81,8 +81,8 @@ export function CampaignCalendarSection() {
                       key={d}
                       className="relative text-center py-1.5 rounded-lg text-[10px] font-medium transition-all duration-200"
                       style={{
-                        background: eventDays[d] ? `${eventDays[d]}22` : d === 1 ? "rgba(255,255,255,0.06)" : "transparent",
-                        color: eventDays[d] ? eventDays[d] : d === 1 ? "white" : "rgba(100,116,139,0.7)",
+                        background: eventDays[d] ? `${eventDays[d]}22` : d === 1 ? "var(--bg-card-hover)" : "transparent",
+                        color: eventDays[d] ? eventDays[d] : d === 1 ? "var(--text-base)" : "rgba(100,116,139,0.7)",
                         border: eventDays[d] ? `1px solid ${eventDays[d]}50` : "1px solid transparent",
                       }}
                     >
@@ -95,7 +95,7 @@ export function CampaignCalendarSection() {
                 </div>
 
                 {/* Task list */}
-                <div className="mt-4 space-y-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1rem" }}>
+                <div className="mt-4 space-y-2" style={{ borderTop: "1px solid var(--bg-card-hover)", paddingTop: "1rem" }}>
                   {tasks.slice(0, 4).map((task, i) => (
                     <motion.div
                       key={i}
@@ -129,7 +129,7 @@ export function CampaignCalendarSection() {
               </div>
 
               {/* Stats row */}
-              <div className="grid grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.05)", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="grid grid-cols-3 gap-px" style={{ background: "var(--bg-card-hover)", borderTop: "1px solid var(--bg-card-hover)" }}>
                 {[
                   { icon: Users, value: "12", label: "Creators" },
                   { icon: CheckCircle2, value: "8/20", label: "Posts done" },

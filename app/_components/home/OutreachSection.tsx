@@ -14,8 +14,8 @@ export function OutreachSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -27,9 +27,9 @@ export function OutreachSection() {
         >
           {/* Left: Email mockup */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }} className="order-2 lg:order-1">
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Header */}
-              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
                   <Mail size={17} className="text-white" />
                 </div>
@@ -42,7 +42,7 @@ export function OutreachSection() {
 
               {/* Campaign brief card */}
               <div className="p-5">
-                <div className="rounded-2xl p-4 mb-4 flex items-start gap-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="rounded-2xl p-4 mb-4 flex items-start gap-4" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shrink-0 flex items-center justify-center">
                     <Sparkles size={22} className="text-white" />
                   </div>
@@ -58,13 +58,13 @@ export function OutreachSection() {
                   <button className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
                     Accept Deal
                   </button>
-                  <button className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", color: "#94a3b8" }}>
+                  <button className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#94a3b8" }}>
                     View Profile
                   </button>
                 </div>
 
                 {/* Bulk send preview */}
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1rem" }}>
+                <div style={{ borderTop: "1px solid var(--bg-card-hover)", paddingTop: "1rem" }}>
                   <div className="text-[11px] font-semibold text-slate-500 mb-2.5">Bulk outreach — 48 creators queued</div>
                   <div className="space-y-2">
                     {[
@@ -88,7 +88,7 @@ export function OutreachSection() {
                       </motion.div>
                     ))}
                   </div>
-                  <div className="flex items-center gap-2 mt-3 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="flex items-center gap-2 mt-3 rounded-xl px-3 py-2" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
                     <input placeholder="Add a note..." className="flex-1 bg-transparent text-[11px] text-slate-600 placeholder:text-slate-700 focus:outline-none" readOnly />
                     <Send size={11} style={{ color: CYAN }} />
                   </div>

@@ -72,10 +72,10 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer style={{ background: "#060609" }}>
+    <footer style={{ background: "var(--bg-footer)" }}>
       <div className="container mx-auto px-4 py-16 md:py-20">
         {/* Top section */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-12 pb-14" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-12 pb-14" style={{ borderBottom: "1px solid var(--border-card)" }}>
           {/* Brand col */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
@@ -85,7 +85,7 @@ const Footer = () => {
               >
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="font-display font-bold text-lg text-white tracking-tight">
+              <span className="font-display font-bold text-lg tracking-tight" style={{ color: "var(--text-base)" }}>
                 Nexly
               </span>
             </Link>
@@ -102,7 +102,7 @@ const Footer = () => {
                   href={s.href}
                   aria-label={s.name}
                   className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-600 transition-all duration-200 hover:text-white hover:scale-[1.08]"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}
+                  style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}
                 >
                   {s.icon}
                 </a>

@@ -13,13 +13,13 @@ const PINK = "#f472b6";
 const EMERALD = "#34d399";
 const AMBER = "#fcd34d";
 
-function GlassCard({ children, className = "", borderColor = "rgba(255,255,255,0.07)", glowColor }: { children: React.ReactNode; className?: string; borderColor?: string; glowColor?: string }) {
+function GlassCard({ children, className = "", borderColor = "var(--border-card)", glowColor }: { children: React.ReactNode; className?: string; borderColor?: string; glowColor?: string }) {
   return (
     <motion.div
       variants={fadeUp}
       transition={{ duration: 0.55 }}
       className={`rounded-3xl p-6 overflow-hidden relative group transition-all duration-500 ${className}`}
-      style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${borderColor}`, backdropFilter: "blur(12px)" }}
+      style={{ background: "var(--bg-card)", border: `1px solid ${borderColor}`, backdropFilter: "blur(12px)" }}
       whileHover={{ scale: 1.015, transition: { duration: 0.2 } }}
     >
       {glowColor && (
@@ -35,8 +35,8 @@ export function BentoSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full blur-[160px] pointer-events-none" style={{ background: "rgba(124,58,237,0.05)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full blur-[160px] pointer-events-none" style={{ background: "var(--glow-purple)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -46,7 +46,7 @@ export function BentoSection() {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.55 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.55 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE }}>
             <Sparkles size={11} />
             Platform Capabilities
           </motion.div>
@@ -76,7 +76,7 @@ export function BentoSection() {
             </div>
             <h3 className="font-display font-bold text-white text-xl mb-1">Find creators that actually convert</h3>
             <p className="text-slate-500 text-sm mb-5">Search 10M+ verified creators by niche, platform, engagement rate, and audience demographics.</p>
-            <div className="flex items-center gap-2 rounded-xl px-3 py-2.5 mb-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="flex items-center gap-2 rounded-xl px-3 py-2.5 mb-3" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
               <Search size={13} className="text-slate-600" />
               <span className="text-slate-600 text-xs flex-1">Search by niche, hashtag, or platform...</span>
               <span className="text-[10px] px-2 py-0.5 rounded font-medium" style={{ background: `${PURPLE}25`, color: PURPLE }}>AI</span>
@@ -87,7 +87,7 @@ export function BentoSection() {
                 { label: "Tech", followers: "1.1M", match: 91, color: "from-violet-500 to-purple-600" },
                 { label: "Gaming", followers: "890K", match: 88, color: "from-blue-500 to-cyan-500" },
               ].map((c, i) => (
-                <div key={i} className="flex-1 rounded-2xl p-3 transition-all hover:scale-[1.02]" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div key={i} className="flex-1 rounded-2xl p-3 transition-all hover:scale-[1.02]" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                   <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${c.color} mb-2`} />
                   <div className="h-1.5 rounded mb-1" style={{ background: "rgba(255,255,255,0.12)", width: "60%" }} />
                   <div className="text-[10px] text-slate-500">{c.followers}</div>
@@ -107,7 +107,7 @@ export function BentoSection() {
             </div>
             <h3 className="font-display font-bold text-white text-lg mb-1">Contact at scale</h3>
             <p className="text-slate-500 text-xs mb-4">Personalized bulk emails with AI-generated templates. Auto-follow-up until you get a reply.</p>
-            <div className="rounded-xl p-3 space-y-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="rounded-xl p-3 space-y-2" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
               {[
                 { brand: "Nike Collab", status: "Replied", color: EMERALD },
                 { brand: "Glossier", status: "Sent", color: CYAN },
@@ -135,7 +135,7 @@ export function BentoSection() {
                 { name: "Tech Unboxing", creators: 5, status: "Review", color: CYAN },
                 { name: "Spring Collab", creators: 11, status: "Done", color: PURPLE },
               ].map((c, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div key={i} className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
                   <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: c.color }} />
                   <span className="text-[11px] text-slate-300 flex-1 truncate">{c.name}</span>
                   <span className="text-[9px] text-slate-600">{c.creators} creators</span>
@@ -153,7 +153,7 @@ export function BentoSection() {
             <h3 className="font-display font-bold text-white text-xl mb-1">AI that works for both sides</h3>
             <p className="text-slate-500 text-sm mb-4">Brands get AI campaign strategy. Creators get a personalized growth mentor. Everyone wins.</p>
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-2xl p-4" style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)" }}>
+              <div className="rounded-2xl p-4" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.2)" }}>
                 <div className="text-[10px] font-semibold mb-2" style={{ color: PURPLE }}>FOR BRANDS</div>
                 <div className="space-y-1.5">
                   {["Best ad format for your product", "Top creator matches by ROI", "Campaign calendar automation"].map((t) => (
@@ -183,12 +183,12 @@ export function BentoSection() {
             </div>
             <h3 className="font-display font-bold text-white text-lg mb-1">Scout from anywhere</h3>
             <p className="text-slate-500 text-xs mb-3">Save creators directly from TikTok, Instagram & YouTube — one click, instantly to CRM.</p>
-            <div className="rounded-xl overflow-hidden" style={{ background: "#0d0d18", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <div className="flex items-center gap-1 px-2.5 py-1.5" style={{ background: "#08080e", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <div className="rounded-xl overflow-hidden" style={{ background: "var(--bg-page-alt)", border: "1px solid var(--border-card)" }}>
+              <div className="flex items-center gap-1 px-2.5 py-1.5" style={{ background: "var(--bg-page)", borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <div className="w-2 h-2 rounded-full bg-red-500/60" />
                 <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
                 <div className="w-2 h-2 rounded-full bg-green-500/60" />
-                <div className="flex-1 mx-2 rounded text-[8px] text-slate-600 px-1.5 py-0.5" style={{ background: "rgba(255,255,255,0.04)" }}>tiktok.com/@nova.style</div>
+                <div className="flex-1 mx-2 rounded text-[8px] text-slate-600 px-1.5 py-0.5" style={{ background: "var(--bg-card-hover)" }}>tiktok.com/@nova.style</div>
               </div>
               <div className="p-2.5 flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 shrink-0" />
@@ -217,7 +217,7 @@ export function BentoSection() {
                 <div key={s.label} className="flex items-center justify-between">
                   <div>
                     <div className="text-[10px] text-slate-600">{s.label}</div>
-                    <div className="h-1.5 rounded-full mt-0.5" style={{ background: "rgba(255,255,255,0.06)", width: 100 }}>
+                    <div className="h-1.5 rounded-full mt-0.5" style={{ background: "var(--bg-card-hover)", width: 100 }}>
                       <div className="h-1.5 rounded-full" style={{ width: "70%", background: s.color }} />
                     </div>
                   </div>

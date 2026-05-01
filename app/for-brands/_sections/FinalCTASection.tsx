@@ -37,18 +37,18 @@ export function FinalCTASection() {
   }
 
   return (
-    <section className="py-32 relative overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="py-32 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
       {/* Dramatic glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[160px]"
-          style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, rgba(8,194,204,0.08) 50%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, var(--glow-cyan) 50%, transparent 70%)" }}
         />
         {/* Dot grid */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, var(--bg-card-hover) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -67,7 +67,7 @@ export function FinalCTASection() {
           className="max-w-3xl mx-auto"
         >
           {/* Badge */}
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}>
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}>
             <Sparkles size={13} />
             Launching Soon · Limited Spots
           </motion.div>
@@ -91,7 +91,7 @@ export function FinalCTASection() {
                 key={i}
                 variants={fadeUp}
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl text-left"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
               >
                 <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)" }}>
                   <perk.icon size={13} style={{ color: "#a78bfa" }} />
@@ -113,11 +113,11 @@ export function FinalCTASection() {
                   required
                   className="flex-1 px-5 py-3.5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none transition-all text-sm"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "var(--bg-card-hover)",
+                    border: "1px solid var(--border-card-strong)",
                   }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
                 />
                 <button
                   type="submit"
@@ -147,7 +147,7 @@ export function FinalCTASection() {
             <div className="flex items-center justify-center gap-3 text-sm text-slate-600">
               <div className="flex -space-x-2">
                 {avatarGradients.map((g, i) => (
-                  <div key={i} className={`w-7 h-7 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "#09090f" }} />
+                  <div key={i} className={`w-7 h-7 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "var(--bg-page)" }} />
                 ))}
               </div>
               <span>
@@ -158,12 +158,12 @@ export function FinalCTASection() {
 
           {/* Bottom decorative line */}
           <motion.div variants={fadeUp} className="mt-20 flex items-center gap-4">
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.07))" }} />
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, var(--border-card))" }} />
             <div className="flex items-center gap-2 text-xs text-slate-700">
               <Sparkles size={12} className="text-violet-800" />
               Talent Trend Spot — AI Influencer Marketing Platform
             </div>
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.07))" }} />
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, var(--border-card))" }} />
           </motion.div>
         </motion.div>
       </div>

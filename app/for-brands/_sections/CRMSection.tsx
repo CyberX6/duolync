@@ -42,7 +42,7 @@ export function CRMSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#070710" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(56,189,248,0.07) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
@@ -80,15 +80,15 @@ export function CRMSection() {
           <motion.div
             variants={fadeUp}
             className="lg:col-span-2 rounded-3xl overflow-hidden"
-            style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}
+            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}
           >
             {/* Table toolbar */}
-            <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl text-xs" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
+              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl text-xs" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--bg-card-hover)" }}>
                 <Search size={12} className="text-slate-600" />
                 <span className="text-slate-600">Search creators...</span>
               </div>
-              <button className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", color: "#64748b" }}>
+              <button className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--bg-card-hover)", color: "#64748b" }}>
                 <Filter size={11} />
                 Filters
               </button>
@@ -99,7 +99,7 @@ export function CRMSection() {
             </div>
 
             {/* Column headers */}
-            <div className="grid grid-cols-5 gap-2 px-5 py-2 text-[10px] font-medium text-slate-600" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+            <div className="grid grid-cols-5 gap-2 px-5 py-2 text-[10px] font-medium text-slate-600" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
               <span className="col-span-2">Creator</span>
               <span>Platform</span>
               <span>Status</span>
@@ -107,7 +107,7 @@ export function CRMSection() {
             </div>
 
             {/* Rows */}
-            <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+            <div className="divide-y" style={{ borderColor: "var(--bg-card-hover)" }}>
               {creators.map((c, i) => (
                 <motion.div
                   key={i}
@@ -136,7 +136,7 @@ export function CRMSection() {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)" }}>
+            <div className="flex items-center justify-between px-5 py-3" style={{ borderTop: "1px solid var(--bg-card-hover)", background: "rgba(255,255,255,0.01)" }}>
               <span className="text-[11px] text-slate-600">128 creators · 24 active campaigns</span>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
@@ -157,7 +157,7 @@ export function CRMSection() {
             <motion.div
               variants={fadeUp}
               className="rounded-3xl p-5"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.25)" }}>
@@ -177,13 +177,13 @@ export function CRMSection() {
               </div>
 
               {/* Subject */}
-              <div className="text-[11px] text-slate-400 mb-2 px-2 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="text-[11px] text-slate-400 mb-2 px-2 py-1.5 rounded-lg" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
                 <span className="text-slate-600 text-[9px]">Subject: </span>
                 {emailTemplate.subject}
               </div>
 
               {/* Body preview */}
-              <div className="text-[10px] text-slate-500 whitespace-pre-line leading-relaxed mb-3 px-2 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="text-[10px] text-slate-500 whitespace-pre-line leading-relaxed mb-3 px-2 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--bg-card-hover)" }}>
                 {emailTemplate.body.split("\n").slice(0, 4).join("\n")}
                 <span className="text-slate-700">...</span>
               </div>
@@ -218,7 +218,7 @@ export function CRMSection() {
                 <div
                   key={i}
                   className="rounded-2xl p-4 transition-all hover:scale-[1.03]"
-                  style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
                 >
                   <stat.icon size={14} style={{ color: stat.color }} className="mb-2" />
                   <div className="font-bold text-white text-lg font-display">{stat.value}</div>
@@ -246,7 +246,7 @@ export function CRMSection() {
               key={i}
               variants={fadeUp}
               className="p-5 rounded-2xl transition-all hover:scale-[1.02]"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
             >
               <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: "rgba(56,189,248,0.12)", border: "1px solid rgba(56,189,248,0.2)" }}>
                 <f.icon size={16} style={{ color: "#7dd3fc" }} />

@@ -45,7 +45,7 @@ export function FinalCTASection() {
   }
 
   return (
-    <section className="py-32 relative overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="py-32 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       {/* Dramatic ambient */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -54,7 +54,7 @@ export function FinalCTASection() {
         />
         <div
           className="absolute inset-0"
-          style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)", backgroundSize: "32px 32px" }}
+          style={{ backgroundImage: "radial-gradient(circle, var(--bg-card-hover) 1px, transparent 1px)", backgroundSize: "32px 32px" }}
         />
       </div>
 
@@ -106,7 +106,7 @@ export function FinalCTASection() {
                 variants={fadeUp}
                 transition={{ duration: 0.5 }}
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl text-left"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
               >
                 <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(236,72,153,0.15)", border: "1px solid rgba(236,72,153,0.25)" }}>
                   <perk.icon size={13} style={{ color: PINK }} />
@@ -127,9 +127,9 @@ export function FinalCTASection() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="flex-1 px-5 py-3.5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none text-sm transition-all"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+                  style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.6)"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
                 />
                 <button
                   type="submit"
@@ -159,7 +159,7 @@ export function FinalCTASection() {
             <div className="flex items-center justify-center gap-3 text-sm text-slate-600">
               <div className="flex -space-x-2">
                 {avatarGradients.map((g, i) => (
-                  <div key={i} className={`w-7 h-7 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "#07080f" }} />
+                  <div key={i} className={`w-7 h-7 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "var(--bg-page-alt)" }} />
                 ))}
               </div>
               <span>
@@ -170,12 +170,12 @@ export function FinalCTASection() {
 
           {/* Bottom separator */}
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="mt-20 flex items-center gap-4">
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.07))" }} />
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, var(--border-card))" }} />
             <div className="flex items-center gap-2 text-xs text-slate-700">
               <Sparkles size={12} className="text-pink-900" />
               Talent Trend Spot — Built for Creators
             </div>
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.07))" }} />
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, var(--border-card))" }} />
           </motion.div>
         </motion.div>
       </div>
