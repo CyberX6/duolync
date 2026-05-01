@@ -31,7 +31,7 @@ export function OmniDashboardSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(192,132,252,0.08) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
@@ -87,9 +87,9 @@ export function OmniDashboardSection() {
 
           {/* Right: Dashboard visual */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }}>
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Top bar */}
-              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <span className="text-sm font-semibold text-white">Content Calendar — May 2026</span>
                 <div className="flex items-center gap-1.5">
                   {platforms.map((p) => (
@@ -101,9 +101,9 @@ export function OmniDashboardSection() {
               </div>
 
               {/* Platform summary */}
-              <div className="grid grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.04)" }}>
+              <div className="grid grid-cols-3 gap-px" style={{ background: "var(--bg-card-hover)" }}>
                 {platforms.map((p) => (
-                  <div key={p.name} className="p-3 text-center" style={{ background: "#07080f" }}>
+                  <div key={p.name} className="p-3 text-center" style={{ background: "var(--bg-page-alt)" }}>
                     <div className="text-lg font-bold font-display" style={{ color: p.color }}>{p.posts}</div>
                     <div className="text-[9px] text-slate-600">posts this month</div>
                     <div className="text-[10px] text-slate-500 mt-0.5">{p.name}</div>
@@ -136,7 +136,7 @@ export function OmniDashboardSection() {
                 </div>
 
                 {/* Upcoming posts */}
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1rem" }}>
+                <div style={{ borderTop: "1px solid var(--bg-card-hover)", paddingTop: "1rem" }}>
                   <div className="text-[11px] font-semibold text-slate-500 mb-2.5">Upcoming posts</div>
                   <div className="space-y-2">
                     {scheduledPosts.map((post, i) => (

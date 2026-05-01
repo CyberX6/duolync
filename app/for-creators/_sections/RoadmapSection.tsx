@@ -68,9 +68,9 @@ export function RoadmapSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[180px]" style={{ background: "radial-gradient(circle, rgba(252,211,77,0.05) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[180px]" style={{ background: "radial-gradient(circle, var(--glow-amber) 0%, transparent 70%)" }} />
       </div>
 
       <div className="container mx-auto px-4">
@@ -110,7 +110,7 @@ export function RoadmapSection() {
               variants={fadeUp}
               transition={{ duration: 0.6 }}
               className="text-center p-4 rounded-2xl"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
             >
               <s.icon size={16} className="mx-auto mb-2" style={{ color: s.color }} />
               <div className="text-xl font-bold font-display" style={{ color: s.color }}>{s.value}</div>
@@ -132,7 +132,7 @@ export function RoadmapSection() {
               variants={fadeUp}
               transition={{ duration: 0.6 }}
               className="rounded-3xl p-5 relative overflow-hidden transition-all duration-300 hover:scale-[1.02]"
-              style={{ background: step.active ? step.bg : "rgba(255,255,255,0.025)", border: `1px solid ${step.active ? step.border : "rgba(255,255,255,0.07)"}` }}
+              style={{ background: step.active ? step.bg : "var(--bg-card)", border: `1px solid ${step.active ? step.border : "var(--border-card)"}` }}
             >
               {/* Phase badge */}
               <div className="flex items-center justify-between mb-4">

@@ -6,6 +6,33 @@
 
 @layer base {
   :root {
+    /* ── Landing page theme tokens (light default) ── */
+    --bg-page:          #f8fafc;
+    --bg-page-alt:      #f1f5f9;
+    --bg-footer:        #e2e8f0;
+    --bg-navbar:        rgba(248,250,252,0.94);
+    --border-navbar:    rgba(0,0,0,0.08);
+
+    --bg-card:          rgba(255,255,255,0.8);
+    --bg-card-hover:    rgba(255,255,255,0.95);
+    --bg-card-subtle:   rgba(255,255,255,0.65);
+    --border-card:      rgba(0,0,0,0.08);
+    --border-card-strong: rgba(0,0,0,0.12);
+    --border-card-faint:  rgba(0,0,0,0.05);
+    --shadow-card:      0 2px 24px rgba(0,0,0,0.08);
+
+    --dot-grid:         rgba(0,0,0,0.04);
+
+    --glow-purple:      rgba(124,58,237,0.07);
+    --glow-cyan:        rgba(6,182,212,0.05);
+    --glow-pink:        rgba(236,72,153,0.06);
+    --glow-emerald:     rgba(52,211,153,0.05);
+    --glow-amber:       rgba(252,211,77,0.04);
+
+    --text-base:        #0f172a;
+    --text-muted:       #475569;
+    --text-faint:       #94a3b8;
+
     /* Background & Surfaces */
     --background: 0 0% 100%;
     --foreground: 240 10% 10%;
@@ -79,6 +106,33 @@
   }
 
   .dark {
+    /* ── Landing page theme tokens (dark) ── */
+    --bg-page:          #09090f;
+    --bg-page-alt:      #07080f;
+    --bg-footer:        #060609;
+    --bg-navbar:        rgba(9,9,15,0.88);
+    --border-navbar:    rgba(255,255,255,0.07);
+
+    --bg-card:          rgba(255,255,255,0.025);
+    --bg-card-hover:    rgba(255,255,255,0.04);
+    --bg-card-subtle:   rgba(255,255,255,0.03);
+    --border-card:      rgba(255,255,255,0.07);
+    --border-card-strong: rgba(255,255,255,0.09);
+    --border-card-faint:  rgba(255,255,255,0.05);
+    --shadow-card:      none;
+
+    --dot-grid:         rgba(255,255,255,0.045);
+
+    --glow-purple:      rgba(124,58,237,0.12);
+    --glow-cyan:        rgba(6,182,212,0.08);
+    --glow-pink:        rgba(236,72,153,0.08);
+    --glow-emerald:     rgba(52,211,153,0.07);
+    --glow-amber:       rgba(252,211,77,0.05);
+
+    --text-base:        #ffffff;
+    --text-muted:       #94a3b8;
+    --text-faint:       #475569;
+
     --background: 240 10% 6%;
     --foreground: 0 0% 98%;
     
@@ -419,6 +473,45 @@
   .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
   .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
   .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+  /* ── Light mode text overrides ────────────────────────────────────── */
+
+  /* 1. BROAD RULE: every .text-white inside content areas → dark charcoal */
+  html:not(.dark) main .text-white,
+  html:not(.dark) section .text-white,
+  html:not(.dark) nav .text-white,
+  html:not(.dark) footer .text-white {
+    color: #0f172a;
+  }
+
+  /* 2. EXCEPTION A: white text ON an element that has a gradient inline style
+        (CTA buttons, pill badges rendered as <a> / <button> / <div> with
+        style={{ background: "linear-gradient(...)" }}) */
+  html:not(.dark) [style*="linear-gradient"].text-white {
+    color: #ffffff !important;
+  }
+
+  /* 3. EXCEPTION B: white text INSIDE an element that carries a gradient
+        inline style (icons/text nested inside gradient containers) */
+  html:not(.dark) [style*="linear-gradient"] .text-white {
+    color: #ffffff !important;
+  }
+
+  /* 4. EXCEPTION C: white text inside elements that use Tailwind's own
+        bg-gradient-to-* helpers  (avatar thumbnails, icon boxes, etc.)
+        Matches any element with a class starting with "from-" */
+  html:not(.dark) [class*="from-"] .text-white,
+  html:not(.dark) [class*="from-"].text-white {
+    color: #ffffff !important;
+  }
+
+  /* 5. Slate grays — darker equivalents for light backgrounds */
+  html:not(.dark) .text-slate-200 { color: #334155; }
+  html:not(.dark) .text-slate-300 { color: #475569; }
+  html:not(.dark) .text-slate-400 { color: #64748b; }
+  html:not(.dark) .text-slate-500 { color: #475569; }
+  html:not(.dark) .text-slate-600 { color: #334155; }
+  html:not(.dark) .text-slate-700 { color: #1e293b; }
 
   /* Gradient border */
   .gradient-border {

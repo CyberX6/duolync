@@ -28,8 +28,8 @@ export function ToolsSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(252,211,77,0.05) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-amber) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -62,7 +62,7 @@ export function ToolsSection() {
         >
           {/* Left: Free tools */}
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }}>
-            <div className="rounded-3xl p-6 h-full" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl p-6 h-full" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               <div className="mb-2">
                 <div className="text-lg font-display font-bold text-white">Free Tools</div>
                 <p className="text-slate-500 text-sm">Your complete guide to influencer marketing</p>
@@ -101,9 +101,9 @@ export function ToolsSection() {
               <div
                 key={i}
                 className="flex items-start gap-4 rounded-2xl p-5 transition-all hover:bg-white/[0.02] cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
               >
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.2)" }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.2)" }}>
                   <r.Icon size={20} style={{ color: PURPLE }} />
                 </div>
                 <div className="flex-1">
@@ -118,7 +118,7 @@ export function ToolsSection() {
 
             {/* Chrome extension banner */}
             <div className="rounded-2xl p-5 flex items-center gap-4" style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.2), rgba(8,145,178,0.2))", border: "1px solid rgba(124,58,237,0.3)" }}>
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.1)" }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--border-card-strong)" }}>
                 <Globe size={20} className="text-white" />
               </div>
               <div className="flex-1">

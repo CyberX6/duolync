@@ -20,7 +20,7 @@ export function ChromeExtensionSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
       <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
@@ -78,15 +78,15 @@ export function ChromeExtensionSection() {
           {/* Right: Browser window mockup */}
           <motion.div variants={fadeUp} className="relative">
             {/* Main browser window */}
-            <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ background: "#0d0d18", border: "1px solid rgba(255,255,255,0.1)" }}>
+            <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ background: "var(--bg-page-alt)", border: "1px solid var(--border-card-strong)" }}>
               {/* Browser chrome */}
-              <div className="flex items-center gap-2 px-4 py-3" style={{ background: "#080810", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="flex items-center gap-2 px-4 py-3" style={{ background: "#080810", borderBottom: "1px solid var(--border-card)" }}>
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-500/70" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
                   <div className="w-3 h-3 rounded-full bg-green-500/70" />
                 </div>
-                <div className="flex-1 mx-3 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-600" style={{ background: "rgba(255,255,255,0.05)" }}>
+                <div className="flex-1 mx-3 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-600" style={{ background: "var(--bg-card-hover)" }}>
                   <div className="w-3 h-3 rounded-sm bg-slate-700" />
                   tiktok.com/@nova.beauty
                   <CheckCircle2 size={10} className="text-green-500 ml-auto" />
@@ -107,7 +107,7 @@ export function ChromeExtensionSection() {
                       <div className="h-4 rounded" style={{ background: "rgba(255,255,255,0.15)", width: 120 }} />
                       <CheckCircle2 size={14} className="text-blue-400" />
                     </div>
-                    <div className="h-2.5 rounded mb-3" style={{ background: "rgba(255,255,255,0.08)", width: 160 }} />
+                    <div className="h-2.5 rounded mb-3" style={{ background: "var(--border-card-strong)", width: 160 }} />
                     <div className="flex gap-4 text-xs text-slate-500">
                       <div><strong className="text-slate-300">1.8M</strong> Followers</div>
                       <div><strong className="text-slate-300">12.4M</strong> Likes</div>

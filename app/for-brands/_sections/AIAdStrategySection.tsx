@@ -16,7 +16,7 @@ const adFormats = [
     roi: "3.2×",
     desc: "Authentic narrative-driven content builds emotional connection. Ideal for lifestyle and beauty.",
     color: "#a78bfa",
-    bg: "rgba(124,58,237,0.12)",
+    bg: "var(--glow-purple)",
     border: "rgba(124,58,237,0.3)",
     icon: Play,
   },
@@ -60,8 +60,8 @@ export function AIAdStrategySection() {
   const [activeFormat, setActiveFormat] = useState(0);
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#070710" }}>
-      <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(52,211,153,0.07) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
+      <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-emerald) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -95,8 +95,8 @@ export function AIAdStrategySection() {
                   variants={fadeUp}
                   className="flex items-start gap-4 p-4 rounded-2xl cursor-pointer transition-all duration-300"
                   style={{
-                    background: activeFormat === i ? format.bg : "rgba(255,255,255,0.03)",
-                    border: `1px solid ${activeFormat === i ? format.border : "rgba(255,255,255,0.07)"}`,
+                    background: activeFormat === i ? format.bg : "var(--bg-card-subtle)",
+                    border: `1px solid ${activeFormat === i ? format.border : "var(--border-card)"}`,
                   }}
                   onClick={() => setActiveFormat(i)}
                 >
@@ -141,9 +141,9 @@ export function AIAdStrategySection() {
 
           {/* Right: AI chat visual */}
           <motion.div variants={fadeUp}>
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card-strong)" }}>
               {/* Chat header */}
-              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)", background: "rgba(255,255,255,0.02)" }}>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
                   <Brain size={14} className="text-white" />
                 </div>
@@ -223,7 +223,7 @@ export function AIAdStrategySection() {
                   <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
                     <Brain size={12} className="text-white" />
                   </div>
-                  <div className="flex items-center gap-1 px-3 py-2 rounded-2xl" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <div className="flex items-center gap-1 px-3 py-2 rounded-2xl" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "0ms" }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "150ms" }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -234,7 +234,7 @@ export function AIAdStrategySection() {
 
               {/* Input area */}
               <div className="px-4 pb-4">
-                <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                   <input
                     type="text"
                     placeholder="Ask anything about your ad strategy..."

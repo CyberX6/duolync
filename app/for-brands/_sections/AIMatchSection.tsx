@@ -52,9 +52,9 @@ export function AIMatchSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#070710" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       {/* Ambient */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)" }} />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -66,7 +66,7 @@ export function AIMatchSection() {
         >
           {/* Left: content */}
           <div>
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.35)", color: "#c4b5fd" }}>
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.35)", color: "#c4b5fd" }}>
               <Sparkles size={11} />
               AI Smart Search & Matching
             </motion.div>
@@ -110,8 +110,8 @@ export function AIMatchSection() {
           {/* Right: visual */}
           <motion.div variants={fadeUp} className="relative">
             {/* Search bar */}
-            <div className="rounded-2xl p-4 mb-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-2xl p-4 mb-4" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card-strong)" }}>
+              <div className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                 <Search size={15} className="text-slate-600" />
                 <span className="text-slate-500 text-sm flex-1">Skincare brand targeting 25-34F with $50+ AOV...</span>
                 <span className="text-[10px] px-2 py-0.5 rounded font-medium" style={{ background: "rgba(124,58,237,0.25)", color: "#c4b5fd" }}>AI</span>
@@ -119,7 +119,7 @@ export function AIMatchSection() {
               <div className="flex items-center gap-2 mt-2 px-1">
                 <span className="text-[10px] text-slate-600">Filters:</span>
                 {["Engagement >4%", "100K–5M followers", "Female majority"].map((f) => (
-                  <span key={f} className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.05)", color: "#64748b", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <span key={f} className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "var(--bg-card-hover)", color: "#64748b", border: "1px solid var(--bg-card-hover)" }}>
                     {f}
                   </span>
                 ))}
@@ -135,7 +135,7 @@ export function AIMatchSection() {
                   animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                   transition={{ delay: 0.4 + i * 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="rounded-2xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.01] cursor-pointer"
-                  style={{ background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ background: "rgba(255,255,255,0.035)", border: "1px solid var(--border-card-strong)" }}
                 >
                   <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${c.gradient} shrink-0`} />
                   <div className="flex-1 min-w-0">
@@ -150,7 +150,7 @@ export function AIMatchSection() {
                     </div>
                     <div className="flex gap-1">
                       {c.tags.map((t) => (
-                        <span key={t} className="px-1.5 py-0.5 rounded-full text-[9px]" style={{ background: "rgba(255,255,255,0.05)", color: "#94a3b8" }}>{t}</span>
+                        <span key={t} className="px-1.5 py-0.5 rounded-full text-[9px]" style={{ background: "var(--bg-card-hover)", color: "#94a3b8" }}>{t}</span>
                       ))}
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export function AIMatchSection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.9, duration: 0.6 }}
               className="mt-4 rounded-2xl p-4"
-              style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)" }}
+              style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.2)" }}
             >
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles size={13} className="text-violet-400" />
@@ -182,7 +182,7 @@ export function AIMatchSection() {
                       <span className="text-slate-500">{insight.label}</span>
                       <span className="font-medium" style={{ color: insight.color }}>{insight.value}%</span>
                     </div>
-                    <div className="h-1 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+                    <div className="h-1 rounded-full" style={{ background: "var(--bg-card-hover)" }}>
                       <div className="h-1 rounded-full transition-all duration-1000" style={{ width: isInView ? `${insight.value}%` : "0%", background: insight.color }} />
                     </div>
                   </div>

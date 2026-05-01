@@ -14,7 +14,7 @@ const useCases = [
     title: "Influencer Marketing Agency",
     description: "Scale client campaigns without scaling your team. Run dozens of campaigns simultaneously with AI-powered matching, CRM automation, and real-time analytics.",
     color: "#a78bfa",
-    bg: "rgba(124,58,237,0.1)",
+    bg: "var(--glow-purple)",
     border: "rgba(124,58,237,0.25)",
     gradient: "from-violet-500 to-purple-700",
     perks: ["Multi-client workspace", "White-label reporting", "Bulk creator outreach"],
@@ -34,7 +34,7 @@ const useCases = [
     title: "Startup Entrepreneur",
     description: "Launch influencer campaigns on a lean budget. Get access to micro-creators with hyper-engaged audiences, and scale up as your business grows.",
     color: "#f472b6",
-    bg: "rgba(236,72,153,0.1)",
+    bg: "var(--glow-pink)",
     border: "rgba(236,72,153,0.25)",
     gradient: "from-pink-500 to-rose-600",
     perks: ["Free starter plan", "Micro-creator access", "No contracts required"],
@@ -46,9 +46,9 @@ export function UseCasesSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[160px]" style={{ background: "rgba(124,58,237,0.05)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[160px]" style={{ background: "var(--glow-purple)" }} />
       </div>
 
       <div className="container mx-auto px-4">
@@ -59,7 +59,7 @@ export function UseCasesSection() {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.3)", color: "#a78bfa" }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#a78bfa" }}>
             <Sparkles size={11} />
             Use Cases
           </motion.div>
@@ -94,7 +94,7 @@ export function UseCasesSection() {
                   <uc.Icon size={40} className="text-white" />
                 </div>
                 <div className="absolute top-4 left-4 w-8 h-8 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
-                <div className="absolute bottom-6 right-6 w-12 h-12 rounded-xl" style={{ background: "rgba(255,255,255,0.1)" }} />
+                <div className="absolute bottom-6 right-6 w-12 h-12 rounded-xl" style={{ background: "var(--border-card-strong)" }} />
               </div>
 
               {/* Content */}

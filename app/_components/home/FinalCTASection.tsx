@@ -13,12 +13,12 @@ export function FinalCTASection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[160px]" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)" }} />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%)" }} />
-        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[160px]" style={{ background: "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, var(--glow-pink) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, var(--bg-card-hover) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
       </div>
 
       <div className="container mx-auto px-4 relative">
@@ -29,7 +29,7 @@ export function FinalCTASection() {
           variants={stagger}
           className="max-w-4xl mx-auto text-center"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
             <Sparkles size={11} />
             Launching Soon — Join the Wishlist
           </motion.div>
@@ -68,7 +68,7 @@ export function FinalCTASection() {
               <Link
                 href="/for-brands"
                 className="flex items-center gap-2 px-5 py-4 rounded-2xl font-medium text-sm transition-all hover:scale-[1.02]"
-                style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)", color: "#a78bfa" }}
+                style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#a78bfa" }}
               >
                 <Building2 size={15} />
                 For Brands
@@ -76,7 +76,7 @@ export function FinalCTASection() {
               <Link
                 href="/for-creators"
                 className="flex items-center gap-2 px-5 py-4 rounded-2xl font-medium text-sm transition-all hover:scale-[1.02]"
-                style={{ background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.3)", color: "#f472b6" }}
+                style={{ background: "var(--glow-pink)", border: "1px solid rgba(236,72,153,0.3)", color: "#f472b6" }}
               >
                 <Users size={15} />
                 For Creators
@@ -89,7 +89,7 @@ export function FinalCTASection() {
             <Link
               href="/auth"
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:scale-[1.02]"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#64748b" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#64748b" }}
             >
               <Globe size={15} />
               Or download our free Chrome Extension

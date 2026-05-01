@@ -21,14 +21,14 @@ const avatarGradients = [
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "var(--bg-page)" }}>
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 left-1/4 w-[700px] h-[700px] rounded-full blur-[160px]" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.14) 0%, transparent 70%)" }} />
-        <div className="absolute top-1/2 right-0 w-[500px] h-[500px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, rgba(8,194,204,0.08) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px]" style={{ background: "radial-gradient(circle, rgba(236,72,153,0.07) 0%, transparent 70%)" }} />
+        <div className="absolute -top-32 left-1/4 w-[700px] h-[700px] rounded-full blur-[160px]" style={{ background: "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 right-0 w-[500px] h-[500px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[120px]" style={{ background: "radial-gradient(circle, var(--glow-pink) 0%, transparent 70%)" }} />
         {/* Dot grid */}
-        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, var(--dot-grid) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
       </div>
 
       <div className="relative container mx-auto px-4 pt-28 pb-16">
@@ -39,7 +39,7 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm"
-            style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}
+            style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}
           >
             <Sparkles size={13} />
             AI-Powered Influencer Marketing Platform
@@ -102,7 +102,7 @@ export function HeroSection() {
             <Link
               href="/auth"
               className="flex items-center gap-2 px-6 py-4 rounded-2xl font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#94a3b8" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#94a3b8" }}
             >
               Start for free
             </Link>
@@ -118,7 +118,7 @@ export function HeroSection() {
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
                 {avatarGradients.map((g, i) => (
-                  <div key={i} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "#09090f" }} />
+                  <div key={i} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "var(--bg-page)" }} />
                 ))}
               </div>
               <span className="text-slate-500"><strong className="text-slate-300">12,000+</strong> brands & creators joined</span>
@@ -141,7 +141,7 @@ export function HeroSection() {
               <div
                 key={t.label}
                 className="text-center p-4 rounded-2xl transition-all hover:scale-[1.04]"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}
               >
                 <div className="text-2xl font-bold font-display mb-0.5" style={{ background: "linear-gradient(90deg, #a78bfa, #38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                   {t.value}
@@ -160,8 +160,8 @@ export function HeroSection() {
           className="flex justify-center gap-4 mt-16 flex-wrap"
         >
           {[
-            { label: "For Brands", desc: "AI matching · Campaign tools · CRM", color: "#a78bfa", bg: "rgba(124,58,237,0.1)", border: "rgba(124,58,237,0.25)", href: "/for-brands" },
-            { label: "For Creators", desc: "Curated deals · Growth AI · Dashboard", color: "#f9a8d4", bg: "rgba(236,72,153,0.1)", border: "rgba(236,72,153,0.25)", href: "/for-creators" },
+            { label: "For Brands", desc: "AI matching · Campaign tools · CRM", color: "#a78bfa", bg: "var(--glow-purple)", border: "rgba(124,58,237,0.25)", href: "/for-brands" },
+            { label: "For Creators", desc: "Curated deals · Growth AI · Dashboard", color: "#f9a8d4", bg: "var(--glow-pink)", border: "rgba(236,72,153,0.25)", href: "/for-creators" },
           ].map((card) => (
             <Link key={card.label} href={card.href} className="flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02]" style={{ background: card.bg, border: `1px solid ${card.border}` }}>
               <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${card.color}22` }}>

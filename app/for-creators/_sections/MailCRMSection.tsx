@@ -28,7 +28,7 @@ export function MailCRMSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
       <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(103,232,249,0.07) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
@@ -41,10 +41,10 @@ export function MailCRMSection() {
         >
           {/* Left: Inbox visual */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }} className="order-2 lg:order-1">
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Toolbar */}
-              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl text-xs" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
+                <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl text-xs" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
                   <Mail size={12} className="text-slate-600" />
                   <span className="text-slate-600">Search conversations...</span>
                 </div>
@@ -55,7 +55,7 @@ export function MailCRMSection() {
               </div>
 
               {/* Pipeline bar */}
-              <div className="grid grid-cols-4 gap-px px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="grid grid-cols-4 gap-px px-5 py-3" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
                 {dealPipeline.map((stage) => (
                   <div key={stage.label} className="text-center">
                     <div className="text-sm font-bold font-display" style={{ color: stage.color }}>{stage.count}</div>
@@ -65,7 +65,7 @@ export function MailCRMSection() {
               </div>
 
               {/* Email list */}
-              <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+              <div className="divide-y" style={{ borderColor: "var(--bg-card-hover)" }}>
                 {emails.map((email, i) => (
                   <motion.div
                     key={i}
@@ -90,8 +90,8 @@ export function MailCRMSection() {
               </div>
 
               {/* Compose bar */}
-              <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)" }}>
-                <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="px-5 py-3" style={{ borderTop: "1px solid var(--bg-card-hover)", background: "rgba(255,255,255,0.01)" }}>
+                <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
                   <input placeholder="Reply to Nike..." className="flex-1 bg-transparent text-xs text-slate-400 placeholder:text-slate-600 focus:outline-none" readOnly />
                   <Paperclip size={12} className="text-slate-600" />
                   <button className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}>

@@ -32,8 +32,8 @@ export function SmartFiltersSection() {
   }
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#09090f" }}>
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%)" }} />
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none" style={{ background: "radial-gradient(circle, var(--glow-pink) 0%, transparent 70%)" }} />
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -45,9 +45,9 @@ export function SmartFiltersSection() {
         >
           {/* Left: Visual */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }}>
-            <div className="rounded-3xl overflow-hidden" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-3xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-card-strong)" }}>
               {/* Header */}
-              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+              <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid var(--bg-card-hover)", background: "rgba(255,255,255,0.02)" }}>
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "rgba(244,114,182,0.15)", border: "1px solid rgba(244,114,182,0.3)" }}>
                   <SlidersHorizontal size={15} style={{ color: PINK }} />
                 </div>
@@ -73,8 +73,8 @@ export function SmartFiltersSection() {
                           onClick={() => toggle(n.label)}
                           className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200"
                           style={{
-                            background: active ? `${PINK}20` : "rgba(255,255,255,0.04)",
-                            border: `1px solid ${active ? `${PINK}45` : "rgba(255,255,255,0.07)"}`,
+                            background: active ? `${PINK}20` : "var(--bg-card-hover)",
+                            border: `1px solid ${active ? `${PINK}45` : "var(--border-card)"}`,
                             color: active ? PINK : "#64748b",
                           }}
                         >
@@ -94,7 +94,7 @@ export function SmartFiltersSection() {
                       <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5"><DollarSign size={11} />Min. Offer</div>
                       <div className="text-xs font-bold" style={{ color: PINK }}>$500</div>
                     </div>
-                    <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+                    <div className="h-1.5 rounded-full" style={{ background: "var(--border-card-strong)" }}>
                       <div className="h-1.5 rounded-full w-2/5" style={{ background: `linear-gradient(90deg, ${PINK}, ${VIOLET})` }} />
                     </div>
                     <div className="flex justify-between text-[9px] text-slate-700 mt-1"><span>$0</span><span>$10K+</span></div>
@@ -104,7 +104,7 @@ export function SmartFiltersSection() {
                       <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5"><Users size={11} />Min. Followers</div>
                       <div className="text-xs font-bold" style={{ color: VIOLET }}>10K</div>
                     </div>
-                    <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+                    <div className="h-1.5 rounded-full" style={{ background: "var(--border-card-strong)" }}>
                       <div className="h-1.5 rounded-full w-1/3" style={{ background: `linear-gradient(90deg, ${VIOLET}, #67e8f9)` }} />
                     </div>
                     <div className="flex justify-between text-[9px] text-slate-700 mt-1"><span>1K</span><span>5M+</span></div>
@@ -120,8 +120,8 @@ export function SmartFiltersSection() {
                         key={loc}
                         className="px-2.5 py-1 rounded-lg text-[11px]"
                         style={{
-                          background: i < 3 ? "rgba(103,232,249,0.12)" : "rgba(255,255,255,0.04)",
-                          border: `1px solid ${i < 3 ? "rgba(103,232,249,0.3)" : "rgba(255,255,255,0.07)"}`,
+                          background: i < 3 ? "rgba(103,232,249,0.12)" : "var(--bg-card-hover)",
+                          border: `1px solid ${i < 3 ? "rgba(103,232,249,0.3)" : "var(--border-card)"}`,
                           color: i < 3 ? "#67e8f9" : "#475569",
                         }}
                       >
@@ -133,7 +133,7 @@ export function SmartFiltersSection() {
               </div>
 
               {/* Divider */}
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }} />
+              <div style={{ borderTop: "1px solid var(--bg-card-hover)" }} />
 
               {/* Matched deals preview */}
               <div className="p-5">
@@ -148,7 +148,7 @@ export function SmartFiltersSection() {
                       animate={isInView ? { opacity: 1, x: 0 } : {}}
                       transition={{ delay: 0.5 + i * 0.12 }}
                       className="flex items-center gap-3 rounded-xl p-3"
-                      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                      style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
                     >
                       <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${deal.color} shrink-0`} />
                       <div className="flex-1 min-w-0">

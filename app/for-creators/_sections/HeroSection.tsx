@@ -23,22 +23,22 @@ export function HeroSection() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute top-0 right-1/4 w-[700px] h-[700px] rounded-full blur-[160px]"
-          style={{ background: "radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--glow-pink) 0%, transparent 70%)" }}
         />
         <div
           className="absolute bottom-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px]"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" }}
         />
         {/* Dot grid */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, var(--bg-card-hover) 1px, transparent 1px)",
             backgroundSize: "36px 36px",
           }}
         />
@@ -57,7 +57,7 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm font-medium mb-8 backdrop-blur-sm"
-            style={{ borderColor: "rgba(236,72,153,0.4)", background: "rgba(236,72,153,0.1)", color: "#f9a8d4" }}
+            style={{ borderColor: "rgba(236,72,153,0.4)", background: "var(--glow-pink)", color: "#f9a8d4" }}
           >
             <Zap size={13} />
             Built for Creators, by Creators
@@ -107,9 +107,9 @@ export function HeroSection() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
               onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.5)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
             />
             <button
               className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
@@ -129,7 +129,7 @@ export function HeroSection() {
           >
             <div className="flex -space-x-2">
               {avatarGradients.map((g, i) => (
-                <div key={i} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "#07080f" }} />
+                <div key={i} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2`} style={{ borderColor: "var(--bg-page-alt)" }} />
               ))}
             </div>
             <span>
@@ -149,7 +149,7 @@ export function HeroSection() {
             <div
               key={stat.label}
               className="text-center p-5 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.03]"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+              style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}
             >
               <div
                 className="text-2xl font-bold font-display mb-1"
@@ -190,7 +190,7 @@ export function HeroSection() {
           </div>
 
           {/* After */}
-          <div className="flex-1 rounded-2xl px-5 py-4 text-center" style={{ background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.15)" }}>
+          <div className="flex-1 rounded-2xl px-5 py-4 text-center" style={{ background: "var(--glow-emerald)", border: "1px solid rgba(52,211,153,0.15)" }}>
             <div className="text-xs font-semibold text-emerald-500/70 uppercase tracking-widest mb-2">After</div>
             <div className="space-y-1 text-xs text-slate-400">
               <div className="flex items-center gap-2 justify-center"><span className="text-emerald-400">✓</span> Curated deals matching your niche</div>

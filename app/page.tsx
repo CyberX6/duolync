@@ -14,14 +14,14 @@ import { FinalCTASection } from "@/app/_components/home/FinalCTASection";
 
 export default function Page() {
   return (
-    <div className="min-h-screen" style={{ background: "#09090f" }}>
+    <div className="min-h-screen" style={{ background: "var(--bg-page)" }}>
       {/* Navbar — fixed dark overlay */}
       <div
         className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: "rgba(9,9,15,0.85)",
+          background: "var(--bg-navbar)",
           backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          borderBottom: "1px solid var(--border-card)",
         }}
       >
         <Navbar />
@@ -39,7 +39,7 @@ export default function Page() {
         <FinalCTASection />
       </main>
 
-      <div style={{ background: "#060609", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "var(--bg-footer)", borderTop: "1px solid var(--border-card)" }}>
         <Footer />
       </div>
     </div>

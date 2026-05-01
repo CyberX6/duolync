@@ -29,7 +29,7 @@ const BRAND_STEPS = [
     description:
       "Tell our AI about your product, brand values, and ideal customer. It maps your DNA to creator audiences across all major platforms — pinpointing exactly who will convert.",
     accent: "#a78bfa",
-    accentBg: "rgba(124,58,237,0.12)",
+    accentBg: "var(--glow-purple)",
     accentBorder: "rgba(124,58,237,0.3)",
     perks: ["Audience demographic analysis", "Brand-value alignment scoring", "Multi-platform targeting"],
     mockup: "brand-01",
@@ -119,7 +119,7 @@ function BrandMockup01() {
             <span className="text-slate-400">{row.label}</span>
             <span className="font-bold" style={{ color: row.color }}>{row.pct}%</span>
           </div>
-          <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.07)" }}>
+          <div className="h-1.5 rounded-full" style={{ background: "var(--border-card)" }}>
             <motion.div
               className="h-1.5 rounded-full"
               style={{ background: row.color }}
@@ -130,7 +130,7 @@ function BrandMockup01() {
           </div>
         </div>
       ))}
-      <div className="mt-3 flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.25)" }}>
+      <div className="mt-3 flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.25)" }}>
         <Sparkles size={12} style={{ color: "#a78bfa" }} />
         <span className="text-[11px]" style={{ color: "#a78bfa" }}>AI matched <strong>Tech & Gaming</strong> as your top niche</span>
       </div>
@@ -152,7 +152,7 @@ function BrandMockup02() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + i * 0.12 }}
           className="flex items-center gap-2.5 rounded-xl p-2.5"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}
         >
           <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${c.color} shrink-0`} />
           <div className="flex-1 min-w-0">
@@ -175,14 +175,14 @@ function BrandMockup03() {
           { label: "Reach", value: "2.8M", color: "#67e8f9" },
           { label: "Deals", value: "24", color: "#a78bfa" },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl p-2 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <div key={s.label} className="rounded-xl p-2 text-center" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
             <div className="text-sm font-bold font-display" style={{ color: s.color }}>{s.value}</div>
             <div className="text-[9px] text-slate-600">{s.label}</div>
           </div>
         ))}
       </div>
       {["Summer Launch · Active", "Unboxing Series · Review", "Spring Collab · Done"].map((c, i) => (
-        <div key={i} className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div key={i} className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
           <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: i === 0 ? "#34d399" : i === 1 ? "#67e8f9" : "#a78bfa" }} />
           <span className="text-[10px] text-slate-400">{c}</span>
         </div>
@@ -205,7 +205,7 @@ function CreatorMockup01() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15 + i * 0.1 }}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}
         >
           <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${p.color}20` }}>
             <div className="w-2 h-2 rounded-full" style={{ background: p.color }} />
@@ -215,7 +215,7 @@ function CreatorMockup01() {
           <span className="text-[10px] font-bold" style={{ color: p.color }}>{p.pct}%</span>
         </motion.div>
       ))}
-      <div className="flex items-center gap-2 rounded-xl px-3 py-2 mt-1" style={{ background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.25)" }}>
+      <div className="flex items-center gap-2 rounded-xl px-3 py-2 mt-1" style={{ background: "var(--glow-pink)", border: "1px solid rgba(236,72,153,0.25)" }}>
         <CheckCircle2 size={11} style={{ color: "#f472b6" }} />
         <span className="text-[10px]" style={{ color: "#f472b6" }}>Profile synced · Verified badge earned</span>
       </div>
@@ -231,7 +231,7 @@ function CreatorMockup02() {
         { label: "Preferred niche", value: "Beauty, Fashion", color: "#fcd34d" },
         { label: "Blocked categories", value: "Gambling, Alcohol", color: "#f87171" },
       ].map((f) => (
-        <div key={f.label} className="rounded-xl px-3 py-2.5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+        <div key={f.label} className="rounded-xl px-3 py-2.5" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
           <div className="text-[9px] text-slate-600 mb-0.5">{f.label}</div>
           <div className="text-[11px] font-semibold" style={{ color: f.color }}>{f.value}</div>
         </div>
@@ -259,10 +259,10 @@ function CreatorMockup03() {
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-3 rounded-xl px-3 py-2.5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div className="flex items-center gap-3 rounded-xl px-3 py-2.5" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
         <div className="flex-1">
           <div className="text-[9px] text-slate-600 mb-1">Progress to 10K milestone</div>
-          <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.07)" }}>
+          <div className="h-1.5 rounded-full" style={{ background: "var(--border-card)" }}>
             <motion.div className="h-1.5 rounded-full" style={{ background: "#c084fc" }} initial={{ width: 0 }} animate={{ width: "68%" }} transition={{ duration: 1, ease: "easeOut", delay: 0.4 }} />
           </div>
         </div>
@@ -303,8 +303,8 @@ function StepCard({ step, index, isActive, onClick }: {
       onClick={onClick}
       className="cursor-pointer rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group"
       style={{
-        background: isActive ? step.accentBg : "rgba(255,255,255,0.025)",
-        border: `1px solid ${isActive ? step.accentBorder : "rgba(255,255,255,0.07)"}`,
+        background: isActive ? step.accentBg : "var(--bg-card)",
+        border: `1px solid ${isActive ? step.accentBorder : "var(--border-card)"}`,
         boxShadow: isActive ? `0 0 40px ${step.accent}18` : "none",
       }}
       whileHover={{ scale: 1.01 }}
@@ -312,7 +312,7 @@ function StepCard({ step, index, isActive, onClick }: {
       {/* Step number watermark */}
       <div
         className="absolute -top-4 -right-2 font-display font-black text-7xl pointer-events-none select-none leading-none"
-        style={{ color: isActive ? `${step.accent}12` : "rgba(255,255,255,0.03)" }}
+        style={{ color: isActive ? `${step.accent}12` : "var(--bg-card-subtle)" }}
       >
         {step.number}
       </div>
@@ -324,8 +324,8 @@ function StepCard({ step, index, isActive, onClick }: {
             <div
               className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300"
               style={{
-                background: isActive ? step.accentBg : "rgba(255,255,255,0.05)",
-                border: `1px solid ${isActive ? step.accentBorder : "rgba(255,255,255,0.08)"}`,
+                background: isActive ? step.accentBg : "var(--bg-card-hover)",
+                border: `1px solid ${isActive ? step.accentBorder : "var(--border-card-strong)"}`,
               }}
             >
               <Icon size={22} style={{ color: isActive ? step.accent : "#475569" }} />
@@ -381,7 +381,7 @@ function StepCard({ step, index, isActive, onClick }: {
               {/* Mockup card */}
               <div
                 className="rounded-2xl p-4"
-                style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.06)" }}
+                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
               >
                 {MOCKUP_MAP[step.mockup]}
               </div>
@@ -404,7 +404,7 @@ function DesktopStepper({ steps, activeIndex, onSelect, tab }: {
   return (
     <div className="hidden lg:flex items-start gap-0 mb-12 relative">
       {/* Connecting line */}
-      <div className="absolute top-6 left-0 right-0 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
+      <div className="absolute top-6 left-0 right-0 h-px" style={{ background: "var(--border-card)" }} />
       <motion.div
         className="absolute top-6 left-0 h-px"
         style={{ background: tab === "brands" ? "linear-gradient(90deg, #a78bfa, #67e8f9, #34d399)" : "linear-gradient(90deg, #f472b6, #fcd34d, #c084fc)" }}
@@ -428,7 +428,7 @@ function DesktopStepper({ steps, activeIndex, onSelect, tab }: {
               className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300"
               style={{
                 background: isActive || isDone ? step.accentBg : "rgba(9,9,15,1)",
-                border: `2px solid ${isActive ? step.accent : isDone ? `${step.accent}60` : "rgba(255,255,255,0.1)"}`,
+                border: `2px solid ${isActive ? step.accent : isDone ? `${step.accent}60` : "var(--border-card-strong)"}`,
                 boxShadow: isActive ? `0 0 24px ${step.accent}40` : "none",
               }}
               animate={isActive ? { scale: [1, 1.05, 1] } : {}}
@@ -469,11 +469,11 @@ export default function HowItWorksPage() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#09090f" }}>
+    <div className="min-h-screen" style={{ background: "var(--bg-page)" }}>
       {/* Navbar */}
       <div
         className="fixed top-0 left-0 right-0 z-50"
-        style={{ background: "rgba(9,9,15,0.88)", backdropFilter: "blur(18px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+        style={{ background: "var(--bg-navbar)", backdropFilter: "blur(18px)", borderBottom: "1px solid var(--border-card)" }}
       >
         <Navbar />
       </div>
@@ -481,9 +481,9 @@ export default function HowItWorksPage() {
       <main className="pt-28 pb-24">
         {/* Ambient glows */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 left-1/4 w-[600px] h-[600px] rounded-full blur-[160px]" style={{ background: tab === "brands" ? "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)" : "radial-gradient(circle, rgba(236,72,153,0.09) 0%, transparent 70%)" }} />
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-[140px]" style={{ background: tab === "brands" ? "radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)" : "radial-gradient(circle, rgba(192,132,252,0.07) 0%, transparent 70%)" }} />
-          <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+          <div className="absolute -top-20 left-1/4 w-[600px] h-[600px] rounded-full blur-[160px]" style={{ background: tab === "brands" ? "radial-gradient(circle, var(--glow-purple) 0%, transparent 70%)" : "radial-gradient(circle, var(--glow-pink) 0%, transparent 70%)" }} />
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-[140px]" style={{ background: tab === "brands" ? "radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%)" : "radial-gradient(circle, rgba(192,132,252,0.07) 0%, transparent 70%)" }} />
+          <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, var(--dot-grid) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
         </div>
 
         <div className="relative container mx-auto px-4 max-w-5xl">
@@ -495,7 +495,7 @@ export default function HowItWorksPage() {
             variants={stagger}
             className="text-center mb-14"
           >
-            <motion.div variants={fadeUp} transition={{ duration: 0.55 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
+            <motion.div variants={fadeUp} transition={{ duration: 0.55 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
               <Sparkles size={11} />
               How It Works
             </motion.div>
@@ -521,7 +521,7 @@ export default function HowItWorksPage() {
           >
             <div
               className="flex items-center gap-1 p-1 rounded-2xl"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
             >
               <button
                 onClick={() => handleTabChange("brands")}
@@ -586,7 +586,7 @@ export default function HowItWorksPage() {
                 key={i}
                 onClick={() => setActiveStep(i)}
                 className="w-8 h-1.5 rounded-full transition-all duration-300"
-                style={{ background: activeStep === i ? step.accent : "rgba(255,255,255,0.1)" }}
+                style={{ background: activeStep === i ? step.accent : "var(--border-card-strong)" }}
               />
             ))}
           </div>
@@ -610,7 +610,7 @@ export default function HowItWorksPage() {
             <Link
               href={tab === "brands" ? "/for-brands" : "/for-creators"}
               className="flex items-center gap-2 px-6 py-4 rounded-2xl text-sm font-medium transition-all hover:scale-[1.02]"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "#64748b" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#64748b" }}
             >
               {tab === "brands" ? <Building2 size={14} /> : <Users size={14} />}
               Explore {tab === "brands" ? "Brand" : "Creator"} features
@@ -619,7 +619,7 @@ export default function HowItWorksPage() {
         </div>
       </main>
 
-      <div style={{ background: "#060609", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "var(--bg-footer)", borderTop: "1px solid var(--bg-card-hover)" }}>
         <Footer />
       </div>
     </div>

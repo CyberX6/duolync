@@ -26,7 +26,7 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(124,58,237,0.4), transparent)" }} />
 
       <div className="container mx-auto px-4">
@@ -40,7 +40,7 @@ export function FAQSection() {
             className="lg:col-span-4"
           >
             <div className="lg:sticky lg:top-28">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE }}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE }}>
                 <Sparkles size={11} />
                 FAQ
               </div>
@@ -77,8 +77,8 @@ export function FAQSection() {
                 transition={{ duration: 0.5 }}
                 className="rounded-2xl overflow-hidden transition-all duration-300"
                 style={{
-                  background: open === i ? "rgba(124,58,237,0.07)" : "rgba(255,255,255,0.025)",
-                  border: `1px solid ${open === i ? "rgba(124,58,237,0.3)" : "rgba(255,255,255,0.07)"}`,
+                  background: open === i ? "var(--glow-purple)" : "var(--bg-card)",
+                  border: `1px solid ${open === i ? "rgba(124,58,237,0.3)" : "var(--border-card)"}`,
                 }}
               >
                 <button
@@ -90,7 +90,7 @@ export function FAQSection() {
                   </span>
                   <div
                     className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all"
-                    style={{ background: open === i ? "rgba(124,58,237,0.25)" : "rgba(255,255,255,0.06)", border: `1px solid ${open === i ? "rgba(124,58,237,0.4)" : "rgba(255,255,255,0.08)"}` }}
+                    style={{ background: open === i ? "rgba(124,58,237,0.25)" : "var(--bg-card-hover)", border: `1px solid ${open === i ? "rgba(124,58,237,0.4)" : "var(--border-card-strong)"}` }}
                   >
                     {open === i
                       ? <Minus size={12} style={{ color: PURPLE }} />
@@ -108,7 +108,7 @@ export function FAQSection() {
                       transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-5 pb-4 text-sm text-slate-400 leading-relaxed" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div className="px-5 pb-4 text-sm text-slate-400 leading-relaxed" style={{ borderTop: "1px solid var(--bg-card-hover)" }}>
                         <div className="pt-4">{faq.answer}</div>
                       </div>
                     </motion.div>

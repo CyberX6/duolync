@@ -13,9 +13,9 @@ import { FinalCTASection } from "./_sections/FinalCTASection";
 
 export default function ForBrandsPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#09090f" }}>
+    <div className="min-h-screen" style={{ background: "var(--bg-page)" }}>
       {/* Navbar with dark override */}
-      <div className="fixed top-0 left-0 right-0 z-50" style={{ background: "rgba(9,9,15,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+      <div className="fixed top-0 left-0 right-0 z-50" style={{ background: "var(--bg-navbar)", backdropFilter: "blur(16px)", borderBottom: "1px solid var(--border-card)" }}>
         <Navbar />
       </div>
 
@@ -31,7 +31,7 @@ export default function ForBrandsPage() {
       </main>
 
       {/* Footer with dark override */}
-      <div style={{ background: "#070710", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "var(--bg-footer)", borderTop: "1px solid var(--border-card)" }}>
         <Footer />
       </div>
     </div>

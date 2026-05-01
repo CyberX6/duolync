@@ -22,7 +22,7 @@ const EMERALD = "#34d399";
 function GlassCard({
   children,
   className = "",
-  borderColor = "rgba(255,255,255,0.07)",
+  borderColor = "var(--border-card)",
   glowColor,
 }: {
   children: React.ReactNode;
@@ -35,7 +35,7 @@ function GlassCard({
       variants={fadeUp}
       transition={{ duration: 0.6 }}
       className={`rounded-3xl p-6 overflow-hidden relative group transition-all duration-500 ${className}`}
-      style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${borderColor}`, backdropFilter: "blur(12px)" }}
+      style={{ background: "var(--bg-card)", border: `1px solid ${borderColor}`, backdropFilter: "blur(12px)" }}
       whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
     >
       {glowColor && (
@@ -65,7 +65,7 @@ export function BentoSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-28 relative overflow-hidden" style={{ background: "#07080f" }}>
+    <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[160px] pointer-events-none" style={{ background: "rgba(219,39,119,0.04)" }} />
 
       <div className="container mx-auto px-4">
@@ -113,8 +113,8 @@ export function BentoSection() {
                   key={niche}
                   className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
                   style={{
-                    background: i < 3 ? `${PINK}20` : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${i < 3 ? `${PINK}40` : "rgba(255,255,255,0.08)"}`,
+                    background: i < 3 ? `${PINK}20` : "var(--bg-card-hover)",
+                    border: `1px solid ${i < 3 ? `${PINK}40` : "var(--border-card-strong)"}`,
                     color: i < 3 ? PINK : "#64748b",
                   }}
                 >
@@ -123,14 +123,14 @@ export function BentoSection() {
               ))}
             </div>
             <div className="flex gap-3 flex-wrap">
-              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
                 <div className="text-slate-600 text-[9px] mb-1">Min. Offer Amount</div>
                 <div className="text-white font-semibold">$500+</div>
-                <div className="mt-1.5 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <div className="mt-1.5 h-1 rounded-full" style={{ background: "var(--border-card-strong)" }}>
                   <div className="h-1 rounded-full w-1/2" style={{ background: `linear-gradient(90deg, ${PINK}, ${VIOLET})` }} />
                 </div>
               </div>
-              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
                 <div className="text-slate-600 text-[9px] mb-1">Location</div>
                 <div className="text-white font-semibold">US & EU</div>
                 <div className="mt-1.5 flex gap-1">
@@ -139,10 +139,10 @@ export function BentoSection() {
                   ))}
                 </div>
               </div>
-              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="rounded-xl px-3 py-2 text-xs flex-1 min-w-[120px]" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
                 <div className="text-slate-600 text-[9px] mb-1">Audience Size</div>
                 <div className="text-white font-semibold">10K – 5M</div>
-                <div className="mt-1.5 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <div className="mt-1.5 h-1 rounded-full" style={{ background: "var(--border-card-strong)" }}>
                   <div className="h-1 rounded-full w-3/4" style={{ background: `linear-gradient(90deg, ${CYAN}, ${VIOLET})` }} />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export function BentoSection() {
                 </div>
               ))}
             </div>
-            <div className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="rounded-xl p-3" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
               <div className="grid grid-cols-7 gap-0.5 mb-1">
                 {["M","T","W","T","F","S","S"].map((d, i) => (
                   <div key={i} className="text-[8px] text-slate-700 text-center">{d}</div>
@@ -178,7 +178,7 @@ export function BentoSection() {
                     className="text-[8px] text-center py-1 rounded"
                     style={{
                       background: [4, 8, 15, 22].includes(d) ? `${PINK}40` : [6, 13, 20].includes(d) ? `${VIOLET}35` : "transparent",
-                      color: [4,8,15,22,6,13,20].includes(d) ? "white" : "rgba(100,116,139,0.7)",
+                      color: [4,8,15,22,6,13,20].includes(d) ? "var(--text-base)" : "rgba(100,116,139,0.7)",
                     }}
                   >
                     {d}
@@ -204,7 +204,7 @@ export function BentoSection() {
                 <div
                   key={i}
                   className="flex items-center gap-2.5 rounded-xl p-2.5"
-                  style={{ background: item.unread ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)", border: `1px solid rgba(255,255,255,${item.unread ? "0.08" : "0.04"})` }}
+                  style={{ background: item.unread ? "var(--bg-card-hover)" : "rgba(255,255,255,0.02)", border: `1px solid rgba(255,255,255,${item.unread ? "0.08" : "0.04"})` }}
                 >
                   <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${item.color} shrink-0`} />
                   <div className="flex-1 min-w-0">
@@ -233,7 +233,7 @@ export function BentoSection() {
                 { label: "Best Post Time", value: "7–9 PM", trend: "Tue & Thu", color: CYAN },
                 { label: "Growth Rate", value: "+12%", trend: "vs last month", color: VIOLET },
               ].map((s, i) => (
-                <div key={i} className="flex-1 min-w-[100px] rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div key={i} className="flex-1 min-w-[100px] rounded-xl p-3" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
                   <div className="text-[9px] text-slate-600 mb-1">{s.label}</div>
                   <div className="text-sm font-bold" style={{ color: s.color }}>{s.value}</div>
                   <div className="text-[9px] text-slate-600">{s.trend}</div>
@@ -268,14 +268,14 @@ export function BentoSection() {
                   <div
                     className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold"
                     style={{
-                      background: s.done ? `${AMBER}30` : s.active ? `${AMBER}20` : "rgba(255,255,255,0.05)",
-                      border: `1px solid ${s.done ? `${AMBER}50` : s.active ? `${AMBER}40` : "rgba(255,255,255,0.08)"}`,
+                      background: s.done ? `${AMBER}30` : s.active ? `${AMBER}20` : "var(--bg-card-hover)",
+                      border: `1px solid ${s.done ? `${AMBER}50` : s.active ? `${AMBER}40` : "var(--border-card-strong)"}`,
                       color: s.done ? AMBER : s.active ? AMBER : "#475569",
                     }}
                   >
                     {s.done ? "✓" : i + 1}
                   </div>
-                  <span className="text-[11px]" style={{ color: s.done ? "#94a3b8" : s.active ? "white" : "#475569" }}>{s.step}</span>
+                  <span className="text-[11px]" style={{ color: s.done ? "var(--text-faint)" : s.active ? "var(--text-base)" : "#475569" }}>{s.step}</span>
                   {s.active && (
                     <div className="ml-auto px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: `${AMBER}20`, color: AMBER }}>NOW</div>
                   )}

@@ -13,9 +13,9 @@ import { FinalCTASection } from "./_sections/FinalCTASection";
 
 export default function ForCreatorsPage() {
   return (
-    <div className="min-h-screen" style={{ background: "#07080f" }}>
+    <div className="min-h-screen" style={{ background: "var(--bg-page-alt)" }}>
       {/* Dark Navbar override */}
-      <div className="fixed top-0 left-0 right-0 z-50" style={{ background: "rgba(7,8,15,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+      <div className="fixed top-0 left-0 right-0 z-50" style={{ background: "var(--bg-navbar)", backdropFilter: "blur(16px)", borderBottom: "1px solid var(--border-card)" }}>
         <Navbar />
       </div>
 
@@ -30,7 +30,7 @@ export default function ForCreatorsPage() {
         <FinalCTASection />
       </main>
 
-      <div style={{ background: "#050509", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "var(--bg-footer)", borderTop: "1px solid var(--bg-card-hover)" }}>
         <Footer />
       </div>
     </div>
