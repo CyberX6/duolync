@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
-import VideoShowcaseSection from "@/components/landing/VideoShowcaseSection";
+// import VideoShowcaseSection from "@/components/landing/VideoShowcaseSection";
 import InfluencerSearchSection from "@/components/landing/InfluencerSearchSection";
 import InfluencerContactSection from "@/components/landing/InfluencerContactSection";
 import InfluencerCRMSection from "@/components/landing/InfluencerCRMSection";
@@ -16,7 +16,7 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <VideoShowcaseSection />
+        {/* <VideoShowcaseSection /> */}
         <InfluencerSearchSection />
         <InfluencerContactSection />
         <InfluencerCRMSection />
