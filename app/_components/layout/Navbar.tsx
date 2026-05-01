@@ -5,10 +5,9 @@ import { Menu, X, Sparkles, ArrowRight, Building2, Users } from "lucide-react";
 import Link from "next/link";
 
 const navLinks = [
-  { name: "How It Works", href: "#how-it-works" },
+  { name: "How It Works", href: "/how-it-works" },
   { name: "For Brands", href: "/for-brands" },
   { name: "For Creators", href: "/for-creators" },
-  { name: "Testimonials", href: "#testimonials" },
 ];
 
 const Navbar = () => {
