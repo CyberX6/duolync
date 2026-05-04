@@ -12,12 +12,9 @@ import {
   Sparkles,
   CheckCircle2,
   TrendingUp,
-  Heart,
 } from "lucide-react";
 import Image from "next/image";
 import nova1 from "@/assets/nova1.png";
-import nova2 from "@/assets/nova2.png";
-import nova3 from "@/assets/nova3.png";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -612,31 +609,6 @@ export function BentoSection() {
                 </div>
               </div>
 
-              {/* Video grid */}
-              <div className="grid grid-cols-2 gap-0.5 px-3 pb-3">
-                <div className="relative rounded-lg overflow-hidden aspect-[9/12]">
-                  <Image src={nova2} alt="" className="w-full h-full object-cover" fill sizes="80px" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-1 left-1 flex items-center gap-0.5">
-                    <Heart size={7} className="text-white fill-white" />
-                    <span className="text-[7px] text-white font-medium">2.4M</span>
-                  </div>
-                  <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-sm bg-black/50 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-sm bg-white/80" style={{ clipPath: "polygon(20% 0%, 100% 50%, 20% 100%, 20% 0%)" }} />
-                  </div>
-                </div>
-                <div className="relative rounded-lg overflow-hidden aspect-[9/12]">
-                  <Image src={nova3} alt="" className="w-full h-full object-cover" fill sizes="80px" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-1 left-1 flex items-center gap-0.5">
-                    <Heart size={7} className="text-white fill-white" />
-                    <span className="text-[7px] text-white font-medium">1.1M</span>
-                  </div>
-                  <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-sm bg-black/50 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-sm bg-white/80" style={{ clipPath: "polygon(20% 0%, 100% 50%, 20% 100%, 20% 0%)" }} />
-                  </div>
-                </div>
-              </div>
             </div>
           </GlassCard>
 
