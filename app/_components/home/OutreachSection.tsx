@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
 import { Mail, Zap, Clock, CheckCircle2, ArrowRight, Send } from "lucide-react";
 import Image from "next/image";
-import summerKickoff from "@/assets/Summer Kick-off .png";
 import novaBeautyImg from "@/assets/nova.beauty.png";
 import techguruImg from "@/assets/techguru.jpg";
 import fitlifeImg from "@/assets/fitlife.jpg";
@@ -49,8 +48,25 @@ export function OutreachSection() {
               {/* Campaign brief card */}
               <div className="p-5">
                 <div className="rounded-2xl p-4 mb-4 flex items-start gap-4" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card)" }}>
-                  <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0">
-                    <Image src={summerKickoff} alt="Summer Kick-off" width={56} height={56} className="w-full h-full object-cover" />
+                  <div
+                    className="w-14 h-14 rounded-xl shrink-0 flex flex-col items-center justify-center relative overflow-hidden"
+                    style={{ background: "linear-gradient(135deg, #1e1a2e, #2a1a3e)", border: "1px solid rgba(251,191,36,0.25)" }}
+                  >
+                    {/* Subtle glow */}
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(circle at 50% 30%, rgba(251,191,36,0.18) 0%, transparent 70%)" }} />
+                    {/* Sun icon */}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1 relative z-10">
+                      <defs>
+                        <linearGradient id="sun-grad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor="#fcd34d" />
+                          <stop offset="100%" stopColor="#f97316" />
+                        </linearGradient>
+                      </defs>
+                      <circle cx="12" cy="12" r="4" fill="url(#sun-grad)" />
+                      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="url(#sun-grad)" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                    <span className="text-[6px] font-black tracking-widest leading-none uppercase relative z-10" style={{ color: "#fcd34d" }}>SUMMER</span>
+                    <span className="text-[5px] font-semibold tracking-widest leading-none mt-0.5 uppercase relative z-10" style={{ color: "rgba(251,191,36,0.5)" }}>'26</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-slate-500 mb-0.5">Campaign Brief</div>

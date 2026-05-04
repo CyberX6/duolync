@@ -14,7 +14,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Image from "next/image";
-import nova1 from "@/assets/nova1.png";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -566,13 +565,13 @@ export function BentoSection() {
               <div className="px-3 pt-3 pb-2">
                 <div className="flex items-center gap-2.5">
                   <div className="relative shrink-0">
-                    <Image
-                      src={nova1}
-                      alt="Nova Beauty"
-                      className="w-9 h-9 rounded-full object-cover ring-2 ring-pink-500/40"
-                      width={36}
-                      height={36}
-                    />
+                    <div
+                      className="w-9 h-9 rounded-full flex flex-col items-center justify-center ring-2 ring-pink-500/40"
+                      style={{ background: "linear-gradient(135deg, #ec4899, #be185d)" }}
+                    >
+                      <span className="text-[7px] font-black text-white tracking-widest leading-none">NOVA</span>
+                      <span className="text-[5px] font-bold text-pink-200 tracking-widest leading-none mt-0.5">BEAUTY</span>
+                    </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-pink-500 border border-[var(--bg-page-alt)] flex items-center justify-center">
                       <div className="w-1.5 h-1.5 rounded-sm bg-white" />
                     </div>
