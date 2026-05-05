@@ -14,8 +14,6 @@ import {
   Mail,
   TrendingUp,
 } from "lucide-react";
-import Image from "next/image";
-import nova1 from "@/assets/nova1.png";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -108,17 +106,16 @@ export function BentoSection() {
           </motion.p>
         </motion.div>
 
-        {/* Bento Grid */}
+        {/* Bento Grid — row-based layout */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={stagger}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-          style={{ gridAutoRows: "minmax(260px, auto)" }}
+          className="space-y-4 max-w-7xl mx-auto"
         >
-          {/* 1 — AI Matching: spans 2 cols */}
+          {/* ── Row 1: AI Matching hero — full width ── */}
           <GlassCard
-            className="lg:col-span-2"
+            className="w-full"
             borderColor="rgba(124,58,237,0.25)"
             glowColor="var(--glow-purple)"
           >
@@ -183,21 +180,13 @@ export function BentoSection() {
                   className="flex-1 min-w-[120px] rounded-2xl p-3 backdrop-blur-sm transition-all duration-300 hover:scale-[1.03]"
                   style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
                 >
-                  <div
-                    className="w-8 h-8 rounded-xl flex items-center justify-center mb-2 shrink-0"
-                    style={{ background: c.iconBg }}
-                  >
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center mb-2 shrink-0" style={{ background: c.iconBg }}>
                     {c.icon}
                   </div>
-                  {/* Animated progress bar */}
                   <div className="h-1.5 rounded-full mb-1 bg-white/5 overflow-hidden">
                     <div
                       className={`h-full rounded-full bg-gradient-to-r ${c.barGradient} transition-all duration-700 ease-out`}
-                      style={{
-                        width: isInView ? `${c.match}%` : "0%",
-                        transitionDelay: `${0.3 + i * 0.12}s`,
-                        boxShadow: `0 0 6px 1px ${c.glow}`,
-                      }}
+                      style={{ width: isInView ? `${c.match}%` : "0%", transitionDelay: `${0.3 + i * 0.12}s`, boxShadow: `0 0 6px 1px ${c.glow}` }}
                     />
                   </div>
                   <div className="text-[10px] text-slate-500">{c.followers}</div>
@@ -219,33 +208,66 @@ export function BentoSection() {
             </div>
           </GlassCard>
 
-          {/* 2 — Campaign Calendar */}
-          <GlassCard borderColor="rgba(6,182,212,0.25)" glowColor="rgba(6,182,212,0.06)">
+          {/* ── Row 2: CRM (2/3) + Calendar (1/3) ── */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <GlassCard
+            className="md:col-span-2 h-full"
+            borderColor="rgba(56,189,248,0.22)"
+            glowColor="rgba(56,189,248,0.06)"
+          >
+            <FeatureBadge color="#7dd3fc" Icon={Database} label="CRM & Bulk Outreach" />
+            <h3 className="font-display font-bold text-white text-xl mb-1">Mass reach. Zero chaos.</h3>
+            <p className="text-slate-500 text-sm mb-5">Centralized creator database with automated outreach, deal tracking, and full campaign history.</p>
+
+            {/* CRM table mockup */}
+            <div className="rounded-2xl overflow-hidden" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
+              <div className="grid grid-cols-4 gap-2 px-4 py-2 text-[10px] font-medium text-slate-600" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
+                <span>Creator</span><span>Platform</span><span>Status</span><span>Last Contact</span>
+              </div>
+              {[
+                { name: "@nova.style",  platform: "TikTok",    status: "Active",       statusColor: "#34d399", days: "Today",  avatarBg: "rgba(244,114,182,0.18)", avatarColor: "#f472b6" },
+                { name: "@fitlife.co",  platform: "Instagram", status: "Negotiating",  statusColor: "#fcd34d", days: "2d ago", avatarBg: "rgba(251,191,36,0.18)",  avatarColor: "#fbbf24" },
+                { name: "@techguru",    platform: "YouTube",   status: "Pending",      statusColor: "#7dd3fc", days: "5d ago", avatarBg: "rgba(96,165,250,0.18)",  avatarColor: "#60a5fa" },
+                { name: "@travel.joe",  platform: "TikTok",   status: "Completed",    statusColor: "#a78bfa", days: "1w ago", avatarBg: "rgba(167,139,250,0.18)", avatarColor: "#a78bfa" },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-4 gap-2 px-4 py-2.5 items-center transition-all duration-200 hover:bg-white/[0.02]" style={{ borderBottom: i < 3 ? "1px solid var(--bg-card-hover)" : "none" }}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold" style={{ background: row.avatarBg, color: row.avatarColor }}>
+                      {row.name.replace("@", "").charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-xs text-slate-300 truncate">{row.name}</span>
+                  </div>
+                  <span className="text-[11px] text-slate-500">{row.platform}</span>
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full w-fit" style={{ background: `${row.statusColor}18`, color: row.statusColor }}>{row.status}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-slate-600">{row.days}</span>
+                    <Mail size={10} className="text-slate-700" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-[11px] text-slate-600">128 creators in database</span>
+              <button className="flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-lg transition-all hover:opacity-80" style={{ background: "rgba(56,189,248,0.15)", color: "#7dd3fc", border: "1px solid rgba(56,189,248,0.25)" }}>
+                <Mail size={11} />
+                Bulk Email (128)
+              </button>
+            </div>
+          </GlassCard>
+
+          {/* Campaign Calendar — closes Row 2 */}
+          <GlassCard className="h-full" borderColor="rgba(6,182,212,0.25)" glowColor="rgba(6,182,212,0.06)">
             <FeatureBadge color="#67e8f9" Icon={Calendar} label="Campaign Calendar" />
             <h3 className="font-display font-bold text-white text-lg mb-1">Plan at scale</h3>
             <p className="text-slate-500 text-xs mb-3">Multi-creator scheduling, deadline tracking, and "What & When" for every post.</p>
-
-            {/* Mini calendar */}
             <div className="rounded-xl p-3" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
               <div className="grid grid-cols-7 gap-0.5 mb-1.5">
                 {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
                   <div key={i} className="text-[8px] text-slate-700 text-center py-0.5">{d}</div>
                 ))}
                 {Array.from({ length: 28 }, (_, i) => i + 1).map((d) => (
-                  <div
-                    key={d}
-                    className="text-[8px] text-center py-1 rounded-md transition-all"
-                    style={{
-                      background: [3, 7, 14, 21].includes(d)
-                        ? "rgba(124,58,237,0.5)"
-                        : [5, 12, 19].includes(d)
-                        ? "rgba(6,182,212,0.4)"
-                        : "transparent",
-                      color: [3, 7, 14, 21, 5, 12, 19].includes(d) ? "var(--text-base)" : "rgba(100,116,139,0.8)",
-                    }}
-                  >
-                    {d}
-                  </div>
+                  <div key={d} className="text-[8px] text-center py-1 rounded-md transition-all" style={{ background: [3,7,14,21].includes(d) ? "rgba(124,58,237,0.5)" : [5,12,19].includes(d) ? "rgba(6,182,212,0.4)" : "transparent", color: [3,7,14,21,5,12,19].includes(d) ? "var(--text-base)" : "rgba(100,116,139,0.8)" }}>{d}</div>
                 ))}
               </div>
               <div className="space-y-1.5 mt-2">
@@ -262,70 +284,53 @@ export function BentoSection() {
               </div>
             </div>
           </GlassCard>
+          </div>{/* end Row 2 */}
 
-          {/* 3 — AI Ad Strategy */}
-          <GlassCard borderColor="rgba(52,211,153,0.25)" glowColor="var(--glow-emerald)">
+          {/* ── Row 3: AI Ad (50%) + Chrome Extension (50%) ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <GlassCard className="h-full" borderColor="rgba(52,211,153,0.25)" glowColor="var(--glow-emerald)">
             <FeatureBadge color="#6ee7b7" Icon={Brain} label="AI Ad Consultant" />
             <h3 className="font-display font-bold text-white text-lg mb-1">AI-crafted ad strategies</h3>
             <p className="text-slate-500 text-xs mb-3">Receive recommendations on the best ad types for maximum ROI.</p>
-
-            {/* Chat mockup */}
             <div className="space-y-2">
-              <div
-                className="rounded-xl px-3 py-2 text-xs text-slate-300 max-w-[90%]"
-                style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
-              >
+              <div className="rounded-xl px-3 py-2 text-xs text-slate-300 max-w-[90%]" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}>
                 Best format for a skincare launch on TikTok?
               </div>
-              <div
-                className="rounded-xl px-3 py-2 text-xs text-white ml-auto max-w-[92%]"
-                style={{ background: "linear-gradient(135deg, rgba(52,211,153,0.2), rgba(6,182,212,0.2))", border: "1px solid rgba(52,211,153,0.25)" }}
-              >
+              <div className="rounded-xl px-3 py-2 text-xs text-white ml-auto max-w-[92%]" style={{ background: "linear-gradient(135deg, rgba(52,211,153,0.2), rgba(6,182,212,0.2))", border: "1px solid rgba(52,211,153,0.25)" }}>
                 <div className="flex items-center gap-1 mb-1">
                   <Sparkles size={9} className="text-emerald-400" />
                   <span className="text-emerald-400 font-semibold text-[10px]">AI Recommendation</span>
                 </div>
                 <strong>Storytelling (60s reel)</strong> — 3.2× avg ROI. Show before/after with authentic testimonial.
               </div>
-              <div
-                className="rounded-xl px-3 py-2 text-xs ml-auto max-w-[88%]"
-                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)", color: "#94a3b8" }}
-              >
+              <div className="rounded-xl px-3 py-2 text-xs ml-auto max-w-[88%]" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)", color: "#94a3b8" }}>
                 <span className="text-amber-400 font-medium">Also try:</span> Comparison, Unboxing
               </div>
             </div>
           </GlassCard>
 
-          {/* 4 — Chrome Extension */}
-          <GlassCard borderColor="rgba(251,191,36,0.22)" glowColor="rgba(251,191,36,0.05)">
+          <GlassCard className="h-full" borderColor="rgba(251,191,36,0.22)" glowColor="rgba(251,191,36,0.05)">
             <FeatureBadge color="#fcd34d" Icon={Globe} label="Chrome Extension" />
             <h3 className="font-display font-bold text-white text-lg mb-1">Scout creators anywhere</h3>
             <p className="text-slate-500 text-xs mb-3">Save creators from TikTok, Instagram & YouTube with one click.</p>
-
-            {/* Browser window mockup */}
             <div className="rounded-2xl overflow-hidden" style={{ background: "var(--bg-page-alt)", border: "1px solid var(--border-card-strong)" }}>
               <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: "#080810", borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <div className="w-2 h-2 rounded-full bg-red-500/70" />
                 <div className="w-2 h-2 rounded-full bg-yellow-500/70" />
                 <div className="w-2 h-2 rounded-full bg-green-500/70" />
-                <div className="flex-1 mx-2 rounded-md px-2 py-0.5 text-[8px] text-slate-600" style={{ background: "var(--bg-card-hover)" }}>
-                  tiktok.com/@nova.style
-                </div>
+                <div className="flex-1 mx-2 rounded-md px-2 py-0.5 text-[8px] text-slate-600" style={{ background: "var(--bg-card-hover)" }}>tiktok.com/@nova.beauty</div>
               </div>
               <div className="p-3 flex items-center gap-2">
-                <Image src={nova1} alt="Nova Beauty" width={36} height={36} className="w-9 h-9 rounded-full object-cover shrink-0" />
+                <div className="w-9 h-9 rounded-full flex flex-col items-center justify-center shrink-0 ring-2 ring-pink-500/40" style={{ background: "linear-gradient(135deg, #ec4899, #be185d)" }}>
+                  <span className="text-[7px] font-black text-white tracking-widest leading-none">NOVA</span>
+                  <span className="text-[5px] font-bold text-pink-200 tracking-widest leading-none mt-0.5">BEAUTY</span>
+                </div>
                 <div>
                   <div className="text-[10px] font-semibold text-slate-200">Nova Beauty</div>
                   <div className="text-[9px] text-slate-600">1.8M followers · Beauty</div>
                 </div>
-                <button
-                  className="ml-auto px-2.5 py-1 rounded-lg text-[10px] font-bold text-white"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
-                >
-                  + Save
-                </button>
+                <button className="ml-auto px-2.5 py-1 rounded-lg text-[10px] font-bold text-white" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>+ Save</button>
               </div>
-              {/* Extension popup overlay */}
               <div className="mx-3 mb-3 rounded-xl p-2" style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}>
                 <div className="flex items-center gap-1.5 text-[9px] text-violet-300">
                   <CheckCircle2 size={9} />
@@ -334,73 +339,8 @@ export function BentoSection() {
               </div>
             </div>
           </GlassCard>
+          </div>{/* end Row 3 */}
 
-          {/* 5 — CRM: spans 2 cols */}
-          <GlassCard
-            className="lg:col-span-2"
-            borderColor="rgba(56,189,248,0.22)"
-            glowColor="rgba(56,189,248,0.06)"
-          >
-            <FeatureBadge color="#7dd3fc" Icon={Database} label="CRM & Bulk Outreach" />
-            <h3 className="font-display font-bold text-white text-xl mb-1">Mass reach. Zero chaos.</h3>
-            <p className="text-slate-500 text-sm mb-5">Centralized creator database with automated outreach, deal tracking, and full campaign history.</p>
-
-            {/* CRM table mockup */}
-            <div className="rounded-2xl overflow-hidden" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}>
-              {/* Table header */}
-              <div className="grid grid-cols-4 gap-2 px-4 py-2 text-[10px] font-medium text-slate-600" style={{ borderBottom: "1px solid var(--bg-card-hover)" }}>
-                <span>Creator</span>
-                <span>Platform</span>
-                <span>Status</span>
-                <span>Last Contact</span>
-              </div>
-              {[
-                { name: "@nova.style", platform: "TikTok", status: "Active", statusColor: "#34d399", days: "Today", avatarBg: "rgba(244,114,182,0.18)", avatarColor: "#f472b6" },
-                { name: "@fitlife.co", platform: "Instagram", status: "Negotiating", statusColor: "#fcd34d", days: "2d ago", avatarBg: "rgba(251,191,36,0.18)", avatarColor: "#fbbf24" },
-                { name: "@techguru", platform: "YouTube", status: "Pending", statusColor: "#7dd3fc", days: "5d ago", avatarBg: "rgba(96,165,250,0.18)", avatarColor: "#60a5fa" },
-                { name: "@travel.joe", platform: "TikTok", status: "Completed", statusColor: "#a78bfa", days: "1w ago", avatarBg: "rgba(167,139,250,0.18)", avatarColor: "#a78bfa" },
-              ].map((row, i) => (
-                <div
-                  key={i}
-                  className="grid grid-cols-4 gap-2 px-4 py-2.5 items-center transition-all duration-200 hover:bg-white/[0.02]"
-                  style={{ borderBottom: i < 3 ? "1px solid var(--bg-card-hover)" : "none" }}
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold"
-                      style={{ background: row.avatarBg, color: row.avatarColor }}
-                    >
-                      {row.name.replace("@", "").charAt(0).toUpperCase()}
-                    </div>
-                    <span className="text-xs text-slate-300 truncate">{row.name}</span>
-                  </div>
-                  <span className="text-[11px] text-slate-500">{row.platform}</span>
-                  <span
-                    className="text-[10px] font-medium px-2 py-0.5 rounded-full w-fit"
-                    style={{ background: `${row.statusColor}18`, color: row.statusColor }}
-                  >
-                    {row.status}
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-slate-600">{row.days}</span>
-                    <Mail size={10} className="text-slate-700" />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Bottom action bar */}
-            <div className="flex items-center justify-between mt-3">
-              <span className="text-[11px] text-slate-600">128 creators in database</span>
-              <button
-                className="flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-lg transition-all hover:opacity-80"
-                style={{ background: "rgba(56,189,248,0.15)", color: "#7dd3fc", border: "1px solid rgba(56,189,248,0.25)" }}
-              >
-                <Mail size={11} />
-                Bulk Email (128)
-              </button>
-            </div>
-          </GlassCard>
         </motion.div>
       </div>
     </section>
