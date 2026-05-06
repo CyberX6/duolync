@@ -51,6 +51,18 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+/// OAuth state, magic links, email verification tokens, etc. Required by Better Auth.
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
 model PlatformToken {
   id             String    @id @default(cuid())
   userId         String
