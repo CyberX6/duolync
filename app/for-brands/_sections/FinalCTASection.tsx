@@ -81,7 +81,7 @@ export function FinalCTASection() {
           </motion.h2>
 
           <motion.p variants={fadeUp} className="text-slate-400 text-xl leading-relaxed mb-10 max-w-xl mx-auto">
-            Join our exclusive wishlist to be the first to access the platform. Launching soon — spots are limited.
+            Join our exclusive waitlist to be the first to access the platform. Launching soon — spots are limited.
           </motion.p>
 
           {/* Perks grid */}
@@ -124,7 +124,7 @@ export function FinalCTASection() {
                   className="px-7 py-3.5 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 text-sm transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
                 >
-                  Join the Wishlist
+                  Join the Waitlist
                   <ArrowRight size={16} />
                 </button>
               </form>
@@ -161,7 +161,7 @@ export function FinalCTASection() {
             <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, var(--border-card))" }} />
             <div className="flex items-center gap-2 text-xs text-slate-700">
               <Sparkles size={12} className="text-violet-800" />
-              Talent Trend Spot — AI Influencer Marketing Platform
+              Duolync — AI Influencer Marketing Platform
             </div>
             <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, var(--border-card))" }} />
           </motion.div>

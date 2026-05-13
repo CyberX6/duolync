@@ -90,7 +90,7 @@ const FreeToolsSection = () => {
                 Your complete guide to influencer marketing
               </p>
               <p className="text-muted-foreground mb-8">
-                Unlock the power of influencer marketing with Nexly's free resources. 
+                Unlock the power of influencer marketing with Duolync's free resources. 
                 Gain insights, tips, and strategies to effectively harness the potential 
                 of influencers for your business success.
               </p>

@@ -85,7 +85,7 @@ export function FinalCTASection() {
           </motion.h2>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-slate-400 text-xl leading-relaxed mb-8 max-w-xl mx-auto">
-            Join our exclusive wishlist and be among the first creators to access the platform. Launching very soon — spots are limited.
+            Join our exclusive waitlist and be among the first creators to access the platform. Launching very soon — spots are limited.
           </motion.p>
 
           {/* Social proof row */}
@@ -173,7 +173,7 @@ export function FinalCTASection() {
             <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, var(--border-card))" }} />
             <div className="flex items-center gap-2 text-xs text-slate-700">
               <Sparkles size={12} className="text-pink-900" />
-              Talent Trend Spot — Built for Creators
+              Duolync — Built for Creators
             </div>
             <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, var(--border-card))" }} />
           </motion.div>

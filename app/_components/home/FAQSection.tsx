@@ -10,11 +10,11 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 const PURPLE = "#a78bfa";
 
 const faqs = [
-  { question: "What is Talent Trend Spot?", answer: "Talent Trend Spot is a dual-sided AI platform that connects content creators with brands for collaboration opportunities. Our platform uses AI-powered matching to help brands find perfect creators for their campaigns, while giving creators access to exclusive, curated partnership opportunities." },
-  { question: "How do I get started as a creator?", answer: "Simply join the wishlist, create your profile, and connect your social accounts. Our AI will start matching you with relevant brand opportunities based on your niche, audience demographics, and engagement metrics — automatically." },
-  { question: "Is Talent Trend Spot free to use?", answer: "We offer a free starter tier for both brands and creators with core features included. Premium plans unlock advanced AI tools, priority placement, bulk outreach, and detailed analytics. No credit card required to start." },
+  { question: "What is Duolync?", answer: "Duolync is a dual-sided AI platform that connects content creators with brands for collaboration opportunities. Our platform uses AI-powered matching to help brands find perfect creators for their campaigns, while giving creators access to exclusive, curated partnership opportunities." },
+  { question: "How do I get started as a creator?", answer: "Simply join the waitlist, create your profile, and connect your social accounts. Our AI will start matching you with relevant brand opportunities based on your niche, audience demographics, and engagement metrics — automatically." },
+  { question: "Is Duolync free to use?", answer: "We offer a free starter tier for both brands and creators with core features included. Premium plans unlock advanced AI tools, priority placement, bulk outreach, and detailed analytics. No credit card required to start." },
   { question: "How does the AI brand-creator matching work?", answer: "Our AI analyzes 200+ data points including audience demographics, engagement quality, content style, brand affinity, and past campaign performance to predict the best matches. It learns continuously from actual campaign results to improve accuracy over time." },
-  { question: "What platforms are supported?", answer: "Talent Trend Spot supports all major social platforms: TikTok, YouTube, Instagram, Twitter/X, Twitch, and LinkedIn. You can connect multiple accounts to showcase your full creator portfolio or target creators across all platforms from one dashboard." },
+  { question: "What platforms are supported?", answer: "Duolync supports all major social platforms: TikTok, YouTube, Instagram, Twitter/X, Twitch, and LinkedIn. You can connect multiple accounts to showcase your full creator portfolio or target creators across all platforms from one dashboard." },
   { question: "How do payments and deals work?", answer: "Brands post offers with budgets. Creators apply or are matched and can accept deals directly. Payments are facilitated securely through the platform — brands release funds from escrow when campaign deliverables are completed." },
   { question: "What kind of brands can use this platform?", answer: "Any brand looking to leverage creator marketing — from funded startups and e-commerce brands to global agencies and Fortune 500 companies. Our tools scale with your budget, whether you're running a $500 micro-campaign or a $500K influencer strategy." },
   { question: "How is my data protected?", answer: "Your personal information is encrypted end-to-end and never sold or shared without explicit consent. We comply with GDPR, CCPA, and all major privacy regulations. Platform security is audited regularly. See our Privacy Policy for full details." },
@@ -54,7 +54,7 @@ export function FAQSection() {
                 Can't find your answer? Reach out to our team and we'll get back to you within 24 hours.
               </p>
               <a
-                href="/auth"
+                href="mailto:hello@duolync.com"
                 className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium transition-all"
                 style={{ color: PURPLE }}
               >

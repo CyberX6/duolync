@@ -56,7 +56,7 @@ const Auth = () => {
         }
         const { error } = await signUp(email, password, userType, fullName);
         if (error) throw error;
-        toast({ title: "Account created successfully!", description: "Welcome to Nexly!" });
+        toast({ title: "Account created successfully!", description: "Welcome to Duolync!" });
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
@@ -130,9 +130,9 @@ const Auth = () => {
         <div className="relative z-10">
           <a href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
+              <span className="text-white font-bold text-xl">D</span>
             </div>
-            <span className="font-display font-bold text-2xl text-white">Nexly</span>
+            <span className="font-display font-bold text-2xl text-white">Duolync</span>
           </a>
         </div>
 
@@ -176,9 +176,9 @@ const Auth = () => {
           <div className="lg:hidden flex justify-center mb-8">
             <a href="/" className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
+                <span className="text-white font-bold text-xl">D</span>
               </div>
-              <span className="font-display font-bold text-2xl">Nexly</span>
+              <span className="font-display font-bold text-2xl">Duolync</span>
             </a>
           </div>
 
@@ -186,8 +186,8 @@ const Auth = () => {
           {mode === "select" && (
             <div className="animate-fade-in">
               <div className="text-center mb-8">
-                <h2 className="font-display text-3xl font-bold mb-2">Join Nexly</h2>
-                <p className="text-muted-foreground">Choose how you want to use Nexly</p>
+                <h2 className="font-display text-3xl font-bold mb-2">Join Duolync</h2>
+                <p className="text-muted-foreground">Choose how you want to use Duolync</p>
               </div>
 
               <div className="grid gap-4 mb-8">
@@ -263,7 +263,7 @@ const Auth = () => {
                 <p className="text-muted-foreground">
                   {mode === "signup" 
                     ? `Sign up as a ${userType === "brand" ? "Brand" : "Creator"}`
-                    : "Log in to your Nexly account"}
+                    : "Log in to your Duolync account"}
                 </p>
               </div>
 

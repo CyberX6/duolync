@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, ArrowRight, Building2, Users } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/app/_components/theme/ThemeToggle";
+import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
 
 const navLinks = [
   { name: "How It Works", href: "/how-it-works" },
@@ -14,6 +15,7 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { openWaitlist } = useWaitlist();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -44,7 +46,7 @@ const Navbar = () => {
               className="font-display font-bold text-lg tracking-tight"
               style={{ color: "var(--text-base)" }}
             >
-              Nexly
+              Duolync
             </span>
           </Link>
 
@@ -64,14 +66,14 @@ const Navbar = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-2.5">
             <ThemeToggle />
-            <Link
-              href="/auth"
+            <button
+              onClick={() => openWaitlist()}
               className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 hover:scale-[1.02]"
               style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
             >
-              Join the Wishlist
+              Join the Waitlist!
               <ArrowRight size={14} />
-            </Link>
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -134,15 +136,14 @@ const Navbar = () => {
                   <Users size={15} />
                   For Creators
                 </Link>
-                <Link
-                  href="/auth"
+                <button
+                  onClick={() => { openWaitlist(); setIsOpen(false); }}
                   className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-semibold text-white mt-1 transition-all hover:opacity-90"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
-                  onClick={() => setIsOpen(false)}
                 >
-                  Join the Wishlist
+                  Join the Waitlist!
                   <ArrowRight size={14} />
-                </Link>
+                </button>
               </div>
             </div>
           </div>

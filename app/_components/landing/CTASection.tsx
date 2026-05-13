@@ -36,7 +36,7 @@ const CTASection = () => {
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <p className="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
-              Join thousands of brands and creators who trust Nexly for authentic 
+              Join thousands of brands and creators who trust Duolync for authentic 
               collaborations that drive real results.
             </p>
           </ScrollReveal>

@@ -19,7 +19,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Read persisted preference on mount
   useEffect(() => {
-    const stored = localStorage.getItem("nexly-theme") as Theme | null;
+    const stored = localStorage.getItem("duolync-theme") as Theme | null;
     const resolved = stored ?? "dark";
     setTheme(resolved);
     applyTheme(resolved);
@@ -29,7 +29,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
     applyTheme(next);
-    localStorage.setItem("nexly-theme", next);
+    localStorage.setItem("duolync-theme", next);
   };
 
   return (

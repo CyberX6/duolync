@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
 import { ArrowRight, Globe, Building2, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
 
 const fadeUp: Variants = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
 const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.12 } } };
@@ -11,6 +12,7 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 export function FinalCTASection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { openWaitlist } = useWaitlist();
 
   return (
     <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
@@ -31,7 +33,7 @@ export function FinalCTASection() {
         >
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
             <Sparkles size={11} />
-            Launching Soon — Join the Wishlist
+            Launching Soon — Join the Waitlist
           </motion.div>
 
           <motion.h2
@@ -49,20 +51,20 @@ export function FinalCTASection() {
           </motion.h2>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-slate-400 text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Join the exclusive waitlist to be among the first to access Talent Trend Spot. No credit card required. Cancel anytime. Just endless possibilities.
+            Join the exclusive waitlist to be among the first to access Duolync. No credit card required. Cancel anytime. Just endless possibilities.
           </motion.p>
 
           {/* CTA buttons */}
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link
-              href="/auth"
+            <button
+              onClick={() => openWaitlist()}
               className="group flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-2xl"
               style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)", boxShadow: "0 0 40px rgba(124,58,237,0.3)" }}
             >
               <Sparkles size={17} />
-              Join the Wishlist
+              Join the Waitlist!
               <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
-            </Link>
+            </button>
 
             <div className="flex gap-3">
               <Link
@@ -86,14 +88,14 @@ export function FinalCTASection() {
 
           {/* Extension CTA */}
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }}>
-            <Link
-              href="/auth"
+            <button
+              onClick={() => openWaitlist()}
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:scale-[1.02]"
               style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#64748b" }}
             >
               <Globe size={15} />
               Or download our free Chrome Extension
-            </Link>
+            </button>
           </motion.div>
 
           {/* Trust row */}

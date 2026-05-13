@@ -80,6 +80,13 @@ model PlatformToken {
   @@unique([userId, platform])
 }
 
+model Waitlist {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      String   // "brand" | "creator"
+  createdAt DateTime @default(now())
+}
+
 model PlatformStats {
   id             String   @id @default(cuid())
   userId         String

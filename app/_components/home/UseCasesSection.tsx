@@ -70,7 +70,7 @@ export function UseCasesSection() {
             </span>
           </motion.h2>
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-slate-400 max-w-xl mx-auto">
-            Whether you're running a global agency or launching your first campaign — Talent Trend Spot scales with you.
+            Whether you're running a global agency or launching your first campaign — Duolync scales with you.
           </motion.p>
         </motion.div>
 

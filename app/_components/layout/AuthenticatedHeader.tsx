@@ -31,7 +31,7 @@ const AuthenticatedHeader = () => {
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
             <span className="text-white font-bold text-lg">N</span>
           </div>
-          <span className="font-display font-bold text-xl">Nexly</span>
+          <span className="font-display font-bold text-xl">Duolync</span>
         </Link>
 
         {/* Right side - Notifications & Profile */}

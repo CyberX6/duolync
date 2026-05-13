@@ -63,7 +63,7 @@ const InfluencerSearchSection = () => {
             </h2>
 
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Find the best creators for your campaign with Nexly. Use advanced
+              Find the best creators for your campaign with Duolync. Use advanced
               filters to pinpoint perfect matches for your campaigns and
               supercharge your results in no time.
             </p>

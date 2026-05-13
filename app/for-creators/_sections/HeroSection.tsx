@@ -115,7 +115,7 @@ export function HeroSection() {
               className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
               style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
             >
-              Join the Wishlist
+              Join the Waitlist
               <ArrowRight size={16} />
             </button>
           </motion.div>

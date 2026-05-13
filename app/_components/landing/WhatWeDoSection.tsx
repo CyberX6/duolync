@@ -103,7 +103,7 @@ const EnterpriseMockup = () => (
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       {/* Top bar */}
       <div className="bg-[#7c3aed] px-4 py-3 flex items-center justify-between">
-        <span className="text-white font-semibold text-sm">Nexly</span>
+        <span className="text-white font-semibold text-sm">Duolync</span>
         <div className="flex items-center gap-1">
           <div className="w-6 h-6 rounded-full bg-pink-400" />
           <div className="w-6 h-6 rounded-full bg-yellow-400 -ml-2" />
@@ -174,7 +174,7 @@ const SmallBusinessMockup = () => (
   <div className="relative w-full max-w-lg">
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       <div className="bg-[#10b981] px-4 py-3 flex items-center justify-between">
-        <span className="text-white font-semibold text-sm">Nexly</span>
+        <span className="text-white font-semibold text-sm">Duolync</span>
         <div className="flex items-center gap-1">
           <div className="w-6 h-6 rounded-full bg-white/30" />
         </div>
@@ -202,7 +202,7 @@ const PersonalMockup = () => (
   <div className="relative w-full max-w-lg">
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       <div className="bg-[#f59e0b] px-4 py-3 flex items-center justify-between">
-        <span className="text-white font-semibold text-sm">Nexly</span>
+        <span className="text-white font-semibold text-sm">Duolync</span>
         <div className="flex items-center gap-1">
           <div className="w-6 h-6 rounded-full bg-white/30" />
         </div>
@@ -227,7 +227,7 @@ const EducatorsMockup = () => (
   <div className="relative w-full max-w-lg">
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       <div className="bg-[#3b82f6] px-4 py-3 flex items-center justify-between">
-        <span className="text-white font-semibold text-sm">Nexly</span>
+        <span className="text-white font-semibold text-sm">Duolync</span>
         <div className="flex items-center gap-1">
           <div className="w-6 h-6 rounded-full bg-white/30" />
         </div>
@@ -270,10 +270,10 @@ const WhatWeDoSection = () => {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-            What Nexly can do for you
+            What Duolync can do for you
           </h2>
           <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto">
-            Make an impact with Nexly's AI tools for every marketing need. With our platform, you can explore even more ways to connect. From rapid content creation to on-brand scalability – the possibilities are endless.
+            Make an impact with Duolync's AI tools for every marketing need. With our platform, you can explore even more ways to connect. From rapid content creation to on-brand scalability – the possibilities are endless.
           </p>
         </div>
 
