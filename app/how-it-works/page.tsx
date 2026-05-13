@@ -604,7 +604,7 @@ export default function HowItWorksPage() {
               style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)", boxShadow: "0 0 32px rgba(124,58,237,0.25)" }}
             >
               <Sparkles size={15} />
-              Join the Wishlist
+              Join the Waitlist
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <Link

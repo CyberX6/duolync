@@ -7,15 +7,15 @@ import {
 
 const faqs = [
   {
-    question: "What is Nexly?",
-    answer: "Nexly is a dual-sided marketplace that connects content creators with brands for collaboration opportunities. Our platform uses AI-powered matching to help brands find the perfect creators for their campaigns, while giving creators access to exclusive partnership opportunities.",
+    question: "What is Duolync?",
+    answer: "Duolync is a dual-sided marketplace that connects content creators with brands for collaboration opportunities. Our platform uses AI-powered matching to help brands find the perfect creators for their campaigns, while giving creators access to exclusive partnership opportunities.",
   },
   {
     question: "How do I get started as a creator?",
     answer: "Simply sign up for a free account, connect your social media accounts, and complete your creator profile. Our AI will start matching you with relevant brand opportunities based on your niche, audience, and engagement metrics.",
   },
   {
-    question: "Is Nexly free to use?",
+    question: "Is Duolync free to use?",
     answer: "We offer a free tier for creators that includes basic profile features and access to browse opportunities. Premium plans unlock advanced features like priority placement, direct messaging with brands, and detailed analytics.",
   },
   {
@@ -24,14 +24,14 @@ const faqs = [
   },
   {
     question: "What platforms are supported?",
-    answer: "Nexly supports all major social platforms including TikTok, YouTube, Instagram, Twitter/X, Twitch, and LinkedIn. You can connect multiple accounts to showcase your full creator portfolio.",
+    answer: "Duolync supports all major social platforms including TikTok, YouTube, Instagram, Twitter/X, Twitch, and LinkedIn. You can connect multiple accounts to showcase your full creator portfolio.",
   },
   {
     question: "How do payments work?",
-    answer: "Nexly facilitates secure payments between brands and creators. Brands deposit funds into escrow when a collaboration is agreed upon, and creators receive payment upon successful completion of deliverables.",
+    answer: "Duolync facilitates secure payments between brands and creators. Brands deposit funds into escrow when a collaboration is agreed upon, and creators receive payment upon successful completion of deliverables.",
   },
   {
-    question: "What kind of brands use Nexly?",
+    question: "What kind of brands use Duolync?",
     answer: "Our platform serves businesses of all sizes - from startups and small businesses to Fortune 500 companies. Any brand looking to leverage influencer marketing can benefit from our creator network.",
   },
   {
@@ -39,8 +39,8 @@ const faqs = [
     answer: "We take data privacy seriously. Your personal information is encrypted and never shared without consent. We comply with GDPR and other privacy regulations. See our Privacy Policy for complete details.",
   },
   {
-    question: "Can I use Nexly for commercial collaborations?",
-    answer: "Absolutely! Nexly is designed specifically for commercial collaborations between creators and brands. All collaborations facilitated through our platform are intended for commercial purposes.",
+    question: "Can I use Duolync for commercial collaborations?",
+    answer: "Absolutely! Duolync is designed specifically for commercial collaborations between creators and brands. All collaborations facilitated through our platform are intended for commercial purposes.",
   },
 ];
 

@@ -115,7 +115,7 @@ const Onboarding = () => {
       
       if (error) throw error;
       
-      toast({ title: "Profile complete!", description: "Welcome to Nexly!" });
+      toast({ title: "Profile complete!", description: "Welcome to Duolync!" });
       router.replace(isBrand ? "/brand/dashboard" : "/creator/dashboard");
     } catch (error: any) {
       toast({

@@ -62,7 +62,7 @@ export function ChromeExtensionSection() {
               {[
                 { icon: Bookmark, text: "Save creator profiles with one click — directly from their social pages" },
                 { icon: Star,     text: "Auto-fetches engagement rate, audience demographics, and niche tags" },
-                { icon: Users,    text: "Syncs instantly to your Talent Trend Spot CRM and creator lists" },
+                { icon: Users,    text: "Syncs instantly to your Duolync CRM and creator lists" },
                 { icon: Zap,      text: "Works on TikTok, Instagram, YouTube, and Twitter/X" },
               ].map((item, i) => (
                 <motion.li key={i} variants={fadeUp} className="flex items-center gap-3">
@@ -156,7 +156,7 @@ export function ChromeExtensionSection() {
                   ))}
                 </div>
 
-                {/* ── Floating Talent Trend Spot widget ── */}
+                {/* ── Floating Duolync widget ── */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.88, y: 12 }}
                   animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
@@ -169,7 +169,7 @@ export function ChromeExtensionSection() {
                     <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
                       <Bookmark size={11} className="text-white" />
                     </div>
-                    <span className="text-[11px] font-bold text-white">Talent Trend Spot</span>
+                    <span className="text-[11px] font-bold text-white">Duolync</span>
                   </div>
 
                   {/* Stats */}

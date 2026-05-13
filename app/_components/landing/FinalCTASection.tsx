@@ -20,10 +20,10 @@ const FinalCTASection = () => {
             viewport={{ once: true }}
           >
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Start using Nexly for free 🌟
+              Start using Duolync for free 🌟
             </h2>
             <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-              Embark freely and witness Nexly's magic firsthand. When the stars
+              Embark freely and witness Duolync's magic firsthand. When the stars
               align for growth, scale at your own rhythm. Freedom to cancel
               anytime, no pressure, no hidden fees – just endless possibilities.
             </p>

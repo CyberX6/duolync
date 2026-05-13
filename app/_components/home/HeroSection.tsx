@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Building2, Users, Star, TrendingUp, Zap, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
 
 const trust = [
   { icon: Star, value: "10M+", label: "Creators" },
@@ -20,6 +21,8 @@ const avatarGradients = [
 ];
 
 export function HeroSection() {
+  const { openWaitlist } = useWaitlist();
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "var(--bg-page)" }}>
       {/* Ambient glows */}
@@ -71,7 +74,7 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.7 }}
             className="text-slate-400 text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
           >
-            Talent Trend Spot uses AI to match brands with perfect creators, manage campaigns at scale, and help creators land the deals they deserve.
+            Duolync uses AI to match brands with perfect creators, manage campaigns at scale, and help creators land the deals they deserve.
           </motion.p>
 
           {/* Dual CTA */}
@@ -81,31 +84,31 @@ export function HeroSection() {
             transition={{ delay: 0.45, duration: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
           >
-            <Link
-              href="/for-brands"
+            <button
+              onClick={() => openWaitlist("brand")}
               className="group flex items-center gap-2.5 px-7 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.03] hover:opacity-95 active:scale-[0.98]"
               style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
             >
               <Building2 size={18} />
-              I'm a Brand
+              I&apos;m a Brand
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/for-creators"
+            </button>
+            <button
+              onClick={() => openWaitlist("creator")}
               className="group flex items-center gap-2.5 px-7 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
               style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
             >
               <Users size={18} />
-              I'm a Creator
+              I&apos;m a Creator
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/auth"
+            </button>
+            <button
+              onClick={() => openWaitlist()}
               className="flex items-center gap-2 px-6 py-4 rounded-2xl font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
               style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#94a3b8" }}
             >
-              Start for free
-            </Link>
+              Join the Waitlist!
+            </button>
           </motion.div>
 
           {/* Social proof */}

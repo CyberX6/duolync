@@ -14,7 +14,7 @@ const VideoShowcaseSection = () => {
           className="text-center mb-12"
         >
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            See Nexly in Action
+            See Duolync in Action
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Watch how easy it is to discover, analyze, and connect with the perfect creators for your brand.

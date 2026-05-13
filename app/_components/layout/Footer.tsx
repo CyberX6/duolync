@@ -86,8 +86,8 @@ const Footer = () => {
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <span className="font-display font-bold text-lg tracking-tight" style={{ color: "var(--text-base)" }}>
-                Nexly
-              </span>
+              Duolync
+            </span>
             </Link>
 
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs mb-6">
@@ -135,7 +135,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
           <p className="text-xs text-slate-700 order-2 md:order-1">
-            © {new Date().getFullYear()} Nexly. All rights reserved.
+            © {new Date().getFullYear()} Duolync. All rights reserved.
           </p>
 
           <div className="flex items-center gap-1 order-1 md:order-2">

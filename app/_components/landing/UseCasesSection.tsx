@@ -7,7 +7,7 @@ const useCases = [
     icon: Building2,
     title: "Influencer Marketing Agency Founder",
     description:
-      "They need an affordable, scalable influencer marketing tool. Nexly offers cost-effectiveness and helps them deliver outstanding client results without overstretching their budget.",
+      "They need an affordable, scalable influencer marketing tool. Duolync offers cost-effectiveness and helps them deliver outstanding client results without overstretching their budget.",
     color: "bg-purple-100",
     iconColor: "text-purple-600",
     image: "bg-gradient-to-br from-purple-400 to-purple-600",
@@ -16,7 +16,7 @@ const useCases = [
     icon: Sparkles,
     title: "Creative Brand Owner",
     description:
-      "They need time-saving influencer marketing solutions. Nexly streamlines their discovery and outreach processes, enhancing their efficiency and campaign results.",
+      "They need time-saving influencer marketing solutions. Duolync streamlines their discovery and outreach processes, enhancing their efficiency and campaign results.",
     color: "bg-blue-100",
     iconColor: "text-blue-600",
     image: "bg-gradient-to-br from-blue-400 to-cyan-500",
@@ -25,7 +25,7 @@ const useCases = [
     icon: Rocket,
     title: "Brand New Startup Entrepreneur",
     description:
-      "This solopreneur seeks a low-risk influencer marketing software. Nexly offers them a free trial, providing a transparent path to amplify their personal business growth.",
+      "This solopreneur seeks a low-risk influencer marketing software. Duolync offers them a free trial, providing a transparent path to amplify their personal business growth.",
     color: "bg-orange-100",
     iconColor: "text-orange-600",
     image: "bg-gradient-to-br from-orange-400 to-pink-500",
@@ -44,10 +44,10 @@ const UseCasesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Nexly use cases <span className="inline-block">✨</span>
+            Duolync use cases <span className="inline-block">✨</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Nexly empowers users to overcome challenges, maximize ROI, and
+            Duolync empowers users to overcome challenges, maximize ROI, and
             achieve their influencer marketing objectives.
           </p>
         </motion.div>

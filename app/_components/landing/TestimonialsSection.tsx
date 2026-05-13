@@ -7,7 +7,7 @@ const testimonials = [
     role: "Fashion Influencer",
     avatar: "SM",
     followers: "2.5M Followers",
-    content: "Nexly completely transformed how I work with brands. The platform made it so easy to find partnerships that truly align with my style and values.",
+    content: "Duolync completely transformed how I work with brands. The platform made it so easy to find partnerships that truly align with my style and values.",
     rating: 5,
     gradient: "from-purple-500 to-pink-500",
   },
@@ -16,7 +16,7 @@ const testimonials = [
     role: "Marketing Director, TechBrand",
     avatar: "DC",
     followers: "Fortune 500",
-    content: "We've seen a 340% increase in engagement since using Nexly. The AI matching is incredible - every creator we've worked with has been perfect for our brand.",
+    content: "We've seen a 340% increase in engagement since using Duolync. The AI matching is incredible - every creator we've worked with has been perfect for our brand.",
     rating: 5,
     gradient: "from-cyan-500 to-blue-500",
   },
@@ -25,7 +25,7 @@ const testimonials = [
     role: "Lifestyle Creator",
     avatar: "ER",
     followers: "850K Followers",
-    content: "The best part about Nexly is the transparency. I know exactly what to expect from each collaboration, and payments are always on time.",
+    content: "The best part about Duolync is the transparency. I know exactly what to expect from each collaboration, and payments are always on time.",
     rating: 5,
     gradient: "from-orange-500 to-yellow-500",
   },
@@ -48,7 +48,7 @@ const TestimonialsSection = () => {
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <p className="text-muted-foreground text-lg">
-              See what brands and creators are saying about their experience with Nexly.
+              See what brands and creators are saying about their experience with Duolync.
             </p>
           </ScrollReveal>
         </div>

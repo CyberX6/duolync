@@ -34,7 +34,7 @@ const BecomeCreatorSection = () => {
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
               <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-                Whether you have 1,000 followers or 10 million, there's a place for you on Nexly. 
+                Whether you have 1,000 followers or 10 million, there's a place for you on Duolync. 
                 Join our community of creators and start earning from your influence.
               </p>
             </ScrollReveal>

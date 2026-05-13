@@ -90,7 +90,7 @@ const HeroSection = () => {
           >
             <Image
               src={heroCreator}
-              alt="Creator using Nexly platform with social media analytics"
+              alt="Creator using Duolync platform with social media analytics"
               className="w-full h-auto max-h-[500px] lg:max-h-[550px] object-cover object-top lg:rounded-l-3xl"
               sizes="(max-width: 1024px) 100vw, 55vw"
               priority
