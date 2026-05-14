@@ -286,7 +286,6 @@ export function WaitlistModal() {
                           style={{
                             background: "rgba(255,255,255,0.04)",
                             border: "1px solid rgba(255,255,255,0.1)",
-                            focusRing: "none",
                           }}
                           onFocus={(e) => {
                             e.currentTarget.style.border = "1px solid rgba(124,58,237,0.6)";
