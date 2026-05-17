@@ -126,9 +126,6 @@ export function ToolsSection() {
                 <div className="text-sm font-semibold text-white mb-0.5">Free Chrome Extension</div>
                 <div className="text-[11px] text-slate-400">Find creators while browsing social media</div>
               </div>
-              <button onClick={() => openWaitlist()} className="shrink-0 px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90" style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}>
-                Download
-              </button>
             </div>
           </motion.div>
         </motion.div>

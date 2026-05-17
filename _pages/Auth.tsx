@@ -128,11 +128,18 @@ const Auth = () => {
         </div>
         
         <div className="relative z-10">
-          <a href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">D</span>
-            </div>
-            <span className="font-display font-bold text-2xl text-white">Duolync</span>
+          <a href="/" className="flex items-center">
+            <span
+              className="font-display font-bold text-2xl tracking-tight"
+              style={{
+                background: "linear-gradient(135deg, #a78bfa, #ec4899)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Duolync
+            </span>
           </a>
         </div>
 
@@ -174,11 +181,18 @@ const Auth = () => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
-            <a href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-xl">D</span>
-              </div>
-              <span className="font-display font-bold text-2xl">Duolync</span>
+            <a href="/" className="flex items-center">
+              <span
+                className="font-display font-bold text-2xl tracking-tight"
+                style={{
+                  background: "linear-gradient(135deg, #a78bfa, #ec4899)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Duolync
+              </span>
             </a>
           </div>
 

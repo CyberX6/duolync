@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, ArrowRight, Building2, Users } from "lucide-react";
+import { Menu, X, ArrowRight, Building2, Users } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/app/_components/theme/ThemeToggle";
 import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
@@ -35,16 +35,15 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
+          <Link href="/" className="flex items-center shrink-0">
             <span
-              className="font-display font-bold text-lg tracking-tight"
-              style={{ color: "var(--text-base)" }}
+              className="font-display font-bold text-2xl tracking-tight"
+              style={{
+                background: "linear-gradient(90deg, #a78bfa 0%, #818cf8 40%, #f472b6 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
             >
               Duolync
             </span>
