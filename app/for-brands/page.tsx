@@ -2,6 +2,8 @@
 
 import Navbar from "@/app/_components/layout/Navbar";
 import Footer from "@/app/_components/layout/Footer";
+import { WaitlistProvider } from "@/app/_components/waitlist/WaitlistContext";
+import { WaitlistModal } from "@/app/_components/waitlist/WaitlistModal";
 import { HeroSection } from "./_sections/HeroSection";
 import { BentoSection } from "./_sections/BentoSection";
 import { AIMatchSection } from "./_sections/AIMatchSection";
@@ -13,6 +15,7 @@ import { FinalCTASection } from "./_sections/FinalCTASection";
 
 export default function ForBrandsPage() {
   return (
+    <WaitlistProvider>
     <div className="min-h-screen" style={{ background: "var(--bg-page)" }}>
       {/* Navbar with dark override */}
       <div className="fixed top-0 left-0 right-0 z-50" style={{ background: "var(--bg-navbar)", backdropFilter: "blur(16px)", borderBottom: "1px solid var(--border-card)" }}>
@@ -34,6 +37,9 @@ export default function ForBrandsPage() {
       <div style={{ background: "var(--bg-footer)", borderTop: "1px solid var(--border-card)" }}>
         <Footer />
       </div>
+
+      <WaitlistModal />
     </div>
+    </WaitlistProvider>
   );
 }

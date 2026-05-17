@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
-import { ArrowRight, Sparkles, CheckCircle2, Zap, Lock, Bell } from "lucide-react";
+import { ArrowRight, Sparkles, CheckCircle2, Zap, Lock, Bell, Loader2 } from "lucide-react";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -30,10 +30,31 @@ export function FinalCTASection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (!email) return;
+    setIsLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, role: "brand" }),
+      });
+      const data = await res.json() as { error?: string };
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
+      } else {
+        setSubmitted(true);
+      }
+    } catch {
+      setError("Network error. Please check your connection.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -104,30 +125,33 @@ export function FinalCTASection() {
           {/* CTA form */}
           <motion.div variants={fadeUp}>
             {!submitted ? (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-6">
+              <>
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-3">
                 <input
                   type="email"
                   placeholder="your@company.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); setError(""); }}
                   required
                   className="flex-1 px-5 py-3.5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none transition-all text-sm"
-                  style={{
-                    background: "var(--bg-card-hover)",
-                    border: "1px solid var(--border-card-strong)",
-                  }}
+                  style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
                 />
                 <button
                   type="submit"
-                  className="px-7 py-3.5 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 text-sm transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+                  disabled={isLoading || !email}
+                  className="px-7 py-3.5 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 text-sm transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
                 >
-                  Join the Waitlist
-                  <ArrowRight size={16} />
+                  {isLoading ? <Loader2 size={15} className="animate-spin" /> : <ArrowRight size={16} />}
+                  {isLoading ? "Joining..." : "Join the Waitlist"}
                 </button>
               </form>
+              {error && (
+                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2 max-w-md mx-auto mb-3">{error}</p>
+              )}
+              </>
             ) : (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, TrendingUp, DollarSign, Shield, Star } from "lucide-react";
+import { ArrowRight, Zap, TrendingUp, DollarSign, Shield, Star, Loader2, CheckCircle2 } from "lucide-react";
 
 const avatarGradients = [
   "from-pink-500 to-rose-600",
@@ -21,6 +21,33 @@ const stats = [
 
 export function HeroSection() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setIsLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, role: "creator" }),
+      });
+      const data = await res.json() as { error?: string };
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
+      } else {
+        setSubmitted(true);
+      }
+    } catch {
+      setError("Network error. Please check your connection.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "var(--bg-page-alt)" }}>
@@ -99,25 +126,45 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8"
+            className="max-w-md mx-auto mb-8"
           >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
-              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.5)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
-            />
-            <button
-              className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
-            >
-              Join the Waitlist
-              <ArrowRight size={16} />
-            </button>
+            {submitted ? (
+              <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)" }}>
+                <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
+                <div className="text-left">
+                  <div className="text-white font-semibold text-sm">You&apos;re on the list! 🎉</div>
+                  <div className="text-emerald-400 text-xs">We&apos;ll reach out as soon as we launch.</div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setError(""); }}
+                    required
+                    className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
+                    style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.5)"; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={isLoading || !email}
+                    className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                    style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
+                  >
+                    {isLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                    {isLoading ? "Joining..." : "Join the Waitlist"}
+                  </button>
+                </form>
+                {error && (
+                  <p className="mt-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">{error}</p>
+                )}
+              </>
+            )}
           </motion.div>
 
           {/* Social proof */}
