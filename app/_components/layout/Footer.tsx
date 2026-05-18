@@ -83,13 +83,26 @@ const Footer = () => {
 
         {/* Right — links + copyright */}
         <div className="flex flex-col items-start md:items-end gap-3 text-sm text-zinc-400">
-          <div className="flex gap-4 mb-1">
-            <a href="#" className="transition-colors duration-200 hover:text-white">
-              Privacy
-            </a>
-            <a href="#" className="transition-colors duration-200 hover:text-white">
-              Terms
-            </a>
+          <div className="flex items-center gap-3 mb-1">
+            {[
+              { label: "About Us",   href: "/about",   color: "#ec4899" },
+              { label: "Contact Us", href: "/contact", color: "#ec4899" },
+              { label: "Privacy",    href: "/privacy", color: "#a78bfa" },
+              { label: "Terms",      href: "/terms",   color: "#a78bfa" },
+            ].map((link, i, arr) => (
+              <span key={link.href} className="flex items-center gap-3">
+                <Link
+                  href={link.href}
+                  className="transition-colors duration-200 hover:brightness-125"
+                  style={{ color: link.color }}
+                >
+                  {link.label}
+                </Link>
+                {i < arr.length - 1 && (
+                  <span className="text-zinc-400 select-none text-xl leading-none">•</span>
+                )}
+              </span>
+            ))}
           </div>
           <p className="text-zinc-600 text-xs">
             © {new Date().getFullYear()} Duolync. All rights reserved.
