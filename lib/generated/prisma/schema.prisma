@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  image         String?
+  role          String   @default("creator") // "creator" | "brand"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // ── Onboarding & profile ─────────────────────────────────────────────────
+  hasCompletedOnboarding Boolean @default(false) @map("onboardingCompleted")
+  bio                    String?
+  niche                  String?
+  primaryPlatform        String? // "youtube" | "tiktok" | "instagram" | ...
+  location               String?
+  companyName            String? // brand only
+  industry               String? // brand only
+  website                String? // brand only
+  brandAccountType       String? // "company" | "personal" — brand only
+  totalFollowers         Int     @default(0)
+  avgEngagementRate      Float   @default(0)
+
+  // ── Relations ─────────────────────────────────────────────────────────────
+  accounts         Account[]
+  sessions         Session[]
+  platformTokens   PlatformToken[]
+  sentMessages     Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// OAuth state, magic links, email verification tokens, etc. Required by Better Auth.
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model PlatformToken {
+  id             String    @id @default(cuid())
+  userId         String
+  platform       String // "youtube" | "instagram" | "tiktok" | "facebook"
+  accessToken    String
+  refreshToken   String?
+  expiresAt      DateTime?
+  scopes         String?
+  platformUserId String? // their ID on that platform
+  username       String? // their handle
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
+}
+
+model Waitlist {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      String // "brand" | "creator"
+  createdAt DateTime @default(now())
+}
+
+model PlatformStats {
+  id             String   @id @default(cuid())
+  userId         String
+  platform       String
+  followerCount  Int?
+  followingCount Int?
+  postCount      Int?
+  engagementRate Float?
+  fetchedAt      DateTime @default(now())
+  raw            Json?
+
+  @@index([userId, platform])
+}
+
+/// Direct messages between any two users (Brand ↔ Creator or Creator ↔ Creator).
+model Message {
+  id         String   @id @default(cuid())
+  text       String
+  createdAt  DateTime @default(now())
+  senderId   String
+  receiverId String
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([senderId, receiverId])
+}

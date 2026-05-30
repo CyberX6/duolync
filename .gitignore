@@ -23,6 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .next/
-
 .env
+.envgit reset --mixed HEAD~1
 .pnpm-store/

@@ -6,23 +6,29 @@ type Theme = "dark" | "light";
 
 interface ThemeContextValue {
   theme: Theme;
+  mounted: boolean;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "dark",
+  mounted: false,
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
+  const [mounted, setMounted] = useState(false);
 
-  // Read persisted preference on mount
+  // Sync with the anti-FOUC script + localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("duolync-theme") as Theme | null;
-    const resolved = stored ?? "dark";
+    const resolved =
+      stored ??
+      (document.documentElement.classList.contains("dark") ? "dark" : "light");
     setTheme(resolved);
     applyTheme(resolved);
+    setMounted(true);
   }, []);
 
   const toggleTheme = () => {
@@ -33,7 +39,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, mounted, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
