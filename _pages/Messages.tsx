@@ -1,284 +1,811 @@
-import { useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
-import { Send, Search, User, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import MainLayout from "@/components/layout/MainLayout";
+"use client";
+
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  KeyboardEvent,
+} from "react";
+import {
+  Send,
+  Search,
+  ArrowLeft,
+  MessageSquare,
+  BadgeCheck,
+  Pencil,
+  Loader2,
+  X,
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/app/_components/ui/button";
+import { Input } from "@/app/_components/ui/input";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import MainLayout from "@/app/_components/layout/MainLayout";
 import { useAuth } from "@/hooks/useAuth";
+import { validateMessageContent } from "@/lib/validation";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { validateMessageContent } from "@/lib/validation";
+import {
+  getConversationsAction,
+  getConversationAction,
+  sendMessageAction,
+  searchUsersAction,
+  getUserPreviewAction,
+  type ConversationSummary,
+  type DBMessage,
+  type UserPreview,
+} from "@/app/actions/messages";
+import { useMessaging } from "@/app/_components/messaging/MessagingContext";
 
-interface Conversation {
-  id: string;
-  participant_one: string;
-  participant_two: string;
-  last_message_at: string;
-  other_profile: {
-    id: string;
-    full_name: string | null;
-    avatar_url: string | null;
-    user_type: string;
-  };
-  last_message?: string;
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatTime(dateStr: string): string {
+  const d = new Date(dateStr);
+  const now = new Date();
+  const diff = now.getTime() - d.getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days === 0)
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  if (days === 1) return "Yesterday";
+  if (days < 7) return d.toLocaleDateString([], { weekday: "short" });
+  return d.toLocaleDateString([], { month: "short", day: "numeric" });
 }
 
-interface Message {
-  id: string;
-  content: string;
-  sender_id: string;
-  created_at: string;
-  read_at: string | null;
+/**
+ * Returns only colour + shape classes for a message bubble.
+ * max-width is applied on the WRAPPER div so the browser never
+ * has to break characters in the middle of a word.
+ */
+function getBubbleClasses(
+  senderRole: "brand" | "creator",
+  isOwn: boolean,
+): string {
+  const base =
+    "rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap";
+  const tail = isOwn ? "rounded-br-md" : "rounded-bl-md";
+  if (senderRole === "brand") return cn(base, tail, "bg-teal-600 text-white");
+  return cn(base, tail, "bg-purple-600 text-white");
 }
+
+// ─── Typing indicator (3 bouncing dots) ───────────────────────────────────────
+// Renders on the LEFT (partner's side) only. The author of the typing event
+// never sees their own indicator — currentUserId !== typingUserId always holds.
+
+function TypingDots({
+  conv,
+}: {
+  conv: { otherUserName: string; otherUserAvatarUrl: string | null; otherUserType: "brand" | "creator" };
+}) {
+  return (
+    <div className="flex gap-2.5 flex-row">
+      <Avatar
+        name={conv.otherUserName}
+        avatarUrl={conv.otherUserAvatarUrl}
+        type={conv.otherUserType}
+        size="sm"
+      />
+      <div className="flex flex-col items-start max-w-[70%] min-w-0">
+        <div className="rounded-2xl rounded-bl-md bg-zinc-100 dark:bg-neutral-800 px-4 py-3 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "200ms" }} />
+          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "400ms" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Avatar ───────────────────────────────────────────────────────────────────
+
+const Avatar = ({
+  name,
+  avatarUrl,
+  type,
+  size = "md",
+}: {
+  name: string;
+  avatarUrl: string | null;
+  type: "brand" | "creator";
+  size?: "sm" | "md" | "lg";
+}) => {
+  const sizeClass =
+    size === "sm"
+      ? "w-9 h-9 text-[11px]"
+      : size === "lg"
+        ? "w-14 h-14 text-lg"
+        : "w-11 h-11 text-sm";
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div className={cn("rounded-xl overflow-hidden shrink-0", sizeClass)}>
+      {avatarUrl ? (
+        <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+      ) : (
+        <div
+          className={cn(
+            "w-full h-full flex items-center justify-center font-bold text-white",
+            type === "brand"
+              ? "bg-gradient-to-br from-teal-600 to-cyan-600"
+              : "bg-gradient-to-br from-violet-600 to-purple-600",
+          )}
+        >
+          {initials}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Conversation Row ─────────────────────────────────────────────────────────
+
+const ConversationRow = ({
+  conv,
+  isSelected,
+  unread,
+  onClick,
+}: {
+  conv: ConversationSummary;
+  isSelected: boolean;
+  unread: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={cn(
+      "w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left transition-all duration-150",
+      isSelected
+        ? "bg-primary/10 border border-primary/20"
+        : unread
+          ? "hover:bg-zinc-100 dark:hover:bg-neutral-800/60 border border-transparent bg-primary/5"
+          : "hover:bg-zinc-100 dark:hover:bg-neutral-800/60 border border-transparent",
+    )}
+  >
+    <Avatar
+      name={conv.otherUserName}
+      avatarUrl={conv.otherUserAvatarUrl}
+      type={conv.otherUserType}
+      size="md"
+    />
+    <div className="flex-1 min-w-0">
+      <div className="flex items-center justify-between gap-2 mb-0.5">
+        <span
+          className={cn(
+            "text-[13px] truncate",
+            unread ? "font-bold text-zinc-900 dark:text-zinc-50" : "font-semibold text-zinc-900 dark:text-zinc-50",
+          )}
+        >
+          {conv.otherUserName}
+        </span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {conv.lastMessageAt && (
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+              {formatTime(conv.lastMessageAt)}
+            </span>
+          )}
+          {unread && !isSelected && (
+            <span className="w-2 h-2 rounded-full bg-red-500" />
+          )}
+        </div>
+      </div>
+      <p
+        className={cn(
+          "text-xs truncate",
+          unread ? "text-zinc-700 dark:text-zinc-50 font-medium" : "text-zinc-500 dark:text-zinc-400",
+        )}
+      >
+        {conv.lastMessage ?? "No messages yet"}
+      </p>
+    </div>
+  </button>
+);
+
+// ─── User Search Row (new conversation candidate) ─────────────────────────────
+
+const UserSearchRow = ({
+  user,
+  isSelected,
+  onClick,
+}: {
+  user: UserPreview;
+  isSelected: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={cn(
+      "w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-150",
+      isSelected
+        ? "bg-primary/10 border border-primary/20"
+        : "hover:bg-zinc-100 dark:hover:bg-neutral-800/60 border border-transparent",
+    )}
+  >
+    <Avatar
+      name={user.name}
+      avatarUrl={user.avatarUrl}
+      type={user.userType}
+      size="md"
+    />
+    <div className="flex-1 min-w-0">
+      <p className="font-semibold text-[13px] truncate text-zinc-900 dark:text-zinc-50">{user.name}</p>
+      <p
+        className={cn(
+          "text-[11px] font-medium capitalize",
+          user.userType === "brand" ? "text-teal-600 dark:text-teal-400" : "text-violet-600 dark:text-violet-400",
+        )}
+      >
+        {user.userType} · Start a conversation
+      </p>
+    </div>
+  </button>
+);
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const Messages = () => {
   const { profile } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const toProfileId = searchParams?.get("to");
+  const { markConversationRead, isUnread } = useMessaging();
 
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [loading] = useState(false);
-  const [sending, setSending] = useState(false);
+  // ── Conversations list ─────────────────────────────────────────────────────
+  const [conversations, setConversations] = useState<ConversationSummary[]>([]);
+  const [convsLoading, setConvsLoading] = useState(true);
+
+  // ── Active conversation ────────────────────────────────────────────────────
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<DBMessage[]>([]);
+  const [msgsLoading, setMsgsLoading] = useState(false);
+
+  // ── User search ────────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<UserPreview[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // ── Misc UI ────────────────────────────────────────────────────────────────
+  const [inputText, setInputText] = useState("");
+  const [sending, setSending] = useState(false);
   const [showMobileList, setShowMobileList] = useState(true);
+  /**
+   * partnerTyping — shown on the LEFT for ~2.5 s after the current user sends.
+   * Simulates "they're drafting a reply". Never triggered by the current user's
+   * own keystroke (currentUserId !== typingUserId rule is enforced by design).
+   */
+  const [partnerTyping, setPartnerTyping] = useState(false);
+  const partnerTypingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile || !selectedConversation || !newMessage.trim()) return;
+  // ── Load conversations on mount ────────────────────────────────────────────
+  useEffect(() => {
+    setConvsLoading(true);
+    getConversationsAction()
+      .then(setConversations)
+      .finally(() => setConvsLoading(false));
+  }, []);
 
-    // Validate message content before submission
-    const validation = validateMessageContent(newMessage);
+  // ── Handle ?userId= query param (deep-link into a specific conversation) ───
+  //
+  // FIX: async side-effects (getUserPreviewAction) must NOT be placed inside a
+  // setState updater function — React may call updaters multiple times in
+  // StrictMode and they must be pure.  Running the async call directly inside
+  // the effect (after mount) prevents the "Cannot update Router while rendering
+  // Messages" error.
+  useEffect(() => {
+    const userId = searchParams?.get("userId");
+    if (!userId) return;
+
+    setSelectedUserId(userId);
+    setShowMobileList(false);
+
+    // Inject a placeholder row only when this user is not already listed.
+    // The async fetch runs outside any state-updater to stay pure.
+    getUserPreviewAction(userId).then((preview) => {
+      if (!preview) return;
+      const placeholder: ConversationSummary = {
+        otherUserId: preview.id,
+        otherUserName: preview.name,
+        otherUserAvatarUrl: preview.avatarUrl,
+        otherUserType: preview.userType,
+        lastMessage: null,
+        lastMessageAt: new Date().toISOString(),
+        lastMessageSenderId: null,
+      };
+      setConversations((p) =>
+        p.some((c) => c.otherUserId === userId) ? p : [placeholder, ...p],
+      );
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  // ── Load messages when selected conversation changes ──────────────────────
+  const loadMessages = useCallback(async (otherUserId: string) => {
+    setMsgsLoading(true);
+    try {
+      const data = await getConversationAction(otherUserId);
+      setMessages(data);
+    } finally {
+      setMsgsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!selectedUserId) return;
+    setMessages([]);
+    loadMessages(selectedUserId);
+    markConversationRead(selectedUserId);
+  }, [selectedUserId, loadMessages, markConversationRead]);
+
+  // ── Live polling for the active conversation (2500 ms) ────────────────────
+  useEffect(() => {
+    if (!selectedUserId) return;
+    // Reset typing indicator whenever we switch conversations.
+    if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
+    setPartnerTyping(false);
+
+    const id = setInterval(async () => {
+      const refreshed = await getConversationAction(selectedUserId);
+      setMessages((prev) => {
+        if (refreshed.length === prev.length && refreshed.length > 0) {
+          const lastNew = refreshed[refreshed.length - 1]?.id;
+          const lastOld = prev[prev.length - 1]?.id;
+          if (lastNew === lastOld) return prev; // no new messages
+        }
+        // New message from the partner → they're done "typing".
+        const lastMsg = refreshed[refreshed.length - 1];
+        if (lastMsg && lastMsg.senderId === selectedUserId) {
+          if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
+          setPartnerTyping(false);
+        }
+        return refreshed;
+      });
+    }, 2500);
+    return () => clearInterval(id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUserId]);
+
+  // ── Scroll to bottom on new messages ─────────────────────────────────────
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length]);
+
+  // ── Live user search (debounced 250 ms) ────────────────────────────────────
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    setSearchLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const results = await searchUsersAction(searchQuery);
+        setSearchResults(results);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // ── Derived: metadata for the active conversation header ──────────────────
+  const activeConvMeta: ConversationSummary | null =
+    conversations.find((c) => c.otherUserId === selectedUserId) ?? null;
+
+  // ── Start a conversation from a search result ─────────────────────────────
+  const startConvFromSearch = (user: UserPreview) => {
+    setSearchQuery("");
+    setSearchResults([]);
+
+    // Add a placeholder row to the conversations panel if not already there.
+    setConversations((prev) => {
+      if (prev.some((c) => c.otherUserId === user.id)) return prev;
+      return [
+        {
+          otherUserId: user.id,
+          otherUserName: user.name,
+          otherUserAvatarUrl: user.avatarUrl,
+          otherUserType: user.userType,
+          lastMessage: null,
+          lastMessageAt: new Date().toISOString(),
+          lastMessageSenderId: null,
+        },
+        ...prev,
+      ];
+    });
+
+    setSelectedUserId(user.id);
+    setShowMobileList(false);
+  };
+
+  // ── Send message ───────────────────────────────────────────────────────────
+  const handleSend = async () => {
+    if (!selectedUserId || !inputText.trim() || sending) return;
+    const validation = validateMessageContent(inputText);
     if (validation.success === false) {
-      toast({ title: "Validation Error", description: validation.error, variant: "destructive" });
+      toast({
+        title: "Validation error",
+        description: validation.error,
+        variant: "destructive",
+      });
       return;
     }
 
+    const text = validation.data;
     setSending(true);
-    // Optimistic update
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        content: validation.data,
-        sender_id: profile.id,
-        created_at: new Date().toISOString(),
-        read_at: null,
-      },
-    ]);
-    setNewMessage("");
+
+    const optimistic: DBMessage = {
+      id: `opt-${Date.now()}`,
+      text,
+      senderId: profile?.id ?? "",
+      receiverId: selectedUserId,
+      createdAt: new Date().toISOString(),
+      senderRole: profile?.user_type ?? "creator",
+      senderName: profile?.full_name ?? "Me",
+      senderAvatarUrl: profile?.avatar_url ?? null,
+    };
+    setMessages((prev) => [...prev, optimistic]);
+    setInputText("");
+
+    const { error } = await sendMessageAction(selectedUserId, text);
+    if (error) {
+      setMessages((prev) => prev.filter((m) => m.id !== optimistic.id));
+      setInputText(text);
+      toast({ title: "Send failed", description: error, variant: "destructive" });
+    } else {
+      const refreshed = await getConversationAction(selectedUserId);
+      setMessages(refreshed);
+      // Show partner-typing dots on the LEFT for ~2.5 s (partner may be replying).
+      // Rule: current user NEVER triggers their own indicator — this fires only
+      // after a successful outbound send, not from the user's own keystrokes.
+      if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
+      setPartnerTyping(true);
+      partnerTypingTimer.current = setTimeout(() => setPartnerTyping(false), 2500);
+      setConversations((prev) => {
+        const exists = prev.find((c) => c.otherUserId === selectedUserId);
+        const updated: ConversationSummary = exists
+          ? {
+              ...exists,
+              lastMessage: text,
+              lastMessageAt: new Date().toISOString(),
+              lastMessageSenderId: profile?.id ?? null,
+            }
+          : {
+              otherUserId: selectedUserId,
+              otherUserName: activeConvMeta?.otherUserName ?? "User",
+              otherUserAvatarUrl: activeConvMeta?.otherUserAvatarUrl ?? null,
+              otherUserType: activeConvMeta?.otherUserType ?? "creator",
+              lastMessage: text,
+              lastMessageAt: new Date().toISOString(),
+              lastMessageSenderId: profile?.id ?? null,
+            };
+        return exists
+          ? prev.map((c) => (c.otherUserId === selectedUserId ? updated : c))
+          : [updated, ...prev];
+      });
+    }
     setSending(false);
   };
 
-  const formatTime = (date: string) => {
-    const d = new Date(date);
-    const now = new Date();
-    const diff = now.getTime() - d.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (days === 0) {
-      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    } else if (days === 1) {
-      return "Yesterday";
-    } else if (days < 7) {
-      return d.toLocaleDateString([], { weekday: "short" });
-    } else {
-      return d.toLocaleDateString([], { month: "short", day: "numeric" });
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
-  const filteredConversations = conversations.filter((c) =>
-    c.other_profile.full_name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const selectConversation = (conv: ConversationSummary) => {
+    setSelectedUserId(conv.otherUserId);
+    setShowMobileList(false);
+    setSearchQuery("");
+    setSearchResults([]);
+    markConversationRead(conv.otherUserId);
+  };
+
+  const isSearchMode = searchQuery.trim().length > 0;
 
   return (
     <MainLayout showGroupsPanel={false}>
-      <div className="h-[calc(100vh-4rem)] flex border border-border bg-card">
-        {/* Conversations List */}
+      <div className="h-[calc(100vh-4rem)] flex bg-zinc-50 dark:bg-[#09090b]">
+
+        {/* ── Left: Sidebar ────────────────────────────────────── */}
         <div
           className={cn(
-            "w-full md:w-80 lg:w-96 border-r border-border flex flex-col",
-            !showMobileList && "hidden md:flex"
+            "w-full md:w-80 lg:w-96 border-r border-zinc-200 dark:border-zinc-800 flex flex-col bg-white dark:bg-zinc-950",
+            !showMobileList && "hidden md:flex",
           )}
         >
-          <div className="p-4 border-b border-border">
-            <h2 className="font-display text-xl font-bold mb-4">Messages</h2>
+          {/* Header */}
+          <div className="px-4 pt-5 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center gap-2 mb-4">
+              {/* ── Back button ── */}
+              <button
+                onClick={() => router.back()}
+                className="w-8 h-8 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center text-zinc-500 dark:text-muted-foreground hover:text-zinc-900 dark:hover:text-foreground transition-colors shrink-0"
+                title="Go back"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+
+              <h2 className="font-display text-xl font-bold flex-1 text-zinc-900 dark:text-zinc-50">Messages</h2>
+
+              {/* ── New message button — focuses search ── */}
+              <button
+                onClick={() => searchRef.current?.focus()}
+                title="New message"
+                className="w-8 h-8 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 flex items-center justify-center text-zinc-500 dark:text-muted-foreground hover:text-zinc-900 dark:hover:text-foreground transition-colors"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Search bar — queries ALL platform users from DB */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 dark:text-muted-foreground pointer-events-none" />
               <Input
-                placeholder="Search conversations..."
+                ref={searchRef}
+                placeholder="Search people or start a new chat…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-10 pr-9 h-9 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-primary/50 text-sm"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => { setSearchQuery(""); setSearchResults([]); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
 
+          {/* List */}
           <ScrollArea className="flex-1">
-            {loading ? (
-              <div className="p-4 space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex gap-3 animate-pulse">
-                    <div className="w-12 h-12 rounded-full bg-secondary" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-secondary rounded w-3/4" />
-                      <div className="h-3 bg-secondary rounded w-1/2" />
-                    </div>
+            <div className="p-2 space-y-1">
+              {isSearchMode ? (
+                /* ── Search Results Mode ── */
+                searchLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
                   </div>
-                ))}
-              </div>
-            ) : filteredConversations.length > 0 ? (
-              <div className="p-2">
-                {filteredConversations.map((conv) => (
-                  <button
-                    key={conv.id}
-                    onClick={() => {
-                      setSelectedConversation(conv);
-                      setShowMobileList(false);
-                    }}
-                    className={cn(
-                      "w-full flex items-center gap-3 p-3 rounded-xl transition-colors text-left",
-                      selectedConversation?.id === conv.id
-                        ? "bg-primary/10"
-                        : "hover:bg-secondary"
-                    )}
-                  >
-                    <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                      {conv.other_profile.avatar_url ? (
-                        <img
-                          src={conv.other_profile.avatar_url}
-                          alt=""
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <User className="w-5 h-5 text-muted-foreground" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold truncate">
-                          {conv.other_profile.full_name || "User"}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {formatTime(conv.last_message_at)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground truncate capitalize">
-                        {conv.other_profile.user_type}
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="p-8 text-center text-muted-foreground">
-                <p>No conversations yet</p>
-              </div>
-            )}
+                ) : searchResults.length > 0 ? (
+                  <>
+                    <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+                      Platform Users
+                    </p>
+                    {searchResults.map((user) => (
+                      <UserSearchRow
+                        key={user.id}
+                        user={user}
+                        isSelected={user.id === selectedUserId}
+                        onClick={() => startConvFromSearch(user)}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center py-12 text-center px-4">
+                    <p className="text-sm text-muted-foreground">
+                      No users found for &ldquo;{searchQuery}&rdquo;
+                    </p>
+                  </div>
+                )
+              ) : convsLoading ? (
+                /* ── Loading existing conversations ── */
+                <div className="flex justify-center py-12">
+                  <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : conversations.length > 0 ? (
+                /* ── Existing conversations ── */
+                conversations.map((conv) => (
+                  <ConversationRow
+                    key={conv.otherUserId}
+                    conv={conv}
+                    isSelected={conv.otherUserId === selectedUserId}
+                    unread={isUnread(conv.otherUserId)}
+                    onClick={() => selectConversation(conv)}
+                  />
+                ))
+              ) : (
+                /* ── Empty state ── */
+                <div className="flex flex-col items-center py-16 px-6 text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 flex items-center justify-center mb-4">
+                    <MessageSquare className="w-5 h-5 text-zinc-400 dark:text-neutral-600" />
+                  </div>
+                  <p className="text-sm font-semibold mb-1 text-zinc-900 dark:text-zinc-50">No conversations yet</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Search for any user above, or click the pencil icon to start
+                    a new chat.
+                  </p>
+                </div>
+              )}
+            </div>
           </ScrollArea>
         </div>
 
-        {/* Chat Area */}
+        {/* ── Right: Chat Area ─────────────────────────────────── */}
         <div
-          className={cn(
-            "flex-1 flex flex-col",
-            showMobileList && "hidden md:flex"
-          )}
+          className={cn("flex-1 flex flex-col bg-zinc-50 dark:bg-[#09090b]", showMobileList && "hidden md:flex")}
         >
-          {selectedConversation ? (
+          {activeConvMeta ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b border-border flex items-center gap-3">
+              <div className="flex items-center gap-3 px-5 py-3.5 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
                 <button
-                  className="md:hidden text-muted-foreground hover:text-foreground"
+                  className="md:hidden text-zinc-500 dark:text-muted-foreground hover:text-zinc-900 dark:hover:text-foreground mr-1"
                   onClick={() => setShowMobileList(true)}
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                  {selectedConversation.other_profile.avatar_url ? (
-                    <img
-                      src={selectedConversation.other_profile.avatar_url}
-                      alt=""
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </div>
-                <div>
-                  <div className="font-semibold">
-                    {selectedConversation.other_profile.full_name || "User"}
+                <Avatar
+                  name={activeConvMeta.otherUserName}
+                  avatarUrl={activeConvMeta.otherUserAvatarUrl}
+                  type={activeConvMeta.otherUserType}
+                  size="sm"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-semibold text-[14px] truncate text-zinc-900 dark:text-zinc-50">
+                      {activeConvMeta.otherUserName}
+                    </span>
+                    <BadgeCheck className="w-3.5 h-3.5 text-primary shrink-0 opacity-60" />
                   </div>
-                  <div className="text-sm text-muted-foreground capitalize">
-                    {selectedConversation.other_profile.user_type}
+                  <div
+                    className={cn(
+                      "text-[11px] font-semibold capitalize",
+                      activeConvMeta.otherUserType === "brand"
+                        ? "text-teal-600 dark:text-teal-400"
+                        : "text-purple-600 dark:text-purple-400",
+                    )}
+                  >
+                    {activeConvMeta.otherUserType} account
                   </div>
                 </div>
               </div>
 
               {/* Messages */}
-              <ScrollArea className="flex-1 p-4">
-                <div className="space-y-4">
-                  {messages.map((msg) => {
-                    const isOwn = msg.sender_id === profile?.id;
-                    return (
-                      <div
-                        key={msg.id}
-                        className={cn("flex", isOwn ? "justify-end" : "justify-start")}
-                      >
+              <ScrollArea className="flex-1 px-5 py-4">
+                <div className="space-y-3 max-w-3xl mx-auto">
+                  {msgsLoading ? (
+                    <div className="flex justify-center py-16">
+                      <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : messages.length === 0 ? (
+                    <div className="flex flex-col items-center py-16 text-center">
+                      <Avatar
+                        name={activeConvMeta.otherUserName}
+                        avatarUrl={activeConvMeta.otherUserAvatarUrl}
+                        type={activeConvMeta.otherUserType}
+                        size="lg"
+                      />
+                      <p className="mt-4 font-semibold text-[15px] text-zinc-900 dark:text-zinc-50">
+                        {activeConvMeta.otherUserName}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                        You&apos;re now connected. Send a message to start the
+                        conversation!
+                      </p>
+                    </div>
+                  ) : (
+                    messages.map((msg) => {
+                      const isOwn = msg.senderId === profile?.id;
+                      return (
                         <div
+                          key={msg.id}
                           className={cn(
-                            "max-w-[70%] rounded-2xl px-4 py-2",
-                            isOwn
-                              ? "bg-primary text-primary-foreground rounded-br-md"
-                              : "bg-secondary rounded-bl-md"
+                            "flex gap-2.5",
+                            isOwn ? "flex-row-reverse" : "flex-row",
                           )}
                         >
-                          <p>{msg.content}</p>
-                          <p
+                          {!isOwn && (
+                            <Avatar
+                              name={activeConvMeta.otherUserName}
+                              avatarUrl={activeConvMeta.otherUserAvatarUrl}
+                              type={activeConvMeta.otherUserType}
+                              size="sm"
+                            />
+                          )}
+                          {/* Wrapper owns max-width; bubble owns colour only */}
+                          <div
                             className={cn(
-                              "text-xs mt-1",
-                              isOwn ? "text-primary-foreground/70" : "text-muted-foreground"
+                              "flex flex-col gap-0.5 min-w-0 max-w-[70%]",
+                              isOwn ? "items-end" : "items-start",
                             )}
                           >
-                            {formatTime(msg.created_at)}
-                          </p>
+                            <div className={getBubbleClasses(msg.senderRole, isOwn)}>
+                              {msg.text}
+                            </div>
+                            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 px-1">
+                              {formatTime(msg.createdAt)}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
+
+                  {/* Partner typing dots — LEFT side, only after the current user sends */}
+                  {partnerTyping && !msgsLoading && activeConvMeta && (
+                    <TypingDots conv={activeConvMeta} />
+                  )}
+
                   <div ref={messagesEndRef} />
                 </div>
               </ScrollArea>
 
-              {/* Message Input */}
-              <form onSubmit={sendMessage} className="p-4 border-t border-border">
-                <div className="flex gap-2">
+              {/* Input */}
+              <div className="px-5 py-4 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
+                <div className="flex gap-3 max-w-3xl mx-auto">
                   <Input
-                    placeholder="Type a message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder={`Message ${activeConvMeta.otherUserName}…`}
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 h-11 bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 focus-visible:ring-1 focus-visible:ring-purple-500 focus:border-purple-500 text-sm"
+                    autoFocus
                     disabled={sending}
-                    className="flex-1"
                   />
-                  <Button type="submit" disabled={sending || !newMessage.trim()}>
-                    <Send className="w-4 h-4" />
+                  <Button
+                    className={cn(
+                      "h-11 px-5 rounded-xl font-semibold gap-2 shrink-0 transition-all",
+                      profile?.user_type === "brand"
+                        ? "bg-teal-600 hover:bg-teal-500 text-white shadow-[0_4px_20px_rgba(20,184,166,0.35)]"
+                        : "btn-gradient",
+                    )}
+                    onClick={handleSend}
+                    disabled={!inputText.trim() || sending}
+                  >
+                    {sending ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Send className="w-4 h-4" />
+                    )}
+                    Send
                   </Button>
                 </div>
-              </form>
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 text-center mt-2 max-w-3xl mx-auto">
+                  Press{" "}
+                  <kbd className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-neutral-800 border border-zinc-200 dark:border-neutral-700 text-[10px] font-mono text-zinc-600 dark:text-zinc-400">
+                    Enter
+                  </kbd>{" "}
+                  to send
+                </p>
+              </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-secondary mx-auto mb-4 flex items-center justify-center">
-                  <Send className="w-6 h-6" />
-                </div>
-                <p>Select a conversation to start messaging</p>
+            /* ── No conversation selected ── */
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
+              <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6">
+                <MessageSquare className="w-8 h-8 text-primary/50" />
+              </div>
+              <h3 className="font-display text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-50">
+                Your messages
+              </h3>
+              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
+                Select a conversation or{" "}
+                <button
+                  className="underline text-primary hover:text-primary/80 transition-colors"
+                  onClick={() => searchRef.current?.focus()}
+                >
+                  search for a user
+                </button>{" "}
+                to start chatting.
+              </p>
+              <div className="flex gap-3 mt-4">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400 border-teal-200 dark:border-teal-500/20">
+                  <span className="w-2.5 h-2.5 rounded-full bg-teal-500" />
+                  Brand bubbles
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400 border-purple-200 dark:border-purple-500/20">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                  Creator bubbles
+                </span>
               </div>
             </div>
           )}

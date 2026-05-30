@@ -1,24 +1,46 @@
-import { createContext, useContext, ReactNode } from 'react';
-import { useSession, signIn as baSignIn, signOut as baSignOut, signUp as baSignUp } from '@/lib/auth-client';
+"use client";
 
-interface Profile {
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  useSession,
+  signIn as baSignIn,
+  signOut as baSignOut,
+  signUp as baSignUp,
+} from "@/lib/auth-client";
+import {
+  getMyProfileAction,
+  updateProfileAction,
+  type FullProfile,
+} from "@/app/actions/profile";
+
+// ── Public profile type (snake_case to match existing callers) ─────────────
+export interface Profile {
   id: string;
   user_id: string;
-  user_type: 'brand' | 'creator';
+  user_type: "brand" | "creator";
   email: string;
   full_name: string | null;
   avatar_url: string | null;
   bio: string | null;
-  brand_account_type: 'company' | 'personal' | null;
+  brand_account_type: "company" | "personal" | null;
   company_name: string | null;
   industry: string | null;
   website: string | null;
   niche: string | null;
-  primary_platform: 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'twitch' | 'linkedin' | null;
+  primary_platform:
+    | "youtube"
+    | "tiktok"
+    | "instagram"
+    | "twitter"
+    | "twitch"
+    | "linkedin"
+    | null;
   location: string | null;
   languages: string[];
   total_followers: number;
   avg_engagement_rate: number;
+  /** Sourced from DB — reliable flag for onboarding gate checks. */
+  hasCompletedOnboarding: boolean;
 }
 
 interface AuthUser {
@@ -32,7 +54,12 @@ interface AuthContextType {
   user: AuthUser | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, userType: 'brand' | 'creator', fullName: string) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    userType: "brand" | "creator",
+    fullName: string,
+  ) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithProvider: (
     provider: "google" | "facebook",
@@ -45,6 +72,31 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// ── Map FullProfile (DB) → Profile (public API) ────────────────────────────
+function toProfile(fp: FullProfile): Profile {
+  return {
+    id: fp.id,
+    user_id: fp.user_id,
+    user_type: fp.user_type,
+    email: fp.email,
+    full_name: fp.full_name,
+    avatar_url: fp.avatar_url,
+    bio: fp.bio,
+    brand_account_type: fp.brand_account_type,
+    company_name: fp.company_name,
+    industry: fp.industry,
+    website: fp.website,
+    niche: fp.niche,
+    primary_platform: fp.primary_platform,
+    location: fp.location,
+    languages: fp.languages,
+    total_followers: fp.total_followers,
+    avg_engagement_rate: fp.avg_engagement_rate,
+    hasCompletedOnboarding: fp.hasCompletedOnboarding,
+  };
+}
+
+// ── Provider ───────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { data: session, isPending } = useSession();
 
@@ -59,32 +111,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     : null;
 
-  const profile: Profile | null = sessionUser
-    ? {
-        id: sessionUser.id,
-        user_id: sessionUser.id,
-        user_type: ((sessionUser as { role?: string }).role === 'brand' ? 'brand' : 'creator') as 'brand' | 'creator',
-        email: sessionUser.email,
-        full_name: sessionUser.name ?? null,
-        avatar_url: sessionUser.image ?? null,
-        bio: null,
-        brand_account_type: null,
-        company_name: null,
-        industry: null,
-        website: null,
-        niche: null,
-        primary_platform: null,
-        location: null,
-        languages: [],
-        total_followers: 0,
-        avg_engagement_rate: 0,
-      }
-    : null;
+  // ── DB-sourced extended profile ─────────────────────────────────────────
+  const [dbProfile, setDbProfile] = useState<FullProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
+  useEffect(() => {
+    if (!sessionUser?.id) {
+      setDbProfile(null);
+      return;
+    }
+    setProfileLoading(true);
+    getMyProfileAction()
+      .then((p) => setDbProfile(p))
+      .finally(() => setProfileLoading(false));
+  }, [sessionUser?.id]);
+
+  const profile: Profile | null = dbProfile ? toProfile(dbProfile) : null;
+
+  // True while we're still waiting for either the session cookie OR the DB fetch.
+  const loading = isPending || profileLoading;
+
+  // ── Auth handlers ──────────────────────────────────────────────────────
   const handleSignUp = async (
     email: string,
     password: string,
-    userType: 'brand' | 'creator',
+    userType: "brand" | "creator",
     fullName: string,
   ): Promise<{ error: Error | null }> => {
     const result = await baSignUp.email({
@@ -96,7 +147,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: result.error ? new Error(result.error.message) : null };
   };
 
-  const handleSignIn = async (email: string, password: string): Promise<{ error: Error | null }> => {
+  const handleSignIn = async (
+    email: string,
+    password: string,
+  ): Promise<{ error: Error | null }> => {
     const result = await baSignIn.email({ email, password });
     return { error: result.error ? new Error(result.error.message) : null };
   };
@@ -107,29 +161,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<{ error: Error | null }> => {
     const result = await baSignIn.social({
       provider,
-      callbackURL: callbackURL ?? process.env.NEXT_PUBLIC_APP_URL + "/feed",
+      callbackURL:
+        callbackURL ?? process.env.NEXT_PUBLIC_APP_URL + "/onboarding",
     });
-
     return { error: result.error ? new Error(result.error.message) : null };
   };
 
   const handleSignOut = async () => {
     await baSignOut();
+    setDbProfile(null);
   };
 
-  // Stubs — profile mutations will be implemented via server actions
-  const updateProfile = async (_updates: Partial<Profile>): Promise<{ error: Error | null }> => {
+  // ── Profile mutations ─────────────────────────────────────────────────
+  const refreshProfile = async () => {
+    if (!sessionUser?.id) return;
+    const fresh = await getMyProfileAction();
+    setDbProfile(fresh);
+  };
+
+  const updateProfile = async (
+    updates: Partial<Profile>,
+  ): Promise<{ error: Error | null }> => {
+    const result = await updateProfileAction({
+      bio: updates.bio,
+      niche: updates.niche,
+      primaryPlatform: updates.primary_platform,
+      location: updates.location,
+      companyName: updates.company_name,
+      industry: updates.industry,
+      website: updates.website,
+      brandAccountType: updates.brand_account_type,
+    });
+
+    if (result.error) return { error: new Error(result.error) };
+    await refreshProfile();
     return { error: null };
   };
-
-  const refreshProfile = async () => {};
 
   return (
     <AuthContext.Provider
       value={{
         user,
         profile,
-        loading: isPending,
+        loading,
         signUp: handleSignUp,
         signIn: handleSignIn,
         signInWithProvider: handleSignInWithProvider,
@@ -146,7 +220,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

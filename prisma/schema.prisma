@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -7,17 +8,34 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  email          String          @unique
-  emailVerified  Boolean         @default(false)
-  name           String?
-  image          String?
-  role           String          @default("creator") // "creator" | "brand"
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  accounts       Account[]
-  sessions       Session[]
-  platformTokens PlatformToken[]
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  image         String?
+  role          String   @default("creator") // "creator" | "brand"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // ── Onboarding & profile ─────────────────────────────────────────────────
+  hasCompletedOnboarding Boolean @default(false) @map("onboardingCompleted")
+  bio                    String?
+  niche                  String?
+  primaryPlatform        String? // "youtube" | "tiktok" | "instagram" | ...
+  location               String?
+  companyName            String? // brand only
+  industry               String? // brand only
+  website                String? // brand only
+  brandAccountType       String? // "company" | "personal" — brand only
+  totalFollowers         Int     @default(0)
+  avgEngagementRate      Float   @default(0)
+
+  // ── Relations ─────────────────────────────────────────────────────────────
+  accounts         Account[]
+  sessions         Session[]
+  platformTokens   PlatformToken[]
+  sentMessages     Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
 }
 
 model Account {
@@ -96,7 +114,23 @@ model PlatformStats {
   postCount      Int?
   engagementRate Float?
   fetchedAt      DateTime @default(now())
-  raw            Json? // store full API response, useful early on
+  raw            Json?
 
   @@index([userId, platform])
+}
+
+/// Direct messages between any two users (Brand ↔ Creator or Creator ↔ Creator).
+model Message {
+  id         String   @id @default(cuid())
+  text       String
+  createdAt  DateTime @default(now())
+  senderId   String
+  receiverId String
+
+  sender   User @relation("SentMessages",     fields: [senderId],   references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([senderId, receiverId])
 }
