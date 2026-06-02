@@ -6,6 +6,28 @@ import { Role } from "@/lib/generated/prisma";
 import { headers } from "next/headers";
 import { z } from "zod";
 
+export type SelectRoleResult =
+  | { success: true; error: null }
+  | { success: false; error: string };
+
+export async function selectRole(
+  role: "BRAND" | "CREATOR",
+): Promise<SelectRoleResult> {
+  const authResult = await requireSessionUserId();
+  if (!authResult.userId) {
+    return { success: false, error: authResult.error ?? "Unauthorized" };
+  }
+  try {
+    await db.user.update({
+      where: { id: authResult.userId },
+      data: { role: role === "BRAND" ? Role.BRAND : Role.CREATOR },
+    });
+    return { success: true, error: null };
+  } catch {
+    return { success: false, error: "Failed to set role" };
+  }
+}
+
 const imageUrlSchema = z.string().url().optional();
 
 const brandOnboardingSchema = z.object({

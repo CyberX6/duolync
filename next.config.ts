@@ -13,6 +13,7 @@ const corsHeaders = (origin: string) => [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
   images: {
     remotePatterns: [
       {

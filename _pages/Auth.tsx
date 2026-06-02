@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Building2, User, Mail, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
-type UserType = "brand" | "creator" | null;
 type AuthTab = "signup" | "login";
 
 const GoogleIcon = () => (
@@ -54,13 +53,11 @@ const Auth = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const initialType = searchParams?.get("type") as UserType;
   const initialMode = searchParams?.get("mode");
 
   const [tab, setTab] = useState<AuthTab>(
     initialMode === "login" ? "login" : "signup"
   );
-  const [userType, setUserType] = useState<UserType>(initialType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -85,7 +82,6 @@ const Auth = () => {
 
   const switchTab = (newTab: AuthTab) => {
     setTab(newTab);
-    if (newTab === "login") setUserType(null);
     setEmail("");
     setPassword("");
     setFullName("");
@@ -93,16 +89,12 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (tab === "signup" && !userType) {
-      toast({ title: "Please select your account type", variant: "destructive" });
-      return;
-    }
     setIsLoading(true);
     try {
       if (tab === "signup") {
-        const { error } = await signUp(email, password, userType!, fullName);
+        const { error } = await signUp(email, password, fullName);
         if (error) throw error;
-        toast({ title: "Account created!", description: "Welcome to Duolync!" });
+        toast({ title: "Account created!", description: "Welcome to Nexly!" });
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
@@ -120,21 +112,8 @@ const Auth = () => {
   };
 
   const handleSocialAuth = async (provider: "google" | "facebook") => {
-    if (tab === "signup" && !userType) {
-      toast({
-        title: "Select your account type first",
-        description: 'Choose "Brand" or "Creator" before continuing',
-        variant: "destructive",
-      });
-      return;
-    }
     setIsLoading(true);
-    // Persist the pending role so it can be applied after OAuth completes
-    if (tab === "signup" && userType) {
-      localStorage.setItem("duolync_pending_role", userType);
-    }
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
     const callbackURL = `${origin}/onboarding`;
     const { error } = await signInWithProvider(provider, callbackURL);
     if (error) {
@@ -147,21 +126,8 @@ const Auth = () => {
     }
   };
 
-  const formEnabled = tab === "login" || !!userType;
-
-  const leftPanelHeadline =
-    userType === "brand"
-      ? "Find Your Perfect\nCreator Match"
-      : userType === "creator"
-      ? "Turn Your Influence\nInto Income"
-      : "Connect.\nCollaborate.\nGrow.";
-
-  const leftPanelSub =
-    userType === "brand"
-      ? "Access 50,000+ verified creators across TikTok, YouTube, Instagram and more."
-      : userType === "creator"
-      ? "Join thousands of creators who've found their dream brand partnerships."
-      : "The leading marketplace connecting brands with authentic content creators.";
+  const leftPanelHeadline = "Connect.\nCollaborate.\nGrow.";
+  const leftPanelSub = "The leading marketplace connecting brands with authentic content creators.";
 
   return (
     <div className="min-h-screen gradient-hero flex relative overflow-hidden">
@@ -245,121 +211,15 @@ const Auth = () => {
             ))}
           </div>
 
-          {/* ── Sign Up: role cards ──────────────────────────────── */}
-          {tab === "signup" && (
-            <div className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                I am a&hellip;
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {/* Brand */}
-                <button
-                  type="button"
-                  onClick={() => setUserType("brand")}
-                  className={cn(
-                    "relative p-4 rounded-xl border-2 text-left transition-all duration-200 group backdrop-blur-sm",
-                    userType === "brand"
-                      ? "border-violet-500 bg-violet-500/10 shadow-[0_0_28px_rgba(139,92,246,0.30)]"
-                      : "border-white/[0.08] hover:border-white/[0.15] bg-white/[0.03] hover:bg-white/[0.05]"
-                  )}
-                >
-                  {userType === "brand" && (
-                    <CheckCircle2 className="absolute top-2.5 right-2.5 w-4 h-4 text-violet-400" />
-                  )}
-                  <div
-                    className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors",
-                      userType === "brand"
-                        ? "bg-violet-500/20"
-                        : "bg-neutral-800 group-hover:bg-neutral-700"
-                    )}
-                  >
-                    <Building2
-                      className={cn(
-                        "w-5 h-5 transition-colors",
-                        userType === "brand"
-                          ? "text-violet-400"
-                          : "text-neutral-400"
-                      )}
-                    />
-                  </div>
-                  <p
-                    className={cn(
-                      "font-display font-bold text-sm mb-1",
-                      userType === "brand" ? "text-violet-300" : "text-foreground"
-                    )}
-                  >
-                    Brand
-                  </p>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Find &amp; work with creators
-                  </p>
-                </button>
-
-                {/* Creator */}
-                <button
-                  type="button"
-                  onClick={() => setUserType("creator")}
-                  className={cn(
-                    "relative p-4 rounded-xl border-2 text-left transition-all duration-200 group backdrop-blur-sm",
-                    userType === "creator"
-                      ? "border-pink-500 bg-pink-500/10 shadow-[0_0_28px_rgba(236,72,153,0.30)]"
-                      : "border-white/[0.08] hover:border-white/[0.15] bg-white/[0.03] hover:bg-white/[0.05]"
-                  )}
-                >
-                  {userType === "creator" && (
-                    <CheckCircle2 className="absolute top-2.5 right-2.5 w-4 h-4 text-pink-400" />
-                  )}
-                  <div
-                    className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors",
-                      userType === "creator"
-                        ? "bg-pink-500/20"
-                        : "bg-neutral-800 group-hover:bg-neutral-700"
-                    )}
-                  >
-                    <User
-                      className={cn(
-                        "w-5 h-5 transition-colors",
-                        userType === "creator"
-                          ? "text-pink-400"
-                          : "text-neutral-400"
-                      )}
-                    />
-                  </div>
-                  <p
-                    className={cn(
-                      "font-display font-bold text-sm mb-1",
-                      userType === "creator" ? "text-pink-300" : "text-foreground"
-                    )}
-                  >
-                    Creator
-                  </p>
-                  <p className="text-xs text-muted-foreground leading-snug">
-                    Get discovered by brands
-                  </p>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Form heading */}
           <div className="mb-5">
             <h2 className="font-display text-2xl font-bold leading-tight">
-              {tab === "login"
-                ? "Welcome back"
-                : userType === "brand"
-                ? "Join as a Brand"
-                : userType === "creator"
-                ? "Join as a Creator"
-                : "Create your account"}
+              {tab === "login" ? "Welcome back" : "Create your account"}
             </h2>
             <p className="text-muted-foreground text-sm mt-1">
               {tab === "login"
-                ? "Log in to your Duolync account"
-                : userType
-                ? `Set up your ${userType} profile on Duolync`
-                : "Select Brand or Creator above to continue"}
+                ? "Log in to your Nexly account"
+                : "Join Nexly to get started"}
             </p>
           </div>
 
@@ -378,9 +238,9 @@ const Auth = () => {
                     placeholder="Jane Smith"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="pl-10 h-11 transition-opacity"
+                    className="pl-10 h-11"
                     required
-                    disabled={!formEnabled || isLoading}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -400,7 +260,7 @@ const Auth = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 h-11"
                   required
-                  disabled={!formEnabled || isLoading}
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -420,7 +280,7 @@ const Auth = () => {
                   className="pl-10 pr-10 h-11"
                   required
                   minLength={6}
-                  disabled={!formEnabled || isLoading}
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -440,13 +300,9 @@ const Auth = () => {
             <Button
               type="submit"
               className="w-full h-11 btn-gradient font-semibold"
-              disabled={isLoading || !formEnabled}
+              disabled={isLoading}
             >
-              {isLoading
-                ? "Loading…"
-                : tab === "signup"
-                ? "Create Account"
-                : "Log In"}
+              {isLoading ? "Loading…" : tab === "signup" ? "Create Account" : "Log In"}
             </Button>
           </form>
 
@@ -465,24 +321,14 @@ const Auth = () => {
             <Button
               type="button"
               variant="outline"
-              className={cn(
-                "w-full h-11 gap-2.5 border-white/[0.10] hover:border-white/[0.20] bg-white/[0.03] hover:bg-white/[0.06] transition-all backdrop-blur-sm",
-                (!formEnabled || isLoading) && "opacity-50 cursor-not-allowed"
-              )}
+              className="w-full h-11 gap-2.5 border-white/[0.10] hover:border-white/[0.20] bg-white/[0.03] hover:bg-white/[0.06] transition-all backdrop-blur-sm"
               onClick={() => handleSocialAuth("google")}
-              disabled={isLoading || !formEnabled}
+              disabled={isLoading}
             >
               <GoogleIcon />
               Continue with Google
             </Button>
           </div>
-
-          {/* Hint when role not selected */}
-          {tab === "signup" && !userType && (
-            <p className="text-center text-xs text-muted-foreground mt-3">
-              Select your account type above to unlock sign-up options
-            </p>
-          )}
 
           {/* Footer switch */}
           <p className="text-center text-sm text-muted-foreground mt-6">
