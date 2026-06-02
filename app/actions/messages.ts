@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { Role } from "@/lib/generated/prisma";
+import { fromPrismaRole } from "@/lib/roles";
 import { headers } from "next/headers";
 
 export interface ConversationSummary {
@@ -32,6 +34,25 @@ async function requireSession() {
   return session;
 }
 
+function displayNameForUser(user: {
+  name: string | null;
+  role: Role;
+  brandProfile: { companyName: string } | null;
+}): string {
+  if (user.role === Role.BRAND && user.brandProfile?.companyName) {
+    return user.brandProfile.companyName;
+  }
+  return user.name ?? "User";
+}
+
+const userPreviewSelect = {
+  id: true,
+  name: true,
+  image: true,
+  role: true,
+  brandProfile: { select: { companyName: true } },
+} as const;
+
 export async function sendMessageAction(
   receiverId: string,
   text: string,
@@ -60,8 +81,8 @@ export async function getConversationsAction(): Promise<ConversationSummary[]> {
       OR: [{ senderId: currentUserId }, { receiverId: currentUserId }],
     },
     include: {
-      sender: { select: { id: true, name: true, image: true, role: true } },
-      receiver: { select: { id: true, name: true, image: true, role: true } },
+      sender: { select: userPreviewSelect },
+      receiver: { select: userPreviewSelect },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -77,9 +98,9 @@ export async function getConversationsAction(): Promise<ConversationSummary[]> {
 
     conversations.push({
       otherUserId: other.id,
-      otherUserName: other.name ?? "User",
+      otherUserName: displayNameForUser(other),
       otherUserAvatarUrl: other.image ?? null,
-      otherUserType: ((other.role ?? "creator") as "brand" | "creator"),
+      otherUserType: fromPrismaRole(other.role),
       lastMessage: msg.text,
       lastMessageAt: msg.createdAt.toISOString(),
       lastMessageSenderId: msg.senderId,
@@ -104,25 +125,30 @@ export async function searchUsersAction(query: string): Promise<UserPreview[]> {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return [];
 
+  const q = query.trim();
+
   const users = await db.user.findMany({
     where: {
       hasCompletedOnboarding: true,
       id: { not: session.user.id },
       OR: [
-        { name: { contains: query.trim(), mode: "insensitive" } },
-        { companyName: { contains: query.trim(), mode: "insensitive" } },
+        { name: { contains: q, mode: "insensitive" } },
+        {
+          brandProfile: {
+            companyName: { contains: q, mode: "insensitive" },
+          },
+        },
       ],
     },
-    select: { id: true, name: true, image: true, role: true, companyName: true },
+    select: userPreviewSelect,
     take: 8,
   });
 
   return users.map((u) => ({
     id: u.id,
-    name:
-      (u.role === "brand" ? u.companyName : null) ?? u.name ?? "User",
+    name: displayNameForUser(u),
     avatarUrl: u.image ?? null,
-    userType: (u.role ?? "creator") as "brand" | "creator",
+    userType: fromPrismaRole(u.role),
   }));
 }
 
@@ -134,17 +160,16 @@ export async function getUserPreviewAction(
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, image: true, role: true, companyName: true },
+    select: userPreviewSelect,
   });
 
   if (!user) return null;
 
   return {
     id: user.id,
-    name:
-      (user.role === "brand" ? user.companyName : null) ?? user.name ?? "User",
+    name: displayNameForUser(user),
     avatarUrl: user.image ?? null,
-    userType: (user.role ?? "creator") as "brand" | "creator",
+    userType: fromPrismaRole(user.role),
   };
 }
 
@@ -164,7 +189,7 @@ export async function getConversationAction(
       ],
     },
     include: {
-      sender: { select: { id: true, name: true, image: true, role: true } },
+      sender: { select: userPreviewSelect },
     },
     orderBy: { createdAt: "asc" },
   });
@@ -175,8 +200,8 @@ export async function getConversationAction(
     senderId: m.senderId,
     receiverId: m.receiverId,
     createdAt: m.createdAt.toISOString(),
-    senderRole: ((m.sender.role ?? "creator") as "brand" | "creator"),
-    senderName: m.sender.name ?? "User",
+    senderRole: fromPrismaRole(m.sender.role),
+    senderName: displayNameForUser(m.sender),
     senderAvatarUrl: m.sender.image ?? null,
   }));
 }

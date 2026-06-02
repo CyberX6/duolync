@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { completeOnboardingAction } from "@/app/actions/profile";
+import { completeOnboarding } from "@/app/actions/onboarding";
 
 const industries = [
   "Technology", "Fashion", "Beauty", "Food & Beverage", "Health & Fitness",
@@ -120,8 +120,8 @@ const Onboarding = () => {
             bio: bio || undefined,
           };
 
-      const { error } = await completeOnboardingAction(data);
-      if (error) throw new Error(error);
+      const result = await completeOnboarding(data);
+      if (!result.success) throw new Error(result.error);
 
       // Refresh the DB-backed profile so hasCompletedOnboarding flips to true,
       // then show the hold screen while the route transition completes.

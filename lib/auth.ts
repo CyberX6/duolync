@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "@/lib/db";
+import { toPrismaRole } from "@/lib/roles";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {
@@ -26,6 +27,38 @@ export const auth = betterAuth({
         required: false,
         defaultValue: "creator",
         input: true,
+      },
+      hasCompletedOnboarding: {
+        type: "boolean" as const,
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
+    },
+  },
+
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => ({
+          data: {
+            ...user,
+            role: toPrismaRole(user.role),
+          },
+        }),
+      },
+      update: {
+        before: async (user) => {
+          if (user.role === undefined) {
+            return { data: user };
+          }
+          return {
+            data: {
+              ...user,
+              role: toPrismaRole(user.role),
+            },
+          };
+        },
       },
     },
   },

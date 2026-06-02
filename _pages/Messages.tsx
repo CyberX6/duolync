@@ -68,34 +68,6 @@ function getBubbleClasses(
   return cn(base, tail, "bg-purple-600 text-white");
 }
 
-// ─── Typing indicator (3 bouncing dots) ───────────────────────────────────────
-// Renders on the LEFT (partner's side) only. The author of the typing event
-// never sees their own indicator — currentUserId !== typingUserId always holds.
-
-function TypingDots({
-  conv,
-}: {
-  conv: { otherUserName: string; otherUserAvatarUrl: string | null; otherUserType: "brand" | "creator" };
-}) {
-  return (
-    <div className="flex gap-2.5 flex-row">
-      <Avatar
-        name={conv.otherUserName}
-        avatarUrl={conv.otherUserAvatarUrl}
-        type={conv.otherUserType}
-        size="sm"
-      />
-      <div className="flex flex-col items-start max-w-[70%] min-w-0">
-        <div className="rounded-2xl rounded-bl-md bg-zinc-100 dark:bg-neutral-800 px-4 py-3 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "200ms" }} />
-          <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-neutral-400 animate-bounce" style={{ animationDelay: "400ms" }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Avatar ───────────────────────────────────────────────────────────────────
 
 const Avatar = ({
@@ -273,13 +245,6 @@ const Messages = () => {
   const [inputText, setInputText] = useState("");
   const [sending, setSending] = useState(false);
   const [showMobileList, setShowMobileList] = useState(true);
-  /**
-   * partnerTyping — shown on the LEFT for ~2.5 s after the current user sends.
-   * Simulates "they're drafting a reply". Never triggered by the current user's
-   * own keystroke (currentUserId !== typingUserId rule is enforced by design).
-   */
-  const [partnerTyping, setPartnerTyping] = useState(false);
-  const partnerTypingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -346,9 +311,6 @@ const Messages = () => {
   // ── Live polling for the active conversation (2500 ms) ────────────────────
   useEffect(() => {
     if (!selectedUserId) return;
-    // Reset typing indicator whenever we switch conversations.
-    if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
-    setPartnerTyping(false);
 
     const id = setInterval(async () => {
       const refreshed = await getConversationAction(selectedUserId);
@@ -357,12 +319,6 @@ const Messages = () => {
           const lastNew = refreshed[refreshed.length - 1]?.id;
           const lastOld = prev[prev.length - 1]?.id;
           if (lastNew === lastOld) return prev; // no new messages
-        }
-        // New message from the partner → they're done "typing".
-        const lastMsg = refreshed[refreshed.length - 1];
-        if (lastMsg && lastMsg.senderId === selectedUserId) {
-          if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
-          setPartnerTyping(false);
         }
         return refreshed;
       });
@@ -461,12 +417,6 @@ const Messages = () => {
     } else {
       const refreshed = await getConversationAction(selectedUserId);
       setMessages(refreshed);
-      // Show partner-typing dots on the LEFT for ~2.5 s (partner may be replying).
-      // Rule: current user NEVER triggers their own indicator — this fires only
-      // after a successful outbound send, not from the user's own keystrokes.
-      if (partnerTypingTimer.current) clearTimeout(partnerTypingTimer.current);
-      setPartnerTyping(true);
-      partnerTypingTimer.current = setTimeout(() => setPartnerTyping(false), 2500);
       setConversations((prev) => {
         const exists = prev.find((c) => c.otherUserId === selectedUserId);
         const updated: ConversationSummary = exists
@@ -728,11 +678,6 @@ const Messages = () => {
                         </div>
                       );
                     })
-                  )}
-
-                  {/* Partner typing dots — LEFT side, only after the current user sends */}
-                  {partnerTyping && !msgsLoading && activeConvMeta && (
-                    <TypingDots conv={activeConvMeta} />
                   )}
 
                   <div ref={messagesEndRef} />

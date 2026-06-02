@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { Role } from "@/lib/generated/prisma";
+import { fromPrismaRole } from "@/lib/roles";
 import { headers } from "next/headers";
 
 export interface FullProfile {
@@ -49,47 +51,62 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
       image: true,
       role: true,
       hasCompletedOnboarding: true,
-      bio: true,
-      niche: true,
-      primaryPlatform: true,
-      location: true,
-      companyName: true,
-      industry: true,
-      website: true,
-      brandAccountType: true,
-      totalFollowers: true,
-      avgEngagementRate: true,
+      brandProfile: {
+        select: {
+          bio: true,
+          companyName: true,
+          industry: true,
+          website: true,
+          brandAccountType: true,
+          location: true,
+        },
+      },
+      creatorProfile: {
+        select: {
+          bio: true,
+          niche: true,
+          primaryPlatform: true,
+          location: true,
+          totalFollowers: true,
+          avgEngagementRate: true,
+        },
+      },
     },
   });
 
   if (!user) return null;
 
+  const userType = fromPrismaRole(user.role);
+  const brand = user.brandProfile;
+  const creator = user.creatorProfile;
+
   return {
     id: user.id,
     user_id: user.id,
-    user_type: (user.role ?? "creator") as "brand" | "creator",
+    user_type: userType,
     email: user.email,
     full_name: user.name ?? null,
     avatar_url: user.image ?? null,
-    bio: user.bio ?? null,
-    brand_account_type: (user.brandAccountType ?? null) as
+    bio: (userType === "brand" ? brand?.bio : creator?.bio) ?? null,
+    brand_account_type: (brand?.brandAccountType ?? null) as
       | "company"
       | "personal"
       | null,
-    company_name: user.companyName ?? null,
-    industry: user.industry ?? null,
-    website: user.website ?? null,
-    niche: user.niche ?? null,
-    primary_platform: (user.primaryPlatform ?? null) as FullProfile["primary_platform"],
-    location: user.location ?? null,
+    company_name: brand?.companyName ?? null,
+    industry: brand?.industry ?? null,
+    website: brand?.website ?? null,
+    niche: creator?.niche ?? null,
+    primary_platform: (creator?.primaryPlatform ?? null) as FullProfile["primary_platform"],
+    location: (userType === "brand" ? brand?.location : creator?.location) ?? null,
     languages: ["English"],
-    total_followers: user.totalFollowers,
-    avg_engagement_rate: user.avgEngagementRate,
+    total_followers: creator?.totalFollowers ?? 0,
+    avg_engagement_rate: creator?.avgEngagementRate ?? 0,
     hasCompletedOnboarding: user.hasCompletedOnboarding,
   };
 }
 
 export interface OnboardingData {
+  imageUrl?: string;
   // Creator
   niche?: string;
   primaryPlatform?: string;
@@ -101,30 +118,6 @@ export interface OnboardingData {
   website?: string;
   // Shared
   bio?: string;
-}
-
-export async function completeOnboardingAction(
-  data: OnboardingData,
-): Promise<{ error: string | null }> {
-  const session = await getSessionOrNull();
-  if (!session) return { error: "Unauthorized" };
-
-  await db.user.update({
-    where: { id: session.user.id },
-    data: {
-      hasCompletedOnboarding: true,
-      bio: data.bio ?? null,
-      niche: data.niche ?? null,
-      primaryPlatform: data.primaryPlatform ?? null,
-      location: data.location ?? null,
-      brandAccountType: data.brandAccountType ?? null,
-      companyName: data.companyName ?? null,
-      industry: data.industry ?? null,
-      website: data.website ?? null,
-    },
-  });
-
-  return { error: null };
 }
 
 export async function updateProfileAction(data: {
@@ -140,10 +133,57 @@ export async function updateProfileAction(data: {
   const session = await getSessionOrNull();
   if (!session) return { error: "Unauthorized" };
 
-  await db.user.update({
+  const user = await db.user.findUnique({
     where: { id: session.user.id },
-    data,
+    select: { role: true },
   });
+  if (!user) return { error: "User not found" };
+
+  if (user.role === Role.BRAND) {
+    await db.brandProfile.upsert({
+      where: { userId: session.user.id },
+      create: {
+        userId: session.user.id,
+        companyName: data.companyName?.trim() || "Brand",
+        industry: data.industry ?? null,
+        website: data.website ?? null,
+        brandAccountType: data.brandAccountType ?? null,
+        bio: data.bio ?? null,
+        location: data.location ?? null,
+      },
+      update: {
+        ...(data.companyName !== undefined
+          ? { companyName: data.companyName ?? "Brand" }
+          : {}),
+        ...(data.industry !== undefined ? { industry: data.industry } : {}),
+        ...(data.website !== undefined ? { website: data.website } : {}),
+        ...(data.brandAccountType !== undefined
+          ? { brandAccountType: data.brandAccountType }
+          : {}),
+        ...(data.bio !== undefined ? { bio: data.bio } : {}),
+        ...(data.location !== undefined ? { location: data.location } : {}),
+      },
+    });
+  } else {
+    await db.creatorProfile.upsert({
+      where: { userId: session.user.id },
+      create: {
+        userId: session.user.id,
+        bio: data.bio ?? null,
+        niche: data.niche ?? null,
+        primaryPlatform: data.primaryPlatform ?? null,
+        location: data.location ?? null,
+      },
+      update: {
+        ...(data.bio !== undefined ? { bio: data.bio } : {}),
+        ...(data.niche !== undefined ? { niche: data.niche } : {}),
+        ...(data.primaryPlatform !== undefined
+          ? { primaryPlatform: data.primaryPlatform }
+          : {}),
+        ...(data.location !== undefined ? { location: data.location } : {}),
+      },
+    });
+  }
 
   return { error: null };
 }

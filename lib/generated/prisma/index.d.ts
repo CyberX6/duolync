@@ -19,6 +19,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model BrandProfile
+ * 
+ */
+export type BrandProfile = $Result.DefaultSelection<Prisma.$BrandProfilePayload>
+/**
+ * Model CreatorProfile
+ * 
+ */
+export type CreatorProfile = $Result.DefaultSelection<Prisma.$CreatorProfilePayload>
+/**
  * Model Account
  * 
  */
@@ -30,7 +40,7 @@ export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
 export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
 /**
  * Model Verification
- * OAuth state, magic links, email verification tokens, etc. Required by Better Auth.
+ * 
  */
 export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
 /**
@@ -39,20 +49,109 @@ export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
  */
 export type PlatformToken = $Result.DefaultSelection<Prisma.$PlatformTokenPayload>
 /**
- * Model Waitlist
- * 
- */
-export type Waitlist = $Result.DefaultSelection<Prisma.$WaitlistPayload>
-/**
  * Model PlatformStats
  * 
  */
 export type PlatformStats = $Result.DefaultSelection<Prisma.$PlatformStatsPayload>
 /**
+ * Model Waitlist
+ * 
+ */
+export type Waitlist = $Result.DefaultSelection<Prisma.$WaitlistPayload>
+/**
  * Model Message
- * Direct messages between any two users (Brand ↔ Creator or Creator ↔ Creator).
+ * 
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
+/**
+ * Model Campaign
+ * 
+ */
+export type Campaign = $Result.DefaultSelection<Prisma.$CampaignPayload>
+/**
+ * Model Proposal
+ * 
+ */
+export type Proposal = $Result.DefaultSelection<Prisma.$ProposalPayload>
+/**
+ * Model Contract
+ * 
+ */
+export type Contract = $Result.DefaultSelection<Prisma.$ContractPayload>
+/**
+ * Model Milestone
+ * 
+ */
+export type Milestone = $Result.DefaultSelection<Prisma.$MilestonePayload>
+/**
+ * Model CRMLead
+ * 
+ */
+export type CRMLead = $Result.DefaultSelection<Prisma.$CRMLeadPayload>
+/**
+ * Model Task
+ * 
+ */
+export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const Role: {
+  BRAND: 'BRAND',
+  CREATOR: 'CREATOR'
+};
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const ContractStatus: {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus]
+
+
+export const MilestoneStatus: {
+  PENDING: 'PENDING',
+  IN_REVIEW: 'IN_REVIEW',
+  APPROVED: 'APPROVED',
+  PAID: 'PAID'
+};
+
+export type MilestoneStatus = (typeof MilestoneStatus)[keyof typeof MilestoneStatus]
+
+
+export const LeadStatus: {
+  DISCOVERED: 'DISCOVERED',
+  NEGOTIATING: 'NEGOTIATING',
+  INVITED: 'INVITED',
+  REJECTED: 'REJECTED'
+};
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+}
+
+export type Role = $Enums.Role
+
+export const Role: typeof $Enums.Role
+
+export type ContractStatus = $Enums.ContractStatus
+
+export const ContractStatus: typeof $Enums.ContractStatus
+
+export type MilestoneStatus = $Enums.MilestoneStatus
+
+export const MilestoneStatus: typeof $Enums.MilestoneStatus
+
+export type LeadStatus = $Enums.LeadStatus
+
+export const LeadStatus: typeof $Enums.LeadStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -186,6 +285,26 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.brandProfile`: Exposes CRUD operations for the **BrandProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BrandProfiles
+    * const brandProfiles = await prisma.brandProfile.findMany()
+    * ```
+    */
+  get brandProfile(): Prisma.BrandProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.creatorProfile`: Exposes CRUD operations for the **CreatorProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CreatorProfiles
+    * const creatorProfiles = await prisma.creatorProfile.findMany()
+    * ```
+    */
+  get creatorProfile(): Prisma.CreatorProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
     * Example usage:
     * ```ts
@@ -226,16 +345,6 @@ export class PrismaClient<
   get platformToken(): Prisma.PlatformTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.waitlist`: Exposes CRUD operations for the **Waitlist** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Waitlists
-    * const waitlists = await prisma.waitlist.findMany()
-    * ```
-    */
-  get waitlist(): Prisma.WaitlistDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.platformStats`: Exposes CRUD operations for the **PlatformStats** model.
     * Example usage:
     * ```ts
@@ -246,6 +355,16 @@ export class PrismaClient<
   get platformStats(): Prisma.PlatformStatsDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.waitlist`: Exposes CRUD operations for the **Waitlist** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Waitlists
+    * const waitlists = await prisma.waitlist.findMany()
+    * ```
+    */
+  get waitlist(): Prisma.WaitlistDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.message`: Exposes CRUD operations for the **Message** model.
     * Example usage:
     * ```ts
@@ -254,6 +373,66 @@ export class PrismaClient<
     * ```
     */
   get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.campaign`: Exposes CRUD operations for the **Campaign** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Campaigns
+    * const campaigns = await prisma.campaign.findMany()
+    * ```
+    */
+  get campaign(): Prisma.CampaignDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.proposal`: Exposes CRUD operations for the **Proposal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Proposals
+    * const proposals = await prisma.proposal.findMany()
+    * ```
+    */
+  get proposal(): Prisma.ProposalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contract`: Exposes CRUD operations for the **Contract** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Contracts
+    * const contracts = await prisma.contract.findMany()
+    * ```
+    */
+  get contract(): Prisma.ContractDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.milestone`: Exposes CRUD operations for the **Milestone** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Milestones
+    * const milestones = await prisma.milestone.findMany()
+    * ```
+    */
+  get milestone(): Prisma.MilestoneDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cRMLead`: Exposes CRUD operations for the **CRMLead** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CRMLeads
+    * const cRMLeads = await prisma.cRMLead.findMany()
+    * ```
+    */
+  get cRMLead(): Prisma.CRMLeadDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.task`: Exposes CRUD operations for the **Task** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tasks
+    * const tasks = await prisma.task.findMany()
+    * ```
+    */
+  get task(): Prisma.TaskDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -689,13 +868,21 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    BrandProfile: 'BrandProfile',
+    CreatorProfile: 'CreatorProfile',
     Account: 'Account',
     Session: 'Session',
     Verification: 'Verification',
     PlatformToken: 'PlatformToken',
-    Waitlist: 'Waitlist',
     PlatformStats: 'PlatformStats',
-    Message: 'Message'
+    Waitlist: 'Waitlist',
+    Message: 'Message',
+    Campaign: 'Campaign',
+    Proposal: 'Proposal',
+    Contract: 'Contract',
+    Milestone: 'Milestone',
+    CRMLead: 'CRMLead',
+    Task: 'Task'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -711,7 +898,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "platformToken" | "waitlist" | "platformStats" | "message"
+      modelProps: "user" | "brandProfile" | "creatorProfile" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "proposal" | "contract" | "milestone" | "cRMLead" | "task"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -786,6 +973,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      BrandProfile: {
+        payload: Prisma.$BrandProfilePayload<ExtArgs>
+        fields: Prisma.BrandProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BrandProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BrandProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.BrandProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BrandProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          findMany: {
+            args: Prisma.BrandProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>[]
+          }
+          create: {
+            args: Prisma.BrandProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          createMany: {
+            args: Prisma.BrandProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BrandProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.BrandProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          update: {
+            args: Prisma.BrandProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.BrandProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BrandProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BrandProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.BrandProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BrandProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.BrandProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBrandProfile>
+          }
+          groupBy: {
+            args: Prisma.BrandProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BrandProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BrandProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<BrandProfileCountAggregateOutputType> | number
+          }
+        }
+      }
+      CreatorProfile: {
+        payload: Prisma.$CreatorProfilePayload<ExtArgs>
+        fields: Prisma.CreatorProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CreatorProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CreatorProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.CreatorProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CreatorProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          findMany: {
+            args: Prisma.CreatorProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>[]
+          }
+          create: {
+            args: Prisma.CreatorProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          createMany: {
+            args: Prisma.CreatorProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CreatorProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.CreatorProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          update: {
+            args: Prisma.CreatorProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.CreatorProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CreatorProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CreatorProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.CreatorProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CreatorProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.CreatorProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCreatorProfile>
+          }
+          groupBy: {
+            args: Prisma.CreatorProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CreatorProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CreatorProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<CreatorProfileCountAggregateOutputType> | number
           }
         }
       }
@@ -1085,80 +1420,6 @@ export namespace Prisma {
           }
         }
       }
-      Waitlist: {
-        payload: Prisma.$WaitlistPayload<ExtArgs>
-        fields: Prisma.WaitlistFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.WaitlistFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.WaitlistFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          findFirst: {
-            args: Prisma.WaitlistFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.WaitlistFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          findMany: {
-            args: Prisma.WaitlistFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
-          }
-          create: {
-            args: Prisma.WaitlistCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          createMany: {
-            args: Prisma.WaitlistCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.WaitlistCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
-          }
-          delete: {
-            args: Prisma.WaitlistDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          update: {
-            args: Prisma.WaitlistUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          deleteMany: {
-            args: Prisma.WaitlistDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.WaitlistUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.WaitlistUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
-          }
-          upsert: {
-            args: Prisma.WaitlistUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
-          }
-          aggregate: {
-            args: Prisma.WaitlistAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateWaitlist>
-          }
-          groupBy: {
-            args: Prisma.WaitlistGroupByArgs<ExtArgs>
-            result: $Utils.Optional<WaitlistGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.WaitlistCountArgs<ExtArgs>
-            result: $Utils.Optional<WaitlistCountAggregateOutputType> | number
-          }
-        }
-      }
       PlatformStats: {
         payload: Prisma.$PlatformStatsPayload<ExtArgs>
         fields: Prisma.PlatformStatsFieldRefs
@@ -1233,6 +1494,80 @@ export namespace Prisma {
           }
         }
       }
+      Waitlist: {
+        payload: Prisma.$WaitlistPayload<ExtArgs>
+        fields: Prisma.WaitlistFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WaitlistFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WaitlistFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          findFirst: {
+            args: Prisma.WaitlistFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WaitlistFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          findMany: {
+            args: Prisma.WaitlistFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
+          }
+          create: {
+            args: Prisma.WaitlistCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          createMany: {
+            args: Prisma.WaitlistCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WaitlistCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
+          }
+          delete: {
+            args: Prisma.WaitlistDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          update: {
+            args: Prisma.WaitlistUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          deleteMany: {
+            args: Prisma.WaitlistDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WaitlistUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WaitlistUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>[]
+          }
+          upsert: {
+            args: Prisma.WaitlistUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WaitlistPayload>
+          }
+          aggregate: {
+            args: Prisma.WaitlistAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWaitlist>
+          }
+          groupBy: {
+            args: Prisma.WaitlistGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WaitlistGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WaitlistCountArgs<ExtArgs>
+            result: $Utils.Optional<WaitlistCountAggregateOutputType> | number
+          }
+        }
+      }
       Message: {
         payload: Prisma.$MessagePayload<ExtArgs>
         fields: Prisma.MessageFieldRefs
@@ -1304,6 +1639,450 @@ export namespace Prisma {
           count: {
             args: Prisma.MessageCountArgs<ExtArgs>
             result: $Utils.Optional<MessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      Campaign: {
+        payload: Prisma.$CampaignPayload<ExtArgs>
+        fields: Prisma.CampaignFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CampaignFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CampaignFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          findFirst: {
+            args: Prisma.CampaignFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CampaignFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          findMany: {
+            args: Prisma.CampaignFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>[]
+          }
+          create: {
+            args: Prisma.CampaignCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          createMany: {
+            args: Prisma.CampaignCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CampaignCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>[]
+          }
+          delete: {
+            args: Prisma.CampaignDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          update: {
+            args: Prisma.CampaignUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          deleteMany: {
+            args: Prisma.CampaignDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CampaignUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CampaignUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>[]
+          }
+          upsert: {
+            args: Prisma.CampaignUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignPayload>
+          }
+          aggregate: {
+            args: Prisma.CampaignAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCampaign>
+          }
+          groupBy: {
+            args: Prisma.CampaignGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CampaignGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CampaignCountArgs<ExtArgs>
+            result: $Utils.Optional<CampaignCountAggregateOutputType> | number
+          }
+        }
+      }
+      Proposal: {
+        payload: Prisma.$ProposalPayload<ExtArgs>
+        fields: Prisma.ProposalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProposalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProposalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          findFirst: {
+            args: Prisma.ProposalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProposalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          findMany: {
+            args: Prisma.ProposalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>[]
+          }
+          create: {
+            args: Prisma.ProposalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          createMany: {
+            args: Prisma.ProposalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProposalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>[]
+          }
+          delete: {
+            args: Prisma.ProposalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          update: {
+            args: Prisma.ProposalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProposalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProposalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProposalUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProposalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalPayload>
+          }
+          aggregate: {
+            args: Prisma.ProposalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProposal>
+          }
+          groupBy: {
+            args: Prisma.ProposalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProposalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProposalCountArgs<ExtArgs>
+            result: $Utils.Optional<ProposalCountAggregateOutputType> | number
+          }
+        }
+      }
+      Contract: {
+        payload: Prisma.$ContractPayload<ExtArgs>
+        fields: Prisma.ContractFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContractFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContractFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          findFirst: {
+            args: Prisma.ContractFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContractFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          findMany: {
+            args: Prisma.ContractFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>[]
+          }
+          create: {
+            args: Prisma.ContractCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          createMany: {
+            args: Prisma.ContractCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContractCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>[]
+          }
+          delete: {
+            args: Prisma.ContractDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          update: {
+            args: Prisma.ContractUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContractDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContractUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContractUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContractUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContractPayload>
+          }
+          aggregate: {
+            args: Prisma.ContractAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContract>
+          }
+          groupBy: {
+            args: Prisma.ContractGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContractGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContractCountArgs<ExtArgs>
+            result: $Utils.Optional<ContractCountAggregateOutputType> | number
+          }
+        }
+      }
+      Milestone: {
+        payload: Prisma.$MilestonePayload<ExtArgs>
+        fields: Prisma.MilestoneFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MilestoneFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MilestoneFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          findFirst: {
+            args: Prisma.MilestoneFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MilestoneFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          findMany: {
+            args: Prisma.MilestoneFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>[]
+          }
+          create: {
+            args: Prisma.MilestoneCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          createMany: {
+            args: Prisma.MilestoneCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MilestoneCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>[]
+          }
+          delete: {
+            args: Prisma.MilestoneDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          update: {
+            args: Prisma.MilestoneUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          deleteMany: {
+            args: Prisma.MilestoneDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MilestoneUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MilestoneUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>[]
+          }
+          upsert: {
+            args: Prisma.MilestoneUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestonePayload>
+          }
+          aggregate: {
+            args: Prisma.MilestoneAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMilestone>
+          }
+          groupBy: {
+            args: Prisma.MilestoneGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MilestoneGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MilestoneCountArgs<ExtArgs>
+            result: $Utils.Optional<MilestoneCountAggregateOutputType> | number
+          }
+        }
+      }
+      CRMLead: {
+        payload: Prisma.$CRMLeadPayload<ExtArgs>
+        fields: Prisma.CRMLeadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CRMLeadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CRMLeadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          findFirst: {
+            args: Prisma.CRMLeadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CRMLeadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          findMany: {
+            args: Prisma.CRMLeadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>[]
+          }
+          create: {
+            args: Prisma.CRMLeadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          createMany: {
+            args: Prisma.CRMLeadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CRMLeadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>[]
+          }
+          delete: {
+            args: Prisma.CRMLeadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          update: {
+            args: Prisma.CRMLeadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          deleteMany: {
+            args: Prisma.CRMLeadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CRMLeadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CRMLeadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>[]
+          }
+          upsert: {
+            args: Prisma.CRMLeadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CRMLeadPayload>
+          }
+          aggregate: {
+            args: Prisma.CRMLeadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCRMLead>
+          }
+          groupBy: {
+            args: Prisma.CRMLeadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CRMLeadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CRMLeadCountArgs<ExtArgs>
+            result: $Utils.Optional<CRMLeadCountAggregateOutputType> | number
+          }
+        }
+      }
+      Task: {
+        payload: Prisma.$TaskPayload<ExtArgs>
+        fields: Prisma.TaskFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findFirst: {
+            args: Prisma.TaskFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findMany: {
+            args: Prisma.TaskFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          create: {
+            args: Prisma.TaskCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          createMany: {
+            args: Prisma.TaskCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TaskCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          delete: {
+            args: Prisma.TaskDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          update: {
+            args: Prisma.TaskUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TaskUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          upsert: {
+            args: Prisma.TaskUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          aggregate: {
+            args: Prisma.TaskAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTask>
+          }
+          groupBy: {
+            args: Prisma.TaskGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskCountAggregateOutputType> | number
           }
         }
       }
@@ -1416,13 +2195,21 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    brandProfile?: BrandProfileOmit
+    creatorProfile?: CreatorProfileOmit
     account?: AccountOmit
     session?: SessionOmit
     verification?: VerificationOmit
     platformToken?: PlatformTokenOmit
-    waitlist?: WaitlistOmit
     platformStats?: PlatformStatsOmit
+    waitlist?: WaitlistOmit
     message?: MessageOmit
+    campaign?: CampaignOmit
+    proposal?: ProposalOmit
+    contract?: ContractOmit
+    milestone?: MilestoneOmit
+    cRMLead?: CRMLeadOmit
+    task?: TaskOmit
   }
 
   /* Types for Logging */
@@ -1506,6 +2293,7 @@ export namespace Prisma {
     accounts: number
     sessions: number
     platformTokens: number
+    platformStats: number
     sentMessages: number
     receivedMessages: number
   }
@@ -1514,6 +2302,7 @@ export namespace Prisma {
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     platformTokens?: boolean | UserCountOutputTypeCountPlatformTokensArgs
+    platformStats?: boolean | UserCountOutputTypeCountPlatformStatsArgs
     sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
     receivedMessages?: boolean | UserCountOutputTypeCountReceivedMessagesArgs
   }
@@ -1553,6 +2342,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountPlatformStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlatformStatsWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountSentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
   }
@@ -1566,6 +2362,166 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BrandProfileCountOutputType
+   */
+
+  export type BrandProfileCountOutputType = {
+    campaigns: number
+    crmLeads: number
+  }
+
+  export type BrandProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaigns?: boolean | BrandProfileCountOutputTypeCountCampaignsArgs
+    crmLeads?: boolean | BrandProfileCountOutputTypeCountCrmLeadsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BrandProfileCountOutputType without action
+   */
+  export type BrandProfileCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfileCountOutputType
+     */
+    select?: BrandProfileCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BrandProfileCountOutputType without action
+   */
+  export type BrandProfileCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignWhereInput
+  }
+
+  /**
+   * BrandProfileCountOutputType without action
+   */
+  export type BrandProfileCountOutputTypeCountCrmLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CRMLeadWhereInput
+  }
+
+
+  /**
+   * Count Type CreatorProfileCountOutputType
+   */
+
+  export type CreatorProfileCountOutputType = {
+    contracts: number
+    proposals: number
+  }
+
+  export type CreatorProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contracts?: boolean | CreatorProfileCountOutputTypeCountContractsArgs
+    proposals?: boolean | CreatorProfileCountOutputTypeCountProposalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CreatorProfileCountOutputType without action
+   */
+  export type CreatorProfileCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfileCountOutputType
+     */
+    select?: CreatorProfileCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CreatorProfileCountOutputType without action
+   */
+  export type CreatorProfileCountOutputTypeCountContractsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContractWhereInput
+  }
+
+  /**
+   * CreatorProfileCountOutputType without action
+   */
+  export type CreatorProfileCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalWhereInput
+  }
+
+
+  /**
+   * Count Type CampaignCountOutputType
+   */
+
+  export type CampaignCountOutputType = {
+    proposals: number
+    contracts: number
+  }
+
+  export type CampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    proposals?: boolean | CampaignCountOutputTypeCountProposalsArgs
+    contracts?: boolean | CampaignCountOutputTypeCountContractsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignCountOutputType
+     */
+    select?: CampaignCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalWhereInput
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountContractsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContractWhereInput
+  }
+
+
+  /**
+   * Count Type ContractCountOutputType
+   */
+
+  export type ContractCountOutputType = {
+    milestones: number
+    tasks: number
+  }
+
+  export type ContractCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    milestones?: boolean | ContractCountOutputTypeCountMilestonesArgs
+    tasks?: boolean | ContractCountOutputTypeCountTasksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ContractCountOutputType without action
+   */
+  export type ContractCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContractCountOutputType
+     */
+    select?: ContractCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ContractCountOutputType without action
+   */
+  export type ContractCountOutputTypeCountMilestonesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MilestoneWhereInput
+  }
+
+  /**
+   * ContractCountOutputType without action
+   */
+  export type ContractCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1575,20 +2531,8 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
-  }
-
-  export type UserAvgAggregateOutputType = {
-    totalFollowers: number | null
-    avgEngagementRate: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    totalFollowers: number | null
-    avgEngagementRate: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1597,20 +2541,10 @@ export namespace Prisma {
     emailVerified: boolean | null
     name: string | null
     image: string | null
-    role: string | null
+    role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
     hasCompletedOnboarding: boolean | null
-    bio: string | null
-    niche: string | null
-    primaryPlatform: string | null
-    location: string | null
-    companyName: string | null
-    industry: string | null
-    website: string | null
-    brandAccountType: string | null
-    totalFollowers: number | null
-    avgEngagementRate: number | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1619,20 +2553,10 @@ export namespace Prisma {
     emailVerified: boolean | null
     name: string | null
     image: string | null
-    role: string | null
+    role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
     hasCompletedOnboarding: boolean | null
-    bio: string | null
-    niche: string | null
-    primaryPlatform: string | null
-    location: string | null
-    companyName: string | null
-    industry: string | null
-    website: string | null
-    brandAccountType: string | null
-    totalFollowers: number | null
-    avgEngagementRate: number | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1645,29 +2569,9 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     hasCompletedOnboarding: number
-    bio: number
-    niche: number
-    primaryPlatform: number
-    location: number
-    companyName: number
-    industry: number
-    website: number
-    brandAccountType: number
-    totalFollowers: number
-    avgEngagementRate: number
     _all: number
   }
 
-
-  export type UserAvgAggregateInputType = {
-    totalFollowers?: true
-    avgEngagementRate?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    totalFollowers?: true
-    avgEngagementRate?: true
-  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1679,16 +2583,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     hasCompletedOnboarding?: true
-    bio?: true
-    niche?: true
-    primaryPlatform?: true
-    location?: true
-    companyName?: true
-    industry?: true
-    website?: true
-    brandAccountType?: true
-    totalFollowers?: true
-    avgEngagementRate?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1701,16 +2595,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     hasCompletedOnboarding?: true
-    bio?: true
-    niche?: true
-    primaryPlatform?: true
-    location?: true
-    companyName?: true
-    industry?: true
-    website?: true
-    brandAccountType?: true
-    totalFollowers?: true
-    avgEngagementRate?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1723,16 +2607,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     hasCompletedOnboarding?: true
-    bio?: true
-    niche?: true
-    primaryPlatform?: true
-    location?: true
-    companyName?: true
-    industry?: true
-    website?: true
-    brandAccountType?: true
-    totalFollowers?: true
-    avgEngagementRate?: true
     _all?: true
   }
 
@@ -1774,18 +2648,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1816,8 +2678,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1828,23 +2688,11 @@ export namespace Prisma {
     emailVerified: boolean
     name: string | null
     image: string | null
-    role: string
+    role: $Enums.Role
     createdAt: Date
     updatedAt: Date
     hasCompletedOnboarding: boolean
-    bio: string | null
-    niche: string | null
-    primaryPlatform: string | null
-    location: string | null
-    companyName: string | null
-    industry: string | null
-    website: string | null
-    brandAccountType: string | null
-    totalFollowers: number
-    avgEngagementRate: number
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1873,21 +2721,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     hasCompletedOnboarding?: boolean
-    bio?: boolean
-    niche?: boolean
-    primaryPlatform?: boolean
-    location?: boolean
-    companyName?: boolean
-    industry?: boolean
-    website?: boolean
-    brandAccountType?: boolean
-    totalFollowers?: boolean
-    avgEngagementRate?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     platformTokens?: boolean | User$platformTokensArgs<ExtArgs>
+    platformStats?: boolean | User$platformStatsArgs<ExtArgs>
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>
+    brandProfile?: boolean | User$brandProfileArgs<ExtArgs>
+    creatorProfile?: boolean | User$creatorProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1901,16 +2742,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     hasCompletedOnboarding?: boolean
-    bio?: boolean
-    niche?: boolean
-    primaryPlatform?: boolean
-    location?: boolean
-    companyName?: boolean
-    industry?: boolean
-    website?: boolean
-    brandAccountType?: boolean
-    totalFollowers?: boolean
-    avgEngagementRate?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1923,16 +2754,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     hasCompletedOnboarding?: boolean
-    bio?: boolean
-    niche?: boolean
-    primaryPlatform?: boolean
-    location?: boolean
-    companyName?: boolean
-    industry?: boolean
-    website?: boolean
-    brandAccountType?: boolean
-    totalFollowers?: boolean
-    avgEngagementRate?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1945,25 +2766,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     hasCompletedOnboarding?: boolean
-    bio?: boolean
-    niche?: boolean
-    primaryPlatform?: boolean
-    location?: boolean
-    companyName?: boolean
-    industry?: boolean
-    website?: boolean
-    brandAccountType?: boolean
-    totalFollowers?: boolean
-    avgEngagementRate?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "image" | "role" | "createdAt" | "updatedAt" | "hasCompletedOnboarding" | "bio" | "niche" | "primaryPlatform" | "location" | "companyName" | "industry" | "website" | "brandAccountType" | "totalFollowers" | "avgEngagementRate", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "image" | "role" | "createdAt" | "updatedAt" | "hasCompletedOnboarding", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     platformTokens?: boolean | User$platformTokensArgs<ExtArgs>
+    platformStats?: boolean | User$platformStatsArgs<ExtArgs>
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>
+    brandProfile?: boolean | User$brandProfileArgs<ExtArgs>
+    creatorProfile?: boolean | User$creatorProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1975,8 +2789,11 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       platformTokens: Prisma.$PlatformTokenPayload<ExtArgs>[]
+      platformStats: Prisma.$PlatformStatsPayload<ExtArgs>[]
       sentMessages: Prisma.$MessagePayload<ExtArgs>[]
       receivedMessages: Prisma.$MessagePayload<ExtArgs>[]
+      brandProfile: Prisma.$BrandProfilePayload<ExtArgs> | null
+      creatorProfile: Prisma.$CreatorProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1984,20 +2801,10 @@ export namespace Prisma {
       emailVerified: boolean
       name: string | null
       image: string | null
-      role: string
+      role: $Enums.Role
       createdAt: Date
       updatedAt: Date
       hasCompletedOnboarding: boolean
-      bio: string | null
-      niche: string | null
-      primaryPlatform: string | null
-      location: string | null
-      companyName: string | null
-      industry: string | null
-      website: string | null
-      brandAccountType: string | null
-      totalFollowers: number
-      avgEngagementRate: number
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2395,8 +3202,11 @@ export namespace Prisma {
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     platformTokens<T extends User$platformTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$platformTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    platformStats<T extends User$platformStatsArgs<ExtArgs> = {}>(args?: Subset<T, User$platformStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sentMessages<T extends User$sentMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     receivedMessages<T extends User$receivedMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    brandProfile<T extends User$brandProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$brandProfileArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    creatorProfile<T extends User$creatorProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$creatorProfileArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2431,20 +3241,10 @@ export namespace Prisma {
     readonly emailVerified: FieldRef<"User", 'Boolean'>
     readonly name: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
-    readonly role: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly hasCompletedOnboarding: FieldRef<"User", 'Boolean'>
-    readonly bio: FieldRef<"User", 'String'>
-    readonly niche: FieldRef<"User", 'String'>
-    readonly primaryPlatform: FieldRef<"User", 'String'>
-    readonly location: FieldRef<"User", 'String'>
-    readonly companyName: FieldRef<"User", 'String'>
-    readonly industry: FieldRef<"User", 'String'>
-    readonly website: FieldRef<"User", 'String'>
-    readonly brandAccountType: FieldRef<"User", 'String'>
-    readonly totalFollowers: FieldRef<"User", 'Int'>
-    readonly avgEngagementRate: FieldRef<"User", 'Float'>
   }
     
 
@@ -2910,6 +3710,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.platformStats
+   */
+  export type User$platformStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    where?: PlatformStatsWhereInput
+    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
+    cursor?: PlatformStatsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
+  }
+
+  /**
    * User.sentMessages
    */
   export type User$sentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2958,6 +3782,44 @@ export namespace Prisma {
   }
 
   /**
+   * User.brandProfile
+   */
+  export type User$brandProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    where?: BrandProfileWhereInput
+  }
+
+  /**
+   * User.creatorProfile
+   */
+  export type User$creatorProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    where?: CreatorProfileWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2973,6 +3835,2377 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BrandProfile
+   */
+
+  export type AggregateBrandProfile = {
+    _count: BrandProfileCountAggregateOutputType | null
+    _min: BrandProfileMinAggregateOutputType | null
+    _max: BrandProfileMaxAggregateOutputType | null
+  }
+
+  export type BrandProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    companyName: string | null
+    industry: string | null
+    website: string | null
+    brandAccountType: string | null
+    bio: string | null
+    location: string | null
+  }
+
+  export type BrandProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    companyName: string | null
+    industry: string | null
+    website: string | null
+    brandAccountType: string | null
+    bio: string | null
+    location: string | null
+  }
+
+  export type BrandProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    companyName: number
+    industry: number
+    website: number
+    brandAccountType: number
+    bio: number
+    location: number
+    _all: number
+  }
+
+
+  export type BrandProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    companyName?: true
+    industry?: true
+    website?: true
+    brandAccountType?: true
+    bio?: true
+    location?: true
+  }
+
+  export type BrandProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    companyName?: true
+    industry?: true
+    website?: true
+    brandAccountType?: true
+    bio?: true
+    location?: true
+  }
+
+  export type BrandProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    companyName?: true
+    industry?: true
+    website?: true
+    brandAccountType?: true
+    bio?: true
+    location?: true
+    _all?: true
+  }
+
+  export type BrandProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BrandProfile to aggregate.
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BrandProfiles to fetch.
+     */
+    orderBy?: BrandProfileOrderByWithRelationInput | BrandProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BrandProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BrandProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BrandProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BrandProfiles
+    **/
+    _count?: true | BrandProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BrandProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BrandProfileMaxAggregateInputType
+  }
+
+  export type GetBrandProfileAggregateType<T extends BrandProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateBrandProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBrandProfile[P]>
+      : GetScalarType<T[P], AggregateBrandProfile[P]>
+  }
+
+
+
+
+  export type BrandProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BrandProfileWhereInput
+    orderBy?: BrandProfileOrderByWithAggregationInput | BrandProfileOrderByWithAggregationInput[]
+    by: BrandProfileScalarFieldEnum[] | BrandProfileScalarFieldEnum
+    having?: BrandProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BrandProfileCountAggregateInputType | true
+    _min?: BrandProfileMinAggregateInputType
+    _max?: BrandProfileMaxAggregateInputType
+  }
+
+  export type BrandProfileGroupByOutputType = {
+    id: string
+    userId: string
+    companyName: string
+    industry: string | null
+    website: string | null
+    brandAccountType: string | null
+    bio: string | null
+    location: string | null
+    _count: BrandProfileCountAggregateOutputType | null
+    _min: BrandProfileMinAggregateOutputType | null
+    _max: BrandProfileMaxAggregateOutputType | null
+  }
+
+  type GetBrandProfileGroupByPayload<T extends BrandProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BrandProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BrandProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BrandProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], BrandProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BrandProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    companyName?: boolean
+    industry?: boolean
+    website?: boolean
+    brandAccountType?: boolean
+    bio?: boolean
+    location?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    campaigns?: boolean | BrandProfile$campaignsArgs<ExtArgs>
+    crmLeads?: boolean | BrandProfile$crmLeadsArgs<ExtArgs>
+    _count?: boolean | BrandProfileCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brandProfile"]>
+
+  export type BrandProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    companyName?: boolean
+    industry?: boolean
+    website?: boolean
+    brandAccountType?: boolean
+    bio?: boolean
+    location?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brandProfile"]>
+
+  export type BrandProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    companyName?: boolean
+    industry?: boolean
+    website?: boolean
+    brandAccountType?: boolean
+    bio?: boolean
+    location?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brandProfile"]>
+
+  export type BrandProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    companyName?: boolean
+    industry?: boolean
+    website?: boolean
+    brandAccountType?: boolean
+    bio?: boolean
+    location?: boolean
+  }
+
+  export type BrandProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "companyName" | "industry" | "website" | "brandAccountType" | "bio" | "location", ExtArgs["result"]["brandProfile"]>
+  export type BrandProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    campaigns?: boolean | BrandProfile$campaignsArgs<ExtArgs>
+    crmLeads?: boolean | BrandProfile$crmLeadsArgs<ExtArgs>
+    _count?: boolean | BrandProfileCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BrandProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BrandProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BrandProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BrandProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      campaigns: Prisma.$CampaignPayload<ExtArgs>[]
+      crmLeads: Prisma.$CRMLeadPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      companyName: string
+      industry: string | null
+      website: string | null
+      brandAccountType: string | null
+      bio: string | null
+      location: string | null
+    }, ExtArgs["result"]["brandProfile"]>
+    composites: {}
+  }
+
+  type BrandProfileGetPayload<S extends boolean | null | undefined | BrandProfileDefaultArgs> = $Result.GetResult<Prisma.$BrandProfilePayload, S>
+
+  type BrandProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BrandProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BrandProfileCountAggregateInputType | true
+    }
+
+  export interface BrandProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BrandProfile'], meta: { name: 'BrandProfile' } }
+    /**
+     * Find zero or one BrandProfile that matches the filter.
+     * @param {BrandProfileFindUniqueArgs} args - Arguments to find a BrandProfile
+     * @example
+     * // Get one BrandProfile
+     * const brandProfile = await prisma.brandProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BrandProfileFindUniqueArgs>(args: SelectSubset<T, BrandProfileFindUniqueArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BrandProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BrandProfileFindUniqueOrThrowArgs} args - Arguments to find a BrandProfile
+     * @example
+     * // Get one BrandProfile
+     * const brandProfile = await prisma.brandProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BrandProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, BrandProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BrandProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileFindFirstArgs} args - Arguments to find a BrandProfile
+     * @example
+     * // Get one BrandProfile
+     * const brandProfile = await prisma.brandProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BrandProfileFindFirstArgs>(args?: SelectSubset<T, BrandProfileFindFirstArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BrandProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileFindFirstOrThrowArgs} args - Arguments to find a BrandProfile
+     * @example
+     * // Get one BrandProfile
+     * const brandProfile = await prisma.brandProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BrandProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, BrandProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BrandProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BrandProfiles
+     * const brandProfiles = await prisma.brandProfile.findMany()
+     * 
+     * // Get first 10 BrandProfiles
+     * const brandProfiles = await prisma.brandProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const brandProfileWithIdOnly = await prisma.brandProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BrandProfileFindManyArgs>(args?: SelectSubset<T, BrandProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BrandProfile.
+     * @param {BrandProfileCreateArgs} args - Arguments to create a BrandProfile.
+     * @example
+     * // Create one BrandProfile
+     * const BrandProfile = await prisma.brandProfile.create({
+     *   data: {
+     *     // ... data to create a BrandProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends BrandProfileCreateArgs>(args: SelectSubset<T, BrandProfileCreateArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BrandProfiles.
+     * @param {BrandProfileCreateManyArgs} args - Arguments to create many BrandProfiles.
+     * @example
+     * // Create many BrandProfiles
+     * const brandProfile = await prisma.brandProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BrandProfileCreateManyArgs>(args?: SelectSubset<T, BrandProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BrandProfiles and returns the data saved in the database.
+     * @param {BrandProfileCreateManyAndReturnArgs} args - Arguments to create many BrandProfiles.
+     * @example
+     * // Create many BrandProfiles
+     * const brandProfile = await prisma.brandProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BrandProfiles and only return the `id`
+     * const brandProfileWithIdOnly = await prisma.brandProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BrandProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, BrandProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BrandProfile.
+     * @param {BrandProfileDeleteArgs} args - Arguments to delete one BrandProfile.
+     * @example
+     * // Delete one BrandProfile
+     * const BrandProfile = await prisma.brandProfile.delete({
+     *   where: {
+     *     // ... filter to delete one BrandProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BrandProfileDeleteArgs>(args: SelectSubset<T, BrandProfileDeleteArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BrandProfile.
+     * @param {BrandProfileUpdateArgs} args - Arguments to update one BrandProfile.
+     * @example
+     * // Update one BrandProfile
+     * const brandProfile = await prisma.brandProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BrandProfileUpdateArgs>(args: SelectSubset<T, BrandProfileUpdateArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BrandProfiles.
+     * @param {BrandProfileDeleteManyArgs} args - Arguments to filter BrandProfiles to delete.
+     * @example
+     * // Delete a few BrandProfiles
+     * const { count } = await prisma.brandProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BrandProfileDeleteManyArgs>(args?: SelectSubset<T, BrandProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BrandProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BrandProfiles
+     * const brandProfile = await prisma.brandProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BrandProfileUpdateManyArgs>(args: SelectSubset<T, BrandProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BrandProfiles and returns the data updated in the database.
+     * @param {BrandProfileUpdateManyAndReturnArgs} args - Arguments to update many BrandProfiles.
+     * @example
+     * // Update many BrandProfiles
+     * const brandProfile = await prisma.brandProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BrandProfiles and only return the `id`
+     * const brandProfileWithIdOnly = await prisma.brandProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BrandProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, BrandProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BrandProfile.
+     * @param {BrandProfileUpsertArgs} args - Arguments to update or create a BrandProfile.
+     * @example
+     * // Update or create a BrandProfile
+     * const brandProfile = await prisma.brandProfile.upsert({
+     *   create: {
+     *     // ... data to create a BrandProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BrandProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BrandProfileUpsertArgs>(args: SelectSubset<T, BrandProfileUpsertArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BrandProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileCountArgs} args - Arguments to filter BrandProfiles to count.
+     * @example
+     * // Count the number of BrandProfiles
+     * const count = await prisma.brandProfile.count({
+     *   where: {
+     *     // ... the filter for the BrandProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends BrandProfileCountArgs>(
+      args?: Subset<T, BrandProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BrandProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BrandProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BrandProfileAggregateArgs>(args: Subset<T, BrandProfileAggregateArgs>): Prisma.PrismaPromise<GetBrandProfileAggregateType<T>>
+
+    /**
+     * Group by BrandProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BrandProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BrandProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BrandProfileGroupByArgs['orderBy'] }
+        : { orderBy?: BrandProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BrandProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBrandProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BrandProfile model
+   */
+  readonly fields: BrandProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BrandProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BrandProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaigns<T extends BrandProfile$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    crmLeads<T extends BrandProfile$crmLeadsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$crmLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BrandProfile model
+   */
+  interface BrandProfileFieldRefs {
+    readonly id: FieldRef<"BrandProfile", 'String'>
+    readonly userId: FieldRef<"BrandProfile", 'String'>
+    readonly companyName: FieldRef<"BrandProfile", 'String'>
+    readonly industry: FieldRef<"BrandProfile", 'String'>
+    readonly website: FieldRef<"BrandProfile", 'String'>
+    readonly brandAccountType: FieldRef<"BrandProfile", 'String'>
+    readonly bio: FieldRef<"BrandProfile", 'String'>
+    readonly location: FieldRef<"BrandProfile", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BrandProfile findUnique
+   */
+  export type BrandProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BrandProfile to fetch.
+     */
+    where: BrandProfileWhereUniqueInput
+  }
+
+  /**
+   * BrandProfile findUniqueOrThrow
+   */
+  export type BrandProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BrandProfile to fetch.
+     */
+    where: BrandProfileWhereUniqueInput
+  }
+
+  /**
+   * BrandProfile findFirst
+   */
+  export type BrandProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BrandProfile to fetch.
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BrandProfiles to fetch.
+     */
+    orderBy?: BrandProfileOrderByWithRelationInput | BrandProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BrandProfiles.
+     */
+    cursor?: BrandProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BrandProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BrandProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BrandProfiles.
+     */
+    distinct?: BrandProfileScalarFieldEnum | BrandProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile findFirstOrThrow
+   */
+  export type BrandProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BrandProfile to fetch.
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BrandProfiles to fetch.
+     */
+    orderBy?: BrandProfileOrderByWithRelationInput | BrandProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BrandProfiles.
+     */
+    cursor?: BrandProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BrandProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BrandProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BrandProfiles.
+     */
+    distinct?: BrandProfileScalarFieldEnum | BrandProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile findMany
+   */
+  export type BrandProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BrandProfiles to fetch.
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BrandProfiles to fetch.
+     */
+    orderBy?: BrandProfileOrderByWithRelationInput | BrandProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BrandProfiles.
+     */
+    cursor?: BrandProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BrandProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BrandProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BrandProfiles.
+     */
+    distinct?: BrandProfileScalarFieldEnum | BrandProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile create
+   */
+  export type BrandProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BrandProfile.
+     */
+    data: XOR<BrandProfileCreateInput, BrandProfileUncheckedCreateInput>
+  }
+
+  /**
+   * BrandProfile createMany
+   */
+  export type BrandProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BrandProfiles.
+     */
+    data: BrandProfileCreateManyInput | BrandProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BrandProfile createManyAndReturn
+   */
+  export type BrandProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many BrandProfiles.
+     */
+    data: BrandProfileCreateManyInput | BrandProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BrandProfile update
+   */
+  export type BrandProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BrandProfile.
+     */
+    data: XOR<BrandProfileUpdateInput, BrandProfileUncheckedUpdateInput>
+    /**
+     * Choose, which BrandProfile to update.
+     */
+    where: BrandProfileWhereUniqueInput
+  }
+
+  /**
+   * BrandProfile updateMany
+   */
+  export type BrandProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BrandProfiles.
+     */
+    data: XOR<BrandProfileUpdateManyMutationInput, BrandProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which BrandProfiles to update
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * Limit how many BrandProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BrandProfile updateManyAndReturn
+   */
+  export type BrandProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update BrandProfiles.
+     */
+    data: XOR<BrandProfileUpdateManyMutationInput, BrandProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which BrandProfiles to update
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * Limit how many BrandProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BrandProfile upsert
+   */
+  export type BrandProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BrandProfile to update in case it exists.
+     */
+    where: BrandProfileWhereUniqueInput
+    /**
+     * In case the BrandProfile found by the `where` argument doesn't exist, create a new BrandProfile with this data.
+     */
+    create: XOR<BrandProfileCreateInput, BrandProfileUncheckedCreateInput>
+    /**
+     * In case the BrandProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BrandProfileUpdateInput, BrandProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * BrandProfile delete
+   */
+  export type BrandProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+    /**
+     * Filter which BrandProfile to delete.
+     */
+    where: BrandProfileWhereUniqueInput
+  }
+
+  /**
+   * BrandProfile deleteMany
+   */
+  export type BrandProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BrandProfiles to delete
+     */
+    where?: BrandProfileWhereInput
+    /**
+     * Limit how many BrandProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BrandProfile.campaigns
+   */
+  export type BrandProfile$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    where?: CampaignWhereInput
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    cursor?: CampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile.crmLeads
+   */
+  export type BrandProfile$crmLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    where?: CRMLeadWhereInput
+    orderBy?: CRMLeadOrderByWithRelationInput | CRMLeadOrderByWithRelationInput[]
+    cursor?: CRMLeadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CRMLeadScalarFieldEnum | CRMLeadScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile without action
+   */
+  export type BrandProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BrandProfile
+     */
+    select?: BrandProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BrandProfile
+     */
+    omit?: BrandProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CreatorProfile
+   */
+
+  export type AggregateCreatorProfile = {
+    _count: CreatorProfileCountAggregateOutputType | null
+    _avg: CreatorProfileAvgAggregateOutputType | null
+    _sum: CreatorProfileSumAggregateOutputType | null
+    _min: CreatorProfileMinAggregateOutputType | null
+    _max: CreatorProfileMaxAggregateOutputType | null
+  }
+
+  export type CreatorProfileAvgAggregateOutputType = {
+    totalFollowers: number | null
+    avgEngagementRate: number | null
+  }
+
+  export type CreatorProfileSumAggregateOutputType = {
+    totalFollowers: number | null
+    avgEngagementRate: number | null
+  }
+
+  export type CreatorProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    bio: string | null
+    niche: string | null
+    primaryPlatform: string | null
+    location: string | null
+    totalFollowers: number | null
+    avgEngagementRate: number | null
+    lastStatsUpdate: Date | null
+  }
+
+  export type CreatorProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    bio: string | null
+    niche: string | null
+    primaryPlatform: string | null
+    location: string | null
+    totalFollowers: number | null
+    avgEngagementRate: number | null
+    lastStatsUpdate: Date | null
+  }
+
+  export type CreatorProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    bio: number
+    niche: number
+    primaryPlatform: number
+    location: number
+    totalFollowers: number
+    avgEngagementRate: number
+    lastStatsUpdate: number
+    _all: number
+  }
+
+
+  export type CreatorProfileAvgAggregateInputType = {
+    totalFollowers?: true
+    avgEngagementRate?: true
+  }
+
+  export type CreatorProfileSumAggregateInputType = {
+    totalFollowers?: true
+    avgEngagementRate?: true
+  }
+
+  export type CreatorProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    niche?: true
+    primaryPlatform?: true
+    location?: true
+    totalFollowers?: true
+    avgEngagementRate?: true
+    lastStatsUpdate?: true
+  }
+
+  export type CreatorProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    niche?: true
+    primaryPlatform?: true
+    location?: true
+    totalFollowers?: true
+    avgEngagementRate?: true
+    lastStatsUpdate?: true
+  }
+
+  export type CreatorProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    bio?: true
+    niche?: true
+    primaryPlatform?: true
+    location?: true
+    totalFollowers?: true
+    avgEngagementRate?: true
+    lastStatsUpdate?: true
+    _all?: true
+  }
+
+  export type CreatorProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreatorProfile to aggregate.
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorProfiles to fetch.
+     */
+    orderBy?: CreatorProfileOrderByWithRelationInput | CreatorProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CreatorProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CreatorProfiles
+    **/
+    _count?: true | CreatorProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CreatorProfileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CreatorProfileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CreatorProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CreatorProfileMaxAggregateInputType
+  }
+
+  export type GetCreatorProfileAggregateType<T extends CreatorProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateCreatorProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCreatorProfile[P]>
+      : GetScalarType<T[P], AggregateCreatorProfile[P]>
+  }
+
+
+
+
+  export type CreatorProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CreatorProfileWhereInput
+    orderBy?: CreatorProfileOrderByWithAggregationInput | CreatorProfileOrderByWithAggregationInput[]
+    by: CreatorProfileScalarFieldEnum[] | CreatorProfileScalarFieldEnum
+    having?: CreatorProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CreatorProfileCountAggregateInputType | true
+    _avg?: CreatorProfileAvgAggregateInputType
+    _sum?: CreatorProfileSumAggregateInputType
+    _min?: CreatorProfileMinAggregateInputType
+    _max?: CreatorProfileMaxAggregateInputType
+  }
+
+  export type CreatorProfileGroupByOutputType = {
+    id: string
+    userId: string
+    bio: string | null
+    niche: string | null
+    primaryPlatform: string | null
+    location: string | null
+    totalFollowers: number
+    avgEngagementRate: number
+    lastStatsUpdate: Date | null
+    _count: CreatorProfileCountAggregateOutputType | null
+    _avg: CreatorProfileAvgAggregateOutputType | null
+    _sum: CreatorProfileSumAggregateOutputType | null
+    _min: CreatorProfileMinAggregateOutputType | null
+    _max: CreatorProfileMaxAggregateOutputType | null
+  }
+
+  type GetCreatorProfileGroupByPayload<T extends CreatorProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CreatorProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CreatorProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CreatorProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], CreatorProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CreatorProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    niche?: boolean
+    primaryPlatform?: boolean
+    location?: boolean
+    totalFollowers?: boolean
+    avgEngagementRate?: boolean
+    lastStatsUpdate?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
+    proposals?: boolean | CreatorProfile$proposalsArgs<ExtArgs>
+    _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorProfile"]>
+
+  export type CreatorProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    niche?: boolean
+    primaryPlatform?: boolean
+    location?: boolean
+    totalFollowers?: boolean
+    avgEngagementRate?: boolean
+    lastStatsUpdate?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorProfile"]>
+
+  export type CreatorProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    niche?: boolean
+    primaryPlatform?: boolean
+    location?: boolean
+    totalFollowers?: boolean
+    avgEngagementRate?: boolean
+    lastStatsUpdate?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["creatorProfile"]>
+
+  export type CreatorProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    bio?: boolean
+    niche?: boolean
+    primaryPlatform?: boolean
+    location?: boolean
+    totalFollowers?: boolean
+    avgEngagementRate?: boolean
+    lastStatsUpdate?: boolean
+  }
+
+  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "niche" | "primaryPlatform" | "location" | "totalFollowers" | "avgEngagementRate" | "lastStatsUpdate", ExtArgs["result"]["creatorProfile"]>
+  export type CreatorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
+    proposals?: boolean | CreatorProfile$proposalsArgs<ExtArgs>
+    _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CreatorProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CreatorProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CreatorProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CreatorProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      contracts: Prisma.$ContractPayload<ExtArgs>[]
+      proposals: Prisma.$ProposalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      bio: string | null
+      niche: string | null
+      primaryPlatform: string | null
+      location: string | null
+      totalFollowers: number
+      avgEngagementRate: number
+      lastStatsUpdate: Date | null
+    }, ExtArgs["result"]["creatorProfile"]>
+    composites: {}
+  }
+
+  type CreatorProfileGetPayload<S extends boolean | null | undefined | CreatorProfileDefaultArgs> = $Result.GetResult<Prisma.$CreatorProfilePayload, S>
+
+  type CreatorProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CreatorProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CreatorProfileCountAggregateInputType | true
+    }
+
+  export interface CreatorProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CreatorProfile'], meta: { name: 'CreatorProfile' } }
+    /**
+     * Find zero or one CreatorProfile that matches the filter.
+     * @param {CreatorProfileFindUniqueArgs} args - Arguments to find a CreatorProfile
+     * @example
+     * // Get one CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CreatorProfileFindUniqueArgs>(args: SelectSubset<T, CreatorProfileFindUniqueArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CreatorProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CreatorProfileFindUniqueOrThrowArgs} args - Arguments to find a CreatorProfile
+     * @example
+     * // Get one CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CreatorProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, CreatorProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CreatorProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileFindFirstArgs} args - Arguments to find a CreatorProfile
+     * @example
+     * // Get one CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CreatorProfileFindFirstArgs>(args?: SelectSubset<T, CreatorProfileFindFirstArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CreatorProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileFindFirstOrThrowArgs} args - Arguments to find a CreatorProfile
+     * @example
+     * // Get one CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CreatorProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, CreatorProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CreatorProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CreatorProfiles
+     * const creatorProfiles = await prisma.creatorProfile.findMany()
+     * 
+     * // Get first 10 CreatorProfiles
+     * const creatorProfiles = await prisma.creatorProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const creatorProfileWithIdOnly = await prisma.creatorProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CreatorProfileFindManyArgs>(args?: SelectSubset<T, CreatorProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CreatorProfile.
+     * @param {CreatorProfileCreateArgs} args - Arguments to create a CreatorProfile.
+     * @example
+     * // Create one CreatorProfile
+     * const CreatorProfile = await prisma.creatorProfile.create({
+     *   data: {
+     *     // ... data to create a CreatorProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends CreatorProfileCreateArgs>(args: SelectSubset<T, CreatorProfileCreateArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CreatorProfiles.
+     * @param {CreatorProfileCreateManyArgs} args - Arguments to create many CreatorProfiles.
+     * @example
+     * // Create many CreatorProfiles
+     * const creatorProfile = await prisma.creatorProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CreatorProfileCreateManyArgs>(args?: SelectSubset<T, CreatorProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CreatorProfiles and returns the data saved in the database.
+     * @param {CreatorProfileCreateManyAndReturnArgs} args - Arguments to create many CreatorProfiles.
+     * @example
+     * // Create many CreatorProfiles
+     * const creatorProfile = await prisma.creatorProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CreatorProfiles and only return the `id`
+     * const creatorProfileWithIdOnly = await prisma.creatorProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CreatorProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, CreatorProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CreatorProfile.
+     * @param {CreatorProfileDeleteArgs} args - Arguments to delete one CreatorProfile.
+     * @example
+     * // Delete one CreatorProfile
+     * const CreatorProfile = await prisma.creatorProfile.delete({
+     *   where: {
+     *     // ... filter to delete one CreatorProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CreatorProfileDeleteArgs>(args: SelectSubset<T, CreatorProfileDeleteArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CreatorProfile.
+     * @param {CreatorProfileUpdateArgs} args - Arguments to update one CreatorProfile.
+     * @example
+     * // Update one CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CreatorProfileUpdateArgs>(args: SelectSubset<T, CreatorProfileUpdateArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CreatorProfiles.
+     * @param {CreatorProfileDeleteManyArgs} args - Arguments to filter CreatorProfiles to delete.
+     * @example
+     * // Delete a few CreatorProfiles
+     * const { count } = await prisma.creatorProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CreatorProfileDeleteManyArgs>(args?: SelectSubset<T, CreatorProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreatorProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CreatorProfiles
+     * const creatorProfile = await prisma.creatorProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CreatorProfileUpdateManyArgs>(args: SelectSubset<T, CreatorProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CreatorProfiles and returns the data updated in the database.
+     * @param {CreatorProfileUpdateManyAndReturnArgs} args - Arguments to update many CreatorProfiles.
+     * @example
+     * // Update many CreatorProfiles
+     * const creatorProfile = await prisma.creatorProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CreatorProfiles and only return the `id`
+     * const creatorProfileWithIdOnly = await prisma.creatorProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CreatorProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, CreatorProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CreatorProfile.
+     * @param {CreatorProfileUpsertArgs} args - Arguments to update or create a CreatorProfile.
+     * @example
+     * // Update or create a CreatorProfile
+     * const creatorProfile = await prisma.creatorProfile.upsert({
+     *   create: {
+     *     // ... data to create a CreatorProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CreatorProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CreatorProfileUpsertArgs>(args: SelectSubset<T, CreatorProfileUpsertArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CreatorProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileCountArgs} args - Arguments to filter CreatorProfiles to count.
+     * @example
+     * // Count the number of CreatorProfiles
+     * const count = await prisma.creatorProfile.count({
+     *   where: {
+     *     // ... the filter for the CreatorProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends CreatorProfileCountArgs>(
+      args?: Subset<T, CreatorProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CreatorProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CreatorProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CreatorProfileAggregateArgs>(args: Subset<T, CreatorProfileAggregateArgs>): Prisma.PrismaPromise<GetCreatorProfileAggregateType<T>>
+
+    /**
+     * Group by CreatorProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CreatorProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CreatorProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CreatorProfileGroupByArgs['orderBy'] }
+        : { orderBy?: CreatorProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CreatorProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCreatorProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CreatorProfile model
+   */
+  readonly fields: CreatorProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CreatorProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CreatorProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contracts<T extends CreatorProfile$contractsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    proposals<T extends CreatorProfile$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CreatorProfile model
+   */
+  interface CreatorProfileFieldRefs {
+    readonly id: FieldRef<"CreatorProfile", 'String'>
+    readonly userId: FieldRef<"CreatorProfile", 'String'>
+    readonly bio: FieldRef<"CreatorProfile", 'String'>
+    readonly niche: FieldRef<"CreatorProfile", 'String'>
+    readonly primaryPlatform: FieldRef<"CreatorProfile", 'String'>
+    readonly location: FieldRef<"CreatorProfile", 'String'>
+    readonly totalFollowers: FieldRef<"CreatorProfile", 'Int'>
+    readonly avgEngagementRate: FieldRef<"CreatorProfile", 'Float'>
+    readonly lastStatsUpdate: FieldRef<"CreatorProfile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CreatorProfile findUnique
+   */
+  export type CreatorProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorProfile to fetch.
+     */
+    where: CreatorProfileWhereUniqueInput
+  }
+
+  /**
+   * CreatorProfile findUniqueOrThrow
+   */
+  export type CreatorProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorProfile to fetch.
+     */
+    where: CreatorProfileWhereUniqueInput
+  }
+
+  /**
+   * CreatorProfile findFirst
+   */
+  export type CreatorProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorProfile to fetch.
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorProfiles to fetch.
+     */
+    orderBy?: CreatorProfileOrderByWithRelationInput | CreatorProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreatorProfiles.
+     */
+    cursor?: CreatorProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreatorProfiles.
+     */
+    distinct?: CreatorProfileScalarFieldEnum | CreatorProfileScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile findFirstOrThrow
+   */
+  export type CreatorProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorProfile to fetch.
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorProfiles to fetch.
+     */
+    orderBy?: CreatorProfileOrderByWithRelationInput | CreatorProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CreatorProfiles.
+     */
+    cursor?: CreatorProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreatorProfiles.
+     */
+    distinct?: CreatorProfileScalarFieldEnum | CreatorProfileScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile findMany
+   */
+  export type CreatorProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which CreatorProfiles to fetch.
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CreatorProfiles to fetch.
+     */
+    orderBy?: CreatorProfileOrderByWithRelationInput | CreatorProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CreatorProfiles.
+     */
+    cursor?: CreatorProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CreatorProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CreatorProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CreatorProfiles.
+     */
+    distinct?: CreatorProfileScalarFieldEnum | CreatorProfileScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile create
+   */
+  export type CreatorProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CreatorProfile.
+     */
+    data: XOR<CreatorProfileCreateInput, CreatorProfileUncheckedCreateInput>
+  }
+
+  /**
+   * CreatorProfile createMany
+   */
+  export type CreatorProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CreatorProfiles.
+     */
+    data: CreatorProfileCreateManyInput | CreatorProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CreatorProfile createManyAndReturn
+   */
+  export type CreatorProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many CreatorProfiles.
+     */
+    data: CreatorProfileCreateManyInput | CreatorProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreatorProfile update
+   */
+  export type CreatorProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CreatorProfile.
+     */
+    data: XOR<CreatorProfileUpdateInput, CreatorProfileUncheckedUpdateInput>
+    /**
+     * Choose, which CreatorProfile to update.
+     */
+    where: CreatorProfileWhereUniqueInput
+  }
+
+  /**
+   * CreatorProfile updateMany
+   */
+  export type CreatorProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CreatorProfiles.
+     */
+    data: XOR<CreatorProfileUpdateManyMutationInput, CreatorProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which CreatorProfiles to update
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * Limit how many CreatorProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CreatorProfile updateManyAndReturn
+   */
+  export type CreatorProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update CreatorProfiles.
+     */
+    data: XOR<CreatorProfileUpdateManyMutationInput, CreatorProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which CreatorProfiles to update
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * Limit how many CreatorProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CreatorProfile upsert
+   */
+  export type CreatorProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CreatorProfile to update in case it exists.
+     */
+    where: CreatorProfileWhereUniqueInput
+    /**
+     * In case the CreatorProfile found by the `where` argument doesn't exist, create a new CreatorProfile with this data.
+     */
+    create: XOR<CreatorProfileCreateInput, CreatorProfileUncheckedCreateInput>
+    /**
+     * In case the CreatorProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CreatorProfileUpdateInput, CreatorProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * CreatorProfile delete
+   */
+  export type CreatorProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    /**
+     * Filter which CreatorProfile to delete.
+     */
+    where: CreatorProfileWhereUniqueInput
+  }
+
+  /**
+   * CreatorProfile deleteMany
+   */
+  export type CreatorProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CreatorProfiles to delete
+     */
+    where?: CreatorProfileWhereInput
+    /**
+     * Limit how many CreatorProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CreatorProfile.contracts
+   */
+  export type CreatorProfile$contractsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    where?: ContractWhereInput
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    cursor?: ContractWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile.proposals
+   */
+  export type CreatorProfile$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    where?: ProposalWhereInput
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    cursor?: ProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile without action
+   */
+  export type CreatorProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
   }
 
 
@@ -7400,6 +10633,1163 @@ export namespace Prisma {
 
 
   /**
+   * Model PlatformStats
+   */
+
+  export type AggregatePlatformStats = {
+    _count: PlatformStatsCountAggregateOutputType | null
+    _avg: PlatformStatsAvgAggregateOutputType | null
+    _sum: PlatformStatsSumAggregateOutputType | null
+    _min: PlatformStatsMinAggregateOutputType | null
+    _max: PlatformStatsMaxAggregateOutputType | null
+  }
+
+  export type PlatformStatsAvgAggregateOutputType = {
+    followerCount: number | null
+    followingCount: number | null
+    postCount: number | null
+    engagementRate: number | null
+  }
+
+  export type PlatformStatsSumAggregateOutputType = {
+    followerCount: number | null
+    followingCount: number | null
+    postCount: number | null
+    engagementRate: number | null
+  }
+
+  export type PlatformStatsMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    platform: string | null
+    followerCount: number | null
+    followingCount: number | null
+    postCount: number | null
+    engagementRate: number | null
+    fetchedAt: Date | null
+  }
+
+  export type PlatformStatsMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    platform: string | null
+    followerCount: number | null
+    followingCount: number | null
+    postCount: number | null
+    engagementRate: number | null
+    fetchedAt: Date | null
+  }
+
+  export type PlatformStatsCountAggregateOutputType = {
+    id: number
+    userId: number
+    platform: number
+    followerCount: number
+    followingCount: number
+    postCount: number
+    engagementRate: number
+    fetchedAt: number
+    raw: number
+    _all: number
+  }
+
+
+  export type PlatformStatsAvgAggregateInputType = {
+    followerCount?: true
+    followingCount?: true
+    postCount?: true
+    engagementRate?: true
+  }
+
+  export type PlatformStatsSumAggregateInputType = {
+    followerCount?: true
+    followingCount?: true
+    postCount?: true
+    engagementRate?: true
+  }
+
+  export type PlatformStatsMinAggregateInputType = {
+    id?: true
+    userId?: true
+    platform?: true
+    followerCount?: true
+    followingCount?: true
+    postCount?: true
+    engagementRate?: true
+    fetchedAt?: true
+  }
+
+  export type PlatformStatsMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    platform?: true
+    followerCount?: true
+    followingCount?: true
+    postCount?: true
+    engagementRate?: true
+    fetchedAt?: true
+  }
+
+  export type PlatformStatsCountAggregateInputType = {
+    id?: true
+    userId?: true
+    platform?: true
+    followerCount?: true
+    followingCount?: true
+    postCount?: true
+    engagementRate?: true
+    fetchedAt?: true
+    raw?: true
+    _all?: true
+  }
+
+  export type PlatformStatsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformStats to aggregate.
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformStats to fetch.
+     */
+    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlatformStatsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlatformStats
+    **/
+    _count?: true | PlatformStatsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlatformStatsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlatformStatsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlatformStatsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlatformStatsMaxAggregateInputType
+  }
+
+  export type GetPlatformStatsAggregateType<T extends PlatformStatsAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlatformStats]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlatformStats[P]>
+      : GetScalarType<T[P], AggregatePlatformStats[P]>
+  }
+
+
+
+
+  export type PlatformStatsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlatformStatsWhereInput
+    orderBy?: PlatformStatsOrderByWithAggregationInput | PlatformStatsOrderByWithAggregationInput[]
+    by: PlatformStatsScalarFieldEnum[] | PlatformStatsScalarFieldEnum
+    having?: PlatformStatsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlatformStatsCountAggregateInputType | true
+    _avg?: PlatformStatsAvgAggregateInputType
+    _sum?: PlatformStatsSumAggregateInputType
+    _min?: PlatformStatsMinAggregateInputType
+    _max?: PlatformStatsMaxAggregateInputType
+  }
+
+  export type PlatformStatsGroupByOutputType = {
+    id: string
+    userId: string
+    platform: string
+    followerCount: number | null
+    followingCount: number | null
+    postCount: number | null
+    engagementRate: number | null
+    fetchedAt: Date
+    raw: JsonValue | null
+    _count: PlatformStatsCountAggregateOutputType | null
+    _avg: PlatformStatsAvgAggregateOutputType | null
+    _sum: PlatformStatsSumAggregateOutputType | null
+    _min: PlatformStatsMinAggregateOutputType | null
+    _max: PlatformStatsMaxAggregateOutputType | null
+  }
+
+  type GetPlatformStatsGroupByPayload<T extends PlatformStatsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlatformStatsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlatformStatsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlatformStatsGroupByOutputType[P]>
+            : GetScalarType<T[P], PlatformStatsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlatformStatsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    platform?: boolean
+    followerCount?: boolean
+    followingCount?: boolean
+    postCount?: boolean
+    engagementRate?: boolean
+    fetchedAt?: boolean
+    raw?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["platformStats"]>
+
+  export type PlatformStatsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    platform?: boolean
+    followerCount?: boolean
+    followingCount?: boolean
+    postCount?: boolean
+    engagementRate?: boolean
+    fetchedAt?: boolean
+    raw?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["platformStats"]>
+
+  export type PlatformStatsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    platform?: boolean
+    followerCount?: boolean
+    followingCount?: boolean
+    postCount?: boolean
+    engagementRate?: boolean
+    fetchedAt?: boolean
+    raw?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["platformStats"]>
+
+  export type PlatformStatsSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    platform?: boolean
+    followerCount?: boolean
+    followingCount?: boolean
+    postCount?: boolean
+    engagementRate?: boolean
+    fetchedAt?: boolean
+    raw?: boolean
+  }
+
+  export type PlatformStatsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "followerCount" | "followingCount" | "postCount" | "engagementRate" | "fetchedAt" | "raw", ExtArgs["result"]["platformStats"]>
+  export type PlatformStatsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PlatformStatsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PlatformStatsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PlatformStatsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlatformStats"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      platform: string
+      followerCount: number | null
+      followingCount: number | null
+      postCount: number | null
+      engagementRate: number | null
+      fetchedAt: Date
+      raw: Prisma.JsonValue | null
+    }, ExtArgs["result"]["platformStats"]>
+    composites: {}
+  }
+
+  type PlatformStatsGetPayload<S extends boolean | null | undefined | PlatformStatsDefaultArgs> = $Result.GetResult<Prisma.$PlatformStatsPayload, S>
+
+  type PlatformStatsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlatformStatsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlatformStatsCountAggregateInputType | true
+    }
+
+  export interface PlatformStatsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlatformStats'], meta: { name: 'PlatformStats' } }
+    /**
+     * Find zero or one PlatformStats that matches the filter.
+     * @param {PlatformStatsFindUniqueArgs} args - Arguments to find a PlatformStats
+     * @example
+     * // Get one PlatformStats
+     * const platformStats = await prisma.platformStats.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlatformStatsFindUniqueArgs>(args: SelectSubset<T, PlatformStatsFindUniqueArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlatformStats that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlatformStatsFindUniqueOrThrowArgs} args - Arguments to find a PlatformStats
+     * @example
+     * // Get one PlatformStats
+     * const platformStats = await prisma.platformStats.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlatformStatsFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatformStatsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformStats that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsFindFirstArgs} args - Arguments to find a PlatformStats
+     * @example
+     * // Get one PlatformStats
+     * const platformStats = await prisma.platformStats.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlatformStatsFindFirstArgs>(args?: SelectSubset<T, PlatformStatsFindFirstArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformStats that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsFindFirstOrThrowArgs} args - Arguments to find a PlatformStats
+     * @example
+     * // Get one PlatformStats
+     * const platformStats = await prisma.platformStats.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlatformStatsFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatformStatsFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlatformStats that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlatformStats
+     * const platformStats = await prisma.platformStats.findMany()
+     * 
+     * // Get first 10 PlatformStats
+     * const platformStats = await prisma.platformStats.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const platformStatsWithIdOnly = await prisma.platformStats.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlatformStatsFindManyArgs>(args?: SelectSubset<T, PlatformStatsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlatformStats.
+     * @param {PlatformStatsCreateArgs} args - Arguments to create a PlatformStats.
+     * @example
+     * // Create one PlatformStats
+     * const PlatformStats = await prisma.platformStats.create({
+     *   data: {
+     *     // ... data to create a PlatformStats
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlatformStatsCreateArgs>(args: SelectSubset<T, PlatformStatsCreateArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlatformStats.
+     * @param {PlatformStatsCreateManyArgs} args - Arguments to create many PlatformStats.
+     * @example
+     * // Create many PlatformStats
+     * const platformStats = await prisma.platformStats.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlatformStatsCreateManyArgs>(args?: SelectSubset<T, PlatformStatsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlatformStats and returns the data saved in the database.
+     * @param {PlatformStatsCreateManyAndReturnArgs} args - Arguments to create many PlatformStats.
+     * @example
+     * // Create many PlatformStats
+     * const platformStats = await prisma.platformStats.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlatformStats and only return the `id`
+     * const platformStatsWithIdOnly = await prisma.platformStats.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlatformStatsCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatformStatsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PlatformStats.
+     * @param {PlatformStatsDeleteArgs} args - Arguments to delete one PlatformStats.
+     * @example
+     * // Delete one PlatformStats
+     * const PlatformStats = await prisma.platformStats.delete({
+     *   where: {
+     *     // ... filter to delete one PlatformStats
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlatformStatsDeleteArgs>(args: SelectSubset<T, PlatformStatsDeleteArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlatformStats.
+     * @param {PlatformStatsUpdateArgs} args - Arguments to update one PlatformStats.
+     * @example
+     * // Update one PlatformStats
+     * const platformStats = await prisma.platformStats.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlatformStatsUpdateArgs>(args: SelectSubset<T, PlatformStatsUpdateArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlatformStats.
+     * @param {PlatformStatsDeleteManyArgs} args - Arguments to filter PlatformStats to delete.
+     * @example
+     * // Delete a few PlatformStats
+     * const { count } = await prisma.platformStats.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlatformStatsDeleteManyArgs>(args?: SelectSubset<T, PlatformStatsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlatformStats
+     * const platformStats = await prisma.platformStats.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlatformStatsUpdateManyArgs>(args: SelectSubset<T, PlatformStatsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformStats and returns the data updated in the database.
+     * @param {PlatformStatsUpdateManyAndReturnArgs} args - Arguments to update many PlatformStats.
+     * @example
+     * // Update many PlatformStats
+     * const platformStats = await prisma.platformStats.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PlatformStats and only return the `id`
+     * const platformStatsWithIdOnly = await prisma.platformStats.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlatformStatsUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatformStatsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PlatformStats.
+     * @param {PlatformStatsUpsertArgs} args - Arguments to update or create a PlatformStats.
+     * @example
+     * // Update or create a PlatformStats
+     * const platformStats = await prisma.platformStats.upsert({
+     *   create: {
+     *     // ... data to create a PlatformStats
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlatformStats we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlatformStatsUpsertArgs>(args: SelectSubset<T, PlatformStatsUpsertArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PlatformStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsCountArgs} args - Arguments to filter PlatformStats to count.
+     * @example
+     * // Count the number of PlatformStats
+     * const count = await prisma.platformStats.count({
+     *   where: {
+     *     // ... the filter for the PlatformStats we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlatformStatsCountArgs>(
+      args?: Subset<T, PlatformStatsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlatformStatsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlatformStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlatformStatsAggregateArgs>(args: Subset<T, PlatformStatsAggregateArgs>): Prisma.PrismaPromise<GetPlatformStatsAggregateType<T>>
+
+    /**
+     * Group by PlatformStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformStatsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlatformStatsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlatformStatsGroupByArgs['orderBy'] }
+        : { orderBy?: PlatformStatsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlatformStatsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatformStatsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlatformStats model
+   */
+  readonly fields: PlatformStatsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlatformStats.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlatformStatsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlatformStats model
+   */
+  interface PlatformStatsFieldRefs {
+    readonly id: FieldRef<"PlatformStats", 'String'>
+    readonly userId: FieldRef<"PlatformStats", 'String'>
+    readonly platform: FieldRef<"PlatformStats", 'String'>
+    readonly followerCount: FieldRef<"PlatformStats", 'Int'>
+    readonly followingCount: FieldRef<"PlatformStats", 'Int'>
+    readonly postCount: FieldRef<"PlatformStats", 'Int'>
+    readonly engagementRate: FieldRef<"PlatformStats", 'Float'>
+    readonly fetchedAt: FieldRef<"PlatformStats", 'DateTime'>
+    readonly raw: FieldRef<"PlatformStats", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlatformStats findUnique
+   */
+  export type PlatformStatsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter, which PlatformStats to fetch.
+     */
+    where: PlatformStatsWhereUniqueInput
+  }
+
+  /**
+   * PlatformStats findUniqueOrThrow
+   */
+  export type PlatformStatsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter, which PlatformStats to fetch.
+     */
+    where: PlatformStatsWhereUniqueInput
+  }
+
+  /**
+   * PlatformStats findFirst
+   */
+  export type PlatformStatsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter, which PlatformStats to fetch.
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformStats to fetch.
+     */
+    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformStats.
+     */
+    cursor?: PlatformStatsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformStats.
+     */
+    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformStats findFirstOrThrow
+   */
+  export type PlatformStatsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter, which PlatformStats to fetch.
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformStats to fetch.
+     */
+    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformStats.
+     */
+    cursor?: PlatformStatsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformStats.
+     */
+    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformStats findMany
+   */
+  export type PlatformStatsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter, which PlatformStats to fetch.
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformStats to fetch.
+     */
+    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlatformStats.
+     */
+    cursor?: PlatformStatsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformStats.
+     */
+    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformStats create
+   */
+  export type PlatformStatsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PlatformStats.
+     */
+    data: XOR<PlatformStatsCreateInput, PlatformStatsUncheckedCreateInput>
+  }
+
+  /**
+   * PlatformStats createMany
+   */
+  export type PlatformStatsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlatformStats.
+     */
+    data: PlatformStatsCreateManyInput | PlatformStatsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlatformStats createManyAndReturn
+   */
+  export type PlatformStatsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * The data used to create many PlatformStats.
+     */
+    data: PlatformStatsCreateManyInput | PlatformStatsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PlatformStats update
+   */
+  export type PlatformStatsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PlatformStats.
+     */
+    data: XOR<PlatformStatsUpdateInput, PlatformStatsUncheckedUpdateInput>
+    /**
+     * Choose, which PlatformStats to update.
+     */
+    where: PlatformStatsWhereUniqueInput
+  }
+
+  /**
+   * PlatformStats updateMany
+   */
+  export type PlatformStatsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlatformStats.
+     */
+    data: XOR<PlatformStatsUpdateManyMutationInput, PlatformStatsUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformStats to update
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * Limit how many PlatformStats to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformStats updateManyAndReturn
+   */
+  export type PlatformStatsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * The data used to update PlatformStats.
+     */
+    data: XOR<PlatformStatsUpdateManyMutationInput, PlatformStatsUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformStats to update
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * Limit how many PlatformStats to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PlatformStats upsert
+   */
+  export type PlatformStatsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PlatformStats to update in case it exists.
+     */
+    where: PlatformStatsWhereUniqueInput
+    /**
+     * In case the PlatformStats found by the `where` argument doesn't exist, create a new PlatformStats with this data.
+     */
+    create: XOR<PlatformStatsCreateInput, PlatformStatsUncheckedCreateInput>
+    /**
+     * In case the PlatformStats was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlatformStatsUpdateInput, PlatformStatsUncheckedUpdateInput>
+  }
+
+  /**
+   * PlatformStats delete
+   */
+  export type PlatformStatsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+    /**
+     * Filter which PlatformStats to delete.
+     */
+    where: PlatformStatsWhereUniqueInput
+  }
+
+  /**
+   * PlatformStats deleteMany
+   */
+  export type PlatformStatsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformStats to delete
+     */
+    where?: PlatformStatsWhereInput
+    /**
+     * Limit how many PlatformStats to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformStats without action
+   */
+  export type PlatformStatsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformStats
+     */
+    select?: PlatformStatsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformStats
+     */
+    omit?: PlatformStatsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlatformStatsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Waitlist
    */
 
@@ -8383,1100 +12773,6 @@ export namespace Prisma {
      * Omit specific fields from the Waitlist
      */
     omit?: WaitlistOmit<ExtArgs> | null
-  }
-
-
-  /**
-   * Model PlatformStats
-   */
-
-  export type AggregatePlatformStats = {
-    _count: PlatformStatsCountAggregateOutputType | null
-    _avg: PlatformStatsAvgAggregateOutputType | null
-    _sum: PlatformStatsSumAggregateOutputType | null
-    _min: PlatformStatsMinAggregateOutputType | null
-    _max: PlatformStatsMaxAggregateOutputType | null
-  }
-
-  export type PlatformStatsAvgAggregateOutputType = {
-    followerCount: number | null
-    followingCount: number | null
-    postCount: number | null
-    engagementRate: number | null
-  }
-
-  export type PlatformStatsSumAggregateOutputType = {
-    followerCount: number | null
-    followingCount: number | null
-    postCount: number | null
-    engagementRate: number | null
-  }
-
-  export type PlatformStatsMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    platform: string | null
-    followerCount: number | null
-    followingCount: number | null
-    postCount: number | null
-    engagementRate: number | null
-    fetchedAt: Date | null
-  }
-
-  export type PlatformStatsMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    platform: string | null
-    followerCount: number | null
-    followingCount: number | null
-    postCount: number | null
-    engagementRate: number | null
-    fetchedAt: Date | null
-  }
-
-  export type PlatformStatsCountAggregateOutputType = {
-    id: number
-    userId: number
-    platform: number
-    followerCount: number
-    followingCount: number
-    postCount: number
-    engagementRate: number
-    fetchedAt: number
-    raw: number
-    _all: number
-  }
-
-
-  export type PlatformStatsAvgAggregateInputType = {
-    followerCount?: true
-    followingCount?: true
-    postCount?: true
-    engagementRate?: true
-  }
-
-  export type PlatformStatsSumAggregateInputType = {
-    followerCount?: true
-    followingCount?: true
-    postCount?: true
-    engagementRate?: true
-  }
-
-  export type PlatformStatsMinAggregateInputType = {
-    id?: true
-    userId?: true
-    platform?: true
-    followerCount?: true
-    followingCount?: true
-    postCount?: true
-    engagementRate?: true
-    fetchedAt?: true
-  }
-
-  export type PlatformStatsMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    platform?: true
-    followerCount?: true
-    followingCount?: true
-    postCount?: true
-    engagementRate?: true
-    fetchedAt?: true
-  }
-
-  export type PlatformStatsCountAggregateInputType = {
-    id?: true
-    userId?: true
-    platform?: true
-    followerCount?: true
-    followingCount?: true
-    postCount?: true
-    engagementRate?: true
-    fetchedAt?: true
-    raw?: true
-    _all?: true
-  }
-
-  export type PlatformStatsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PlatformStats to aggregate.
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PlatformStats to fetch.
-     */
-    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PlatformStatsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PlatformStats from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PlatformStats.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned PlatformStats
-    **/
-    _count?: true | PlatformStatsCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PlatformStatsAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PlatformStatsSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PlatformStatsMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PlatformStatsMaxAggregateInputType
-  }
-
-  export type GetPlatformStatsAggregateType<T extends PlatformStatsAggregateArgs> = {
-        [P in keyof T & keyof AggregatePlatformStats]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePlatformStats[P]>
-      : GetScalarType<T[P], AggregatePlatformStats[P]>
-  }
-
-
-
-
-  export type PlatformStatsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlatformStatsWhereInput
-    orderBy?: PlatformStatsOrderByWithAggregationInput | PlatformStatsOrderByWithAggregationInput[]
-    by: PlatformStatsScalarFieldEnum[] | PlatformStatsScalarFieldEnum
-    having?: PlatformStatsScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PlatformStatsCountAggregateInputType | true
-    _avg?: PlatformStatsAvgAggregateInputType
-    _sum?: PlatformStatsSumAggregateInputType
-    _min?: PlatformStatsMinAggregateInputType
-    _max?: PlatformStatsMaxAggregateInputType
-  }
-
-  export type PlatformStatsGroupByOutputType = {
-    id: string
-    userId: string
-    platform: string
-    followerCount: number | null
-    followingCount: number | null
-    postCount: number | null
-    engagementRate: number | null
-    fetchedAt: Date
-    raw: JsonValue | null
-    _count: PlatformStatsCountAggregateOutputType | null
-    _avg: PlatformStatsAvgAggregateOutputType | null
-    _sum: PlatformStatsSumAggregateOutputType | null
-    _min: PlatformStatsMinAggregateOutputType | null
-    _max: PlatformStatsMaxAggregateOutputType | null
-  }
-
-  type GetPlatformStatsGroupByPayload<T extends PlatformStatsGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PlatformStatsGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PlatformStatsGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PlatformStatsGroupByOutputType[P]>
-            : GetScalarType<T[P], PlatformStatsGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PlatformStatsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    platform?: boolean
-    followerCount?: boolean
-    followingCount?: boolean
-    postCount?: boolean
-    engagementRate?: boolean
-    fetchedAt?: boolean
-    raw?: boolean
-  }, ExtArgs["result"]["platformStats"]>
-
-  export type PlatformStatsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    platform?: boolean
-    followerCount?: boolean
-    followingCount?: boolean
-    postCount?: boolean
-    engagementRate?: boolean
-    fetchedAt?: boolean
-    raw?: boolean
-  }, ExtArgs["result"]["platformStats"]>
-
-  export type PlatformStatsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    platform?: boolean
-    followerCount?: boolean
-    followingCount?: boolean
-    postCount?: boolean
-    engagementRate?: boolean
-    fetchedAt?: boolean
-    raw?: boolean
-  }, ExtArgs["result"]["platformStats"]>
-
-  export type PlatformStatsSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    platform?: boolean
-    followerCount?: boolean
-    followingCount?: boolean
-    postCount?: boolean
-    engagementRate?: boolean
-    fetchedAt?: boolean
-    raw?: boolean
-  }
-
-  export type PlatformStatsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "followerCount" | "followingCount" | "postCount" | "engagementRate" | "fetchedAt" | "raw", ExtArgs["result"]["platformStats"]>
-
-  export type $PlatformStatsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PlatformStats"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      userId: string
-      platform: string
-      followerCount: number | null
-      followingCount: number | null
-      postCount: number | null
-      engagementRate: number | null
-      fetchedAt: Date
-      raw: Prisma.JsonValue | null
-    }, ExtArgs["result"]["platformStats"]>
-    composites: {}
-  }
-
-  type PlatformStatsGetPayload<S extends boolean | null | undefined | PlatformStatsDefaultArgs> = $Result.GetResult<Prisma.$PlatformStatsPayload, S>
-
-  type PlatformStatsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PlatformStatsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PlatformStatsCountAggregateInputType | true
-    }
-
-  export interface PlatformStatsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlatformStats'], meta: { name: 'PlatformStats' } }
-    /**
-     * Find zero or one PlatformStats that matches the filter.
-     * @param {PlatformStatsFindUniqueArgs} args - Arguments to find a PlatformStats
-     * @example
-     * // Get one PlatformStats
-     * const platformStats = await prisma.platformStats.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PlatformStatsFindUniqueArgs>(args: SelectSubset<T, PlatformStatsFindUniqueArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one PlatformStats that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PlatformStatsFindUniqueOrThrowArgs} args - Arguments to find a PlatformStats
-     * @example
-     * // Get one PlatformStats
-     * const platformStats = await prisma.platformStats.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PlatformStatsFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatformStatsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PlatformStats that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsFindFirstArgs} args - Arguments to find a PlatformStats
-     * @example
-     * // Get one PlatformStats
-     * const platformStats = await prisma.platformStats.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PlatformStatsFindFirstArgs>(args?: SelectSubset<T, PlatformStatsFindFirstArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PlatformStats that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsFindFirstOrThrowArgs} args - Arguments to find a PlatformStats
-     * @example
-     * // Get one PlatformStats
-     * const platformStats = await prisma.platformStats.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PlatformStatsFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatformStatsFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more PlatformStats that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all PlatformStats
-     * const platformStats = await prisma.platformStats.findMany()
-     * 
-     * // Get first 10 PlatformStats
-     * const platformStats = await prisma.platformStats.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const platformStatsWithIdOnly = await prisma.platformStats.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PlatformStatsFindManyArgs>(args?: SelectSubset<T, PlatformStatsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a PlatformStats.
-     * @param {PlatformStatsCreateArgs} args - Arguments to create a PlatformStats.
-     * @example
-     * // Create one PlatformStats
-     * const PlatformStats = await prisma.platformStats.create({
-     *   data: {
-     *     // ... data to create a PlatformStats
-     *   }
-     * })
-     * 
-     */
-    create<T extends PlatformStatsCreateArgs>(args: SelectSubset<T, PlatformStatsCreateArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many PlatformStats.
-     * @param {PlatformStatsCreateManyArgs} args - Arguments to create many PlatformStats.
-     * @example
-     * // Create many PlatformStats
-     * const platformStats = await prisma.platformStats.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PlatformStatsCreateManyArgs>(args?: SelectSubset<T, PlatformStatsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many PlatformStats and returns the data saved in the database.
-     * @param {PlatformStatsCreateManyAndReturnArgs} args - Arguments to create many PlatformStats.
-     * @example
-     * // Create many PlatformStats
-     * const platformStats = await prisma.platformStats.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many PlatformStats and only return the `id`
-     * const platformStatsWithIdOnly = await prisma.platformStats.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PlatformStatsCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatformStatsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a PlatformStats.
-     * @param {PlatformStatsDeleteArgs} args - Arguments to delete one PlatformStats.
-     * @example
-     * // Delete one PlatformStats
-     * const PlatformStats = await prisma.platformStats.delete({
-     *   where: {
-     *     // ... filter to delete one PlatformStats
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PlatformStatsDeleteArgs>(args: SelectSubset<T, PlatformStatsDeleteArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one PlatformStats.
-     * @param {PlatformStatsUpdateArgs} args - Arguments to update one PlatformStats.
-     * @example
-     * // Update one PlatformStats
-     * const platformStats = await prisma.platformStats.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PlatformStatsUpdateArgs>(args: SelectSubset<T, PlatformStatsUpdateArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more PlatformStats.
-     * @param {PlatformStatsDeleteManyArgs} args - Arguments to filter PlatformStats to delete.
-     * @example
-     * // Delete a few PlatformStats
-     * const { count } = await prisma.platformStats.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PlatformStatsDeleteManyArgs>(args?: SelectSubset<T, PlatformStatsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PlatformStats.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many PlatformStats
-     * const platformStats = await prisma.platformStats.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PlatformStatsUpdateManyArgs>(args: SelectSubset<T, PlatformStatsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PlatformStats and returns the data updated in the database.
-     * @param {PlatformStatsUpdateManyAndReturnArgs} args - Arguments to update many PlatformStats.
-     * @example
-     * // Update many PlatformStats
-     * const platformStats = await prisma.platformStats.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more PlatformStats and only return the `id`
-     * const platformStatsWithIdOnly = await prisma.platformStats.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PlatformStatsUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatformStatsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one PlatformStats.
-     * @param {PlatformStatsUpsertArgs} args - Arguments to update or create a PlatformStats.
-     * @example
-     * // Update or create a PlatformStats
-     * const platformStats = await prisma.platformStats.upsert({
-     *   create: {
-     *     // ... data to create a PlatformStats
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the PlatformStats we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PlatformStatsUpsertArgs>(args: SelectSubset<T, PlatformStatsUpsertArgs<ExtArgs>>): Prisma__PlatformStatsClient<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of PlatformStats.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsCountArgs} args - Arguments to filter PlatformStats to count.
-     * @example
-     * // Count the number of PlatformStats
-     * const count = await prisma.platformStats.count({
-     *   where: {
-     *     // ... the filter for the PlatformStats we want to count
-     *   }
-     * })
-    **/
-    count<T extends PlatformStatsCountArgs>(
-      args?: Subset<T, PlatformStatsCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PlatformStatsCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a PlatformStats.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PlatformStatsAggregateArgs>(args: Subset<T, PlatformStatsAggregateArgs>): Prisma.PrismaPromise<GetPlatformStatsAggregateType<T>>
-
-    /**
-     * Group by PlatformStats.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformStatsGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PlatformStatsGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PlatformStatsGroupByArgs['orderBy'] }
-        : { orderBy?: PlatformStatsGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PlatformStatsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatformStatsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the PlatformStats model
-   */
-  readonly fields: PlatformStatsFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for PlatformStats.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PlatformStatsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the PlatformStats model
-   */
-  interface PlatformStatsFieldRefs {
-    readonly id: FieldRef<"PlatformStats", 'String'>
-    readonly userId: FieldRef<"PlatformStats", 'String'>
-    readonly platform: FieldRef<"PlatformStats", 'String'>
-    readonly followerCount: FieldRef<"PlatformStats", 'Int'>
-    readonly followingCount: FieldRef<"PlatformStats", 'Int'>
-    readonly postCount: FieldRef<"PlatformStats", 'Int'>
-    readonly engagementRate: FieldRef<"PlatformStats", 'Float'>
-    readonly fetchedAt: FieldRef<"PlatformStats", 'DateTime'>
-    readonly raw: FieldRef<"PlatformStats", 'Json'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * PlatformStats findUnique
-   */
-  export type PlatformStatsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter, which PlatformStats to fetch.
-     */
-    where: PlatformStatsWhereUniqueInput
-  }
-
-  /**
-   * PlatformStats findUniqueOrThrow
-   */
-  export type PlatformStatsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter, which PlatformStats to fetch.
-     */
-    where: PlatformStatsWhereUniqueInput
-  }
-
-  /**
-   * PlatformStats findFirst
-   */
-  export type PlatformStatsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter, which PlatformStats to fetch.
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PlatformStats to fetch.
-     */
-    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PlatformStats.
-     */
-    cursor?: PlatformStatsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PlatformStats from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PlatformStats.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PlatformStats.
-     */
-    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
-  }
-
-  /**
-   * PlatformStats findFirstOrThrow
-   */
-  export type PlatformStatsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter, which PlatformStats to fetch.
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PlatformStats to fetch.
-     */
-    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PlatformStats.
-     */
-    cursor?: PlatformStatsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PlatformStats from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PlatformStats.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PlatformStats.
-     */
-    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
-  }
-
-  /**
-   * PlatformStats findMany
-   */
-  export type PlatformStatsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter, which PlatformStats to fetch.
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PlatformStats to fetch.
-     */
-    orderBy?: PlatformStatsOrderByWithRelationInput | PlatformStatsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing PlatformStats.
-     */
-    cursor?: PlatformStatsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PlatformStats from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PlatformStats.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PlatformStats.
-     */
-    distinct?: PlatformStatsScalarFieldEnum | PlatformStatsScalarFieldEnum[]
-  }
-
-  /**
-   * PlatformStats create
-   */
-  export type PlatformStatsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * The data needed to create a PlatformStats.
-     */
-    data: XOR<PlatformStatsCreateInput, PlatformStatsUncheckedCreateInput>
-  }
-
-  /**
-   * PlatformStats createMany
-   */
-  export type PlatformStatsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many PlatformStats.
-     */
-    data: PlatformStatsCreateManyInput | PlatformStatsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * PlatformStats createManyAndReturn
-   */
-  export type PlatformStatsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * The data used to create many PlatformStats.
-     */
-    data: PlatformStatsCreateManyInput | PlatformStatsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * PlatformStats update
-   */
-  export type PlatformStatsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * The data needed to update a PlatformStats.
-     */
-    data: XOR<PlatformStatsUpdateInput, PlatformStatsUncheckedUpdateInput>
-    /**
-     * Choose, which PlatformStats to update.
-     */
-    where: PlatformStatsWhereUniqueInput
-  }
-
-  /**
-   * PlatformStats updateMany
-   */
-  export type PlatformStatsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update PlatformStats.
-     */
-    data: XOR<PlatformStatsUpdateManyMutationInput, PlatformStatsUncheckedUpdateManyInput>
-    /**
-     * Filter which PlatformStats to update
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * Limit how many PlatformStats to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * PlatformStats updateManyAndReturn
-   */
-  export type PlatformStatsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * The data used to update PlatformStats.
-     */
-    data: XOR<PlatformStatsUpdateManyMutationInput, PlatformStatsUncheckedUpdateManyInput>
-    /**
-     * Filter which PlatformStats to update
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * Limit how many PlatformStats to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * PlatformStats upsert
-   */
-  export type PlatformStatsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * The filter to search for the PlatformStats to update in case it exists.
-     */
-    where: PlatformStatsWhereUniqueInput
-    /**
-     * In case the PlatformStats found by the `where` argument doesn't exist, create a new PlatformStats with this data.
-     */
-    create: XOR<PlatformStatsCreateInput, PlatformStatsUncheckedCreateInput>
-    /**
-     * In case the PlatformStats was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PlatformStatsUpdateInput, PlatformStatsUncheckedUpdateInput>
-  }
-
-  /**
-   * PlatformStats delete
-   */
-  export type PlatformStatsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
-    /**
-     * Filter which PlatformStats to delete.
-     */
-    where: PlatformStatsWhereUniqueInput
-  }
-
-  /**
-   * PlatformStats deleteMany
-   */
-  export type PlatformStatsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PlatformStats to delete
-     */
-    where?: PlatformStatsWhereInput
-    /**
-     * Limit how many PlatformStats to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * PlatformStats without action
-   */
-  export type PlatformStatsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlatformStats
-     */
-    select?: PlatformStatsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlatformStats
-     */
-    omit?: PlatformStatsOmit<ExtArgs> | null
   }
 
 
@@ -10552,6 +13848,6878 @@ export namespace Prisma {
 
 
   /**
+   * Model Campaign
+   */
+
+  export type AggregateCampaign = {
+    _count: CampaignCountAggregateOutputType | null
+    _avg: CampaignAvgAggregateOutputType | null
+    _sum: CampaignSumAggregateOutputType | null
+    _min: CampaignMinAggregateOutputType | null
+    _max: CampaignMaxAggregateOutputType | null
+  }
+
+  export type CampaignAvgAggregateOutputType = {
+    budget: number | null
+  }
+
+  export type CampaignSumAggregateOutputType = {
+    budget: number | null
+  }
+
+  export type CampaignMinAggregateOutputType = {
+    id: string | null
+    brandProfileId: string | null
+    title: string | null
+    description: string | null
+    budget: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type CampaignMaxAggregateOutputType = {
+    id: string | null
+    brandProfileId: string | null
+    title: string | null
+    description: string | null
+    budget: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type CampaignCountAggregateOutputType = {
+    id: number
+    brandProfileId: number
+    title: number
+    description: number
+    budget: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CampaignAvgAggregateInputType = {
+    budget?: true
+  }
+
+  export type CampaignSumAggregateInputType = {
+    budget?: true
+  }
+
+  export type CampaignMinAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    title?: true
+    description?: true
+    budget?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type CampaignMaxAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    title?: true
+    description?: true
+    budget?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type CampaignCountAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    title?: true
+    description?: true
+    budget?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CampaignAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Campaign to aggregate.
+     */
+    where?: CampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Campaigns to fetch.
+     */
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Campaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Campaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Campaigns
+    **/
+    _count?: true | CampaignCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CampaignAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CampaignSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CampaignMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CampaignMaxAggregateInputType
+  }
+
+  export type GetCampaignAggregateType<T extends CampaignAggregateArgs> = {
+        [P in keyof T & keyof AggregateCampaign]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCampaign[P]>
+      : GetScalarType<T[P], AggregateCampaign[P]>
+  }
+
+
+
+
+  export type CampaignGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignWhereInput
+    orderBy?: CampaignOrderByWithAggregationInput | CampaignOrderByWithAggregationInput[]
+    by: CampaignScalarFieldEnum[] | CampaignScalarFieldEnum
+    having?: CampaignScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CampaignCountAggregateInputType | true
+    _avg?: CampaignAvgAggregateInputType
+    _sum?: CampaignSumAggregateInputType
+    _min?: CampaignMinAggregateInputType
+    _max?: CampaignMaxAggregateInputType
+  }
+
+  export type CampaignGroupByOutputType = {
+    id: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status: string
+    createdAt: Date
+    _count: CampaignCountAggregateOutputType | null
+    _avg: CampaignAvgAggregateOutputType | null
+    _sum: CampaignSumAggregateOutputType | null
+    _min: CampaignMinAggregateOutputType | null
+    _max: CampaignMaxAggregateOutputType | null
+  }
+
+  type GetCampaignGroupByPayload<T extends CampaignGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CampaignGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CampaignGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CampaignGroupByOutputType[P]>
+            : GetScalarType<T[P], CampaignGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CampaignSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    title?: boolean
+    description?: boolean
+    budget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    proposals?: boolean | Campaign$proposalsArgs<ExtArgs>
+    contracts?: boolean | Campaign$contractsArgs<ExtArgs>
+    _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaign"]>
+
+  export type CampaignSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    title?: boolean
+    description?: boolean
+    budget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaign"]>
+
+  export type CampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    title?: boolean
+    description?: boolean
+    budget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaign"]>
+
+  export type CampaignSelectScalar = {
+    id?: boolean
+    brandProfileId?: boolean
+    title?: boolean
+    description?: boolean
+    budget?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandProfileId" | "title" | "description" | "budget" | "status" | "createdAt", ExtArgs["result"]["campaign"]>
+  export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    proposals?: boolean | Campaign$proposalsArgs<ExtArgs>
+    contracts?: boolean | Campaign$contractsArgs<ExtArgs>
+    _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }
+  export type CampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $CampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Campaign"
+    objects: {
+      brand: Prisma.$BrandProfilePayload<ExtArgs>
+      proposals: Prisma.$ProposalPayload<ExtArgs>[]
+      contracts: Prisma.$ContractPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      brandProfileId: string
+      title: string
+      description: string
+      budget: number
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["campaign"]>
+    composites: {}
+  }
+
+  type CampaignGetPayload<S extends boolean | null | undefined | CampaignDefaultArgs> = $Result.GetResult<Prisma.$CampaignPayload, S>
+
+  type CampaignCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CampaignFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CampaignCountAggregateInputType | true
+    }
+
+  export interface CampaignDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Campaign'], meta: { name: 'Campaign' } }
+    /**
+     * Find zero or one Campaign that matches the filter.
+     * @param {CampaignFindUniqueArgs} args - Arguments to find a Campaign
+     * @example
+     * // Get one Campaign
+     * const campaign = await prisma.campaign.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CampaignFindUniqueArgs>(args: SelectSubset<T, CampaignFindUniqueArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Campaign that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CampaignFindUniqueOrThrowArgs} args - Arguments to find a Campaign
+     * @example
+     * // Get one Campaign
+     * const campaign = await prisma.campaign.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CampaignFindUniqueOrThrowArgs>(args: SelectSubset<T, CampaignFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Campaign that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignFindFirstArgs} args - Arguments to find a Campaign
+     * @example
+     * // Get one Campaign
+     * const campaign = await prisma.campaign.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CampaignFindFirstArgs>(args?: SelectSubset<T, CampaignFindFirstArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Campaign that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignFindFirstOrThrowArgs} args - Arguments to find a Campaign
+     * @example
+     * // Get one Campaign
+     * const campaign = await prisma.campaign.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CampaignFindFirstOrThrowArgs>(args?: SelectSubset<T, CampaignFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Campaigns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Campaigns
+     * const campaigns = await prisma.campaign.findMany()
+     * 
+     * // Get first 10 Campaigns
+     * const campaigns = await prisma.campaign.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const campaignWithIdOnly = await prisma.campaign.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CampaignFindManyArgs>(args?: SelectSubset<T, CampaignFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Campaign.
+     * @param {CampaignCreateArgs} args - Arguments to create a Campaign.
+     * @example
+     * // Create one Campaign
+     * const Campaign = await prisma.campaign.create({
+     *   data: {
+     *     // ... data to create a Campaign
+     *   }
+     * })
+     * 
+     */
+    create<T extends CampaignCreateArgs>(args: SelectSubset<T, CampaignCreateArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Campaigns.
+     * @param {CampaignCreateManyArgs} args - Arguments to create many Campaigns.
+     * @example
+     * // Create many Campaigns
+     * const campaign = await prisma.campaign.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CampaignCreateManyArgs>(args?: SelectSubset<T, CampaignCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Campaigns and returns the data saved in the database.
+     * @param {CampaignCreateManyAndReturnArgs} args - Arguments to create many Campaigns.
+     * @example
+     * // Create many Campaigns
+     * const campaign = await prisma.campaign.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Campaigns and only return the `id`
+     * const campaignWithIdOnly = await prisma.campaign.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CampaignCreateManyAndReturnArgs>(args?: SelectSubset<T, CampaignCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Campaign.
+     * @param {CampaignDeleteArgs} args - Arguments to delete one Campaign.
+     * @example
+     * // Delete one Campaign
+     * const Campaign = await prisma.campaign.delete({
+     *   where: {
+     *     // ... filter to delete one Campaign
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CampaignDeleteArgs>(args: SelectSubset<T, CampaignDeleteArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Campaign.
+     * @param {CampaignUpdateArgs} args - Arguments to update one Campaign.
+     * @example
+     * // Update one Campaign
+     * const campaign = await prisma.campaign.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CampaignUpdateArgs>(args: SelectSubset<T, CampaignUpdateArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Campaigns.
+     * @param {CampaignDeleteManyArgs} args - Arguments to filter Campaigns to delete.
+     * @example
+     * // Delete a few Campaigns
+     * const { count } = await prisma.campaign.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CampaignDeleteManyArgs>(args?: SelectSubset<T, CampaignDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Campaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Campaigns
+     * const campaign = await prisma.campaign.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CampaignUpdateManyArgs>(args: SelectSubset<T, CampaignUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Campaigns and returns the data updated in the database.
+     * @param {CampaignUpdateManyAndReturnArgs} args - Arguments to update many Campaigns.
+     * @example
+     * // Update many Campaigns
+     * const campaign = await prisma.campaign.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Campaigns and only return the `id`
+     * const campaignWithIdOnly = await prisma.campaign.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CampaignUpdateManyAndReturnArgs>(args: SelectSubset<T, CampaignUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Campaign.
+     * @param {CampaignUpsertArgs} args - Arguments to update or create a Campaign.
+     * @example
+     * // Update or create a Campaign
+     * const campaign = await prisma.campaign.upsert({
+     *   create: {
+     *     // ... data to create a Campaign
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Campaign we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CampaignUpsertArgs>(args: SelectSubset<T, CampaignUpsertArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Campaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignCountArgs} args - Arguments to filter Campaigns to count.
+     * @example
+     * // Count the number of Campaigns
+     * const count = await prisma.campaign.count({
+     *   where: {
+     *     // ... the filter for the Campaigns we want to count
+     *   }
+     * })
+    **/
+    count<T extends CampaignCountArgs>(
+      args?: Subset<T, CampaignCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CampaignCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Campaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CampaignAggregateArgs>(args: Subset<T, CampaignAggregateArgs>): Prisma.PrismaPromise<GetCampaignAggregateType<T>>
+
+    /**
+     * Group by Campaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CampaignGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CampaignGroupByArgs['orderBy'] }
+        : { orderBy?: CampaignGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CampaignGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampaignGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Campaign model
+   */
+  readonly fields: CampaignFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Campaign.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    brand<T extends BrandProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfileDefaultArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    proposals<T extends Campaign$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contracts<T extends Campaign$contractsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Campaign model
+   */
+  interface CampaignFieldRefs {
+    readonly id: FieldRef<"Campaign", 'String'>
+    readonly brandProfileId: FieldRef<"Campaign", 'String'>
+    readonly title: FieldRef<"Campaign", 'String'>
+    readonly description: FieldRef<"Campaign", 'String'>
+    readonly budget: FieldRef<"Campaign", 'Float'>
+    readonly status: FieldRef<"Campaign", 'String'>
+    readonly createdAt: FieldRef<"Campaign", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Campaign findUnique
+   */
+  export type CampaignFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which Campaign to fetch.
+     */
+    where: CampaignWhereUniqueInput
+  }
+
+  /**
+   * Campaign findUniqueOrThrow
+   */
+  export type CampaignFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which Campaign to fetch.
+     */
+    where: CampaignWhereUniqueInput
+  }
+
+  /**
+   * Campaign findFirst
+   */
+  export type CampaignFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which Campaign to fetch.
+     */
+    where?: CampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Campaigns to fetch.
+     */
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Campaigns.
+     */
+    cursor?: CampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Campaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Campaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Campaigns.
+     */
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign findFirstOrThrow
+   */
+  export type CampaignFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which Campaign to fetch.
+     */
+    where?: CampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Campaigns to fetch.
+     */
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Campaigns.
+     */
+    cursor?: CampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Campaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Campaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Campaigns.
+     */
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign findMany
+   */
+  export type CampaignFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which Campaigns to fetch.
+     */
+    where?: CampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Campaigns to fetch.
+     */
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Campaigns.
+     */
+    cursor?: CampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Campaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Campaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Campaigns.
+     */
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign create
+   */
+  export type CampaignCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Campaign.
+     */
+    data: XOR<CampaignCreateInput, CampaignUncheckedCreateInput>
+  }
+
+  /**
+   * Campaign createMany
+   */
+  export type CampaignCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Campaigns.
+     */
+    data: CampaignCreateManyInput | CampaignCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Campaign createManyAndReturn
+   */
+  export type CampaignCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * The data used to create many Campaigns.
+     */
+    data: CampaignCreateManyInput | CampaignCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Campaign update
+   */
+  export type CampaignUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Campaign.
+     */
+    data: XOR<CampaignUpdateInput, CampaignUncheckedUpdateInput>
+    /**
+     * Choose, which Campaign to update.
+     */
+    where: CampaignWhereUniqueInput
+  }
+
+  /**
+   * Campaign updateMany
+   */
+  export type CampaignUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Campaigns.
+     */
+    data: XOR<CampaignUpdateManyMutationInput, CampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which Campaigns to update
+     */
+    where?: CampaignWhereInput
+    /**
+     * Limit how many Campaigns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Campaign updateManyAndReturn
+   */
+  export type CampaignUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * The data used to update Campaigns.
+     */
+    data: XOR<CampaignUpdateManyMutationInput, CampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which Campaigns to update
+     */
+    where?: CampaignWhereInput
+    /**
+     * Limit how many Campaigns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Campaign upsert
+   */
+  export type CampaignUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Campaign to update in case it exists.
+     */
+    where: CampaignWhereUniqueInput
+    /**
+     * In case the Campaign found by the `where` argument doesn't exist, create a new Campaign with this data.
+     */
+    create: XOR<CampaignCreateInput, CampaignUncheckedCreateInput>
+    /**
+     * In case the Campaign was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CampaignUpdateInput, CampaignUncheckedUpdateInput>
+  }
+
+  /**
+   * Campaign delete
+   */
+  export type CampaignDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    /**
+     * Filter which Campaign to delete.
+     */
+    where: CampaignWhereUniqueInput
+  }
+
+  /**
+   * Campaign deleteMany
+   */
+  export type CampaignDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Campaigns to delete
+     */
+    where?: CampaignWhereInput
+    /**
+     * Limit how many Campaigns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Campaign.proposals
+   */
+  export type Campaign$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    where?: ProposalWhereInput
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    cursor?: ProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign.contracts
+   */
+  export type Campaign$contractsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    where?: ContractWhereInput
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    cursor?: ContractWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign without action
+   */
+  export type CampaignDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Proposal
+   */
+
+  export type AggregateProposal = {
+    _count: ProposalCountAggregateOutputType | null
+    _avg: ProposalAvgAggregateOutputType | null
+    _sum: ProposalSumAggregateOutputType | null
+    _min: ProposalMinAggregateOutputType | null
+    _max: ProposalMaxAggregateOutputType | null
+  }
+
+  export type ProposalAvgAggregateOutputType = {
+    rate: number | null
+  }
+
+  export type ProposalSumAggregateOutputType = {
+    rate: number | null
+  }
+
+  export type ProposalMinAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    creatorProfileId: string | null
+    coverLetter: string | null
+    rate: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ProposalMaxAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    creatorProfileId: string | null
+    coverLetter: string | null
+    rate: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type ProposalCountAggregateOutputType = {
+    id: number
+    campaignId: number
+    creatorProfileId: number
+    coverLetter: number
+    rate: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProposalAvgAggregateInputType = {
+    rate?: true
+  }
+
+  export type ProposalSumAggregateInputType = {
+    rate?: true
+  }
+
+  export type ProposalMinAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    coverLetter?: true
+    rate?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ProposalMaxAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    coverLetter?: true
+    rate?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type ProposalCountAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    coverLetter?: true
+    rate?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProposalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Proposal to aggregate.
+     */
+    where?: ProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Proposals to fetch.
+     */
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Proposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Proposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Proposals
+    **/
+    _count?: true | ProposalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProposalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProposalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProposalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProposalMaxAggregateInputType
+  }
+
+  export type GetProposalAggregateType<T extends ProposalAggregateArgs> = {
+        [P in keyof T & keyof AggregateProposal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProposal[P]>
+      : GetScalarType<T[P], AggregateProposal[P]>
+  }
+
+
+
+
+  export type ProposalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalWhereInput
+    orderBy?: ProposalOrderByWithAggregationInput | ProposalOrderByWithAggregationInput[]
+    by: ProposalScalarFieldEnum[] | ProposalScalarFieldEnum
+    having?: ProposalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProposalCountAggregateInputType | true
+    _avg?: ProposalAvgAggregateInputType
+    _sum?: ProposalSumAggregateInputType
+    _min?: ProposalMinAggregateInputType
+    _max?: ProposalMaxAggregateInputType
+  }
+
+  export type ProposalGroupByOutputType = {
+    id: string
+    campaignId: string
+    creatorProfileId: string
+    coverLetter: string | null
+    rate: number
+    status: string
+    createdAt: Date
+    _count: ProposalCountAggregateOutputType | null
+    _avg: ProposalAvgAggregateOutputType | null
+    _sum: ProposalSumAggregateOutputType | null
+    _min: ProposalMinAggregateOutputType | null
+    _max: ProposalMaxAggregateOutputType | null
+  }
+
+  type GetProposalGroupByPayload<T extends ProposalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProposalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProposalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProposalGroupByOutputType[P]>
+            : GetScalarType<T[P], ProposalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProposalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    coverLetter?: boolean
+    rate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["proposal"]>
+
+  export type ProposalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    coverLetter?: boolean
+    rate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["proposal"]>
+
+  export type ProposalSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    coverLetter?: boolean
+    rate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["proposal"]>
+
+  export type ProposalSelectScalar = {
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    coverLetter?: boolean
+    rate?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorProfileId" | "coverLetter" | "rate" | "status" | "createdAt", ExtArgs["result"]["proposal"]>
+  export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+  export type ProposalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+  export type ProposalIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $ProposalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Proposal"
+    objects: {
+      campaign: Prisma.$CampaignPayload<ExtArgs>
+      creator: Prisma.$CreatorProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      campaignId: string
+      creatorProfileId: string
+      coverLetter: string | null
+      rate: number
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["proposal"]>
+    composites: {}
+  }
+
+  type ProposalGetPayload<S extends boolean | null | undefined | ProposalDefaultArgs> = $Result.GetResult<Prisma.$ProposalPayload, S>
+
+  type ProposalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProposalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProposalCountAggregateInputType | true
+    }
+
+  export interface ProposalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Proposal'], meta: { name: 'Proposal' } }
+    /**
+     * Find zero or one Proposal that matches the filter.
+     * @param {ProposalFindUniqueArgs} args - Arguments to find a Proposal
+     * @example
+     * // Get one Proposal
+     * const proposal = await prisma.proposal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProposalFindUniqueArgs>(args: SelectSubset<T, ProposalFindUniqueArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Proposal that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProposalFindUniqueOrThrowArgs} args - Arguments to find a Proposal
+     * @example
+     * // Get one Proposal
+     * const proposal = await prisma.proposal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProposalFindUniqueOrThrowArgs>(args: SelectSubset<T, ProposalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Proposal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalFindFirstArgs} args - Arguments to find a Proposal
+     * @example
+     * // Get one Proposal
+     * const proposal = await prisma.proposal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProposalFindFirstArgs>(args?: SelectSubset<T, ProposalFindFirstArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Proposal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalFindFirstOrThrowArgs} args - Arguments to find a Proposal
+     * @example
+     * // Get one Proposal
+     * const proposal = await prisma.proposal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProposalFindFirstOrThrowArgs>(args?: SelectSubset<T, ProposalFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Proposals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Proposals
+     * const proposals = await prisma.proposal.findMany()
+     * 
+     * // Get first 10 Proposals
+     * const proposals = await prisma.proposal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const proposalWithIdOnly = await prisma.proposal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProposalFindManyArgs>(args?: SelectSubset<T, ProposalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Proposal.
+     * @param {ProposalCreateArgs} args - Arguments to create a Proposal.
+     * @example
+     * // Create one Proposal
+     * const Proposal = await prisma.proposal.create({
+     *   data: {
+     *     // ... data to create a Proposal
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProposalCreateArgs>(args: SelectSubset<T, ProposalCreateArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Proposals.
+     * @param {ProposalCreateManyArgs} args - Arguments to create many Proposals.
+     * @example
+     * // Create many Proposals
+     * const proposal = await prisma.proposal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProposalCreateManyArgs>(args?: SelectSubset<T, ProposalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Proposals and returns the data saved in the database.
+     * @param {ProposalCreateManyAndReturnArgs} args - Arguments to create many Proposals.
+     * @example
+     * // Create many Proposals
+     * const proposal = await prisma.proposal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Proposals and only return the `id`
+     * const proposalWithIdOnly = await prisma.proposal.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProposalCreateManyAndReturnArgs>(args?: SelectSubset<T, ProposalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Proposal.
+     * @param {ProposalDeleteArgs} args - Arguments to delete one Proposal.
+     * @example
+     * // Delete one Proposal
+     * const Proposal = await prisma.proposal.delete({
+     *   where: {
+     *     // ... filter to delete one Proposal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProposalDeleteArgs>(args: SelectSubset<T, ProposalDeleteArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Proposal.
+     * @param {ProposalUpdateArgs} args - Arguments to update one Proposal.
+     * @example
+     * // Update one Proposal
+     * const proposal = await prisma.proposal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProposalUpdateArgs>(args: SelectSubset<T, ProposalUpdateArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Proposals.
+     * @param {ProposalDeleteManyArgs} args - Arguments to filter Proposals to delete.
+     * @example
+     * // Delete a few Proposals
+     * const { count } = await prisma.proposal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProposalDeleteManyArgs>(args?: SelectSubset<T, ProposalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Proposals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Proposals
+     * const proposal = await prisma.proposal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProposalUpdateManyArgs>(args: SelectSubset<T, ProposalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Proposals and returns the data updated in the database.
+     * @param {ProposalUpdateManyAndReturnArgs} args - Arguments to update many Proposals.
+     * @example
+     * // Update many Proposals
+     * const proposal = await prisma.proposal.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Proposals and only return the `id`
+     * const proposalWithIdOnly = await prisma.proposal.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProposalUpdateManyAndReturnArgs>(args: SelectSubset<T, ProposalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Proposal.
+     * @param {ProposalUpsertArgs} args - Arguments to update or create a Proposal.
+     * @example
+     * // Update or create a Proposal
+     * const proposal = await prisma.proposal.upsert({
+     *   create: {
+     *     // ... data to create a Proposal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Proposal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProposalUpsertArgs>(args: SelectSubset<T, ProposalUpsertArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Proposals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalCountArgs} args - Arguments to filter Proposals to count.
+     * @example
+     * // Count the number of Proposals
+     * const count = await prisma.proposal.count({
+     *   where: {
+     *     // ... the filter for the Proposals we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProposalCountArgs>(
+      args?: Subset<T, ProposalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProposalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Proposal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProposalAggregateArgs>(args: Subset<T, ProposalAggregateArgs>): Prisma.PrismaPromise<GetProposalAggregateType<T>>
+
+    /**
+     * Group by Proposal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProposalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProposalGroupByArgs['orderBy'] }
+        : { orderBy?: ProposalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProposalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProposalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Proposal model
+   */
+  readonly fields: ProposalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Proposal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProposalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    creator<T extends CreatorProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfileDefaultArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Proposal model
+   */
+  interface ProposalFieldRefs {
+    readonly id: FieldRef<"Proposal", 'String'>
+    readonly campaignId: FieldRef<"Proposal", 'String'>
+    readonly creatorProfileId: FieldRef<"Proposal", 'String'>
+    readonly coverLetter: FieldRef<"Proposal", 'String'>
+    readonly rate: FieldRef<"Proposal", 'Float'>
+    readonly status: FieldRef<"Proposal", 'String'>
+    readonly createdAt: FieldRef<"Proposal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Proposal findUnique
+   */
+  export type ProposalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which Proposal to fetch.
+     */
+    where: ProposalWhereUniqueInput
+  }
+
+  /**
+   * Proposal findUniqueOrThrow
+   */
+  export type ProposalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which Proposal to fetch.
+     */
+    where: ProposalWhereUniqueInput
+  }
+
+  /**
+   * Proposal findFirst
+   */
+  export type ProposalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which Proposal to fetch.
+     */
+    where?: ProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Proposals to fetch.
+     */
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Proposals.
+     */
+    cursor?: ProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Proposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Proposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Proposals.
+     */
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * Proposal findFirstOrThrow
+   */
+  export type ProposalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which Proposal to fetch.
+     */
+    where?: ProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Proposals to fetch.
+     */
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Proposals.
+     */
+    cursor?: ProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Proposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Proposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Proposals.
+     */
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * Proposal findMany
+   */
+  export type ProposalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which Proposals to fetch.
+     */
+    where?: ProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Proposals to fetch.
+     */
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Proposals.
+     */
+    cursor?: ProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Proposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Proposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Proposals.
+     */
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * Proposal create
+   */
+  export type ProposalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Proposal.
+     */
+    data: XOR<ProposalCreateInput, ProposalUncheckedCreateInput>
+  }
+
+  /**
+   * Proposal createMany
+   */
+  export type ProposalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Proposals.
+     */
+    data: ProposalCreateManyInput | ProposalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Proposal createManyAndReturn
+   */
+  export type ProposalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * The data used to create many Proposals.
+     */
+    data: ProposalCreateManyInput | ProposalCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Proposal update
+   */
+  export type ProposalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Proposal.
+     */
+    data: XOR<ProposalUpdateInput, ProposalUncheckedUpdateInput>
+    /**
+     * Choose, which Proposal to update.
+     */
+    where: ProposalWhereUniqueInput
+  }
+
+  /**
+   * Proposal updateMany
+   */
+  export type ProposalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Proposals.
+     */
+    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyInput>
+    /**
+     * Filter which Proposals to update
+     */
+    where?: ProposalWhereInput
+    /**
+     * Limit how many Proposals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Proposal updateManyAndReturn
+   */
+  export type ProposalUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * The data used to update Proposals.
+     */
+    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyInput>
+    /**
+     * Filter which Proposals to update
+     */
+    where?: ProposalWhereInput
+    /**
+     * Limit how many Proposals to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Proposal upsert
+   */
+  export type ProposalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Proposal to update in case it exists.
+     */
+    where: ProposalWhereUniqueInput
+    /**
+     * In case the Proposal found by the `where` argument doesn't exist, create a new Proposal with this data.
+     */
+    create: XOR<ProposalCreateInput, ProposalUncheckedCreateInput>
+    /**
+     * In case the Proposal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProposalUpdateInput, ProposalUncheckedUpdateInput>
+  }
+
+  /**
+   * Proposal delete
+   */
+  export type ProposalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    /**
+     * Filter which Proposal to delete.
+     */
+    where: ProposalWhereUniqueInput
+  }
+
+  /**
+   * Proposal deleteMany
+   */
+  export type ProposalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Proposals to delete
+     */
+    where?: ProposalWhereInput
+    /**
+     * Limit how many Proposals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Proposal without action
+   */
+  export type ProposalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Contract
+   */
+
+  export type AggregateContract = {
+    _count: ContractCountAggregateOutputType | null
+    _avg: ContractAvgAggregateOutputType | null
+    _sum: ContractSumAggregateOutputType | null
+    _min: ContractMinAggregateOutputType | null
+    _max: ContractMaxAggregateOutputType | null
+  }
+
+  export type ContractAvgAggregateOutputType = {
+    totalBudget: number | null
+  }
+
+  export type ContractSumAggregateOutputType = {
+    totalBudget: number | null
+  }
+
+  export type ContractMinAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    brandProfileId: string | null
+    creatorProfileId: string | null
+    status: $Enums.ContractStatus | null
+    totalBudget: number | null
+    createdAt: Date | null
+  }
+
+  export type ContractMaxAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    brandProfileId: string | null
+    creatorProfileId: string | null
+    status: $Enums.ContractStatus | null
+    totalBudget: number | null
+    createdAt: Date | null
+  }
+
+  export type ContractCountAggregateOutputType = {
+    id: number
+    campaignId: number
+    brandProfileId: number
+    creatorProfileId: number
+    status: number
+    totalBudget: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ContractAvgAggregateInputType = {
+    totalBudget?: true
+  }
+
+  export type ContractSumAggregateInputType = {
+    totalBudget?: true
+  }
+
+  export type ContractMinAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorProfileId?: true
+    status?: true
+    totalBudget?: true
+    createdAt?: true
+  }
+
+  export type ContractMaxAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorProfileId?: true
+    status?: true
+    totalBudget?: true
+    createdAt?: true
+  }
+
+  export type ContractCountAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorProfileId?: true
+    status?: true
+    totalBudget?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ContractAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Contract to aggregate.
+     */
+    where?: ContractWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Contracts to fetch.
+     */
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContractWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Contracts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Contracts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Contracts
+    **/
+    _count?: true | ContractCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContractAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContractSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContractMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContractMaxAggregateInputType
+  }
+
+  export type GetContractAggregateType<T extends ContractAggregateArgs> = {
+        [P in keyof T & keyof AggregateContract]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContract[P]>
+      : GetScalarType<T[P], AggregateContract[P]>
+  }
+
+
+
+
+  export type ContractGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContractWhereInput
+    orderBy?: ContractOrderByWithAggregationInput | ContractOrderByWithAggregationInput[]
+    by: ContractScalarFieldEnum[] | ContractScalarFieldEnum
+    having?: ContractScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContractCountAggregateInputType | true
+    _avg?: ContractAvgAggregateInputType
+    _sum?: ContractSumAggregateInputType
+    _min?: ContractMinAggregateInputType
+    _max?: ContractMaxAggregateInputType
+  }
+
+  export type ContractGroupByOutputType = {
+    id: string
+    campaignId: string
+    brandProfileId: string
+    creatorProfileId: string
+    status: $Enums.ContractStatus
+    totalBudget: number
+    createdAt: Date
+    _count: ContractCountAggregateOutputType | null
+    _avg: ContractAvgAggregateOutputType | null
+    _sum: ContractSumAggregateOutputType | null
+    _min: ContractMinAggregateOutputType | null
+    _max: ContractMaxAggregateOutputType | null
+  }
+
+  type GetContractGroupByPayload<T extends ContractGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContractGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContractGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContractGroupByOutputType[P]>
+            : GetScalarType<T[P], ContractGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContractSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorProfileId?: boolean
+    status?: boolean
+    totalBudget?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+    milestones?: boolean | Contract$milestonesArgs<ExtArgs>
+    tasks?: boolean | Contract$tasksArgs<ExtArgs>
+    _count?: boolean | ContractCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contract"]>
+
+  export type ContractSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorProfileId?: boolean
+    status?: boolean
+    totalBudget?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contract"]>
+
+  export type ContractSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorProfileId?: boolean
+    status?: boolean
+    totalBudget?: boolean
+    createdAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contract"]>
+
+  export type ContractSelectScalar = {
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorProfileId?: boolean
+    status?: boolean
+    totalBudget?: boolean
+    createdAt?: boolean
+  }
+
+  export type ContractOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "brandProfileId" | "creatorProfileId" | "status" | "totalBudget" | "createdAt", ExtArgs["result"]["contract"]>
+  export type ContractInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+    milestones?: boolean | Contract$milestonesArgs<ExtArgs>
+    tasks?: boolean | Contract$tasksArgs<ExtArgs>
+    _count?: boolean | ContractCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ContractIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+  export type ContractIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $ContractPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Contract"
+    objects: {
+      campaign: Prisma.$CampaignPayload<ExtArgs>
+      creator: Prisma.$CreatorProfilePayload<ExtArgs>
+      milestones: Prisma.$MilestonePayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      campaignId: string
+      brandProfileId: string
+      creatorProfileId: string
+      status: $Enums.ContractStatus
+      totalBudget: number
+      createdAt: Date
+    }, ExtArgs["result"]["contract"]>
+    composites: {}
+  }
+
+  type ContractGetPayload<S extends boolean | null | undefined | ContractDefaultArgs> = $Result.GetResult<Prisma.$ContractPayload, S>
+
+  type ContractCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContractFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContractCountAggregateInputType | true
+    }
+
+  export interface ContractDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Contract'], meta: { name: 'Contract' } }
+    /**
+     * Find zero or one Contract that matches the filter.
+     * @param {ContractFindUniqueArgs} args - Arguments to find a Contract
+     * @example
+     * // Get one Contract
+     * const contract = await prisma.contract.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContractFindUniqueArgs>(args: SelectSubset<T, ContractFindUniqueArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Contract that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContractFindUniqueOrThrowArgs} args - Arguments to find a Contract
+     * @example
+     * // Get one Contract
+     * const contract = await prisma.contract.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContractFindUniqueOrThrowArgs>(args: SelectSubset<T, ContractFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Contract that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractFindFirstArgs} args - Arguments to find a Contract
+     * @example
+     * // Get one Contract
+     * const contract = await prisma.contract.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContractFindFirstArgs>(args?: SelectSubset<T, ContractFindFirstArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Contract that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractFindFirstOrThrowArgs} args - Arguments to find a Contract
+     * @example
+     * // Get one Contract
+     * const contract = await prisma.contract.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContractFindFirstOrThrowArgs>(args?: SelectSubset<T, ContractFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Contracts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Contracts
+     * const contracts = await prisma.contract.findMany()
+     * 
+     * // Get first 10 Contracts
+     * const contracts = await prisma.contract.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contractWithIdOnly = await prisma.contract.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContractFindManyArgs>(args?: SelectSubset<T, ContractFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Contract.
+     * @param {ContractCreateArgs} args - Arguments to create a Contract.
+     * @example
+     * // Create one Contract
+     * const Contract = await prisma.contract.create({
+     *   data: {
+     *     // ... data to create a Contract
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContractCreateArgs>(args: SelectSubset<T, ContractCreateArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Contracts.
+     * @param {ContractCreateManyArgs} args - Arguments to create many Contracts.
+     * @example
+     * // Create many Contracts
+     * const contract = await prisma.contract.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContractCreateManyArgs>(args?: SelectSubset<T, ContractCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Contracts and returns the data saved in the database.
+     * @param {ContractCreateManyAndReturnArgs} args - Arguments to create many Contracts.
+     * @example
+     * // Create many Contracts
+     * const contract = await prisma.contract.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Contracts and only return the `id`
+     * const contractWithIdOnly = await prisma.contract.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContractCreateManyAndReturnArgs>(args?: SelectSubset<T, ContractCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Contract.
+     * @param {ContractDeleteArgs} args - Arguments to delete one Contract.
+     * @example
+     * // Delete one Contract
+     * const Contract = await prisma.contract.delete({
+     *   where: {
+     *     // ... filter to delete one Contract
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContractDeleteArgs>(args: SelectSubset<T, ContractDeleteArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Contract.
+     * @param {ContractUpdateArgs} args - Arguments to update one Contract.
+     * @example
+     * // Update one Contract
+     * const contract = await prisma.contract.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContractUpdateArgs>(args: SelectSubset<T, ContractUpdateArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Contracts.
+     * @param {ContractDeleteManyArgs} args - Arguments to filter Contracts to delete.
+     * @example
+     * // Delete a few Contracts
+     * const { count } = await prisma.contract.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContractDeleteManyArgs>(args?: SelectSubset<T, ContractDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Contracts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Contracts
+     * const contract = await prisma.contract.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContractUpdateManyArgs>(args: SelectSubset<T, ContractUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Contracts and returns the data updated in the database.
+     * @param {ContractUpdateManyAndReturnArgs} args - Arguments to update many Contracts.
+     * @example
+     * // Update many Contracts
+     * const contract = await prisma.contract.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Contracts and only return the `id`
+     * const contractWithIdOnly = await prisma.contract.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContractUpdateManyAndReturnArgs>(args: SelectSubset<T, ContractUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Contract.
+     * @param {ContractUpsertArgs} args - Arguments to update or create a Contract.
+     * @example
+     * // Update or create a Contract
+     * const contract = await prisma.contract.upsert({
+     *   create: {
+     *     // ... data to create a Contract
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Contract we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContractUpsertArgs>(args: SelectSubset<T, ContractUpsertArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Contracts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractCountArgs} args - Arguments to filter Contracts to count.
+     * @example
+     * // Count the number of Contracts
+     * const count = await prisma.contract.count({
+     *   where: {
+     *     // ... the filter for the Contracts we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContractCountArgs>(
+      args?: Subset<T, ContractCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContractCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Contract.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContractAggregateArgs>(args: Subset<T, ContractAggregateArgs>): Prisma.PrismaPromise<GetContractAggregateType<T>>
+
+    /**
+     * Group by Contract.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContractGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContractGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContractGroupByArgs['orderBy'] }
+        : { orderBy?: ContractGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContractGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContractGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Contract model
+   */
+  readonly fields: ContractFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Contract.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContractClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    creator<T extends CreatorProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfileDefaultArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    milestones<T extends Contract$milestonesArgs<ExtArgs> = {}>(args?: Subset<T, Contract$milestonesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Contract$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Contract$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Contract model
+   */
+  interface ContractFieldRefs {
+    readonly id: FieldRef<"Contract", 'String'>
+    readonly campaignId: FieldRef<"Contract", 'String'>
+    readonly brandProfileId: FieldRef<"Contract", 'String'>
+    readonly creatorProfileId: FieldRef<"Contract", 'String'>
+    readonly status: FieldRef<"Contract", 'ContractStatus'>
+    readonly totalBudget: FieldRef<"Contract", 'Float'>
+    readonly createdAt: FieldRef<"Contract", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Contract findUnique
+   */
+  export type ContractFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter, which Contract to fetch.
+     */
+    where: ContractWhereUniqueInput
+  }
+
+  /**
+   * Contract findUniqueOrThrow
+   */
+  export type ContractFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter, which Contract to fetch.
+     */
+    where: ContractWhereUniqueInput
+  }
+
+  /**
+   * Contract findFirst
+   */
+  export type ContractFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter, which Contract to fetch.
+     */
+    where?: ContractWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Contracts to fetch.
+     */
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Contracts.
+     */
+    cursor?: ContractWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Contracts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Contracts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Contracts.
+     */
+    distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * Contract findFirstOrThrow
+   */
+  export type ContractFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter, which Contract to fetch.
+     */
+    where?: ContractWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Contracts to fetch.
+     */
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Contracts.
+     */
+    cursor?: ContractWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Contracts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Contracts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Contracts.
+     */
+    distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * Contract findMany
+   */
+  export type ContractFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter, which Contracts to fetch.
+     */
+    where?: ContractWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Contracts to fetch.
+     */
+    orderBy?: ContractOrderByWithRelationInput | ContractOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Contracts.
+     */
+    cursor?: ContractWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Contracts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Contracts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Contracts.
+     */
+    distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * Contract create
+   */
+  export type ContractCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Contract.
+     */
+    data: XOR<ContractCreateInput, ContractUncheckedCreateInput>
+  }
+
+  /**
+   * Contract createMany
+   */
+  export type ContractCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Contracts.
+     */
+    data: ContractCreateManyInput | ContractCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Contract createManyAndReturn
+   */
+  export type ContractCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * The data used to create many Contracts.
+     */
+    data: ContractCreateManyInput | ContractCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Contract update
+   */
+  export type ContractUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Contract.
+     */
+    data: XOR<ContractUpdateInput, ContractUncheckedUpdateInput>
+    /**
+     * Choose, which Contract to update.
+     */
+    where: ContractWhereUniqueInput
+  }
+
+  /**
+   * Contract updateMany
+   */
+  export type ContractUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Contracts.
+     */
+    data: XOR<ContractUpdateManyMutationInput, ContractUncheckedUpdateManyInput>
+    /**
+     * Filter which Contracts to update
+     */
+    where?: ContractWhereInput
+    /**
+     * Limit how many Contracts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Contract updateManyAndReturn
+   */
+  export type ContractUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * The data used to update Contracts.
+     */
+    data: XOR<ContractUpdateManyMutationInput, ContractUncheckedUpdateManyInput>
+    /**
+     * Filter which Contracts to update
+     */
+    where?: ContractWhereInput
+    /**
+     * Limit how many Contracts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Contract upsert
+   */
+  export type ContractUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Contract to update in case it exists.
+     */
+    where: ContractWhereUniqueInput
+    /**
+     * In case the Contract found by the `where` argument doesn't exist, create a new Contract with this data.
+     */
+    create: XOR<ContractCreateInput, ContractUncheckedCreateInput>
+    /**
+     * In case the Contract was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContractUpdateInput, ContractUncheckedUpdateInput>
+  }
+
+  /**
+   * Contract delete
+   */
+  export type ContractDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    /**
+     * Filter which Contract to delete.
+     */
+    where: ContractWhereUniqueInput
+  }
+
+  /**
+   * Contract deleteMany
+   */
+  export type ContractDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Contracts to delete
+     */
+    where?: ContractWhereInput
+    /**
+     * Limit how many Contracts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Contract.milestones
+   */
+  export type Contract$milestonesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    where?: MilestoneWhereInput
+    orderBy?: MilestoneOrderByWithRelationInput | MilestoneOrderByWithRelationInput[]
+    cursor?: MilestoneWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MilestoneScalarFieldEnum | MilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * Contract.tasks
+   */
+  export type Contract$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Contract without action
+   */
+  export type ContractDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Milestone
+   */
+
+  export type AggregateMilestone = {
+    _count: MilestoneCountAggregateOutputType | null
+    _avg: MilestoneAvgAggregateOutputType | null
+    _sum: MilestoneSumAggregateOutputType | null
+    _min: MilestoneMinAggregateOutputType | null
+    _max: MilestoneMaxAggregateOutputType | null
+  }
+
+  export type MilestoneAvgAggregateOutputType = {
+    percentage: number | null
+    amount: number | null
+  }
+
+  export type MilestoneSumAggregateOutputType = {
+    percentage: number | null
+    amount: number | null
+  }
+
+  export type MilestoneMinAggregateOutputType = {
+    id: string | null
+    contractId: string | null
+    title: string | null
+    percentage: number | null
+    amount: number | null
+    status: $Enums.MilestoneStatus | null
+    dueDate: Date | null
+  }
+
+  export type MilestoneMaxAggregateOutputType = {
+    id: string | null
+    contractId: string | null
+    title: string | null
+    percentage: number | null
+    amount: number | null
+    status: $Enums.MilestoneStatus | null
+    dueDate: Date | null
+  }
+
+  export type MilestoneCountAggregateOutputType = {
+    id: number
+    contractId: number
+    title: number
+    percentage: number
+    amount: number
+    status: number
+    dueDate: number
+    _all: number
+  }
+
+
+  export type MilestoneAvgAggregateInputType = {
+    percentage?: true
+    amount?: true
+  }
+
+  export type MilestoneSumAggregateInputType = {
+    percentage?: true
+    amount?: true
+  }
+
+  export type MilestoneMinAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    percentage?: true
+    amount?: true
+    status?: true
+    dueDate?: true
+  }
+
+  export type MilestoneMaxAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    percentage?: true
+    amount?: true
+    status?: true
+    dueDate?: true
+  }
+
+  export type MilestoneCountAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    percentage?: true
+    amount?: true
+    status?: true
+    dueDate?: true
+    _all?: true
+  }
+
+  export type MilestoneAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Milestone to aggregate.
+     */
+    where?: MilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Milestones to fetch.
+     */
+    orderBy?: MilestoneOrderByWithRelationInput | MilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Milestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Milestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Milestones
+    **/
+    _count?: true | MilestoneCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MilestoneAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MilestoneSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MilestoneMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MilestoneMaxAggregateInputType
+  }
+
+  export type GetMilestoneAggregateType<T extends MilestoneAggregateArgs> = {
+        [P in keyof T & keyof AggregateMilestone]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMilestone[P]>
+      : GetScalarType<T[P], AggregateMilestone[P]>
+  }
+
+
+
+
+  export type MilestoneGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MilestoneWhereInput
+    orderBy?: MilestoneOrderByWithAggregationInput | MilestoneOrderByWithAggregationInput[]
+    by: MilestoneScalarFieldEnum[] | MilestoneScalarFieldEnum
+    having?: MilestoneScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MilestoneCountAggregateInputType | true
+    _avg?: MilestoneAvgAggregateInputType
+    _sum?: MilestoneSumAggregateInputType
+    _min?: MilestoneMinAggregateInputType
+    _max?: MilestoneMaxAggregateInputType
+  }
+
+  export type MilestoneGroupByOutputType = {
+    id: string
+    contractId: string
+    title: string
+    percentage: number
+    amount: number
+    status: $Enums.MilestoneStatus
+    dueDate: Date | null
+    _count: MilestoneCountAggregateOutputType | null
+    _avg: MilestoneAvgAggregateOutputType | null
+    _sum: MilestoneSumAggregateOutputType | null
+    _min: MilestoneMinAggregateOutputType | null
+    _max: MilestoneMaxAggregateOutputType | null
+  }
+
+  type GetMilestoneGroupByPayload<T extends MilestoneGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MilestoneGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MilestoneGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MilestoneGroupByOutputType[P]>
+            : GetScalarType<T[P], MilestoneGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MilestoneSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    percentage?: boolean
+    amount?: boolean
+    status?: boolean
+    dueDate?: boolean
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["milestone"]>
+
+  export type MilestoneSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    percentage?: boolean
+    amount?: boolean
+    status?: boolean
+    dueDate?: boolean
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["milestone"]>
+
+  export type MilestoneSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    percentage?: boolean
+    amount?: boolean
+    status?: boolean
+    dueDate?: boolean
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["milestone"]>
+
+  export type MilestoneSelectScalar = {
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    percentage?: boolean
+    amount?: boolean
+    status?: boolean
+    dueDate?: boolean
+  }
+
+  export type MilestoneOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "title" | "percentage" | "amount" | "status" | "dueDate", ExtArgs["result"]["milestone"]>
+  export type MilestoneInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }
+  export type MilestoneIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }
+  export type MilestoneIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | ContractDefaultArgs<ExtArgs>
+  }
+
+  export type $MilestonePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Milestone"
+    objects: {
+      contract: Prisma.$ContractPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      contractId: string
+      title: string
+      percentage: number
+      amount: number
+      status: $Enums.MilestoneStatus
+      dueDate: Date | null
+    }, ExtArgs["result"]["milestone"]>
+    composites: {}
+  }
+
+  type MilestoneGetPayload<S extends boolean | null | undefined | MilestoneDefaultArgs> = $Result.GetResult<Prisma.$MilestonePayload, S>
+
+  type MilestoneCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MilestoneFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MilestoneCountAggregateInputType | true
+    }
+
+  export interface MilestoneDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Milestone'], meta: { name: 'Milestone' } }
+    /**
+     * Find zero or one Milestone that matches the filter.
+     * @param {MilestoneFindUniqueArgs} args - Arguments to find a Milestone
+     * @example
+     * // Get one Milestone
+     * const milestone = await prisma.milestone.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MilestoneFindUniqueArgs>(args: SelectSubset<T, MilestoneFindUniqueArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Milestone that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MilestoneFindUniqueOrThrowArgs} args - Arguments to find a Milestone
+     * @example
+     * // Get one Milestone
+     * const milestone = await prisma.milestone.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MilestoneFindUniqueOrThrowArgs>(args: SelectSubset<T, MilestoneFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Milestone that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneFindFirstArgs} args - Arguments to find a Milestone
+     * @example
+     * // Get one Milestone
+     * const milestone = await prisma.milestone.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MilestoneFindFirstArgs>(args?: SelectSubset<T, MilestoneFindFirstArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Milestone that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneFindFirstOrThrowArgs} args - Arguments to find a Milestone
+     * @example
+     * // Get one Milestone
+     * const milestone = await prisma.milestone.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MilestoneFindFirstOrThrowArgs>(args?: SelectSubset<T, MilestoneFindFirstOrThrowArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Milestones that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Milestones
+     * const milestones = await prisma.milestone.findMany()
+     * 
+     * // Get first 10 Milestones
+     * const milestones = await prisma.milestone.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const milestoneWithIdOnly = await prisma.milestone.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MilestoneFindManyArgs>(args?: SelectSubset<T, MilestoneFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Milestone.
+     * @param {MilestoneCreateArgs} args - Arguments to create a Milestone.
+     * @example
+     * // Create one Milestone
+     * const Milestone = await prisma.milestone.create({
+     *   data: {
+     *     // ... data to create a Milestone
+     *   }
+     * })
+     * 
+     */
+    create<T extends MilestoneCreateArgs>(args: SelectSubset<T, MilestoneCreateArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Milestones.
+     * @param {MilestoneCreateManyArgs} args - Arguments to create many Milestones.
+     * @example
+     * // Create many Milestones
+     * const milestone = await prisma.milestone.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MilestoneCreateManyArgs>(args?: SelectSubset<T, MilestoneCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Milestones and returns the data saved in the database.
+     * @param {MilestoneCreateManyAndReturnArgs} args - Arguments to create many Milestones.
+     * @example
+     * // Create many Milestones
+     * const milestone = await prisma.milestone.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Milestones and only return the `id`
+     * const milestoneWithIdOnly = await prisma.milestone.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MilestoneCreateManyAndReturnArgs>(args?: SelectSubset<T, MilestoneCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Milestone.
+     * @param {MilestoneDeleteArgs} args - Arguments to delete one Milestone.
+     * @example
+     * // Delete one Milestone
+     * const Milestone = await prisma.milestone.delete({
+     *   where: {
+     *     // ... filter to delete one Milestone
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MilestoneDeleteArgs>(args: SelectSubset<T, MilestoneDeleteArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Milestone.
+     * @param {MilestoneUpdateArgs} args - Arguments to update one Milestone.
+     * @example
+     * // Update one Milestone
+     * const milestone = await prisma.milestone.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MilestoneUpdateArgs>(args: SelectSubset<T, MilestoneUpdateArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Milestones.
+     * @param {MilestoneDeleteManyArgs} args - Arguments to filter Milestones to delete.
+     * @example
+     * // Delete a few Milestones
+     * const { count } = await prisma.milestone.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MilestoneDeleteManyArgs>(args?: SelectSubset<T, MilestoneDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Milestones.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Milestones
+     * const milestone = await prisma.milestone.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MilestoneUpdateManyArgs>(args: SelectSubset<T, MilestoneUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Milestones and returns the data updated in the database.
+     * @param {MilestoneUpdateManyAndReturnArgs} args - Arguments to update many Milestones.
+     * @example
+     * // Update many Milestones
+     * const milestone = await prisma.milestone.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Milestones and only return the `id`
+     * const milestoneWithIdOnly = await prisma.milestone.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MilestoneUpdateManyAndReturnArgs>(args: SelectSubset<T, MilestoneUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Milestone.
+     * @param {MilestoneUpsertArgs} args - Arguments to update or create a Milestone.
+     * @example
+     * // Update or create a Milestone
+     * const milestone = await prisma.milestone.upsert({
+     *   create: {
+     *     // ... data to create a Milestone
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Milestone we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MilestoneUpsertArgs>(args: SelectSubset<T, MilestoneUpsertArgs<ExtArgs>>): Prisma__MilestoneClient<$Result.GetResult<Prisma.$MilestonePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Milestones.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneCountArgs} args - Arguments to filter Milestones to count.
+     * @example
+     * // Count the number of Milestones
+     * const count = await prisma.milestone.count({
+     *   where: {
+     *     // ... the filter for the Milestones we want to count
+     *   }
+     * })
+    **/
+    count<T extends MilestoneCountArgs>(
+      args?: Subset<T, MilestoneCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MilestoneCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Milestone.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MilestoneAggregateArgs>(args: Subset<T, MilestoneAggregateArgs>): Prisma.PrismaPromise<GetMilestoneAggregateType<T>>
+
+    /**
+     * Group by Milestone.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MilestoneGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MilestoneGroupByArgs['orderBy'] }
+        : { orderBy?: MilestoneGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MilestoneGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMilestoneGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Milestone model
+   */
+  readonly fields: MilestoneFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Milestone.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MilestoneClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    contract<T extends ContractDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContractDefaultArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Milestone model
+   */
+  interface MilestoneFieldRefs {
+    readonly id: FieldRef<"Milestone", 'String'>
+    readonly contractId: FieldRef<"Milestone", 'String'>
+    readonly title: FieldRef<"Milestone", 'String'>
+    readonly percentage: FieldRef<"Milestone", 'Float'>
+    readonly amount: FieldRef<"Milestone", 'Float'>
+    readonly status: FieldRef<"Milestone", 'MilestoneStatus'>
+    readonly dueDate: FieldRef<"Milestone", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Milestone findUnique
+   */
+  export type MilestoneFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which Milestone to fetch.
+     */
+    where: MilestoneWhereUniqueInput
+  }
+
+  /**
+   * Milestone findUniqueOrThrow
+   */
+  export type MilestoneFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which Milestone to fetch.
+     */
+    where: MilestoneWhereUniqueInput
+  }
+
+  /**
+   * Milestone findFirst
+   */
+  export type MilestoneFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which Milestone to fetch.
+     */
+    where?: MilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Milestones to fetch.
+     */
+    orderBy?: MilestoneOrderByWithRelationInput | MilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Milestones.
+     */
+    cursor?: MilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Milestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Milestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Milestones.
+     */
+    distinct?: MilestoneScalarFieldEnum | MilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * Milestone findFirstOrThrow
+   */
+  export type MilestoneFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which Milestone to fetch.
+     */
+    where?: MilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Milestones to fetch.
+     */
+    orderBy?: MilestoneOrderByWithRelationInput | MilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Milestones.
+     */
+    cursor?: MilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Milestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Milestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Milestones.
+     */
+    distinct?: MilestoneScalarFieldEnum | MilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * Milestone findMany
+   */
+  export type MilestoneFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which Milestones to fetch.
+     */
+    where?: MilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Milestones to fetch.
+     */
+    orderBy?: MilestoneOrderByWithRelationInput | MilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Milestones.
+     */
+    cursor?: MilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Milestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Milestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Milestones.
+     */
+    distinct?: MilestoneScalarFieldEnum | MilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * Milestone create
+   */
+  export type MilestoneCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Milestone.
+     */
+    data: XOR<MilestoneCreateInput, MilestoneUncheckedCreateInput>
+  }
+
+  /**
+   * Milestone createMany
+   */
+  export type MilestoneCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Milestones.
+     */
+    data: MilestoneCreateManyInput | MilestoneCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Milestone createManyAndReturn
+   */
+  export type MilestoneCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * The data used to create many Milestones.
+     */
+    data: MilestoneCreateManyInput | MilestoneCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Milestone update
+   */
+  export type MilestoneUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Milestone.
+     */
+    data: XOR<MilestoneUpdateInput, MilestoneUncheckedUpdateInput>
+    /**
+     * Choose, which Milestone to update.
+     */
+    where: MilestoneWhereUniqueInput
+  }
+
+  /**
+   * Milestone updateMany
+   */
+  export type MilestoneUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Milestones.
+     */
+    data: XOR<MilestoneUpdateManyMutationInput, MilestoneUncheckedUpdateManyInput>
+    /**
+     * Filter which Milestones to update
+     */
+    where?: MilestoneWhereInput
+    /**
+     * Limit how many Milestones to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Milestone updateManyAndReturn
+   */
+  export type MilestoneUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * The data used to update Milestones.
+     */
+    data: XOR<MilestoneUpdateManyMutationInput, MilestoneUncheckedUpdateManyInput>
+    /**
+     * Filter which Milestones to update
+     */
+    where?: MilestoneWhereInput
+    /**
+     * Limit how many Milestones to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Milestone upsert
+   */
+  export type MilestoneUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Milestone to update in case it exists.
+     */
+    where: MilestoneWhereUniqueInput
+    /**
+     * In case the Milestone found by the `where` argument doesn't exist, create a new Milestone with this data.
+     */
+    create: XOR<MilestoneCreateInput, MilestoneUncheckedCreateInput>
+    /**
+     * In case the Milestone was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MilestoneUpdateInput, MilestoneUncheckedUpdateInput>
+  }
+
+  /**
+   * Milestone delete
+   */
+  export type MilestoneDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+    /**
+     * Filter which Milestone to delete.
+     */
+    where: MilestoneWhereUniqueInput
+  }
+
+  /**
+   * Milestone deleteMany
+   */
+  export type MilestoneDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Milestones to delete
+     */
+    where?: MilestoneWhereInput
+    /**
+     * Limit how many Milestones to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Milestone without action
+   */
+  export type MilestoneDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Milestone
+     */
+    select?: MilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Milestone
+     */
+    omit?: MilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MilestoneInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CRMLead
+   */
+
+  export type AggregateCRMLead = {
+    _count: CRMLeadCountAggregateOutputType | null
+    _avg: CRMLeadAvgAggregateOutputType | null
+    _sum: CRMLeadSumAggregateOutputType | null
+    _min: CRMLeadMinAggregateOutputType | null
+    _max: CRMLeadMaxAggregateOutputType | null
+  }
+
+  export type CRMLeadAvgAggregateOutputType = {
+    followers: number | null
+  }
+
+  export type CRMLeadSumAggregateOutputType = {
+    followers: number | null
+  }
+
+  export type CRMLeadMinAggregateOutputType = {
+    id: string | null
+    brandProfileId: string | null
+    handle: string | null
+    platform: string | null
+    avatarUrl: string | null
+    followers: number | null
+    status: $Enums.LeadStatus | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type CRMLeadMaxAggregateOutputType = {
+    id: string | null
+    brandProfileId: string | null
+    handle: string | null
+    platform: string | null
+    avatarUrl: string | null
+    followers: number | null
+    status: $Enums.LeadStatus | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type CRMLeadCountAggregateOutputType = {
+    id: number
+    brandProfileId: number
+    handle: number
+    platform: number
+    avatarUrl: number
+    followers: number
+    status: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CRMLeadAvgAggregateInputType = {
+    followers?: true
+  }
+
+  export type CRMLeadSumAggregateInputType = {
+    followers?: true
+  }
+
+  export type CRMLeadMinAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    handle?: true
+    platform?: true
+    avatarUrl?: true
+    followers?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type CRMLeadMaxAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    handle?: true
+    platform?: true
+    avatarUrl?: true
+    followers?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type CRMLeadCountAggregateInputType = {
+    id?: true
+    brandProfileId?: true
+    handle?: true
+    platform?: true
+    avatarUrl?: true
+    followers?: true
+    status?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CRMLeadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CRMLead to aggregate.
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CRMLeads to fetch.
+     */
+    orderBy?: CRMLeadOrderByWithRelationInput | CRMLeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CRMLeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CRMLeads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CRMLeads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CRMLeads
+    **/
+    _count?: true | CRMLeadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CRMLeadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CRMLeadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CRMLeadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CRMLeadMaxAggregateInputType
+  }
+
+  export type GetCRMLeadAggregateType<T extends CRMLeadAggregateArgs> = {
+        [P in keyof T & keyof AggregateCRMLead]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCRMLead[P]>
+      : GetScalarType<T[P], AggregateCRMLead[P]>
+  }
+
+
+
+
+  export type CRMLeadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CRMLeadWhereInput
+    orderBy?: CRMLeadOrderByWithAggregationInput | CRMLeadOrderByWithAggregationInput[]
+    by: CRMLeadScalarFieldEnum[] | CRMLeadScalarFieldEnum
+    having?: CRMLeadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CRMLeadCountAggregateInputType | true
+    _avg?: CRMLeadAvgAggregateInputType
+    _sum?: CRMLeadSumAggregateInputType
+    _min?: CRMLeadMinAggregateInputType
+    _max?: CRMLeadMaxAggregateInputType
+  }
+
+  export type CRMLeadGroupByOutputType = {
+    id: string
+    brandProfileId: string
+    handle: string
+    platform: string
+    avatarUrl: string | null
+    followers: number
+    status: $Enums.LeadStatus
+    notes: string | null
+    createdAt: Date
+    _count: CRMLeadCountAggregateOutputType | null
+    _avg: CRMLeadAvgAggregateOutputType | null
+    _sum: CRMLeadSumAggregateOutputType | null
+    _min: CRMLeadMinAggregateOutputType | null
+    _max: CRMLeadMaxAggregateOutputType | null
+  }
+
+  type GetCRMLeadGroupByPayload<T extends CRMLeadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CRMLeadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CRMLeadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CRMLeadGroupByOutputType[P]>
+            : GetScalarType<T[P], CRMLeadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CRMLeadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    handle?: boolean
+    platform?: boolean
+    avatarUrl?: boolean
+    followers?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cRMLead"]>
+
+  export type CRMLeadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    handle?: boolean
+    platform?: boolean
+    avatarUrl?: boolean
+    followers?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cRMLead"]>
+
+  export type CRMLeadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    brandProfileId?: boolean
+    handle?: boolean
+    platform?: boolean
+    avatarUrl?: boolean
+    followers?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cRMLead"]>
+
+  export type CRMLeadSelectScalar = {
+    id?: boolean
+    brandProfileId?: boolean
+    handle?: boolean
+    platform?: boolean
+    avatarUrl?: boolean
+    followers?: boolean
+    status?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+  export type CRMLeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandProfileId" | "handle" | "platform" | "avatarUrl" | "followers" | "status" | "notes" | "createdAt", ExtArgs["result"]["cRMLead"]>
+  export type CRMLeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }
+  export type CRMLeadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }
+  export type CRMLeadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $CRMLeadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CRMLead"
+    objects: {
+      brand: Prisma.$BrandProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      brandProfileId: string
+      handle: string
+      platform: string
+      avatarUrl: string | null
+      followers: number
+      status: $Enums.LeadStatus
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["cRMLead"]>
+    composites: {}
+  }
+
+  type CRMLeadGetPayload<S extends boolean | null | undefined | CRMLeadDefaultArgs> = $Result.GetResult<Prisma.$CRMLeadPayload, S>
+
+  type CRMLeadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CRMLeadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CRMLeadCountAggregateInputType | true
+    }
+
+  export interface CRMLeadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CRMLead'], meta: { name: 'CRMLead' } }
+    /**
+     * Find zero or one CRMLead that matches the filter.
+     * @param {CRMLeadFindUniqueArgs} args - Arguments to find a CRMLead
+     * @example
+     * // Get one CRMLead
+     * const cRMLead = await prisma.cRMLead.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CRMLeadFindUniqueArgs>(args: SelectSubset<T, CRMLeadFindUniqueArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CRMLead that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CRMLeadFindUniqueOrThrowArgs} args - Arguments to find a CRMLead
+     * @example
+     * // Get one CRMLead
+     * const cRMLead = await prisma.cRMLead.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CRMLeadFindUniqueOrThrowArgs>(args: SelectSubset<T, CRMLeadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CRMLead that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadFindFirstArgs} args - Arguments to find a CRMLead
+     * @example
+     * // Get one CRMLead
+     * const cRMLead = await prisma.cRMLead.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CRMLeadFindFirstArgs>(args?: SelectSubset<T, CRMLeadFindFirstArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CRMLead that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadFindFirstOrThrowArgs} args - Arguments to find a CRMLead
+     * @example
+     * // Get one CRMLead
+     * const cRMLead = await prisma.cRMLead.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CRMLeadFindFirstOrThrowArgs>(args?: SelectSubset<T, CRMLeadFindFirstOrThrowArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CRMLeads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CRMLeads
+     * const cRMLeads = await prisma.cRMLead.findMany()
+     * 
+     * // Get first 10 CRMLeads
+     * const cRMLeads = await prisma.cRMLead.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cRMLeadWithIdOnly = await prisma.cRMLead.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CRMLeadFindManyArgs>(args?: SelectSubset<T, CRMLeadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CRMLead.
+     * @param {CRMLeadCreateArgs} args - Arguments to create a CRMLead.
+     * @example
+     * // Create one CRMLead
+     * const CRMLead = await prisma.cRMLead.create({
+     *   data: {
+     *     // ... data to create a CRMLead
+     *   }
+     * })
+     * 
+     */
+    create<T extends CRMLeadCreateArgs>(args: SelectSubset<T, CRMLeadCreateArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CRMLeads.
+     * @param {CRMLeadCreateManyArgs} args - Arguments to create many CRMLeads.
+     * @example
+     * // Create many CRMLeads
+     * const cRMLead = await prisma.cRMLead.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CRMLeadCreateManyArgs>(args?: SelectSubset<T, CRMLeadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CRMLeads and returns the data saved in the database.
+     * @param {CRMLeadCreateManyAndReturnArgs} args - Arguments to create many CRMLeads.
+     * @example
+     * // Create many CRMLeads
+     * const cRMLead = await prisma.cRMLead.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CRMLeads and only return the `id`
+     * const cRMLeadWithIdOnly = await prisma.cRMLead.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CRMLeadCreateManyAndReturnArgs>(args?: SelectSubset<T, CRMLeadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CRMLead.
+     * @param {CRMLeadDeleteArgs} args - Arguments to delete one CRMLead.
+     * @example
+     * // Delete one CRMLead
+     * const CRMLead = await prisma.cRMLead.delete({
+     *   where: {
+     *     // ... filter to delete one CRMLead
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CRMLeadDeleteArgs>(args: SelectSubset<T, CRMLeadDeleteArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CRMLead.
+     * @param {CRMLeadUpdateArgs} args - Arguments to update one CRMLead.
+     * @example
+     * // Update one CRMLead
+     * const cRMLead = await prisma.cRMLead.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CRMLeadUpdateArgs>(args: SelectSubset<T, CRMLeadUpdateArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CRMLeads.
+     * @param {CRMLeadDeleteManyArgs} args - Arguments to filter CRMLeads to delete.
+     * @example
+     * // Delete a few CRMLeads
+     * const { count } = await prisma.cRMLead.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CRMLeadDeleteManyArgs>(args?: SelectSubset<T, CRMLeadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CRMLeads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CRMLeads
+     * const cRMLead = await prisma.cRMLead.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CRMLeadUpdateManyArgs>(args: SelectSubset<T, CRMLeadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CRMLeads and returns the data updated in the database.
+     * @param {CRMLeadUpdateManyAndReturnArgs} args - Arguments to update many CRMLeads.
+     * @example
+     * // Update many CRMLeads
+     * const cRMLead = await prisma.cRMLead.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CRMLeads and only return the `id`
+     * const cRMLeadWithIdOnly = await prisma.cRMLead.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CRMLeadUpdateManyAndReturnArgs>(args: SelectSubset<T, CRMLeadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CRMLead.
+     * @param {CRMLeadUpsertArgs} args - Arguments to update or create a CRMLead.
+     * @example
+     * // Update or create a CRMLead
+     * const cRMLead = await prisma.cRMLead.upsert({
+     *   create: {
+     *     // ... data to create a CRMLead
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CRMLead we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CRMLeadUpsertArgs>(args: SelectSubset<T, CRMLeadUpsertArgs<ExtArgs>>): Prisma__CRMLeadClient<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CRMLeads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadCountArgs} args - Arguments to filter CRMLeads to count.
+     * @example
+     * // Count the number of CRMLeads
+     * const count = await prisma.cRMLead.count({
+     *   where: {
+     *     // ... the filter for the CRMLeads we want to count
+     *   }
+     * })
+    **/
+    count<T extends CRMLeadCountArgs>(
+      args?: Subset<T, CRMLeadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CRMLeadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CRMLead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CRMLeadAggregateArgs>(args: Subset<T, CRMLeadAggregateArgs>): Prisma.PrismaPromise<GetCRMLeadAggregateType<T>>
+
+    /**
+     * Group by CRMLead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CRMLeadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CRMLeadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CRMLeadGroupByArgs['orderBy'] }
+        : { orderBy?: CRMLeadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CRMLeadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCRMLeadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CRMLead model
+   */
+  readonly fields: CRMLeadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CRMLead.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CRMLeadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    brand<T extends BrandProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfileDefaultArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CRMLead model
+   */
+  interface CRMLeadFieldRefs {
+    readonly id: FieldRef<"CRMLead", 'String'>
+    readonly brandProfileId: FieldRef<"CRMLead", 'String'>
+    readonly handle: FieldRef<"CRMLead", 'String'>
+    readonly platform: FieldRef<"CRMLead", 'String'>
+    readonly avatarUrl: FieldRef<"CRMLead", 'String'>
+    readonly followers: FieldRef<"CRMLead", 'Int'>
+    readonly status: FieldRef<"CRMLead", 'LeadStatus'>
+    readonly notes: FieldRef<"CRMLead", 'String'>
+    readonly createdAt: FieldRef<"CRMLead", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CRMLead findUnique
+   */
+  export type CRMLeadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter, which CRMLead to fetch.
+     */
+    where: CRMLeadWhereUniqueInput
+  }
+
+  /**
+   * CRMLead findUniqueOrThrow
+   */
+  export type CRMLeadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter, which CRMLead to fetch.
+     */
+    where: CRMLeadWhereUniqueInput
+  }
+
+  /**
+   * CRMLead findFirst
+   */
+  export type CRMLeadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter, which CRMLead to fetch.
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CRMLeads to fetch.
+     */
+    orderBy?: CRMLeadOrderByWithRelationInput | CRMLeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CRMLeads.
+     */
+    cursor?: CRMLeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CRMLeads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CRMLeads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CRMLeads.
+     */
+    distinct?: CRMLeadScalarFieldEnum | CRMLeadScalarFieldEnum[]
+  }
+
+  /**
+   * CRMLead findFirstOrThrow
+   */
+  export type CRMLeadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter, which CRMLead to fetch.
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CRMLeads to fetch.
+     */
+    orderBy?: CRMLeadOrderByWithRelationInput | CRMLeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CRMLeads.
+     */
+    cursor?: CRMLeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CRMLeads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CRMLeads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CRMLeads.
+     */
+    distinct?: CRMLeadScalarFieldEnum | CRMLeadScalarFieldEnum[]
+  }
+
+  /**
+   * CRMLead findMany
+   */
+  export type CRMLeadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter, which CRMLeads to fetch.
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CRMLeads to fetch.
+     */
+    orderBy?: CRMLeadOrderByWithRelationInput | CRMLeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CRMLeads.
+     */
+    cursor?: CRMLeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CRMLeads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CRMLeads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CRMLeads.
+     */
+    distinct?: CRMLeadScalarFieldEnum | CRMLeadScalarFieldEnum[]
+  }
+
+  /**
+   * CRMLead create
+   */
+  export type CRMLeadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CRMLead.
+     */
+    data: XOR<CRMLeadCreateInput, CRMLeadUncheckedCreateInput>
+  }
+
+  /**
+   * CRMLead createMany
+   */
+  export type CRMLeadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CRMLeads.
+     */
+    data: CRMLeadCreateManyInput | CRMLeadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CRMLead createManyAndReturn
+   */
+  export type CRMLeadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * The data used to create many CRMLeads.
+     */
+    data: CRMLeadCreateManyInput | CRMLeadCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CRMLead update
+   */
+  export type CRMLeadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CRMLead.
+     */
+    data: XOR<CRMLeadUpdateInput, CRMLeadUncheckedUpdateInput>
+    /**
+     * Choose, which CRMLead to update.
+     */
+    where: CRMLeadWhereUniqueInput
+  }
+
+  /**
+   * CRMLead updateMany
+   */
+  export type CRMLeadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CRMLeads.
+     */
+    data: XOR<CRMLeadUpdateManyMutationInput, CRMLeadUncheckedUpdateManyInput>
+    /**
+     * Filter which CRMLeads to update
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * Limit how many CRMLeads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CRMLead updateManyAndReturn
+   */
+  export type CRMLeadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * The data used to update CRMLeads.
+     */
+    data: XOR<CRMLeadUpdateManyMutationInput, CRMLeadUncheckedUpdateManyInput>
+    /**
+     * Filter which CRMLeads to update
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * Limit how many CRMLeads to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CRMLead upsert
+   */
+  export type CRMLeadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CRMLead to update in case it exists.
+     */
+    where: CRMLeadWhereUniqueInput
+    /**
+     * In case the CRMLead found by the `where` argument doesn't exist, create a new CRMLead with this data.
+     */
+    create: XOR<CRMLeadCreateInput, CRMLeadUncheckedCreateInput>
+    /**
+     * In case the CRMLead was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CRMLeadUpdateInput, CRMLeadUncheckedUpdateInput>
+  }
+
+  /**
+   * CRMLead delete
+   */
+  export type CRMLeadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+    /**
+     * Filter which CRMLead to delete.
+     */
+    where: CRMLeadWhereUniqueInput
+  }
+
+  /**
+   * CRMLead deleteMany
+   */
+  export type CRMLeadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CRMLeads to delete
+     */
+    where?: CRMLeadWhereInput
+    /**
+     * Limit how many CRMLeads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CRMLead without action
+   */
+  export type CRMLeadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CRMLead
+     */
+    select?: CRMLeadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CRMLead
+     */
+    omit?: CRMLeadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CRMLeadInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Task
+   */
+
+  export type AggregateTask = {
+    _count: TaskCountAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  export type TaskMinAggregateOutputType = {
+    id: string | null
+    contractId: string | null
+    title: string | null
+    dueDate: Date | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type TaskMaxAggregateOutputType = {
+    id: string | null
+    contractId: string | null
+    title: string | null
+    dueDate: Date | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type TaskCountAggregateOutputType = {
+    id: number
+    contractId: number
+    title: number
+    dueDate: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TaskMinAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    dueDate?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type TaskMaxAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    dueDate?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type TaskCountAggregateInputType = {
+    id?: true
+    contractId?: true
+    title?: true
+    dueDate?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Task to aggregate.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tasks
+    **/
+    _count?: true | TaskCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TaskMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type GetTaskAggregateType<T extends TaskAggregateArgs> = {
+        [P in keyof T & keyof AggregateTask]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTask[P]>
+      : GetScalarType<T[P], AggregateTask[P]>
+  }
+
+
+
+
+  export type TaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithAggregationInput | TaskOrderByWithAggregationInput[]
+    by: TaskScalarFieldEnum[] | TaskScalarFieldEnum
+    having?: TaskScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskCountAggregateInputType | true
+    _min?: TaskMinAggregateInputType
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type TaskGroupByOutputType = {
+    id: string
+    contractId: string | null
+    title: string
+    dueDate: Date
+    status: string
+    createdAt: Date
+    _count: TaskCountAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  type GetTaskGroupByPayload<T extends TaskGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TaskGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TaskGroupByOutputType[P]>
+            : GetScalarType<T[P], TaskGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    dueDate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    dueDate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    dueDate?: boolean
+    status?: boolean
+    createdAt?: boolean
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectScalar = {
+    id?: boolean
+    contractId?: boolean
+    title?: boolean
+    dueDate?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "title" | "dueDate" | "status" | "createdAt", ExtArgs["result"]["task"]>
+  export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }
+  export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }
+  export type TaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contract?: boolean | Task$contractArgs<ExtArgs>
+  }
+
+  export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Task"
+    objects: {
+      contract: Prisma.$ContractPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      contractId: string | null
+      title: string
+      dueDate: Date
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["task"]>
+    composites: {}
+  }
+
+  type TaskGetPayload<S extends boolean | null | undefined | TaskDefaultArgs> = $Result.GetResult<Prisma.$TaskPayload, S>
+
+  type TaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TaskFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TaskCountAggregateInputType | true
+    }
+
+  export interface TaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Task'], meta: { name: 'Task' } }
+    /**
+     * Find zero or one Task that matches the filter.
+     * @param {TaskFindUniqueArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskFindUniqueArgs>(args: SelectSubset<T, TaskFindUniqueArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Task that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TaskFindUniqueOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Task that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskFindFirstArgs>(args?: SelectSubset<T, TaskFindFirstArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Task that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tasks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tasks
+     * const tasks = await prisma.task.findMany()
+     * 
+     * // Get first 10 Tasks
+     * const tasks = await prisma.task.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const taskWithIdOnly = await prisma.task.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TaskFindManyArgs>(args?: SelectSubset<T, TaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Task.
+     * @param {TaskCreateArgs} args - Arguments to create a Task.
+     * @example
+     * // Create one Task
+     * const Task = await prisma.task.create({
+     *   data: {
+     *     // ... data to create a Task
+     *   }
+     * })
+     * 
+     */
+    create<T extends TaskCreateArgs>(args: SelectSubset<T, TaskCreateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tasks.
+     * @param {TaskCreateManyArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TaskCreateManyArgs>(args?: SelectSubset<T, TaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tasks and returns the data saved in the database.
+     * @param {TaskCreateManyAndReturnArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tasks and only return the `id`
+     * const taskWithIdOnly = await prisma.task.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TaskCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Task.
+     * @param {TaskDeleteArgs} args - Arguments to delete one Task.
+     * @example
+     * // Delete one Task
+     * const Task = await prisma.task.delete({
+     *   where: {
+     *     // ... filter to delete one Task
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TaskDeleteArgs>(args: SelectSubset<T, TaskDeleteArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Task.
+     * @param {TaskUpdateArgs} args - Arguments to update one Task.
+     * @example
+     * // Update one Task
+     * const task = await prisma.task.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TaskUpdateArgs>(args: SelectSubset<T, TaskUpdateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tasks.
+     * @param {TaskDeleteManyArgs} args - Arguments to filter Tasks to delete.
+     * @example
+     * // Delete a few Tasks
+     * const { count } = await prisma.task.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TaskDeleteManyArgs>(args?: SelectSubset<T, TaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tasks
+     * const task = await prisma.task.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TaskUpdateManyArgs>(args: SelectSubset<T, TaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tasks and returns the data updated in the database.
+     * @param {TaskUpdateManyAndReturnArgs} args - Arguments to update many Tasks.
+     * @example
+     * // Update many Tasks
+     * const task = await prisma.task.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tasks and only return the `id`
+     * const taskWithIdOnly = await prisma.task.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TaskUpdateManyAndReturnArgs>(args: SelectSubset<T, TaskUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Task.
+     * @param {TaskUpsertArgs} args - Arguments to update or create a Task.
+     * @example
+     * // Update or create a Task
+     * const task = await prisma.task.upsert({
+     *   create: {
+     *     // ... data to create a Task
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Task we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskUpsertArgs>(args: SelectSubset<T, TaskUpsertArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCountArgs} args - Arguments to filter Tasks to count.
+     * @example
+     * // Count the number of Tasks
+     * const count = await prisma.task.count({
+     *   where: {
+     *     // ... the filter for the Tasks we want to count
+     *   }
+     * })
+    **/
+    count<T extends TaskCountArgs>(
+      args?: Subset<T, TaskCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TaskAggregateArgs>(args: Subset<T, TaskAggregateArgs>): Prisma.PrismaPromise<GetTaskAggregateType<T>>
+
+    /**
+     * Group by Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TaskGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskGroupByArgs['orderBy'] }
+        : { orderBy?: TaskGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Task model
+   */
+  readonly fields: TaskFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Task.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    contract<T extends Task$contractArgs<ExtArgs> = {}>(args?: Subset<T, Task$contractArgs<ExtArgs>>): Prisma__ContractClient<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Task model
+   */
+  interface TaskFieldRefs {
+    readonly id: FieldRef<"Task", 'String'>
+    readonly contractId: FieldRef<"Task", 'String'>
+    readonly title: FieldRef<"Task", 'String'>
+    readonly dueDate: FieldRef<"Task", 'DateTime'>
+    readonly status: FieldRef<"Task", 'String'>
+    readonly createdAt: FieldRef<"Task", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Task findUnique
+   */
+  export type TaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findUniqueOrThrow
+   */
+  export type TaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findFirst
+   */
+  export type TaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findFirstOrThrow
+   */
+  export type TaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findMany
+   */
+  export type TaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Tasks to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task create
+   */
+  export type TaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Task.
+     */
+    data: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+  }
+
+  /**
+   * Task createMany
+   */
+  export type TaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Task createManyAndReturn
+   */
+  export type TaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Task update
+   */
+  export type TaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Task.
+     */
+    data: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+    /**
+     * Choose, which Task to update.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task updateMany
+   */
+  export type TaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tasks.
+     */
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
+    /**
+     * Filter which Tasks to update
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Task updateManyAndReturn
+   */
+  export type TaskUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * The data used to update Tasks.
+     */
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
+    /**
+     * Filter which Tasks to update
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Task upsert
+   */
+  export type TaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Task to update in case it exists.
+     */
+    where: TaskWhereUniqueInput
+    /**
+     * In case the Task found by the `where` argument doesn't exist, create a new Task with this data.
+     */
+    create: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+    /**
+     * In case the Task was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+  }
+
+  /**
+   * Task delete
+   */
+  export type TaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter which Task to delete.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task deleteMany
+   */
+  export type TaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tasks to delete
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Task.contract
+   */
+  export type Task$contractArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contract
+     */
+    select?: ContractSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contract
+     */
+    omit?: ContractOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContractInclude<ExtArgs> | null
+    where?: ContractWhereInput
+  }
+
+  /**
+   * Task without action
+   */
+  export type TaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10574,20 +20742,39 @@ export namespace Prisma {
     role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    hasCompletedOnboarding: 'hasCompletedOnboarding',
-    bio: 'bio',
-    niche: 'niche',
-    primaryPlatform: 'primaryPlatform',
-    location: 'location',
+    hasCompletedOnboarding: 'hasCompletedOnboarding'
+  };
+
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const BrandProfileScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
     companyName: 'companyName',
     industry: 'industry',
     website: 'website',
     brandAccountType: 'brandAccountType',
-    totalFollowers: 'totalFollowers',
-    avgEngagementRate: 'avgEngagementRate'
+    bio: 'bio',
+    location: 'location'
   };
 
-  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+  export type BrandProfileScalarFieldEnum = (typeof BrandProfileScalarFieldEnum)[keyof typeof BrandProfileScalarFieldEnum]
+
+
+  export const CreatorProfileScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    bio: 'bio',
+    niche: 'niche',
+    primaryPlatform: 'primaryPlatform',
+    location: 'location',
+    totalFollowers: 'totalFollowers',
+    avgEngagementRate: 'avgEngagementRate',
+    lastStatsUpdate: 'lastStatsUpdate'
+  };
+
+  export type CreatorProfileScalarFieldEnum = (typeof CreatorProfileScalarFieldEnum)[keyof typeof CreatorProfileScalarFieldEnum]
 
 
   export const AccountScalarFieldEnum: {
@@ -10652,16 +20839,6 @@ export namespace Prisma {
   export type PlatformTokenScalarFieldEnum = (typeof PlatformTokenScalarFieldEnum)[keyof typeof PlatformTokenScalarFieldEnum]
 
 
-  export const WaitlistScalarFieldEnum: {
-    id: 'id',
-    email: 'email',
-    role: 'role',
-    createdAt: 'createdAt'
-  };
-
-  export type WaitlistScalarFieldEnum = (typeof WaitlistScalarFieldEnum)[keyof typeof WaitlistScalarFieldEnum]
-
-
   export const PlatformStatsScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -10677,6 +20854,16 @@ export namespace Prisma {
   export type PlatformStatsScalarFieldEnum = (typeof PlatformStatsScalarFieldEnum)[keyof typeof PlatformStatsScalarFieldEnum]
 
 
+  export const WaitlistScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    role: 'role',
+    createdAt: 'createdAt'
+  };
+
+  export type WaitlistScalarFieldEnum = (typeof WaitlistScalarFieldEnum)[keyof typeof WaitlistScalarFieldEnum]
+
+
   export const MessageScalarFieldEnum: {
     id: 'id',
     text: 'text',
@@ -10686,6 +20873,85 @@ export namespace Prisma {
   };
 
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+  export const CampaignScalarFieldEnum: {
+    id: 'id',
+    brandProfileId: 'brandProfileId',
+    title: 'title',
+    description: 'description',
+    budget: 'budget',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
+
+
+  export const ProposalScalarFieldEnum: {
+    id: 'id',
+    campaignId: 'campaignId',
+    creatorProfileId: 'creatorProfileId',
+    coverLetter: 'coverLetter',
+    rate: 'rate',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type ProposalScalarFieldEnum = (typeof ProposalScalarFieldEnum)[keyof typeof ProposalScalarFieldEnum]
+
+
+  export const ContractScalarFieldEnum: {
+    id: 'id',
+    campaignId: 'campaignId',
+    brandProfileId: 'brandProfileId',
+    creatorProfileId: 'creatorProfileId',
+    status: 'status',
+    totalBudget: 'totalBudget',
+    createdAt: 'createdAt'
+  };
+
+  export type ContractScalarFieldEnum = (typeof ContractScalarFieldEnum)[keyof typeof ContractScalarFieldEnum]
+
+
+  export const MilestoneScalarFieldEnum: {
+    id: 'id',
+    contractId: 'contractId',
+    title: 'title',
+    percentage: 'percentage',
+    amount: 'amount',
+    status: 'status',
+    dueDate: 'dueDate'
+  };
+
+  export type MilestoneScalarFieldEnum = (typeof MilestoneScalarFieldEnum)[keyof typeof MilestoneScalarFieldEnum]
+
+
+  export const CRMLeadScalarFieldEnum: {
+    id: 'id',
+    brandProfileId: 'brandProfileId',
+    handle: 'handle',
+    platform: 'platform',
+    avatarUrl: 'avatarUrl',
+    followers: 'followers',
+    status: 'status',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type CRMLeadScalarFieldEnum = (typeof CRMLeadScalarFieldEnum)[keyof typeof CRMLeadScalarFieldEnum]
+
+
+  export const TaskScalarFieldEnum: {
+    id: 'id',
+    contractId: 'contractId',
+    title: 'title',
+    dueDate: 'dueDate',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10756,6 +21022,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Role'
+   */
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role[]'
+   */
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -10809,6 +21089,48 @@ export namespace Prisma {
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
+
+
+  /**
+   * Reference to a field of type 'ContractStatus'
+   */
+  export type EnumContractStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContractStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContractStatus[]'
+   */
+  export type ListEnumContractStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContractStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MilestoneStatus'
+   */
+  export type EnumMilestoneStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MilestoneStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MilestoneStatus[]'
+   */
+  export type ListEnumMilestoneStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MilestoneStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadStatus'
+   */
+  export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadStatus[]'
+   */
+  export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -10823,25 +21145,18 @@ export namespace Prisma {
     emailVerified?: BoolFilter<"User"> | boolean
     name?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
-    role?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     hasCompletedOnboarding?: BoolFilter<"User"> | boolean
-    bio?: StringNullableFilter<"User"> | string | null
-    niche?: StringNullableFilter<"User"> | string | null
-    primaryPlatform?: StringNullableFilter<"User"> | string | null
-    location?: StringNullableFilter<"User"> | string | null
-    companyName?: StringNullableFilter<"User"> | string | null
-    industry?: StringNullableFilter<"User"> | string | null
-    website?: StringNullableFilter<"User"> | string | null
-    brandAccountType?: StringNullableFilter<"User"> | string | null
-    totalFollowers?: IntFilter<"User"> | number
-    avgEngagementRate?: FloatFilter<"User"> | number
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     platformTokens?: PlatformTokenListRelationFilter
+    platformStats?: PlatformStatsListRelationFilter
     sentMessages?: MessageListRelationFilter
     receivedMessages?: MessageListRelationFilter
+    brandProfile?: XOR<BrandProfileNullableScalarRelationFilter, BrandProfileWhereInput> | null
+    creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -10854,21 +21169,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hasCompletedOnboarding?: SortOrder
-    bio?: SortOrderInput | SortOrder
-    niche?: SortOrderInput | SortOrder
-    primaryPlatform?: SortOrderInput | SortOrder
-    location?: SortOrderInput | SortOrder
-    companyName?: SortOrderInput | SortOrder
-    industry?: SortOrderInput | SortOrder
-    website?: SortOrderInput | SortOrder
-    brandAccountType?: SortOrderInput | SortOrder
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     platformTokens?: PlatformTokenOrderByRelationAggregateInput
+    platformStats?: PlatformStatsOrderByRelationAggregateInput
     sentMessages?: MessageOrderByRelationAggregateInput
     receivedMessages?: MessageOrderByRelationAggregateInput
+    brandProfile?: BrandProfileOrderByWithRelationInput
+    creatorProfile?: CreatorProfileOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10880,25 +21188,18 @@ export namespace Prisma {
     emailVerified?: BoolFilter<"User"> | boolean
     name?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
-    role?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     hasCompletedOnboarding?: BoolFilter<"User"> | boolean
-    bio?: StringNullableFilter<"User"> | string | null
-    niche?: StringNullableFilter<"User"> | string | null
-    primaryPlatform?: StringNullableFilter<"User"> | string | null
-    location?: StringNullableFilter<"User"> | string | null
-    companyName?: StringNullableFilter<"User"> | string | null
-    industry?: StringNullableFilter<"User"> | string | null
-    website?: StringNullableFilter<"User"> | string | null
-    brandAccountType?: StringNullableFilter<"User"> | string | null
-    totalFollowers?: IntFilter<"User"> | number
-    avgEngagementRate?: FloatFilter<"User"> | number
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     platformTokens?: PlatformTokenListRelationFilter
+    platformStats?: PlatformStatsListRelationFilter
     sentMessages?: MessageListRelationFilter
     receivedMessages?: MessageListRelationFilter
+    brandProfile?: XOR<BrandProfileNullableScalarRelationFilter, BrandProfileWhereInput> | null
+    creatorProfile?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -10911,21 +21212,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hasCompletedOnboarding?: SortOrder
-    bio?: SortOrderInput | SortOrder
-    niche?: SortOrderInput | SortOrder
-    primaryPlatform?: SortOrderInput | SortOrder
-    location?: SortOrderInput | SortOrder
-    companyName?: SortOrderInput | SortOrder
-    industry?: SortOrderInput | SortOrder
-    website?: SortOrderInput | SortOrder
-    brandAccountType?: SortOrderInput | SortOrder
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
     _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -10937,20 +21226,169 @@ export namespace Prisma {
     emailVerified?: BoolWithAggregatesFilter<"User"> | boolean
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
-    role?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     hasCompletedOnboarding?: BoolWithAggregatesFilter<"User"> | boolean
-    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
-    niche?: StringNullableWithAggregatesFilter<"User"> | string | null
-    primaryPlatform?: StringNullableWithAggregatesFilter<"User"> | string | null
-    location?: StringNullableWithAggregatesFilter<"User"> | string | null
-    companyName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    industry?: StringNullableWithAggregatesFilter<"User"> | string | null
-    website?: StringNullableWithAggregatesFilter<"User"> | string | null
-    brandAccountType?: StringNullableWithAggregatesFilter<"User"> | string | null
-    totalFollowers?: IntWithAggregatesFilter<"User"> | number
-    avgEngagementRate?: FloatWithAggregatesFilter<"User"> | number
+  }
+
+  export type BrandProfileWhereInput = {
+    AND?: BrandProfileWhereInput | BrandProfileWhereInput[]
+    OR?: BrandProfileWhereInput[]
+    NOT?: BrandProfileWhereInput | BrandProfileWhereInput[]
+    id?: StringFilter<"BrandProfile"> | string
+    userId?: StringFilter<"BrandProfile"> | string
+    companyName?: StringFilter<"BrandProfile"> | string
+    industry?: StringNullableFilter<"BrandProfile"> | string | null
+    website?: StringNullableFilter<"BrandProfile"> | string | null
+    brandAccountType?: StringNullableFilter<"BrandProfile"> | string | null
+    bio?: StringNullableFilter<"BrandProfile"> | string | null
+    location?: StringNullableFilter<"BrandProfile"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    campaigns?: CampaignListRelationFilter
+    crmLeads?: CRMLeadListRelationFilter
+  }
+
+  export type BrandProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    companyName?: SortOrder
+    industry?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    brandAccountType?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    campaigns?: CampaignOrderByRelationAggregateInput
+    crmLeads?: CRMLeadOrderByRelationAggregateInput
+  }
+
+  export type BrandProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: BrandProfileWhereInput | BrandProfileWhereInput[]
+    OR?: BrandProfileWhereInput[]
+    NOT?: BrandProfileWhereInput | BrandProfileWhereInput[]
+    companyName?: StringFilter<"BrandProfile"> | string
+    industry?: StringNullableFilter<"BrandProfile"> | string | null
+    website?: StringNullableFilter<"BrandProfile"> | string | null
+    brandAccountType?: StringNullableFilter<"BrandProfile"> | string | null
+    bio?: StringNullableFilter<"BrandProfile"> | string | null
+    location?: StringNullableFilter<"BrandProfile"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    campaigns?: CampaignListRelationFilter
+    crmLeads?: CRMLeadListRelationFilter
+  }, "id" | "userId">
+
+  export type BrandProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    companyName?: SortOrder
+    industry?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    brandAccountType?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    _count?: BrandProfileCountOrderByAggregateInput
+    _max?: BrandProfileMaxOrderByAggregateInput
+    _min?: BrandProfileMinOrderByAggregateInput
+  }
+
+  export type BrandProfileScalarWhereWithAggregatesInput = {
+    AND?: BrandProfileScalarWhereWithAggregatesInput | BrandProfileScalarWhereWithAggregatesInput[]
+    OR?: BrandProfileScalarWhereWithAggregatesInput[]
+    NOT?: BrandProfileScalarWhereWithAggregatesInput | BrandProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BrandProfile"> | string
+    userId?: StringWithAggregatesFilter<"BrandProfile"> | string
+    companyName?: StringWithAggregatesFilter<"BrandProfile"> | string
+    industry?: StringNullableWithAggregatesFilter<"BrandProfile"> | string | null
+    website?: StringNullableWithAggregatesFilter<"BrandProfile"> | string | null
+    brandAccountType?: StringNullableWithAggregatesFilter<"BrandProfile"> | string | null
+    bio?: StringNullableWithAggregatesFilter<"BrandProfile"> | string | null
+    location?: StringNullableWithAggregatesFilter<"BrandProfile"> | string | null
+  }
+
+  export type CreatorProfileWhereInput = {
+    AND?: CreatorProfileWhereInput | CreatorProfileWhereInput[]
+    OR?: CreatorProfileWhereInput[]
+    NOT?: CreatorProfileWhereInput | CreatorProfileWhereInput[]
+    id?: StringFilter<"CreatorProfile"> | string
+    userId?: StringFilter<"CreatorProfile"> | string
+    bio?: StringNullableFilter<"CreatorProfile"> | string | null
+    niche?: StringNullableFilter<"CreatorProfile"> | string | null
+    primaryPlatform?: StringNullableFilter<"CreatorProfile"> | string | null
+    location?: StringNullableFilter<"CreatorProfile"> | string | null
+    totalFollowers?: IntFilter<"CreatorProfile"> | number
+    avgEngagementRate?: FloatFilter<"CreatorProfile"> | number
+    lastStatsUpdate?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    contracts?: ContractListRelationFilter
+    proposals?: ProposalListRelationFilter
+  }
+
+  export type CreatorProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    niche?: SortOrderInput | SortOrder
+    primaryPlatform?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+    lastStatsUpdate?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    contracts?: ContractOrderByRelationAggregateInput
+    proposals?: ProposalOrderByRelationAggregateInput
+  }
+
+  export type CreatorProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: CreatorProfileWhereInput | CreatorProfileWhereInput[]
+    OR?: CreatorProfileWhereInput[]
+    NOT?: CreatorProfileWhereInput | CreatorProfileWhereInput[]
+    bio?: StringNullableFilter<"CreatorProfile"> | string | null
+    niche?: StringNullableFilter<"CreatorProfile"> | string | null
+    primaryPlatform?: StringNullableFilter<"CreatorProfile"> | string | null
+    location?: StringNullableFilter<"CreatorProfile"> | string | null
+    totalFollowers?: IntFilter<"CreatorProfile"> | number
+    avgEngagementRate?: FloatFilter<"CreatorProfile"> | number
+    lastStatsUpdate?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    contracts?: ContractListRelationFilter
+    proposals?: ProposalListRelationFilter
+  }, "id" | "userId">
+
+  export type CreatorProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    niche?: SortOrderInput | SortOrder
+    primaryPlatform?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+    lastStatsUpdate?: SortOrderInput | SortOrder
+    _count?: CreatorProfileCountOrderByAggregateInput
+    _avg?: CreatorProfileAvgOrderByAggregateInput
+    _max?: CreatorProfileMaxOrderByAggregateInput
+    _min?: CreatorProfileMinOrderByAggregateInput
+    _sum?: CreatorProfileSumOrderByAggregateInput
+  }
+
+  export type CreatorProfileScalarWhereWithAggregatesInput = {
+    AND?: CreatorProfileScalarWhereWithAggregatesInput | CreatorProfileScalarWhereWithAggregatesInput[]
+    OR?: CreatorProfileScalarWhereWithAggregatesInput[]
+    NOT?: CreatorProfileScalarWhereWithAggregatesInput | CreatorProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CreatorProfile"> | string
+    userId?: StringWithAggregatesFilter<"CreatorProfile"> | string
+    bio?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    niche?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    primaryPlatform?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    location?: StringNullableWithAggregatesFilter<"CreatorProfile"> | string | null
+    totalFollowers?: IntWithAggregatesFilter<"CreatorProfile"> | number
+    avgEngagementRate?: FloatWithAggregatesFilter<"CreatorProfile"> | number
+    lastStatsUpdate?: DateTimeNullableWithAggregatesFilter<"CreatorProfile"> | Date | string | null
   }
 
   export type AccountWhereInput = {
@@ -11262,6 +21700,83 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"PlatformToken"> | Date | string
   }
 
+  export type PlatformStatsWhereInput = {
+    AND?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
+    OR?: PlatformStatsWhereInput[]
+    NOT?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
+    id?: StringFilter<"PlatformStats"> | string
+    userId?: StringFilter<"PlatformStats"> | string
+    platform?: StringFilter<"PlatformStats"> | string
+    followerCount?: IntNullableFilter<"PlatformStats"> | number | null
+    followingCount?: IntNullableFilter<"PlatformStats"> | number | null
+    postCount?: IntNullableFilter<"PlatformStats"> | number | null
+    engagementRate?: FloatNullableFilter<"PlatformStats"> | number | null
+    fetchedAt?: DateTimeFilter<"PlatformStats"> | Date | string
+    raw?: JsonNullableFilter<"PlatformStats">
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PlatformStatsOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    platform?: SortOrder
+    followerCount?: SortOrderInput | SortOrder
+    followingCount?: SortOrderInput | SortOrder
+    postCount?: SortOrderInput | SortOrder
+    engagementRate?: SortOrderInput | SortOrder
+    fetchedAt?: SortOrder
+    raw?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PlatformStatsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
+    OR?: PlatformStatsWhereInput[]
+    NOT?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
+    userId?: StringFilter<"PlatformStats"> | string
+    platform?: StringFilter<"PlatformStats"> | string
+    followerCount?: IntNullableFilter<"PlatformStats"> | number | null
+    followingCount?: IntNullableFilter<"PlatformStats"> | number | null
+    postCount?: IntNullableFilter<"PlatformStats"> | number | null
+    engagementRate?: FloatNullableFilter<"PlatformStats"> | number | null
+    fetchedAt?: DateTimeFilter<"PlatformStats"> | Date | string
+    raw?: JsonNullableFilter<"PlatformStats">
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PlatformStatsOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    platform?: SortOrder
+    followerCount?: SortOrderInput | SortOrder
+    followingCount?: SortOrderInput | SortOrder
+    postCount?: SortOrderInput | SortOrder
+    engagementRate?: SortOrderInput | SortOrder
+    fetchedAt?: SortOrder
+    raw?: SortOrderInput | SortOrder
+    _count?: PlatformStatsCountOrderByAggregateInput
+    _avg?: PlatformStatsAvgOrderByAggregateInput
+    _max?: PlatformStatsMaxOrderByAggregateInput
+    _min?: PlatformStatsMinOrderByAggregateInput
+    _sum?: PlatformStatsSumOrderByAggregateInput
+  }
+
+  export type PlatformStatsScalarWhereWithAggregatesInput = {
+    AND?: PlatformStatsScalarWhereWithAggregatesInput | PlatformStatsScalarWhereWithAggregatesInput[]
+    OR?: PlatformStatsScalarWhereWithAggregatesInput[]
+    NOT?: PlatformStatsScalarWhereWithAggregatesInput | PlatformStatsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PlatformStats"> | string
+    userId?: StringWithAggregatesFilter<"PlatformStats"> | string
+    platform?: StringWithAggregatesFilter<"PlatformStats"> | string
+    followerCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
+    followingCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
+    postCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
+    engagementRate?: FloatNullableWithAggregatesFilter<"PlatformStats"> | number | null
+    fetchedAt?: DateTimeWithAggregatesFilter<"PlatformStats"> | Date | string
+    raw?: JsonNullableWithAggregatesFilter<"PlatformStats">
+  }
+
   export type WaitlistWhereInput = {
     AND?: WaitlistWhereInput | WaitlistWhereInput[]
     OR?: WaitlistWhereInput[]
@@ -11307,80 +21822,6 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Waitlist"> | string
     role?: StringWithAggregatesFilter<"Waitlist"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Waitlist"> | Date | string
-  }
-
-  export type PlatformStatsWhereInput = {
-    AND?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
-    OR?: PlatformStatsWhereInput[]
-    NOT?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
-    id?: StringFilter<"PlatformStats"> | string
-    userId?: StringFilter<"PlatformStats"> | string
-    platform?: StringFilter<"PlatformStats"> | string
-    followerCount?: IntNullableFilter<"PlatformStats"> | number | null
-    followingCount?: IntNullableFilter<"PlatformStats"> | number | null
-    postCount?: IntNullableFilter<"PlatformStats"> | number | null
-    engagementRate?: FloatNullableFilter<"PlatformStats"> | number | null
-    fetchedAt?: DateTimeFilter<"PlatformStats"> | Date | string
-    raw?: JsonNullableFilter<"PlatformStats">
-  }
-
-  export type PlatformStatsOrderByWithRelationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    platform?: SortOrder
-    followerCount?: SortOrderInput | SortOrder
-    followingCount?: SortOrderInput | SortOrder
-    postCount?: SortOrderInput | SortOrder
-    engagementRate?: SortOrderInput | SortOrder
-    fetchedAt?: SortOrder
-    raw?: SortOrderInput | SortOrder
-  }
-
-  export type PlatformStatsWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
-    OR?: PlatformStatsWhereInput[]
-    NOT?: PlatformStatsWhereInput | PlatformStatsWhereInput[]
-    userId?: StringFilter<"PlatformStats"> | string
-    platform?: StringFilter<"PlatformStats"> | string
-    followerCount?: IntNullableFilter<"PlatformStats"> | number | null
-    followingCount?: IntNullableFilter<"PlatformStats"> | number | null
-    postCount?: IntNullableFilter<"PlatformStats"> | number | null
-    engagementRate?: FloatNullableFilter<"PlatformStats"> | number | null
-    fetchedAt?: DateTimeFilter<"PlatformStats"> | Date | string
-    raw?: JsonNullableFilter<"PlatformStats">
-  }, "id">
-
-  export type PlatformStatsOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    platform?: SortOrder
-    followerCount?: SortOrderInput | SortOrder
-    followingCount?: SortOrderInput | SortOrder
-    postCount?: SortOrderInput | SortOrder
-    engagementRate?: SortOrderInput | SortOrder
-    fetchedAt?: SortOrder
-    raw?: SortOrderInput | SortOrder
-    _count?: PlatformStatsCountOrderByAggregateInput
-    _avg?: PlatformStatsAvgOrderByAggregateInput
-    _max?: PlatformStatsMaxOrderByAggregateInput
-    _min?: PlatformStatsMinOrderByAggregateInput
-    _sum?: PlatformStatsSumOrderByAggregateInput
-  }
-
-  export type PlatformStatsScalarWhereWithAggregatesInput = {
-    AND?: PlatformStatsScalarWhereWithAggregatesInput | PlatformStatsScalarWhereWithAggregatesInput[]
-    OR?: PlatformStatsScalarWhereWithAggregatesInput[]
-    NOT?: PlatformStatsScalarWhereWithAggregatesInput | PlatformStatsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PlatformStats"> | string
-    userId?: StringWithAggregatesFilter<"PlatformStats"> | string
-    platform?: StringWithAggregatesFilter<"PlatformStats"> | string
-    followerCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
-    followingCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
-    postCount?: IntNullableWithAggregatesFilter<"PlatformStats"> | number | null
-    engagementRate?: FloatNullableWithAggregatesFilter<"PlatformStats"> | number | null
-    fetchedAt?: DateTimeWithAggregatesFilter<"PlatformStats"> | Date | string
-    raw?: JsonNullableWithAggregatesFilter<"PlatformStats">
   }
 
   export type MessageWhereInput = {
@@ -11441,31 +21882,447 @@ export namespace Prisma {
     receiverId?: StringWithAggregatesFilter<"Message"> | string
   }
 
+  export type CampaignWhereInput = {
+    AND?: CampaignWhereInput | CampaignWhereInput[]
+    OR?: CampaignWhereInput[]
+    NOT?: CampaignWhereInput | CampaignWhereInput[]
+    id?: StringFilter<"Campaign"> | string
+    brandProfileId?: StringFilter<"Campaign"> | string
+    title?: StringFilter<"Campaign"> | string
+    description?: StringFilter<"Campaign"> | string
+    budget?: FloatFilter<"Campaign"> | number
+    status?: StringFilter<"Campaign"> | string
+    createdAt?: DateTimeFilter<"Campaign"> | Date | string
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+    proposals?: ProposalListRelationFilter
+    contracts?: ContractListRelationFilter
+  }
+
+  export type CampaignOrderByWithRelationInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    budget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    brand?: BrandProfileOrderByWithRelationInput
+    proposals?: ProposalOrderByRelationAggregateInput
+    contracts?: ContractOrderByRelationAggregateInput
+  }
+
+  export type CampaignWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CampaignWhereInput | CampaignWhereInput[]
+    OR?: CampaignWhereInput[]
+    NOT?: CampaignWhereInput | CampaignWhereInput[]
+    brandProfileId?: StringFilter<"Campaign"> | string
+    title?: StringFilter<"Campaign"> | string
+    description?: StringFilter<"Campaign"> | string
+    budget?: FloatFilter<"Campaign"> | number
+    status?: StringFilter<"Campaign"> | string
+    createdAt?: DateTimeFilter<"Campaign"> | Date | string
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+    proposals?: ProposalListRelationFilter
+    contracts?: ContractListRelationFilter
+  }, "id">
+
+  export type CampaignOrderByWithAggregationInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    budget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: CampaignCountOrderByAggregateInput
+    _avg?: CampaignAvgOrderByAggregateInput
+    _max?: CampaignMaxOrderByAggregateInput
+    _min?: CampaignMinOrderByAggregateInput
+    _sum?: CampaignSumOrderByAggregateInput
+  }
+
+  export type CampaignScalarWhereWithAggregatesInput = {
+    AND?: CampaignScalarWhereWithAggregatesInput | CampaignScalarWhereWithAggregatesInput[]
+    OR?: CampaignScalarWhereWithAggregatesInput[]
+    NOT?: CampaignScalarWhereWithAggregatesInput | CampaignScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Campaign"> | string
+    brandProfileId?: StringWithAggregatesFilter<"Campaign"> | string
+    title?: StringWithAggregatesFilter<"Campaign"> | string
+    description?: StringWithAggregatesFilter<"Campaign"> | string
+    budget?: FloatWithAggregatesFilter<"Campaign"> | number
+    status?: StringWithAggregatesFilter<"Campaign"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
+  }
+
+  export type ProposalWhereInput = {
+    AND?: ProposalWhereInput | ProposalWhereInput[]
+    OR?: ProposalWhereInput[]
+    NOT?: ProposalWhereInput | ProposalWhereInput[]
+    id?: StringFilter<"Proposal"> | string
+    campaignId?: StringFilter<"Proposal"> | string
+    creatorProfileId?: StringFilter<"Proposal"> | string
+    coverLetter?: StringNullableFilter<"Proposal"> | string | null
+    rate?: FloatFilter<"Proposal"> | number
+    status?: StringFilter<"Proposal"> | string
+    createdAt?: DateTimeFilter<"Proposal"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+  }
+
+  export type ProposalOrderByWithRelationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    coverLetter?: SortOrderInput | SortOrder
+    rate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    campaign?: CampaignOrderByWithRelationInput
+    creator?: CreatorProfileOrderByWithRelationInput
+  }
+
+  export type ProposalWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProposalWhereInput | ProposalWhereInput[]
+    OR?: ProposalWhereInput[]
+    NOT?: ProposalWhereInput | ProposalWhereInput[]
+    campaignId?: StringFilter<"Proposal"> | string
+    creatorProfileId?: StringFilter<"Proposal"> | string
+    coverLetter?: StringNullableFilter<"Proposal"> | string | null
+    rate?: FloatFilter<"Proposal"> | number
+    status?: StringFilter<"Proposal"> | string
+    createdAt?: DateTimeFilter<"Proposal"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+  }, "id">
+
+  export type ProposalOrderByWithAggregationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    coverLetter?: SortOrderInput | SortOrder
+    rate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProposalCountOrderByAggregateInput
+    _avg?: ProposalAvgOrderByAggregateInput
+    _max?: ProposalMaxOrderByAggregateInput
+    _min?: ProposalMinOrderByAggregateInput
+    _sum?: ProposalSumOrderByAggregateInput
+  }
+
+  export type ProposalScalarWhereWithAggregatesInput = {
+    AND?: ProposalScalarWhereWithAggregatesInput | ProposalScalarWhereWithAggregatesInput[]
+    OR?: ProposalScalarWhereWithAggregatesInput[]
+    NOT?: ProposalScalarWhereWithAggregatesInput | ProposalScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Proposal"> | string
+    campaignId?: StringWithAggregatesFilter<"Proposal"> | string
+    creatorProfileId?: StringWithAggregatesFilter<"Proposal"> | string
+    coverLetter?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
+    rate?: FloatWithAggregatesFilter<"Proposal"> | number
+    status?: StringWithAggregatesFilter<"Proposal"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
+  }
+
+  export type ContractWhereInput = {
+    AND?: ContractWhereInput | ContractWhereInput[]
+    OR?: ContractWhereInput[]
+    NOT?: ContractWhereInput | ContractWhereInput[]
+    id?: StringFilter<"Contract"> | string
+    campaignId?: StringFilter<"Contract"> | string
+    brandProfileId?: StringFilter<"Contract"> | string
+    creatorProfileId?: StringFilter<"Contract"> | string
+    status?: EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+    totalBudget?: FloatFilter<"Contract"> | number
+    createdAt?: DateTimeFilter<"Contract"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+    milestones?: MilestoneListRelationFilter
+    tasks?: TaskListRelationFilter
+  }
+
+  export type ContractOrderByWithRelationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorProfileId?: SortOrder
+    status?: SortOrder
+    totalBudget?: SortOrder
+    createdAt?: SortOrder
+    campaign?: CampaignOrderByWithRelationInput
+    creator?: CreatorProfileOrderByWithRelationInput
+    milestones?: MilestoneOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
+  }
+
+  export type ContractWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ContractWhereInput | ContractWhereInput[]
+    OR?: ContractWhereInput[]
+    NOT?: ContractWhereInput | ContractWhereInput[]
+    campaignId?: StringFilter<"Contract"> | string
+    brandProfileId?: StringFilter<"Contract"> | string
+    creatorProfileId?: StringFilter<"Contract"> | string
+    status?: EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+    totalBudget?: FloatFilter<"Contract"> | number
+    createdAt?: DateTimeFilter<"Contract"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+    milestones?: MilestoneListRelationFilter
+    tasks?: TaskListRelationFilter
+  }, "id">
+
+  export type ContractOrderByWithAggregationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorProfileId?: SortOrder
+    status?: SortOrder
+    totalBudget?: SortOrder
+    createdAt?: SortOrder
+    _count?: ContractCountOrderByAggregateInput
+    _avg?: ContractAvgOrderByAggregateInput
+    _max?: ContractMaxOrderByAggregateInput
+    _min?: ContractMinOrderByAggregateInput
+    _sum?: ContractSumOrderByAggregateInput
+  }
+
+  export type ContractScalarWhereWithAggregatesInput = {
+    AND?: ContractScalarWhereWithAggregatesInput | ContractScalarWhereWithAggregatesInput[]
+    OR?: ContractScalarWhereWithAggregatesInput[]
+    NOT?: ContractScalarWhereWithAggregatesInput | ContractScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Contract"> | string
+    campaignId?: StringWithAggregatesFilter<"Contract"> | string
+    brandProfileId?: StringWithAggregatesFilter<"Contract"> | string
+    creatorProfileId?: StringWithAggregatesFilter<"Contract"> | string
+    status?: EnumContractStatusWithAggregatesFilter<"Contract"> | $Enums.ContractStatus
+    totalBudget?: FloatWithAggregatesFilter<"Contract"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Contract"> | Date | string
+  }
+
+  export type MilestoneWhereInput = {
+    AND?: MilestoneWhereInput | MilestoneWhereInput[]
+    OR?: MilestoneWhereInput[]
+    NOT?: MilestoneWhereInput | MilestoneWhereInput[]
+    id?: StringFilter<"Milestone"> | string
+    contractId?: StringFilter<"Milestone"> | string
+    title?: StringFilter<"Milestone"> | string
+    percentage?: FloatFilter<"Milestone"> | number
+    amount?: FloatFilter<"Milestone"> | number
+    status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
+    contract?: XOR<ContractScalarRelationFilter, ContractWhereInput>
+  }
+
+  export type MilestoneOrderByWithRelationInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    percentage?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    contract?: ContractOrderByWithRelationInput
+  }
+
+  export type MilestoneWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MilestoneWhereInput | MilestoneWhereInput[]
+    OR?: MilestoneWhereInput[]
+    NOT?: MilestoneWhereInput | MilestoneWhereInput[]
+    contractId?: StringFilter<"Milestone"> | string
+    title?: StringFilter<"Milestone"> | string
+    percentage?: FloatFilter<"Milestone"> | number
+    amount?: FloatFilter<"Milestone"> | number
+    status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
+    contract?: XOR<ContractScalarRelationFilter, ContractWhereInput>
+  }, "id">
+
+  export type MilestoneOrderByWithAggregationInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    percentage?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    _count?: MilestoneCountOrderByAggregateInput
+    _avg?: MilestoneAvgOrderByAggregateInput
+    _max?: MilestoneMaxOrderByAggregateInput
+    _min?: MilestoneMinOrderByAggregateInput
+    _sum?: MilestoneSumOrderByAggregateInput
+  }
+
+  export type MilestoneScalarWhereWithAggregatesInput = {
+    AND?: MilestoneScalarWhereWithAggregatesInput | MilestoneScalarWhereWithAggregatesInput[]
+    OR?: MilestoneScalarWhereWithAggregatesInput[]
+    NOT?: MilestoneScalarWhereWithAggregatesInput | MilestoneScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Milestone"> | string
+    contractId?: StringWithAggregatesFilter<"Milestone"> | string
+    title?: StringWithAggregatesFilter<"Milestone"> | string
+    percentage?: FloatWithAggregatesFilter<"Milestone"> | number
+    amount?: FloatWithAggregatesFilter<"Milestone"> | number
+    status?: EnumMilestoneStatusWithAggregatesFilter<"Milestone"> | $Enums.MilestoneStatus
+    dueDate?: DateTimeNullableWithAggregatesFilter<"Milestone"> | Date | string | null
+  }
+
+  export type CRMLeadWhereInput = {
+    AND?: CRMLeadWhereInput | CRMLeadWhereInput[]
+    OR?: CRMLeadWhereInput[]
+    NOT?: CRMLeadWhereInput | CRMLeadWhereInput[]
+    id?: StringFilter<"CRMLead"> | string
+    brandProfileId?: StringFilter<"CRMLead"> | string
+    handle?: StringFilter<"CRMLead"> | string
+    platform?: StringFilter<"CRMLead"> | string
+    avatarUrl?: StringNullableFilter<"CRMLead"> | string | null
+    followers?: IntFilter<"CRMLead"> | number
+    status?: EnumLeadStatusFilter<"CRMLead"> | $Enums.LeadStatus
+    notes?: StringNullableFilter<"CRMLead"> | string | null
+    createdAt?: DateTimeFilter<"CRMLead"> | Date | string
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+  }
+
+  export type CRMLeadOrderByWithRelationInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    handle?: SortOrder
+    platform?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    followers?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    brand?: BrandProfileOrderByWithRelationInput
+  }
+
+  export type CRMLeadWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CRMLeadWhereInput | CRMLeadWhereInput[]
+    OR?: CRMLeadWhereInput[]
+    NOT?: CRMLeadWhereInput | CRMLeadWhereInput[]
+    brandProfileId?: StringFilter<"CRMLead"> | string
+    handle?: StringFilter<"CRMLead"> | string
+    platform?: StringFilter<"CRMLead"> | string
+    avatarUrl?: StringNullableFilter<"CRMLead"> | string | null
+    followers?: IntFilter<"CRMLead"> | number
+    status?: EnumLeadStatusFilter<"CRMLead"> | $Enums.LeadStatus
+    notes?: StringNullableFilter<"CRMLead"> | string | null
+    createdAt?: DateTimeFilter<"CRMLead"> | Date | string
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+  }, "id">
+
+  export type CRMLeadOrderByWithAggregationInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    handle?: SortOrder
+    platform?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    followers?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CRMLeadCountOrderByAggregateInput
+    _avg?: CRMLeadAvgOrderByAggregateInput
+    _max?: CRMLeadMaxOrderByAggregateInput
+    _min?: CRMLeadMinOrderByAggregateInput
+    _sum?: CRMLeadSumOrderByAggregateInput
+  }
+
+  export type CRMLeadScalarWhereWithAggregatesInput = {
+    AND?: CRMLeadScalarWhereWithAggregatesInput | CRMLeadScalarWhereWithAggregatesInput[]
+    OR?: CRMLeadScalarWhereWithAggregatesInput[]
+    NOT?: CRMLeadScalarWhereWithAggregatesInput | CRMLeadScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CRMLead"> | string
+    brandProfileId?: StringWithAggregatesFilter<"CRMLead"> | string
+    handle?: StringWithAggregatesFilter<"CRMLead"> | string
+    platform?: StringWithAggregatesFilter<"CRMLead"> | string
+    avatarUrl?: StringNullableWithAggregatesFilter<"CRMLead"> | string | null
+    followers?: IntWithAggregatesFilter<"CRMLead"> | number
+    status?: EnumLeadStatusWithAggregatesFilter<"CRMLead"> | $Enums.LeadStatus
+    notes?: StringNullableWithAggregatesFilter<"CRMLead"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CRMLead"> | Date | string
+  }
+
+  export type TaskWhereInput = {
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    id?: StringFilter<"Task"> | string
+    contractId?: StringNullableFilter<"Task"> | string | null
+    title?: StringFilter<"Task"> | string
+    dueDate?: DateTimeFilter<"Task"> | Date | string
+    status?: StringFilter<"Task"> | string
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+    contract?: XOR<ContractNullableScalarRelationFilter, ContractWhereInput> | null
+  }
+
+  export type TaskOrderByWithRelationInput = {
+    id?: SortOrder
+    contractId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    contract?: ContractOrderByWithRelationInput
+  }
+
+  export type TaskWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    contractId?: StringNullableFilter<"Task"> | string | null
+    title?: StringFilter<"Task"> | string
+    dueDate?: DateTimeFilter<"Task"> | Date | string
+    status?: StringFilter<"Task"> | string
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+    contract?: XOR<ContractNullableScalarRelationFilter, ContractWhereInput> | null
+  }, "id">
+
+  export type TaskOrderByWithAggregationInput = {
+    id?: SortOrder
+    contractId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: TaskCountOrderByAggregateInput
+    _max?: TaskMaxOrderByAggregateInput
+    _min?: TaskMinOrderByAggregateInput
+  }
+
+  export type TaskScalarWhereWithAggregatesInput = {
+    AND?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    OR?: TaskScalarWhereWithAggregatesInput[]
+    NOT?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Task"> | string
+    contractId?: StringNullableWithAggregatesFilter<"Task"> | string | null
+    title?: StringWithAggregatesFilter<"Task"> | string
+    dueDate?: DateTimeWithAggregatesFilter<"Task"> | Date | string
+    status?: StringWithAggregatesFilter<"Task"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -11474,25 +22331,18 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -11501,25 +22351,18 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -11528,25 +22371,18 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -11555,20 +22391,10 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
   }
 
   export type UserUpdateManyMutationInput = {
@@ -11577,20 +22403,10 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -11599,20 +22415,185 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type BrandProfileCreateInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    user: UserCreateNestedOneWithoutBrandProfileInput
+    campaigns?: CampaignCreateNestedManyWithoutBrandInput
+    crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
+    crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
+    campaigns?: CampaignUpdateManyWithoutBrandNestedInput
+    crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
+    crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileCreateManyInput = {
+    id?: string
+    userId: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+  }
+
+  export type BrandProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type BrandProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CreatorProfileCreateInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    user: UserCreateNestedOneWithoutCreatorProfileInput
+    contracts?: ContractCreateNestedManyWithoutCreatorInput
+    proposals?: ProposalCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     niche?: NullableStringFieldUpdateOperationsInput | string | null
     primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
     totalFollowers?: IntFieldUpdateOperationsInput | number
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
+    contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    proposals?: ProposalUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    proposals?: ProposalUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CreatorProfileCreateManyInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+  }
+
+  export type CreatorProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CreatorProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AccountCreateInput = {
@@ -11962,6 +22943,89 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlatformStatsCreateInput = {
+    id?: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    user: UserCreateNestedOneWithoutPlatformStatsInput
+  }
+
+  export type PlatformStatsUncheckedCreateInput = {
+    id?: string
+    userId: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    user?: UserUpdateOneRequiredWithoutPlatformStatsNestedInput
+  }
+
+  export type PlatformStatsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsCreateManyInput = {
+    id?: string
+    userId: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type WaitlistCreateInput = {
     id?: string
     email: string
@@ -12009,90 +23073,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PlatformStatsCreateInput = {
-    id?: string
-    userId: string
-    platform: string
-    followerCount?: number | null
-    followingCount?: number | null
-    postCount?: number | null
-    engagementRate?: number | null
-    fetchedAt?: Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsUncheckedCreateInput = {
-    id?: string
-    userId: string
-    platform: string
-    followerCount?: number | null
-    followingCount?: number | null
-    postCount?: number | null
-    engagementRate?: number | null
-    fetchedAt?: Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    platform?: StringFieldUpdateOperationsInput | string
-    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
-    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
-    postCount?: NullableIntFieldUpdateOperationsInput | number | null
-    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    platform?: StringFieldUpdateOperationsInput | string
-    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
-    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
-    postCount?: NullableIntFieldUpdateOperationsInput | number | null
-    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsCreateManyInput = {
-    id?: string
-    userId: string
-    platform: string
-    followerCount?: number | null
-    followingCount?: number | null
-    postCount?: number | null
-    engagementRate?: number | null
-    fetchedAt?: Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    platform?: StringFieldUpdateOperationsInput | string
-    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
-    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
-    postCount?: NullableIntFieldUpdateOperationsInput | number | null
-    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type PlatformStatsUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    platform?: StringFieldUpdateOperationsInput | string
-    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
-    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
-    postCount?: NullableIntFieldUpdateOperationsInput | number | null
-    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
-    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type MessageCreateInput = {
@@ -12149,6 +23129,441 @@ export namespace Prisma {
     receiverId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type CampaignCreateInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    proposals?: ProposalCreateNestedManyWithoutCampaignInput
+    contracts?: ContractCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCampaignInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    proposals?: ProposalUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUncheckedUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignCreateManyInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type CampaignUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalCreateInput = {
+    id?: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutProposalsInput
+    creator: CreatorProfileCreateNestedOneWithoutProposalsInput
+  }
+
+  export type ProposalUncheckedCreateInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ProposalUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutProposalsNestedInput
+    creator?: CreatorProfileUpdateOneRequiredWithoutProposalsNestedInput
+  }
+
+  export type ProposalUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalCreateManyInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ProposalUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContractCreateInput = {
+    id?: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutContractsInput
+    creator: CreatorProfileCreateNestedOneWithoutContractsInput
+    milestones?: MilestoneCreateNestedManyWithoutContractInput
+    tasks?: TaskCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUncheckedCreateInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    milestones?: MilestoneUncheckedCreateNestedManyWithoutContractInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutContractsNestedInput
+    creator?: CreatorProfileUpdateOneRequiredWithoutContractsNestedInput
+    milestones?: MilestoneUpdateManyWithoutContractNestedInput
+    tasks?: TaskUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestones?: MilestoneUncheckedUpdateManyWithoutContractNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractCreateManyInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+  }
+
+  export type ContractUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContractUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MilestoneCreateInput = {
+    id?: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+    contract: ContractCreateNestedOneWithoutMilestonesInput
+  }
+
+  export type MilestoneUncheckedCreateInput = {
+    id?: string
+    contractId: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+  }
+
+  export type MilestoneUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contract?: ContractUpdateOneRequiredWithoutMilestonesNestedInput
+  }
+
+  export type MilestoneUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MilestoneCreateManyInput = {
+    id?: string
+    contractId: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+  }
+
+  export type MilestoneUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MilestoneUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CRMLeadCreateInput = {
+    id?: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+    brand: BrandProfileCreateNestedOneWithoutCrmLeadsInput
+  }
+
+  export type CRMLeadUncheckedCreateInput = {
+    id?: string
+    brandProfileId: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CRMLeadUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: BrandProfileUpdateOneRequiredWithoutCrmLeadsNestedInput
+  }
+
+  export type CRMLeadUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CRMLeadCreateManyInput = {
+    id?: string
+    brandProfileId: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CRMLeadUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CRMLeadUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskCreateInput = {
+    id?: string
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+    contract?: ContractCreateNestedOneWithoutTasksInput
+  }
+
+  export type TaskUncheckedCreateInput = {
+    id?: string
+    contractId?: string | null
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type TaskUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contract?: ContractUpdateOneWithoutTasksNestedInput
+  }
+
+  export type TaskUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskCreateManyInput = {
+    id?: string
+    contractId?: string | null
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type TaskUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12184,6 +23599,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12193,28 +23615,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type AccountListRelationFilter = {
@@ -12235,10 +23635,26 @@ export namespace Prisma {
     none?: PlatformTokenWhereInput
   }
 
+  export type PlatformStatsListRelationFilter = {
+    every?: PlatformStatsWhereInput
+    some?: PlatformStatsWhereInput
+    none?: PlatformStatsWhereInput
+  }
+
   export type MessageListRelationFilter = {
     every?: MessageWhereInput
     some?: MessageWhereInput
     none?: MessageWhereInput
+  }
+
+  export type BrandProfileNullableScalarRelationFilter = {
+    is?: BrandProfileWhereInput | null
+    isNot?: BrandProfileWhereInput | null
+  }
+
+  export type CreatorProfileNullableScalarRelationFilter = {
+    is?: CreatorProfileWhereInput | null
+    isNot?: CreatorProfileWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -12258,6 +23674,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PlatformStatsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MessageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -12272,21 +23692,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hasCompletedOnboarding?: SortOrder
-    bio?: SortOrder
-    niche?: SortOrder
-    primaryPlatform?: SortOrder
-    location?: SortOrder
-    companyName?: SortOrder
-    industry?: SortOrder
-    website?: SortOrder
-    brandAccountType?: SortOrder
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
-  }
-
-  export type UserAvgOrderByAggregateInput = {
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -12299,16 +23704,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hasCompletedOnboarding?: SortOrder
-    bio?: SortOrder
-    niche?: SortOrder
-    primaryPlatform?: SortOrder
-    location?: SortOrder
-    companyName?: SortOrder
-    industry?: SortOrder
-    website?: SortOrder
-    brandAccountType?: SortOrder
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -12321,21 +23716,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hasCompletedOnboarding?: SortOrder
-    bio?: SortOrder
-    niche?: SortOrder
-    primaryPlatform?: SortOrder
-    location?: SortOrder
-    companyName?: SortOrder
-    industry?: SortOrder
-    website?: SortOrder
-    brandAccountType?: SortOrder
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    totalFollowers?: SortOrder
-    avgEngagementRate?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12382,6 +23762,16 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12394,6 +23784,163 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type CampaignListRelationFilter = {
+    every?: CampaignWhereInput
+    some?: CampaignWhereInput
+    none?: CampaignWhereInput
+  }
+
+  export type CRMLeadListRelationFilter = {
+    every?: CRMLeadWhereInput
+    some?: CRMLeadWhereInput
+    none?: CRMLeadWhereInput
+  }
+
+  export type CampaignOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CRMLeadOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BrandProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    companyName?: SortOrder
+    industry?: SortOrder
+    website?: SortOrder
+    brandAccountType?: SortOrder
+    bio?: SortOrder
+    location?: SortOrder
+  }
+
+  export type BrandProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    companyName?: SortOrder
+    industry?: SortOrder
+    website?: SortOrder
+    brandAccountType?: SortOrder
+    bio?: SortOrder
+    location?: SortOrder
+  }
+
+  export type BrandProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    companyName?: SortOrder
+    industry?: SortOrder
+    website?: SortOrder
+    brandAccountType?: SortOrder
+    bio?: SortOrder
+    location?: SortOrder
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type ContractListRelationFilter = {
+    every?: ContractWhereInput
+    some?: ContractWhereInput
+    none?: ContractWhereInput
+  }
+
+  export type ProposalListRelationFilter = {
+    every?: ProposalWhereInput
+    some?: ProposalWhereInput
+    none?: ProposalWhereInput
+  }
+
+  export type ContractOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProposalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CreatorProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    niche?: SortOrder
+    primaryPlatform?: SortOrder
+    location?: SortOrder
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+    lastStatsUpdate?: SortOrder
+  }
+
+  export type CreatorProfileAvgOrderByAggregateInput = {
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+  }
+
+  export type CreatorProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    niche?: SortOrder
+    primaryPlatform?: SortOrder
+    location?: SortOrder
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+    lastStatsUpdate?: SortOrder
+  }
+
+  export type CreatorProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    bio?: SortOrder
+    niche?: SortOrder
+    primaryPlatform?: SortOrder
+    location?: SortOrder
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
+    lastStatsUpdate?: SortOrder
+  }
+
+  export type CreatorProfileSumOrderByAggregateInput = {
+    totalFollowers?: SortOrder
+    avgEngagementRate?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12428,7 +23975,7 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -12436,12 +23983,10 @@ export namespace Prisma {
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type AccountProviderIdAccountIdCompoundUniqueInput = {
@@ -12495,20 +24040,6 @@ export namespace Prisma {
     password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -12616,27 +24147,6 @@ export namespace Prisma {
     username?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type WaitlistCountOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type WaitlistMaxOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type WaitlistMinOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -12790,6 +24300,27 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type WaitlistCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WaitlistMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WaitlistMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type MessageCountOrderByAggregateInput = {
     id?: SortOrder
     text?: SortOrder
@@ -12814,6 +24345,327 @@ export namespace Prisma {
     receiverId?: SortOrder
   }
 
+  export type BrandProfileScalarRelationFilter = {
+    is?: BrandProfileWhereInput
+    isNot?: BrandProfileWhereInput
+  }
+
+  export type CampaignCountOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    budget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CampaignAvgOrderByAggregateInput = {
+    budget?: SortOrder
+  }
+
+  export type CampaignMaxOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    budget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CampaignMinOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    budget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CampaignSumOrderByAggregateInput = {
+    budget?: SortOrder
+  }
+
+  export type CampaignScalarRelationFilter = {
+    is?: CampaignWhereInput
+    isNot?: CampaignWhereInput
+  }
+
+  export type CreatorProfileScalarRelationFilter = {
+    is?: CreatorProfileWhereInput
+    isNot?: CreatorProfileWhereInput
+  }
+
+  export type ProposalCountOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    coverLetter?: SortOrder
+    rate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProposalAvgOrderByAggregateInput = {
+    rate?: SortOrder
+  }
+
+  export type ProposalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    coverLetter?: SortOrder
+    rate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProposalMinOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    coverLetter?: SortOrder
+    rate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProposalSumOrderByAggregateInput = {
+    rate?: SortOrder
+  }
+
+  export type EnumContractStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContractStatusFilter<$PrismaModel> | $Enums.ContractStatus
+  }
+
+  export type MilestoneListRelationFilter = {
+    every?: MilestoneWhereInput
+    some?: MilestoneWhereInput
+    none?: MilestoneWhereInput
+  }
+
+  export type TaskListRelationFilter = {
+    every?: TaskWhereInput
+    some?: TaskWhereInput
+    none?: TaskWhereInput
+  }
+
+  export type MilestoneOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TaskOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContractCountOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorProfileId?: SortOrder
+    status?: SortOrder
+    totalBudget?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContractAvgOrderByAggregateInput = {
+    totalBudget?: SortOrder
+  }
+
+  export type ContractMaxOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorProfileId?: SortOrder
+    status?: SortOrder
+    totalBudget?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContractMinOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorProfileId?: SortOrder
+    status?: SortOrder
+    totalBudget?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContractSumOrderByAggregateInput = {
+    totalBudget?: SortOrder
+  }
+
+  export type EnumContractStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContractStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContractStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContractStatusFilter<$PrismaModel>
+    _max?: NestedEnumContractStatusFilter<$PrismaModel>
+  }
+
+  export type EnumMilestoneStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MilestoneStatus | EnumMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMilestoneStatusFilter<$PrismaModel> | $Enums.MilestoneStatus
+  }
+
+  export type ContractScalarRelationFilter = {
+    is?: ContractWhereInput
+    isNot?: ContractWhereInput
+  }
+
+  export type MilestoneCountOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    percentage?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+  }
+
+  export type MilestoneAvgOrderByAggregateInput = {
+    percentage?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type MilestoneMaxOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    percentage?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+  }
+
+  export type MilestoneMinOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    percentage?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+  }
+
+  export type MilestoneSumOrderByAggregateInput = {
+    percentage?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type EnumMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MilestoneStatus | EnumMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMilestoneStatusFilter<$PrismaModel>
+    _max?: NestedEnumMilestoneStatusFilter<$PrismaModel>
+  }
+
+  export type EnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type CRMLeadCountOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    handle?: SortOrder
+    platform?: SortOrder
+    avatarUrl?: SortOrder
+    followers?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CRMLeadAvgOrderByAggregateInput = {
+    followers?: SortOrder
+  }
+
+  export type CRMLeadMaxOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    handle?: SortOrder
+    platform?: SortOrder
+    avatarUrl?: SortOrder
+    followers?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CRMLeadMinOrderByAggregateInput = {
+    id?: SortOrder
+    brandProfileId?: SortOrder
+    handle?: SortOrder
+    platform?: SortOrder
+    avatarUrl?: SortOrder
+    followers?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CRMLeadSumOrderByAggregateInput = {
+    followers?: SortOrder
+  }
+
+  export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
+  }
+
+  export type ContractNullableScalarRelationFilter = {
+    is?: ContractWhereInput | null
+    isNot?: ContractWhereInput | null
+  }
+
+  export type TaskCountOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TaskMaxOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TaskMinOrderByAggregateInput = {
+    id?: SortOrder
+    contractId?: SortOrder
+    title?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -12835,6 +24687,13 @@ export namespace Prisma {
     connect?: PlatformTokenWhereUniqueInput | PlatformTokenWhereUniqueInput[]
   }
 
+  export type PlatformStatsCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput> | PlatformStatsCreateWithoutUserInput[] | PlatformStatsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlatformStatsCreateOrConnectWithoutUserInput | PlatformStatsCreateOrConnectWithoutUserInput[]
+    createMany?: PlatformStatsCreateManyUserInputEnvelope
+    connect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+  }
+
   export type MessageCreateNestedManyWithoutSenderInput = {
     create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
@@ -12847,6 +24706,18 @@ export namespace Prisma {
     connectOrCreate?: MessageCreateOrConnectWithoutReceiverInput | MessageCreateOrConnectWithoutReceiverInput[]
     createMany?: MessageCreateManyReceiverInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type BrandProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutUserInput
+    connect?: BrandProfileWhereUniqueInput
+  }
+
+  export type CreatorProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
+    connect?: CreatorProfileWhereUniqueInput
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -12870,6 +24741,13 @@ export namespace Prisma {
     connect?: PlatformTokenWhereUniqueInput | PlatformTokenWhereUniqueInput[]
   }
 
+  export type PlatformStatsUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput> | PlatformStatsCreateWithoutUserInput[] | PlatformStatsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlatformStatsCreateOrConnectWithoutUserInput | PlatformStatsCreateOrConnectWithoutUserInput[]
+    createMany?: PlatformStatsCreateManyUserInputEnvelope
+    connect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+  }
+
   export type MessageUncheckedCreateNestedManyWithoutSenderInput = {
     create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
@@ -12884,6 +24762,18 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type BrandProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutUserInput
+    connect?: BrandProfileWhereUniqueInput
+  }
+
+  export type CreatorProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
+    connect?: CreatorProfileWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -12896,24 +24786,12 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -12958,6 +24836,20 @@ export namespace Prisma {
     deleteMany?: PlatformTokenScalarWhereInput | PlatformTokenScalarWhereInput[]
   }
 
+  export type PlatformStatsUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput> | PlatformStatsCreateWithoutUserInput[] | PlatformStatsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlatformStatsCreateOrConnectWithoutUserInput | PlatformStatsCreateOrConnectWithoutUserInput[]
+    upsert?: PlatformStatsUpsertWithWhereUniqueWithoutUserInput | PlatformStatsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlatformStatsCreateManyUserInputEnvelope
+    set?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    disconnect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    delete?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    connect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    update?: PlatformStatsUpdateWithWhereUniqueWithoutUserInput | PlatformStatsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlatformStatsUpdateManyWithWhereWithoutUserInput | PlatformStatsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlatformStatsScalarWhereInput | PlatformStatsScalarWhereInput[]
+  }
+
   export type MessageUpdateManyWithoutSenderNestedInput = {
     create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
@@ -12984,6 +24876,26 @@ export namespace Prisma {
     update?: MessageUpdateWithWhereUniqueWithoutReceiverInput | MessageUpdateWithWhereUniqueWithoutReceiverInput[]
     updateMany?: MessageUpdateManyWithWhereWithoutReceiverInput | MessageUpdateManyWithWhereWithoutReceiverInput[]
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type BrandProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutUserInput
+    upsert?: BrandProfileUpsertWithoutUserInput
+    disconnect?: BrandProfileWhereInput | boolean
+    delete?: BrandProfileWhereInput | boolean
+    connect?: BrandProfileWhereUniqueInput
+    update?: XOR<XOR<BrandProfileUpdateToOneWithWhereWithoutUserInput, BrandProfileUpdateWithoutUserInput>, BrandProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CreatorProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
+    upsert?: CreatorProfileUpsertWithoutUserInput
+    disconnect?: CreatorProfileWhereInput | boolean
+    delete?: CreatorProfileWhereInput | boolean
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutUserInput, CreatorProfileUpdateWithoutUserInput>, CreatorProfileUncheckedUpdateWithoutUserInput>
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -13028,6 +24940,20 @@ export namespace Prisma {
     deleteMany?: PlatformTokenScalarWhereInput | PlatformTokenScalarWhereInput[]
   }
 
+  export type PlatformStatsUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput> | PlatformStatsCreateWithoutUserInput[] | PlatformStatsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlatformStatsCreateOrConnectWithoutUserInput | PlatformStatsCreateOrConnectWithoutUserInput[]
+    upsert?: PlatformStatsUpsertWithWhereUniqueWithoutUserInput | PlatformStatsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlatformStatsCreateManyUserInputEnvelope
+    set?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    disconnect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    delete?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    connect?: PlatformStatsWhereUniqueInput | PlatformStatsWhereUniqueInput[]
+    update?: PlatformStatsUpdateWithWhereUniqueWithoutUserInput | PlatformStatsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlatformStatsUpdateManyWithWhereWithoutUserInput | PlatformStatsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlatformStatsScalarWhereInput | PlatformStatsScalarWhereInput[]
+  }
+
   export type MessageUncheckedUpdateManyWithoutSenderNestedInput = {
     create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
@@ -13056,14 +24982,246 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutAccountsInput = {
-    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
+  export type BrandProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutUserInput
+    upsert?: BrandProfileUpsertWithoutUserInput
+    disconnect?: BrandProfileWhereInput | boolean
+    delete?: BrandProfileWhereInput | boolean
+    connect?: BrandProfileWhereUniqueInput
+    update?: XOR<XOR<BrandProfileUpdateToOneWithWhereWithoutUserInput, BrandProfileUpdateWithoutUserInput>, BrandProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CreatorProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutUserInput
+    upsert?: CreatorProfileUpsertWithoutUserInput
+    disconnect?: CreatorProfileWhereInput | boolean
+    delete?: CreatorProfileWhereInput | boolean
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutUserInput, CreatorProfileUpdateWithoutUserInput>, CreatorProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCreateNestedOneWithoutBrandProfileInput = {
+    create?: XOR<UserCreateWithoutBrandProfileInput, UserUncheckedCreateWithoutBrandProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBrandProfileInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type CampaignCreateNestedManyWithoutBrandInput = {
+    create?: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput> | CampaignCreateWithoutBrandInput[] | CampaignUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrandInput | CampaignCreateOrConnectWithoutBrandInput[]
+    createMany?: CampaignCreateManyBrandInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+  }
+
+  export type CRMLeadCreateNestedManyWithoutBrandInput = {
+    create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
+    createMany?: CRMLeadCreateManyBrandInputEnvelope
+    connect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+  }
+
+  export type CampaignUncheckedCreateNestedManyWithoutBrandInput = {
+    create?: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput> | CampaignCreateWithoutBrandInput[] | CampaignUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrandInput | CampaignCreateOrConnectWithoutBrandInput[]
+    createMany?: CampaignCreateManyBrandInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+  }
+
+  export type CRMLeadUncheckedCreateNestedManyWithoutBrandInput = {
+    create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
+    createMany?: CRMLeadCreateManyBrandInputEnvelope
+    connect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutBrandProfileNestedInput = {
+    create?: XOR<UserCreateWithoutBrandProfileInput, UserUncheckedCreateWithoutBrandProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBrandProfileInput
+    upsert?: UserUpsertWithoutBrandProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBrandProfileInput, UserUpdateWithoutBrandProfileInput>, UserUncheckedUpdateWithoutBrandProfileInput>
+  }
+
+  export type CampaignUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput> | CampaignCreateWithoutBrandInput[] | CampaignUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrandInput | CampaignCreateOrConnectWithoutBrandInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutBrandInput | CampaignUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: CampaignCreateManyBrandInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutBrandInput | CampaignUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutBrandInput | CampaignUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
+  export type CRMLeadUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
+    upsert?: CRMLeadUpsertWithWhereUniqueWithoutBrandInput | CRMLeadUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: CRMLeadCreateManyBrandInputEnvelope
+    set?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    disconnect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    delete?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    connect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    update?: CRMLeadUpdateWithWhereUniqueWithoutBrandInput | CRMLeadUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: CRMLeadUpdateManyWithWhereWithoutBrandInput | CRMLeadUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: CRMLeadScalarWhereInput | CRMLeadScalarWhereInput[]
+  }
+
+  export type CampaignUncheckedUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput> | CampaignCreateWithoutBrandInput[] | CampaignUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutBrandInput | CampaignCreateOrConnectWithoutBrandInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutBrandInput | CampaignUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: CampaignCreateManyBrandInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutBrandInput | CampaignUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutBrandInput | CampaignUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+  }
+
+  export type CRMLeadUncheckedUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
+    upsert?: CRMLeadUpsertWithWhereUniqueWithoutBrandInput | CRMLeadUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: CRMLeadCreateManyBrandInputEnvelope
+    set?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    disconnect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    delete?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    connect?: CRMLeadWhereUniqueInput | CRMLeadWhereUniqueInput[]
+    update?: CRMLeadUpdateWithWhereUniqueWithoutBrandInput | CRMLeadUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: CRMLeadUpdateManyWithWhereWithoutBrandInput | CRMLeadUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: CRMLeadScalarWhereInput | CRMLeadScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCreatorProfileInput = {
+    create?: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatorProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ContractCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput> | ContractCreateWithoutCreatorInput[] | ContractUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCreatorInput | ContractCreateOrConnectWithoutCreatorInput[]
+    createMany?: ContractCreateManyCreatorInputEnvelope
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type ProposalCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput> | ProposalCreateWithoutCreatorInput[] | ProposalUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCreatorInput | ProposalCreateOrConnectWithoutCreatorInput[]
+    createMany?: ProposalCreateManyCreatorInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type ContractUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput> | ContractCreateWithoutCreatorInput[] | ContractUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCreatorInput | ContractCreateOrConnectWithoutCreatorInput[]
+    createMany?: ContractCreateManyCreatorInputEnvelope
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type ProposalUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput> | ProposalCreateWithoutCreatorInput[] | ProposalUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCreatorInput | ProposalCreateOrConnectWithoutCreatorInput[]
+    createMany?: ProposalCreateManyCreatorInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatorProfileNestedInput = {
+    create?: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatorProfileInput
+    upsert?: UserUpsertWithoutCreatorProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatorProfileInput, UserUpdateWithoutCreatorProfileInput>, UserUncheckedUpdateWithoutCreatorProfileInput>
+  }
+
+  export type ContractUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput> | ContractCreateWithoutCreatorInput[] | ContractUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCreatorInput | ContractCreateOrConnectWithoutCreatorInput[]
+    upsert?: ContractUpsertWithWhereUniqueWithoutCreatorInput | ContractUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ContractCreateManyCreatorInputEnvelope
+    set?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    disconnect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    delete?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    update?: ContractUpdateWithWhereUniqueWithoutCreatorInput | ContractUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ContractUpdateManyWithWhereWithoutCreatorInput | ContractUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type ProposalUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput> | ProposalCreateWithoutCreatorInput[] | ProposalUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCreatorInput | ProposalCreateOrConnectWithoutCreatorInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutCreatorInput | ProposalUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ProposalCreateManyCreatorInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutCreatorInput | ProposalUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutCreatorInput | ProposalUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type ContractUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput> | ContractCreateWithoutCreatorInput[] | ContractUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCreatorInput | ContractCreateOrConnectWithoutCreatorInput[]
+    upsert?: ContractUpsertWithWhereUniqueWithoutCreatorInput | ContractUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ContractCreateManyCreatorInputEnvelope
+    set?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    disconnect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    delete?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    update?: ContractUpdateWithWhereUniqueWithoutCreatorInput | ContractUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ContractUpdateManyWithWhereWithoutCreatorInput | ContractUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput> | ProposalCreateWithoutCreatorInput[] | ProposalUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCreatorInput | ProposalCreateOrConnectWithoutCreatorInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutCreatorInput | ProposalUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ProposalCreateManyCreatorInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutCreatorInput | ProposalUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutCreatorInput | ProposalUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutAccountsInput = {
+    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
@@ -13102,6 +25260,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPlatformTokensInput, UserUpdateWithoutPlatformTokensInput>, UserUncheckedUpdateWithoutPlatformTokensInput>
   }
 
+  export type UserCreateNestedOneWithoutPlatformStatsInput = {
+    create?: XOR<UserCreateWithoutPlatformStatsInput, UserUncheckedCreateWithoutPlatformStatsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPlatformStatsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -13116,6 +25280,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutPlatformStatsNestedInput = {
+    create?: XOR<UserCreateWithoutPlatformStatsInput, UserUncheckedCreateWithoutPlatformStatsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPlatformStatsInput
+    upsert?: UserUpsertWithoutPlatformStatsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPlatformStatsInput, UserUpdateWithoutPlatformStatsInput>, UserUncheckedUpdateWithoutPlatformStatsInput>
   }
 
   export type UserCreateNestedOneWithoutSentMessagesInput = {
@@ -13144,6 +25316,300 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutReceivedMessagesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedMessagesInput, UserUpdateWithoutReceivedMessagesInput>, UserUncheckedUpdateWithoutReceivedMessagesInput>
+  }
+
+  export type BrandProfileCreateNestedOneWithoutCampaignsInput = {
+    create?: XOR<BrandProfileCreateWithoutCampaignsInput, BrandProfileUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutCampaignsInput
+    connect?: BrandProfileWhereUniqueInput
+  }
+
+  export type ProposalCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput> | ProposalCreateWithoutCampaignInput[] | ProposalUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCampaignInput | ProposalCreateOrConnectWithoutCampaignInput[]
+    createMany?: ProposalCreateManyCampaignInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type ContractCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput> | ContractCreateWithoutCampaignInput[] | ContractUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCampaignInput | ContractCreateOrConnectWithoutCampaignInput[]
+    createMany?: ContractCreateManyCampaignInputEnvelope
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type ProposalUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput> | ProposalCreateWithoutCampaignInput[] | ProposalUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCampaignInput | ProposalCreateOrConnectWithoutCampaignInput[]
+    createMany?: ProposalCreateManyCampaignInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type ContractUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput> | ContractCreateWithoutCampaignInput[] | ContractUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCampaignInput | ContractCreateOrConnectWithoutCampaignInput[]
+    createMany?: ContractCreateManyCampaignInputEnvelope
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput = {
+    create?: XOR<BrandProfileCreateWithoutCampaignsInput, BrandProfileUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutCampaignsInput
+    upsert?: BrandProfileUpsertWithoutCampaignsInput
+    connect?: BrandProfileWhereUniqueInput
+    update?: XOR<XOR<BrandProfileUpdateToOneWithWhereWithoutCampaignsInput, BrandProfileUpdateWithoutCampaignsInput>, BrandProfileUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type ProposalUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput> | ProposalCreateWithoutCampaignInput[] | ProposalUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCampaignInput | ProposalCreateOrConnectWithoutCampaignInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutCampaignInput | ProposalUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: ProposalCreateManyCampaignInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutCampaignInput | ProposalUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutCampaignInput | ProposalUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type ContractUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput> | ContractCreateWithoutCampaignInput[] | ContractUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCampaignInput | ContractCreateOrConnectWithoutCampaignInput[]
+    upsert?: ContractUpsertWithWhereUniqueWithoutCampaignInput | ContractUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: ContractCreateManyCampaignInputEnvelope
+    set?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    disconnect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    delete?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    update?: ContractUpdateWithWhereUniqueWithoutCampaignInput | ContractUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: ContractUpdateManyWithWhereWithoutCampaignInput | ContractUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput> | ProposalCreateWithoutCampaignInput[] | ProposalUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutCampaignInput | ProposalCreateOrConnectWithoutCampaignInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutCampaignInput | ProposalUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: ProposalCreateManyCampaignInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutCampaignInput | ProposalUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutCampaignInput | ProposalUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type ContractUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput> | ContractCreateWithoutCampaignInput[] | ContractUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: ContractCreateOrConnectWithoutCampaignInput | ContractCreateOrConnectWithoutCampaignInput[]
+    upsert?: ContractUpsertWithWhereUniqueWithoutCampaignInput | ContractUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: ContractCreateManyCampaignInputEnvelope
+    set?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    disconnect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    delete?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+    update?: ContractUpdateWithWhereUniqueWithoutCampaignInput | ContractUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: ContractUpdateManyWithWhereWithoutCampaignInput | ContractUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type CampaignCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<CampaignCreateWithoutProposalsInput, CampaignUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutProposalsInput
+    connect?: CampaignWhereUniqueInput
+  }
+
+  export type CreatorProfileCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<CreatorProfileCreateWithoutProposalsInput, CreatorProfileUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutProposalsInput
+    connect?: CreatorProfileWhereUniqueInput
+  }
+
+  export type CampaignUpdateOneRequiredWithoutProposalsNestedInput = {
+    create?: XOR<CampaignCreateWithoutProposalsInput, CampaignUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutProposalsInput
+    upsert?: CampaignUpsertWithoutProposalsInput
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutProposalsInput, CampaignUpdateWithoutProposalsInput>, CampaignUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type CreatorProfileUpdateOneRequiredWithoutProposalsNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutProposalsInput, CreatorProfileUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutProposalsInput
+    upsert?: CreatorProfileUpsertWithoutProposalsInput
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutProposalsInput, CreatorProfileUpdateWithoutProposalsInput>, CreatorProfileUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type CampaignCreateNestedOneWithoutContractsInput = {
+    create?: XOR<CampaignCreateWithoutContractsInput, CampaignUncheckedCreateWithoutContractsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutContractsInput
+    connect?: CampaignWhereUniqueInput
+  }
+
+  export type CreatorProfileCreateNestedOneWithoutContractsInput = {
+    create?: XOR<CreatorProfileCreateWithoutContractsInput, CreatorProfileUncheckedCreateWithoutContractsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutContractsInput
+    connect?: CreatorProfileWhereUniqueInput
+  }
+
+  export type MilestoneCreateNestedManyWithoutContractInput = {
+    create?: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput> | MilestoneCreateWithoutContractInput[] | MilestoneUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: MilestoneCreateOrConnectWithoutContractInput | MilestoneCreateOrConnectWithoutContractInput[]
+    createMany?: MilestoneCreateManyContractInputEnvelope
+    connect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+  }
+
+  export type TaskCreateNestedManyWithoutContractInput = {
+    create?: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput> | TaskCreateWithoutContractInput[] | TaskUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutContractInput | TaskCreateOrConnectWithoutContractInput[]
+    createMany?: TaskCreateManyContractInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type MilestoneUncheckedCreateNestedManyWithoutContractInput = {
+    create?: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput> | MilestoneCreateWithoutContractInput[] | MilestoneUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: MilestoneCreateOrConnectWithoutContractInput | MilestoneCreateOrConnectWithoutContractInput[]
+    createMany?: MilestoneCreateManyContractInputEnvelope
+    connect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutContractInput = {
+    create?: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput> | TaskCreateWithoutContractInput[] | TaskUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutContractInput | TaskCreateOrConnectWithoutContractInput[]
+    createMany?: TaskCreateManyContractInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type EnumContractStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ContractStatus
+  }
+
+  export type CampaignUpdateOneRequiredWithoutContractsNestedInput = {
+    create?: XOR<CampaignCreateWithoutContractsInput, CampaignUncheckedCreateWithoutContractsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutContractsInput
+    upsert?: CampaignUpsertWithoutContractsInput
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutContractsInput, CampaignUpdateWithoutContractsInput>, CampaignUncheckedUpdateWithoutContractsInput>
+  }
+
+  export type CreatorProfileUpdateOneRequiredWithoutContractsNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutContractsInput, CreatorProfileUncheckedCreateWithoutContractsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutContractsInput
+    upsert?: CreatorProfileUpsertWithoutContractsInput
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutContractsInput, CreatorProfileUpdateWithoutContractsInput>, CreatorProfileUncheckedUpdateWithoutContractsInput>
+  }
+
+  export type MilestoneUpdateManyWithoutContractNestedInput = {
+    create?: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput> | MilestoneCreateWithoutContractInput[] | MilestoneUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: MilestoneCreateOrConnectWithoutContractInput | MilestoneCreateOrConnectWithoutContractInput[]
+    upsert?: MilestoneUpsertWithWhereUniqueWithoutContractInput | MilestoneUpsertWithWhereUniqueWithoutContractInput[]
+    createMany?: MilestoneCreateManyContractInputEnvelope
+    set?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    disconnect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    delete?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    connect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    update?: MilestoneUpdateWithWhereUniqueWithoutContractInput | MilestoneUpdateWithWhereUniqueWithoutContractInput[]
+    updateMany?: MilestoneUpdateManyWithWhereWithoutContractInput | MilestoneUpdateManyWithWhereWithoutContractInput[]
+    deleteMany?: MilestoneScalarWhereInput | MilestoneScalarWhereInput[]
+  }
+
+  export type TaskUpdateManyWithoutContractNestedInput = {
+    create?: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput> | TaskCreateWithoutContractInput[] | TaskUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutContractInput | TaskCreateOrConnectWithoutContractInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutContractInput | TaskUpsertWithWhereUniqueWithoutContractInput[]
+    createMany?: TaskCreateManyContractInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutContractInput | TaskUpdateWithWhereUniqueWithoutContractInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutContractInput | TaskUpdateManyWithWhereWithoutContractInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type MilestoneUncheckedUpdateManyWithoutContractNestedInput = {
+    create?: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput> | MilestoneCreateWithoutContractInput[] | MilestoneUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: MilestoneCreateOrConnectWithoutContractInput | MilestoneCreateOrConnectWithoutContractInput[]
+    upsert?: MilestoneUpsertWithWhereUniqueWithoutContractInput | MilestoneUpsertWithWhereUniqueWithoutContractInput[]
+    createMany?: MilestoneCreateManyContractInputEnvelope
+    set?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    disconnect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    delete?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    connect?: MilestoneWhereUniqueInput | MilestoneWhereUniqueInput[]
+    update?: MilestoneUpdateWithWhereUniqueWithoutContractInput | MilestoneUpdateWithWhereUniqueWithoutContractInput[]
+    updateMany?: MilestoneUpdateManyWithWhereWithoutContractInput | MilestoneUpdateManyWithWhereWithoutContractInput[]
+    deleteMany?: MilestoneScalarWhereInput | MilestoneScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutContractNestedInput = {
+    create?: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput> | TaskCreateWithoutContractInput[] | TaskUncheckedCreateWithoutContractInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutContractInput | TaskCreateOrConnectWithoutContractInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutContractInput | TaskUpsertWithWhereUniqueWithoutContractInput[]
+    createMany?: TaskCreateManyContractInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutContractInput | TaskUpdateWithWhereUniqueWithoutContractInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutContractInput | TaskUpdateManyWithWhereWithoutContractInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type ContractCreateNestedOneWithoutMilestonesInput = {
+    create?: XOR<ContractCreateWithoutMilestonesInput, ContractUncheckedCreateWithoutMilestonesInput>
+    connectOrCreate?: ContractCreateOrConnectWithoutMilestonesInput
+    connect?: ContractWhereUniqueInput
+  }
+
+  export type EnumMilestoneStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MilestoneStatus
+  }
+
+  export type ContractUpdateOneRequiredWithoutMilestonesNestedInput = {
+    create?: XOR<ContractCreateWithoutMilestonesInput, ContractUncheckedCreateWithoutMilestonesInput>
+    connectOrCreate?: ContractCreateOrConnectWithoutMilestonesInput
+    upsert?: ContractUpsertWithoutMilestonesInput
+    connect?: ContractWhereUniqueInput
+    update?: XOR<XOR<ContractUpdateToOneWithWhereWithoutMilestonesInput, ContractUpdateWithoutMilestonesInput>, ContractUncheckedUpdateWithoutMilestonesInput>
+  }
+
+  export type BrandProfileCreateNestedOneWithoutCrmLeadsInput = {
+    create?: XOR<BrandProfileCreateWithoutCrmLeadsInput, BrandProfileUncheckedCreateWithoutCrmLeadsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutCrmLeadsInput
+    connect?: BrandProfileWhereUniqueInput
+  }
+
+  export type EnumLeadStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LeadStatus
+  }
+
+  export type BrandProfileUpdateOneRequiredWithoutCrmLeadsNestedInput = {
+    create?: XOR<BrandProfileCreateWithoutCrmLeadsInput, BrandProfileUncheckedCreateWithoutCrmLeadsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutCrmLeadsInput
+    upsert?: BrandProfileUpsertWithoutCrmLeadsInput
+    connect?: BrandProfileWhereUniqueInput
+    update?: XOR<XOR<BrandProfileUpdateToOneWithWhereWithoutCrmLeadsInput, BrandProfileUpdateWithoutCrmLeadsInput>, BrandProfileUncheckedUpdateWithoutCrmLeadsInput>
+  }
+
+  export type ContractCreateNestedOneWithoutTasksInput = {
+    create?: XOR<ContractCreateWithoutTasksInput, ContractUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: ContractCreateOrConnectWithoutTasksInput
+    connect?: ContractWhereUniqueInput
+  }
+
+  export type ContractUpdateOneWithoutTasksNestedInput = {
+    create?: XOR<ContractCreateWithoutTasksInput, ContractUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: ContractCreateOrConnectWithoutTasksInput
+    upsert?: ContractUpsertWithoutTasksInput
+    disconnect?: ContractWhereInput | boolean
+    delete?: ContractWhereInput | boolean
+    connect?: ContractWhereUniqueInput
+    update?: XOR<XOR<ContractUpdateToOneWithWhereWithoutTasksInput, ContractUpdateWithoutTasksInput>, ContractUncheckedUpdateWithoutTasksInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13179,6 +25645,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13188,28 +25661,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -13227,6 +25678,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -13265,6 +25727,16 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13277,6 +25749,28 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -13309,17 +25803,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13400,6 +25883,57 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumContractStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContractStatusFilter<$PrismaModel> | $Enums.ContractStatus
+  }
+
+  export type NestedEnumContractStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContractStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContractStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContractStatusFilter<$PrismaModel>
+    _max?: NestedEnumContractStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMilestoneStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MilestoneStatus | EnumMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMilestoneStatusFilter<$PrismaModel> | $Enums.MilestoneStatus
+  }
+
+  export type NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MilestoneStatus | EnumMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MilestoneStatus[] | ListEnumMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.MilestoneStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMilestoneStatusFilter<$PrismaModel>
+    _max?: NestedEnumMilestoneStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -13508,6 +26042,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PlatformStatsCreateWithoutUserInput = {
+    id?: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUncheckedCreateWithoutUserInput = {
+    id?: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsCreateOrConnectWithoutUserInput = {
+    where: PlatformStatsWhereUniqueInput
+    create: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlatformStatsCreateManyUserInputEnvelope = {
+    data: PlatformStatsCreateManyUserInput | PlatformStatsCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type MessageCreateWithoutSenderInput = {
     id?: string
     text: string
@@ -13554,6 +26120,66 @@ export namespace Prisma {
   export type MessageCreateManyReceiverInputEnvelope = {
     data: MessageCreateManyReceiverInput | MessageCreateManyReceiverInput[]
     skipDuplicates?: boolean
+  }
+
+  export type BrandProfileCreateWithoutUserInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    campaigns?: CampaignCreateNestedManyWithoutBrandInput
+    crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
+    crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileCreateOrConnectWithoutUserInput = {
+    where: BrandProfileWhereUniqueInput
+    create: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type CreatorProfileCreateWithoutUserInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    contracts?: ContractCreateNestedManyWithoutCreatorInput
+    proposals?: ProposalCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileCreateOrConnectWithoutUserInput = {
+    where: CreatorProfileWhereUniqueInput
+    create: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -13654,6 +26280,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlatformToken"> | Date | string
   }
 
+  export type PlatformStatsUpsertWithWhereUniqueWithoutUserInput = {
+    where: PlatformStatsWhereUniqueInput
+    update: XOR<PlatformStatsUpdateWithoutUserInput, PlatformStatsUncheckedUpdateWithoutUserInput>
+    create: XOR<PlatformStatsCreateWithoutUserInput, PlatformStatsUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlatformStatsUpdateWithWhereUniqueWithoutUserInput = {
+    where: PlatformStatsWhereUniqueInput
+    data: XOR<PlatformStatsUpdateWithoutUserInput, PlatformStatsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PlatformStatsUpdateManyWithWhereWithoutUserInput = {
+    where: PlatformStatsScalarWhereInput
+    data: XOR<PlatformStatsUpdateManyMutationInput, PlatformStatsUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PlatformStatsScalarWhereInput = {
+    AND?: PlatformStatsScalarWhereInput | PlatformStatsScalarWhereInput[]
+    OR?: PlatformStatsScalarWhereInput[]
+    NOT?: PlatformStatsScalarWhereInput | PlatformStatsScalarWhereInput[]
+    id?: StringFilter<"PlatformStats"> | string
+    userId?: StringFilter<"PlatformStats"> | string
+    platform?: StringFilter<"PlatformStats"> | string
+    followerCount?: IntNullableFilter<"PlatformStats"> | number | null
+    followingCount?: IntNullableFilter<"PlatformStats"> | number | null
+    postCount?: IntNullableFilter<"PlatformStats"> | number | null
+    engagementRate?: FloatNullableFilter<"PlatformStats"> | number | null
+    fetchedAt?: DateTimeFilter<"PlatformStats"> | Date | string
+    raw?: JsonNullableFilter<"PlatformStats">
+  }
+
   export type MessageUpsertWithWhereUniqueWithoutSenderInput = {
     where: MessageWhereUniqueInput
     update: XOR<MessageUpdateWithoutSenderInput, MessageUncheckedUpdateWithoutSenderInput>
@@ -13697,30 +26354,521 @@ export namespace Prisma {
     data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutReceiverInput>
   }
 
+  export type BrandProfileUpsertWithoutUserInput = {
+    update: XOR<BrandProfileUpdateWithoutUserInput, BrandProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<BrandProfileCreateWithoutUserInput, BrandProfileUncheckedCreateWithoutUserInput>
+    where?: BrandProfileWhereInput
+  }
+
+  export type BrandProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: BrandProfileWhereInput
+    data: XOR<BrandProfileUpdateWithoutUserInput, BrandProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BrandProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    campaigns?: CampaignUpdateManyWithoutBrandNestedInput
+    crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
+    crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type CreatorProfileUpsertWithoutUserInput = {
+    update: XOR<CreatorProfileUpdateWithoutUserInput, CreatorProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<CreatorProfileCreateWithoutUserInput, CreatorProfileUncheckedCreateWithoutUserInput>
+    where?: CreatorProfileWhereInput
+  }
+
+  export type CreatorProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: CreatorProfileWhereInput
+    data: XOR<CreatorProfileUpdateWithoutUserInput, CreatorProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CreatorProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    proposals?: ProposalUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    proposals?: ProposalUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type UserCreateWithoutBrandProfileInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBrandProfileInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBrandProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBrandProfileInput, UserUncheckedCreateWithoutBrandProfileInput>
+  }
+
+  export type CampaignCreateWithoutBrandInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    proposals?: ProposalCreateNestedManyWithoutCampaignInput
+    contracts?: ContractCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutBrandInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCampaignInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutBrandInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput>
+  }
+
+  export type CampaignCreateManyBrandInputEnvelope = {
+    data: CampaignCreateManyBrandInput | CampaignCreateManyBrandInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CRMLeadCreateWithoutBrandInput = {
+    id?: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CRMLeadUncheckedCreateWithoutBrandInput = {
+    id?: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CRMLeadCreateOrConnectWithoutBrandInput = {
+    where: CRMLeadWhereUniqueInput
+    create: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput>
+  }
+
+  export type CRMLeadCreateManyBrandInputEnvelope = {
+    data: CRMLeadCreateManyBrandInput | CRMLeadCreateManyBrandInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutBrandProfileInput = {
+    update: XOR<UserUpdateWithoutBrandProfileInput, UserUncheckedUpdateWithoutBrandProfileInput>
+    create: XOR<UserCreateWithoutBrandProfileInput, UserUncheckedCreateWithoutBrandProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBrandProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBrandProfileInput, UserUncheckedUpdateWithoutBrandProfileInput>
+  }
+
+  export type UserUpdateWithoutBrandProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBrandProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type CampaignUpsertWithWhereUniqueWithoutBrandInput = {
+    where: CampaignWhereUniqueInput
+    update: XOR<CampaignUpdateWithoutBrandInput, CampaignUncheckedUpdateWithoutBrandInput>
+    create: XOR<CampaignCreateWithoutBrandInput, CampaignUncheckedCreateWithoutBrandInput>
+  }
+
+  export type CampaignUpdateWithWhereUniqueWithoutBrandInput = {
+    where: CampaignWhereUniqueInput
+    data: XOR<CampaignUpdateWithoutBrandInput, CampaignUncheckedUpdateWithoutBrandInput>
+  }
+
+  export type CampaignUpdateManyWithWhereWithoutBrandInput = {
+    where: CampaignScalarWhereInput
+    data: XOR<CampaignUpdateManyMutationInput, CampaignUncheckedUpdateManyWithoutBrandInput>
+  }
+
+  export type CampaignScalarWhereInput = {
+    AND?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+    OR?: CampaignScalarWhereInput[]
+    NOT?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
+    id?: StringFilter<"Campaign"> | string
+    brandProfileId?: StringFilter<"Campaign"> | string
+    title?: StringFilter<"Campaign"> | string
+    description?: StringFilter<"Campaign"> | string
+    budget?: FloatFilter<"Campaign"> | number
+    status?: StringFilter<"Campaign"> | string
+    createdAt?: DateTimeFilter<"Campaign"> | Date | string
+  }
+
+  export type CRMLeadUpsertWithWhereUniqueWithoutBrandInput = {
+    where: CRMLeadWhereUniqueInput
+    update: XOR<CRMLeadUpdateWithoutBrandInput, CRMLeadUncheckedUpdateWithoutBrandInput>
+    create: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput>
+  }
+
+  export type CRMLeadUpdateWithWhereUniqueWithoutBrandInput = {
+    where: CRMLeadWhereUniqueInput
+    data: XOR<CRMLeadUpdateWithoutBrandInput, CRMLeadUncheckedUpdateWithoutBrandInput>
+  }
+
+  export type CRMLeadUpdateManyWithWhereWithoutBrandInput = {
+    where: CRMLeadScalarWhereInput
+    data: XOR<CRMLeadUpdateManyMutationInput, CRMLeadUncheckedUpdateManyWithoutBrandInput>
+  }
+
+  export type CRMLeadScalarWhereInput = {
+    AND?: CRMLeadScalarWhereInput | CRMLeadScalarWhereInput[]
+    OR?: CRMLeadScalarWhereInput[]
+    NOT?: CRMLeadScalarWhereInput | CRMLeadScalarWhereInput[]
+    id?: StringFilter<"CRMLead"> | string
+    brandProfileId?: StringFilter<"CRMLead"> | string
+    handle?: StringFilter<"CRMLead"> | string
+    platform?: StringFilter<"CRMLead"> | string
+    avatarUrl?: StringNullableFilter<"CRMLead"> | string | null
+    followers?: IntFilter<"CRMLead"> | number
+    status?: EnumLeadStatusFilter<"CRMLead"> | $Enums.LeadStatus
+    notes?: StringNullableFilter<"CRMLead"> | string | null
+    createdAt?: DateTimeFilter<"CRMLead"> | Date | string
+  }
+
+  export type UserCreateWithoutCreatorProfileInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatorProfileInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatorProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
+  }
+
+  export type ContractCreateWithoutCreatorInput = {
+    id?: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutContractsInput
+    milestones?: MilestoneCreateNestedManyWithoutContractInput
+    tasks?: TaskCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    milestones?: MilestoneUncheckedCreateNestedManyWithoutContractInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractCreateOrConnectWithoutCreatorInput = {
+    where: ContractWhereUniqueInput
+    create: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ContractCreateManyCreatorInputEnvelope = {
+    data: ContractCreateManyCreatorInput | ContractCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProposalCreateWithoutCreatorInput = {
+    id?: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutProposalsInput
+  }
+
+  export type ProposalUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    campaignId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ProposalCreateOrConnectWithoutCreatorInput = {
+    where: ProposalWhereUniqueInput
+    create: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ProposalCreateManyCreatorInputEnvelope = {
+    data: ProposalCreateManyCreatorInput | ProposalCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCreatorProfileInput = {
+    update: XOR<UserUpdateWithoutCreatorProfileInput, UserUncheckedUpdateWithoutCreatorProfileInput>
+    create: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatorProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatorProfileInput, UserUncheckedUpdateWithoutCreatorProfileInput>
+  }
+
+  export type UserUpdateWithoutCreatorProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatorProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type ContractUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: ContractWhereUniqueInput
+    update: XOR<ContractUpdateWithoutCreatorInput, ContractUncheckedUpdateWithoutCreatorInput>
+    create: XOR<ContractCreateWithoutCreatorInput, ContractUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ContractUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: ContractWhereUniqueInput
+    data: XOR<ContractUpdateWithoutCreatorInput, ContractUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type ContractUpdateManyWithWhereWithoutCreatorInput = {
+    where: ContractScalarWhereInput
+    data: XOR<ContractUpdateManyMutationInput, ContractUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type ContractScalarWhereInput = {
+    AND?: ContractScalarWhereInput | ContractScalarWhereInput[]
+    OR?: ContractScalarWhereInput[]
+    NOT?: ContractScalarWhereInput | ContractScalarWhereInput[]
+    id?: StringFilter<"Contract"> | string
+    campaignId?: StringFilter<"Contract"> | string
+    brandProfileId?: StringFilter<"Contract"> | string
+    creatorProfileId?: StringFilter<"Contract"> | string
+    status?: EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+    totalBudget?: FloatFilter<"Contract"> | number
+    createdAt?: DateTimeFilter<"Contract"> | Date | string
+  }
+
+  export type ProposalUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: ProposalWhereUniqueInput
+    update: XOR<ProposalUpdateWithoutCreatorInput, ProposalUncheckedUpdateWithoutCreatorInput>
+    create: XOR<ProposalCreateWithoutCreatorInput, ProposalUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ProposalUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: ProposalWhereUniqueInput
+    data: XOR<ProposalUpdateWithoutCreatorInput, ProposalUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type ProposalUpdateManyWithWhereWithoutCreatorInput = {
+    where: ProposalScalarWhereInput
+    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type ProposalScalarWhereInput = {
+    AND?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+    OR?: ProposalScalarWhereInput[]
+    NOT?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+    id?: StringFilter<"Proposal"> | string
+    campaignId?: StringFilter<"Proposal"> | string
+    creatorProfileId?: StringFilter<"Proposal"> | string
+    coverLetter?: StringNullableFilter<"Proposal"> | string | null
+    rate?: FloatFilter<"Proposal"> | number
+    status?: StringFilter<"Proposal"> | string
+    createdAt?: DateTimeFilter<"Proposal"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     email: string
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     sessions?: SessionCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -13729,24 +26877,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -13771,24 +26912,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     sessions?: SessionUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -13797,24 +26931,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -13823,24 +26950,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -13849,24 +26969,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -13891,24 +27004,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -13917,24 +27023,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPlatformTokensInput = {
@@ -13943,24 +27042,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlatformTokensInput = {
@@ -13969,24 +27061,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlatformTokensInput = {
@@ -14011,24 +27096,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlatformTokensInput = {
@@ -14037,24 +27115,109 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPlatformStatsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPlatformStatsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPlatformStatsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPlatformStatsInput, UserUncheckedCreateWithoutPlatformStatsInput>
+  }
+
+  export type UserUpsertWithoutPlatformStatsInput = {
+    update: XOR<UserUpdateWithoutPlatformStatsInput, UserUncheckedUpdateWithoutPlatformStatsInput>
+    create: XOR<UserCreateWithoutPlatformStatsInput, UserUncheckedCreateWithoutPlatformStatsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPlatformStatsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPlatformStatsInput, UserUncheckedUpdateWithoutPlatformStatsInput>
+  }
+
+  export type UserUpdateWithoutPlatformStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPlatformStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSentMessagesInput = {
@@ -14063,24 +27226,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -14089,24 +27245,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -14120,24 +27269,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -14146,24 +27288,17 @@ export namespace Prisma {
     emailVerified?: boolean
     name?: string | null
     image?: string | null
-    role?: string
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     hasCompletedOnboarding?: boolean
-    bio?: string | null
-    niche?: string | null
-    primaryPlatform?: string | null
-    location?: string | null
-    companyName?: string | null
-    industry?: string | null
-    website?: string | null
-    brandAccountType?: string | null
-    totalFollowers?: number
-    avgEngagementRate?: number
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -14188,24 +27323,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -14214,24 +27342,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReceivedMessagesInput = {
@@ -14251,24 +27372,17 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    niche?: NullableStringFieldUpdateOperationsInput | string | null
-    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    industry?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -14277,24 +27391,724 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     name?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type BrandProfileCreateWithoutCampaignsInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    user: UserCreateNestedOneWithoutBrandProfileInput
+    crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUncheckedCreateWithoutCampaignsInput = {
+    id?: string
+    userId: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileCreateOrConnectWithoutCampaignsInput = {
+    where: BrandProfileWhereUniqueInput
+    create: XOR<BrandProfileCreateWithoutCampaignsInput, BrandProfileUncheckedCreateWithoutCampaignsInput>
+  }
+
+  export type ProposalCreateWithoutCampaignInput = {
+    id?: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+    creator: CreatorProfileCreateNestedOneWithoutProposalsInput
+  }
+
+  export type ProposalUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    creatorProfileId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ProposalCreateOrConnectWithoutCampaignInput = {
+    where: ProposalWhereUniqueInput
+    create: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type ProposalCreateManyCampaignInputEnvelope = {
+    data: ProposalCreateManyCampaignInput | ProposalCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContractCreateWithoutCampaignInput = {
+    id?: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    creator: CreatorProfileCreateNestedOneWithoutContractsInput
+    milestones?: MilestoneCreateNestedManyWithoutContractInput
+    tasks?: TaskCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    milestones?: MilestoneUncheckedCreateNestedManyWithoutContractInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractCreateOrConnectWithoutCampaignInput = {
+    where: ContractWhereUniqueInput
+    create: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type ContractCreateManyCampaignInputEnvelope = {
+    data: ContractCreateManyCampaignInput | ContractCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BrandProfileUpsertWithoutCampaignsInput = {
+    update: XOR<BrandProfileUpdateWithoutCampaignsInput, BrandProfileUncheckedUpdateWithoutCampaignsInput>
+    create: XOR<BrandProfileCreateWithoutCampaignsInput, BrandProfileUncheckedCreateWithoutCampaignsInput>
+    where?: BrandProfileWhereInput
+  }
+
+  export type BrandProfileUpdateToOneWithWhereWithoutCampaignsInput = {
+    where?: BrandProfileWhereInput
+    data: XOR<BrandProfileUpdateWithoutCampaignsInput, BrandProfileUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type BrandProfileUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
+    crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileUncheckedUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type ProposalUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: ProposalWhereUniqueInput
+    update: XOR<ProposalUpdateWithoutCampaignInput, ProposalUncheckedUpdateWithoutCampaignInput>
+    create: XOR<ProposalCreateWithoutCampaignInput, ProposalUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type ProposalUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: ProposalWhereUniqueInput
+    data: XOR<ProposalUpdateWithoutCampaignInput, ProposalUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type ProposalUpdateManyWithWhereWithoutCampaignInput = {
+    where: ProposalScalarWhereInput
+    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type ContractUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: ContractWhereUniqueInput
+    update: XOR<ContractUpdateWithoutCampaignInput, ContractUncheckedUpdateWithoutCampaignInput>
+    create: XOR<ContractCreateWithoutCampaignInput, ContractUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type ContractUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: ContractWhereUniqueInput
+    data: XOR<ContractUpdateWithoutCampaignInput, ContractUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type ContractUpdateManyWithWhereWithoutCampaignInput = {
+    where: ContractScalarWhereInput
+    data: XOR<ContractUpdateManyMutationInput, ContractUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type CampaignCreateWithoutProposalsInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    contracts?: ContractCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutProposalsInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutProposalsInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutProposalsInput, CampaignUncheckedCreateWithoutProposalsInput>
+  }
+
+  export type CreatorProfileCreateWithoutProposalsInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    user: UserCreateNestedOneWithoutCreatorProfileInput
+    contracts?: ContractCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileUncheckedCreateWithoutProposalsInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileCreateOrConnectWithoutProposalsInput = {
+    where: CreatorProfileWhereUniqueInput
+    create: XOR<CreatorProfileCreateWithoutProposalsInput, CreatorProfileUncheckedCreateWithoutProposalsInput>
+  }
+
+  export type CampaignUpsertWithoutProposalsInput = {
+    update: XOR<CampaignUpdateWithoutProposalsInput, CampaignUncheckedUpdateWithoutProposalsInput>
+    create: XOR<CampaignCreateWithoutProposalsInput, CampaignUncheckedCreateWithoutProposalsInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutProposalsInput, CampaignUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type CampaignUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    contracts?: ContractUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CreatorProfileUpsertWithoutProposalsInput = {
+    update: XOR<CreatorProfileUpdateWithoutProposalsInput, CreatorProfileUncheckedUpdateWithoutProposalsInput>
+    create: XOR<CreatorProfileCreateWithoutProposalsInput, CreatorProfileUncheckedCreateWithoutProposalsInput>
+    where?: CreatorProfileWhereInput
+  }
+
+  export type CreatorProfileUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: CreatorProfileWhereInput
+    data: XOR<CreatorProfileUpdateWithoutProposalsInput, CreatorProfileUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type CreatorProfileUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     niche?: NullableStringFieldUpdateOperationsInput | string | null
     primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
+    contracts?: ContractUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CampaignCreateWithoutContractsInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    proposals?: ProposalCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutContractsInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutContractsInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutContractsInput, CampaignUncheckedCreateWithoutContractsInput>
+  }
+
+  export type CreatorProfileCreateWithoutContractsInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    user: UserCreateNestedOneWithoutCreatorProfileInput
+    proposals?: ProposalCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileUncheckedCreateWithoutContractsInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    proposals?: ProposalUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileCreateOrConnectWithoutContractsInput = {
+    where: CreatorProfileWhereUniqueInput
+    create: XOR<CreatorProfileCreateWithoutContractsInput, CreatorProfileUncheckedCreateWithoutContractsInput>
+  }
+
+  export type MilestoneCreateWithoutContractInput = {
+    id?: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+  }
+
+  export type MilestoneUncheckedCreateWithoutContractInput = {
+    id?: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+  }
+
+  export type MilestoneCreateOrConnectWithoutContractInput = {
+    where: MilestoneWhereUniqueInput
+    create: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput>
+  }
+
+  export type MilestoneCreateManyContractInputEnvelope = {
+    data: MilestoneCreateManyContractInput | MilestoneCreateManyContractInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TaskCreateWithoutContractInput = {
+    id?: string
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type TaskUncheckedCreateWithoutContractInput = {
+    id?: string
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type TaskCreateOrConnectWithoutContractInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput>
+  }
+
+  export type TaskCreateManyContractInputEnvelope = {
+    data: TaskCreateManyContractInput | TaskCreateManyContractInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignUpsertWithoutContractsInput = {
+    update: XOR<CampaignUpdateWithoutContractsInput, CampaignUncheckedUpdateWithoutContractsInput>
+    create: XOR<CampaignCreateWithoutContractsInput, CampaignUncheckedCreateWithoutContractsInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutContractsInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutContractsInput, CampaignUncheckedUpdateWithoutContractsInput>
+  }
+
+  export type CampaignUpdateWithoutContractsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    proposals?: ProposalUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutContractsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CreatorProfileUpsertWithoutContractsInput = {
+    update: XOR<CreatorProfileUpdateWithoutContractsInput, CreatorProfileUncheckedUpdateWithoutContractsInput>
+    create: XOR<CreatorProfileCreateWithoutContractsInput, CreatorProfileUncheckedCreateWithoutContractsInput>
+    where?: CreatorProfileWhereInput
+  }
+
+  export type CreatorProfileUpdateToOneWithWhereWithoutContractsInput = {
+    where?: CreatorProfileWhereInput
+    data: XOR<CreatorProfileUpdateWithoutContractsInput, CreatorProfileUncheckedUpdateWithoutContractsInput>
+  }
+
+  export type CreatorProfileUpdateWithoutContractsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
+    proposals?: ProposalUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateWithoutContractsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    proposals?: ProposalUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type MilestoneUpsertWithWhereUniqueWithoutContractInput = {
+    where: MilestoneWhereUniqueInput
+    update: XOR<MilestoneUpdateWithoutContractInput, MilestoneUncheckedUpdateWithoutContractInput>
+    create: XOR<MilestoneCreateWithoutContractInput, MilestoneUncheckedCreateWithoutContractInput>
+  }
+
+  export type MilestoneUpdateWithWhereUniqueWithoutContractInput = {
+    where: MilestoneWhereUniqueInput
+    data: XOR<MilestoneUpdateWithoutContractInput, MilestoneUncheckedUpdateWithoutContractInput>
+  }
+
+  export type MilestoneUpdateManyWithWhereWithoutContractInput = {
+    where: MilestoneScalarWhereInput
+    data: XOR<MilestoneUpdateManyMutationInput, MilestoneUncheckedUpdateManyWithoutContractInput>
+  }
+
+  export type MilestoneScalarWhereInput = {
+    AND?: MilestoneScalarWhereInput | MilestoneScalarWhereInput[]
+    OR?: MilestoneScalarWhereInput[]
+    NOT?: MilestoneScalarWhereInput | MilestoneScalarWhereInput[]
+    id?: StringFilter<"Milestone"> | string
+    contractId?: StringFilter<"Milestone"> | string
+    title?: StringFilter<"Milestone"> | string
+    percentage?: FloatFilter<"Milestone"> | number
+    amount?: FloatFilter<"Milestone"> | number
+    status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
+  }
+
+  export type TaskUpsertWithWhereUniqueWithoutContractInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutContractInput, TaskUncheckedUpdateWithoutContractInput>
+    create: XOR<TaskCreateWithoutContractInput, TaskUncheckedCreateWithoutContractInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutContractInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutContractInput, TaskUncheckedUpdateWithoutContractInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutContractInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutContractInput>
+  }
+
+  export type TaskScalarWhereInput = {
+    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    OR?: TaskScalarWhereInput[]
+    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    id?: StringFilter<"Task"> | string
+    contractId?: StringNullableFilter<"Task"> | string | null
+    title?: StringFilter<"Task"> | string
+    dueDate?: DateTimeFilter<"Task"> | Date | string
+    status?: StringFilter<"Task"> | string
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+  }
+
+  export type ContractCreateWithoutMilestonesInput = {
+    id?: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutContractsInput
+    creator: CreatorProfileCreateNestedOneWithoutContractsInput
+    tasks?: TaskCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUncheckedCreateWithoutMilestonesInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    tasks?: TaskUncheckedCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractCreateOrConnectWithoutMilestonesInput = {
+    where: ContractWhereUniqueInput
+    create: XOR<ContractCreateWithoutMilestonesInput, ContractUncheckedCreateWithoutMilestonesInput>
+  }
+
+  export type ContractUpsertWithoutMilestonesInput = {
+    update: XOR<ContractUpdateWithoutMilestonesInput, ContractUncheckedUpdateWithoutMilestonesInput>
+    create: XOR<ContractCreateWithoutMilestonesInput, ContractUncheckedCreateWithoutMilestonesInput>
+    where?: ContractWhereInput
+  }
+
+  export type ContractUpdateToOneWithWhereWithoutMilestonesInput = {
+    where?: ContractWhereInput
+    data: XOR<ContractUpdateWithoutMilestonesInput, ContractUncheckedUpdateWithoutMilestonesInput>
+  }
+
+  export type ContractUpdateWithoutMilestonesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutContractsNestedInput
+    creator?: CreatorProfileUpdateOneRequiredWithoutContractsNestedInput
+    tasks?: TaskUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateWithoutMilestonesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tasks?: TaskUncheckedUpdateManyWithoutContractNestedInput
+  }
+
+  export type BrandProfileCreateWithoutCrmLeadsInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    user: UserCreateNestedOneWithoutBrandProfileInput
+    campaigns?: CampaignCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUncheckedCreateWithoutCrmLeadsInput = {
+    id?: string
+    userId: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileCreateOrConnectWithoutCrmLeadsInput = {
+    where: BrandProfileWhereUniqueInput
+    create: XOR<BrandProfileCreateWithoutCrmLeadsInput, BrandProfileUncheckedCreateWithoutCrmLeadsInput>
+  }
+
+  export type BrandProfileUpsertWithoutCrmLeadsInput = {
+    update: XOR<BrandProfileUpdateWithoutCrmLeadsInput, BrandProfileUncheckedUpdateWithoutCrmLeadsInput>
+    create: XOR<BrandProfileCreateWithoutCrmLeadsInput, BrandProfileUncheckedCreateWithoutCrmLeadsInput>
+    where?: BrandProfileWhereInput
+  }
+
+  export type BrandProfileUpdateToOneWithWhereWithoutCrmLeadsInput = {
+    where?: BrandProfileWhereInput
+    data: XOR<BrandProfileUpdateWithoutCrmLeadsInput, BrandProfileUncheckedUpdateWithoutCrmLeadsInput>
+  }
+
+  export type BrandProfileUpdateWithoutCrmLeadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalFollowers?: IntFieldUpdateOperationsInput | number
-    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
-    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
-    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
+    campaigns?: CampaignUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileUncheckedUpdateWithoutCrmLeadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type ContractCreateWithoutTasksInput = {
+    id?: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutContractsInput
+    creator: CreatorProfileCreateNestedOneWithoutContractsInput
+    milestones?: MilestoneCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractUncheckedCreateWithoutTasksInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+    milestones?: MilestoneUncheckedCreateNestedManyWithoutContractInput
+  }
+
+  export type ContractCreateOrConnectWithoutTasksInput = {
+    where: ContractWhereUniqueInput
+    create: XOR<ContractCreateWithoutTasksInput, ContractUncheckedCreateWithoutTasksInput>
+  }
+
+  export type ContractUpsertWithoutTasksInput = {
+    update: XOR<ContractUpdateWithoutTasksInput, ContractUncheckedUpdateWithoutTasksInput>
+    create: XOR<ContractCreateWithoutTasksInput, ContractUncheckedCreateWithoutTasksInput>
+    where?: ContractWhereInput
+  }
+
+  export type ContractUpdateToOneWithWhereWithoutTasksInput = {
+    where?: ContractWhereInput
+    data: XOR<ContractUpdateWithoutTasksInput, ContractUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type ContractUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutContractsNestedInput
+    creator?: CreatorProfileUpdateOneRequiredWithoutContractsNestedInput
+    milestones?: MilestoneUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestones?: MilestoneUncheckedUpdateManyWithoutContractNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -14333,6 +28147,17 @@ export namespace Prisma {
     username?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type PlatformStatsCreateManyUserInput = {
+    id?: string
+    platform: string
+    followerCount?: number | null
+    followingCount?: number | null
+    postCount?: number | null
+    engagementRate?: number | null
+    fetchedAt?: Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type MessageCreateManySenderInput = {
@@ -14463,6 +28288,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlatformStatsUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PlatformStatsUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    followingCount?: NullableIntFieldUpdateOperationsInput | number | null
+    postCount?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type MessageUpdateWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string
     text?: StringFieldUpdateOperationsInput | string
@@ -14503,6 +28361,310 @@ export namespace Prisma {
     text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     senderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CampaignCreateManyBrandInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type CRMLeadCreateManyBrandInput = {
+    id?: string
+    handle: string
+    platform: string
+    avatarUrl?: string | null
+    followers?: number
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CampaignUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUncheckedUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateManyWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CRMLeadUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CRMLeadUncheckedUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CRMLeadUncheckedUpdateManyWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    handle?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    followers?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContractCreateManyCreatorInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+  }
+
+  export type ProposalCreateManyCreatorInput = {
+    id?: string
+    campaignId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ContractUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutContractsNestedInput
+    milestones?: MilestoneUpdateManyWithoutContractNestedInput
+    tasks?: TaskUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestones?: MilestoneUncheckedUpdateManyWithoutContractNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutProposalsNestedInput
+  }
+
+  export type ProposalUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalCreateManyCampaignInput = {
+    id?: string
+    creatorProfileId: string
+    coverLetter?: string | null
+    rate: number
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type ContractCreateManyCampaignInput = {
+    id?: string
+    brandProfileId: string
+    creatorProfileId: string
+    status?: $Enums.ContractStatus
+    totalBudget: number
+    createdAt?: Date | string
+  }
+
+  export type ProposalUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: CreatorProfileUpdateOneRequiredWithoutProposalsNestedInput
+  }
+
+  export type ProposalUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
+    rate?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContractUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: CreatorProfileUpdateOneRequiredWithoutContractsNestedInput
+    milestones?: MilestoneUpdateManyWithoutContractNestedInput
+    tasks?: TaskUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestones?: MilestoneUncheckedUpdateManyWithoutContractNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutContractNestedInput
+  }
+
+  export type ContractUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+    totalBudget?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MilestoneCreateManyContractInput = {
+    id?: string
+    title: string
+    percentage: number
+    amount: number
+    status?: $Enums.MilestoneStatus
+    dueDate?: Date | string | null
+  }
+
+  export type TaskCreateManyContractInput = {
+    id?: string
+    title: string
+    dueDate: Date | string
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type MilestoneUpdateWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MilestoneUncheckedUpdateWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MilestoneUncheckedUpdateManyWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    percentage?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type TaskUpdateWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateManyWithoutContractInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
