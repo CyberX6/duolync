@@ -4,7 +4,6 @@ import {
   useState,
   useEffect,
   useRef,
-  useCallback,
   KeyboardEvent,
 } from "react";
 import { useRouter } from "next/navigation";
@@ -35,40 +34,6 @@ function getBubbleColor(senderRole: "brand" | "creator", isOwn: boolean): string
   return senderRole === "brand"
     ? "bg-teal-600 text-white rounded-br-sm"
     : "bg-violet-600 text-white rounded-br-sm";
-}
-
-// ─── Typing Dots (3 bouncing dots) ────────────────────────────────────────────
-// Always displayed on the LEFT (the partner's side). Never shown to the author
-// of the typing — the current user never sees their own typing indicator.
-
-function TypingDots({
-  partnerName,
-  partnerAvatarUrl,
-  partnerType,
-}: {
-  partnerName: string;
-  partnerAvatarUrl: string | null;
-  partnerType: "brand" | "creator";
-}) {
-  return (
-    <div className="flex gap-1.5 justify-start">
-      <MiniAvatar name={partnerName} avatarUrl={partnerAvatarUrl} type={partnerType} />
-      <div className="rounded-2xl rounded-bl-sm bg-neutral-800 px-3.5 py-2.5 flex items-center gap-1.5">
-        <span
-          className="w-2 h-2 rounded-full bg-neutral-400 animate-bounce"
-          style={{ animationDelay: "0ms" }}
-        />
-        <span
-          className="w-2 h-2 rounded-full bg-neutral-400 animate-bounce"
-          style={{ animationDelay: "200ms" }}
-        />
-        <span
-          className="w-2 h-2 rounded-full bg-neutral-400 animate-bounce"
-          style={{ animationDelay: "400ms" }}
-        />
-      </div>
-    </div>
-  );
 }
 
 // ─── Mini Avatar ──────────────────────────────────────────────────────────────
@@ -128,27 +93,8 @@ export default function ChatWindow({
   const [loading, setLoading] = useState(true);
   const [inputText, setInputText] = useState("");
   const [sending, setSending] = useState(false);
-  /**
-   * partnerTyping — true for ~2.5 s after the current user sends a message,
-   * simulating "the other person is drafting a reply". Shown on the LEFT side
-   * (the partner's side). The current user NEVER sees dots from their own input.
-   */
-  const [partnerTyping, setPartnerTyping] = useState(false);
-  const partnerTypingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Cancel the partner-typing timer and hide dots immediately.
-  const clearPartnerTyping = useCallback(() => {
-    if (partnerTypingTimer.current) {
-      clearTimeout(partnerTypingTimer.current);
-      partnerTypingTimer.current = null;
-    }
-    setPartnerTyping(false);
-  }, []);
-
-  // Clean up the timer on unmount.
-  useEffect(() => () => clearPartnerTyping(), [clearPartnerTyping]);
 
   // ── Initial load ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -170,16 +116,11 @@ export default function ChatWindow({
           const lastOld = prev[prev.length - 1]?.id;
           if (lastNew === lastOld) return prev; // no change — skip re-render
         }
-        // New message from the partner arrived — they're done "typing".
-        const lastMsg = refreshed[refreshed.length - 1];
-        if (lastMsg && lastMsg.senderId === w.userId) {
-          clearPartnerTyping();
-        }
         return refreshed;
       });
     }, 2500);
     return () => clearInterval(id);
-  }, [w.userId, w.minimized, clearPartnerTyping]);
+  }, [w.userId, w.minimized]);
 
   // ── Scroll to newest message ──────────────────────────────────────────────
   useEffect(() => {
@@ -218,11 +159,6 @@ export default function ChatWindow({
     } else {
       const refreshed = await getConversationAction(w.userId);
       setMessages(refreshed);
-      // Show partner-typing dots on the LEFT for ~2.5 s to simulate a reply being drafted.
-      // This is intentionally shown AFTER sending — never when the user is typing.
-      clearPartnerTyping();
-      setPartnerTyping(true);
-      partnerTypingTimer.current = setTimeout(() => setPartnerTyping(false), 2500);
     }
     setSending(false);
   };
@@ -381,15 +317,6 @@ export default function ChatWindow({
                   </div>
                 );
               })
-            )}
-
-            {/* Partner typing dots — LEFT side only, never shown to the typist */}
-            {partnerTyping && !loading && (
-              <TypingDots
-                partnerName={w.userName}
-                partnerAvatarUrl={w.avatarUrl}
-                partnerType={w.userType}
-              />
             )}
 
             <div ref={scrollRef} />
