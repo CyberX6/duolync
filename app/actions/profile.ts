@@ -120,7 +120,22 @@ export interface OnboardingData {
   bio?: string;
 }
 
+export async function updateAvatarAction(
+  imageUrl: string | null,
+): Promise<{ error: string | null }> {
+  const session = await getSessionOrNull();
+  if (!session) return { error: "Unauthorized" };
+
+  await db.user.update({
+    where: { id: session.user.id },
+    data: { image: imageUrl },
+  });
+
+  return { error: null };
+}
+
 export async function updateProfileAction(data: {
+  name?: string | null;
   bio?: string | null;
   niche?: string | null;
   primaryPlatform?: string | null;
@@ -138,6 +153,13 @@ export async function updateProfileAction(data: {
     select: { role: true },
   });
   if (!user) return { error: "User not found" };
+
+  if (data.name !== undefined) {
+    await db.user.update({
+      where: { id: session.user.id },
+      data: { name: data.name ?? undefined },
+    });
+  }
 
   if (user.role === Role.BRAND) {
     await db.brandProfile.upsert({

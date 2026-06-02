@@ -63,7 +63,6 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    userType: "brand" | "creator",
     fullName: string,
   ) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -143,14 +142,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleSignUp = async (
     email: string,
     password: string,
-    userType: "brand" | "creator",
     fullName: string,
   ): Promise<{ error: Error | null }> => {
     const result = await baSignUp.email({
       email,
       password,
       name: fullName,
-      role: userType,
     } as Parameters<typeof baSignUp.email>[0]);
     return { error: result.error ? new Error(result.error.message) : null };
   };
