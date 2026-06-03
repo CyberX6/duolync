@@ -11,7 +11,14 @@ export async function getMiddlewareSession(
   request: NextRequest,
   options?: { disableCookieCache?: boolean },
 ): Promise<MiddlewareSession | null> {
-  const url = new URL("/api/auth/get-session", request.nextUrl.origin);
+  // On Railway (and similar PaaS), the public origin is HTTPS but the container
+  // serves plain HTTP. Fetching the public URL inside the same container hits the
+  // raw HTTP server with an SSL handshake → ERR_SSL_WRONG_VERSION_NUMBER.
+  // Using localhost:PORT bypasses the TLS proxy entirely and avoids the mismatch.
+  const selfOrigin = process.env.PORT
+    ? `http://localhost:${process.env.PORT}`
+    : request.nextUrl.origin;
+  const url = new URL("/api/auth/get-session", selfOrigin);
 
   if (options?.disableCookieCache) {
     url.searchParams.set("disableCookieCache", "true");
