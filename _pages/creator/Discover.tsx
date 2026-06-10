@@ -1,10 +1,9 @@
 "use client";
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Search, SlidersHorizontal, Heart, MessageSquare, X,
   MapPin, BadgeCheck, Users, TrendingUp, ChevronDown,
-  Briefcase, Globe, Sparkles,
+  Briefcase, Globe, Sparkles, UserPlus, UserCheck, Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +19,14 @@ import { useProfiles, type BrandProfile } from "@/components/discovery/ProfilesC
 import { useFavorites } from "@/components/favorites/FavoritesContext";
 import { useMessaging } from "@/components/messaging/MessagingContext";
 import { useAuth } from "@/hooks/useAuth";
+import {
+  sendConnectionRequestAction,
+  withdrawConnectionAction,
+  getConnectionStatusesAction,
+  type ConnectionStatusResult,
+  type ConnectionInfo,
+} from "@/app/actions/connections";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 type DiscoveryTab = "brands" | "creators";
@@ -74,6 +81,77 @@ function matchesReach(followers: number, range: string): boolean {
   return true;
 }
 
+// Seed profiles have short IDs like "b1", "c3". Real cuid IDs are 25 chars.
+function isRealProfile(id: string) {
+  return id.length > 10;
+}
+
+// ─── Shared Connect Button ────────────────────────────────────────────────────
+
+function ConnectBtn({
+  targetId,
+  connectionInfo,
+  onConnectionChange,
+}: {
+  targetId: string;
+  connectionInfo: ConnectionInfo;
+  onConnectionChange: (id: string, status: ConnectionStatusResult, connId: string | null) => void;
+}) {
+  const { toast } = useToast();
+  const [connStatus, setConnStatus] = useState<ConnectionStatusResult>(connectionInfo.status);
+  const [connId, setConnId] = useState<string | null>(connectionInfo.connectionId);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setConnStatus(connectionInfo.status);
+    setConnId(connectionInfo.connectionId);
+  }, [connectionInfo.status, connectionInfo.connectionId]);
+
+  const handle = async () => {
+    if (connStatus === "accepted" || connStatus === "pending_received") return;
+    setLoading(true);
+    if (connStatus === "pending_sent" && connId) {
+      const res = await withdrawConnectionAction(connId);
+      if (!res.error) {
+        setConnStatus("none"); setConnId(null);
+        onConnectionChange(targetId, "none", null);
+        toast({ title: "Request withdrawn" });
+      }
+    } else if (connStatus === "none") {
+      const res = await sendConnectionRequestAction(targetId);
+      if (!res.error && res.connectionId) {
+        setConnStatus("pending_sent"); setConnId(res.connectionId);
+        onConnectionChange(targetId, "pending_sent", res.connectionId);
+        toast({ title: "Connection request sent!" });
+      } else if (res.error) {
+        toast({ title: "Error", description: res.error, variant: "destructive" });
+      }
+    }
+    setLoading(false);
+  };
+
+  const Icon = connStatus === "accepted" ? UserCheck : connStatus === "pending_sent" || connStatus === "pending_received" ? Clock : UserPlus;
+
+  return (
+    <Button
+      variant="ghost" size="sm"
+      disabled={loading || connStatus === "accepted" || connStatus === "pending_received"}
+      title={connStatus === "accepted" ? "Connected" : connStatus === "pending_sent" ? "Withdraw request" : connStatus === "pending_received" ? "They sent you a request" : "Connect"}
+      onClick={handle}
+      className={cn(
+        "h-8 w-8 p-0 rounded-xl border shrink-0 transition-colors",
+        connStatus === "accepted"
+          ? "border-green-300 dark:border-green-700 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10"
+          : connStatus === "pending_sent" || connStatus === "pending_received"
+          ? "border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400"
+          : "border-zinc-200 dark:border-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-200 dark:hover:border-blue-500/40 hover:text-blue-600 dark:hover:text-blue-400",
+      )}
+    >
+      <Icon className="w-3.5 h-3.5" />
+    </Button>
+  );
+}
+
 // ─── Brand Card ───────────────────────────────────────────────────────────────
 
 const BrandCard = ({
@@ -81,11 +159,15 @@ const BrandCard = ({
   isSaved,
   onSave,
   onMessage,
+  connectionInfo,
+  onConnectionChange,
 }: {
   brand: BrandProfile;
   isSaved: boolean;
   onSave: (t: SaveTarget) => void;
   onMessage: (b: BrandProfile) => void;
+  connectionInfo: ConnectionInfo;
+  onConnectionChange: (id: string, status: ConnectionStatusResult, connId: string | null) => void;
 }) => {
   const initials = brand.company_name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   const gradient = BRAND_GRADIENTS[brand.id.charCodeAt(brand.id.length - 1) % BRAND_GRADIENTS.length];
@@ -128,6 +210,7 @@ const BrandCard = ({
         )}
         <div className="flex gap-2">
           <Button size="sm" className="flex-1 h-8 text-xs btn-gradient rounded-xl font-semibold">View Brand</Button>
+          {isRealProfile(brand.id) && <ConnectBtn targetId={brand.id} connectionInfo={connectionInfo} onConnectionChange={onConnectionChange} />}
           <Button
             variant="ghost" size="sm"
             className="h-8 w-8 p-0 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:border-purple-200 dark:hover:border-purple-500/40 hover:text-purple-600 dark:hover:text-purple-400 shrink-0 transition-colors"
@@ -145,12 +228,14 @@ const BrandCard = ({
 // ─── Creator Card ─────────────────────────────────────────────────────────────
 
 const CreatorCard = ({
-  creator, isSaved, onSave, onViewProfile, onMessage,
+  creator, isSaved, onSave, onViewProfile, onMessage, connectionInfo, onConnectionChange,
 }: {
   creator: Creator; isSaved: boolean;
   onSave: (t: SaveTarget) => void;
   onViewProfile: (c: Creator) => void;
   onMessage: (c: Creator) => void;
+  connectionInfo: ConnectionInfo;
+  onConnectionChange: (id: string, status: ConnectionStatusResult, connId: string | null) => void;
 }) => {
   const tags = getNicheTags(creator.niche);
   const initials = creator.full_name ? creator.full_name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "??";
@@ -212,6 +297,7 @@ const CreatorCard = ({
         </div>
         <div className="flex gap-2">
           <Button size="sm" className="flex-1 h-8 text-xs btn-gradient rounded-xl font-semibold" onClick={() => onViewProfile(creator)}>View Profile</Button>
+          {isRealProfile(creator.id) && <ConnectBtn targetId={creator.id} connectionInfo={connectionInfo} onConnectionChange={onConnectionChange} />}
           <Button
             variant="ghost" size="sm"
             className="h-8 w-8 p-0 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:border-purple-200 dark:hover:border-purple-500/40 hover:text-purple-600 dark:hover:text-purple-400 shrink-0 transition-colors"
@@ -267,7 +353,6 @@ const EmptyState = ({ tab, isFiltered, onClear }: { tab: DiscoveryTab; isFiltere
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const CreatorDiscover = () => {
-  const router = useRouter();
   const { profile } = useAuth();
   const { creators, brands } = useProfiles();
   const { isInAnyCollection } = useFavorites();
@@ -279,6 +364,23 @@ const CreatorDiscover = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
+
+  // ── Connection statuses ───────────────────────────────────────────────────
+  const [connectionStatuses, setConnectionStatuses] = useState<Record<string, ConnectionInfo>>({});
+
+  // Fetch statuses once all profiles are loaded
+  useEffect(() => {
+    const allIds = [...creators.map((c) => c.id), ...brands.map((b) => b.id)];
+    if (allIds.length === 0) return;
+    getConnectionStatusesAction(allIds).then(setConnectionStatuses);
+  }, [creators, brands]);
+
+  const handleConnectionChange = useCallback(
+    (targetId: string, status: ConnectionStatusResult, connId: string | null) => {
+      setConnectionStatuses((prev) => ({ ...prev, [targetId]: { status, connectionId: connId } }));
+    },
+    [],
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -459,7 +561,12 @@ const CreatorDiscover = () => {
           ) : filtered.length > 0 ? (
             activeTab === "brands" ? (
               (filteredBrands as BrandProfile[]).map((b) => (
-                <BrandCard key={b.id} brand={b} isSaved={isInAnyCollection(b.id)} onSave={setSaveTarget} onMessage={handleMessageBrand} />
+                <BrandCard
+                  key={b.id} brand={b} isSaved={isInAnyCollection(b.id)}
+                  onSave={setSaveTarget} onMessage={handleMessageBrand}
+                  connectionInfo={connectionStatuses[b.id] ?? { status: "none", connectionId: null }}
+                  onConnectionChange={handleConnectionChange}
+                />
               ))
             ) : (
               (filteredCreators as Creator[]).map((c) => (
@@ -468,6 +575,8 @@ const CreatorDiscover = () => {
                   onSave={setSaveTarget}
                   onViewProfile={(cr) => { setSelectedCreator(cr); setDrawerOpen(true); }}
                   onMessage={handleMessageCreator}
+                  connectionInfo={connectionStatuses[c.id] ?? { status: "none", connectionId: null }}
+                  onConnectionChange={handleConnectionChange}
                 />
               ))
             )

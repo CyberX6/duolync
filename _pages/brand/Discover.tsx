@@ -1,15 +1,22 @@
 "use client";
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Search, SlidersHorizontal, Heart, MessageSquare, X,
-  MapPin, BadgeCheck, Users, TrendingUp, ChevronDown,
+  MapPin, BadgeCheck, Users, TrendingUp, ChevronDown, ListPlus, Check, Plus,
+  UserPlus, UserCheck, Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from "@/components/ui/dialog";
 import MainLayout from "@/components/layout/MainLayout";
 import ProfileDrawer, {
   type Creator, PlatformBadge, PLATFORM_META,
@@ -19,7 +26,27 @@ import { useProfiles } from "@/components/discovery/ProfilesContext";
 import { useFavorites } from "@/components/favorites/FavoritesContext";
 import { useMessaging } from "@/components/messaging/MessagingContext";
 import { useAuth } from "@/hooks/useAuth";
+import {
+  getCommunityListsAction,
+  createCommunityListAction,
+  addCreatorToListAction,
+  removeCreatorFromListAction,
+  type CommunityListWithCount,
+} from "@/app/actions/communities";
+import {
+  sendConnectionRequestAction,
+  withdrawConnectionAction,
+  getConnectionStatusesAction,
+  type ConnectionStatusResult,
+  type ConnectionInfo,
+} from "@/app/actions/connections";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+
+// Seed profiles have short IDs like "c1", "c3". Real cuid IDs are 25+ chars.
+function isRealProfile(id: string) {
+  return id.length > 10;
+}
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -60,6 +87,101 @@ function matchesReach(followers: number, range: string): boolean {
   return true;
 }
 
+// ─── Add to Community Dropdown ────────────────────────────────────────────────
+// Receives lists from parent. On toggle, calls onMemberToggled so parent can
+// do an optimistic update — no stale checkboxes on re-open.
+
+function AddToCommunityMenu({
+  creatorId,
+  lists,
+  onCreateList,
+  onMemberToggled,
+}: {
+  creatorId: string;
+  lists: CommunityListWithCount[];
+  onCreateList: () => void;
+  onMemberToggled: (listId: string, added: boolean) => void;
+}) {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const toggle = async (list: CommunityListWithCount) => {
+    const isMember = list.memberUserIds.includes(creatorId);
+    setLoading(list.id);
+    const result = isMember
+      ? await removeCreatorFromListAction(list.id, creatorId)
+      : await addCreatorToListAction(list.id, creatorId);
+    setLoading(null);
+    if (result.error) {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    } else {
+      // Optimistically update parent so re-opening dropdown shows correct state
+      onMemberToggled(list.id, !isMember);
+      toast({
+        title: isMember ? "Removed from list" : "Added to list",
+        description: isMember ? `Removed from "${list.name}"` : `Added to "${list.name}"`,
+      });
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:border-violet-200 dark:hover:border-violet-500/40 hover:text-violet-600 dark:hover:text-violet-400 shrink-0 transition-colors"
+          aria-label="Add to community"
+          title="Add to Community"
+        >
+          <ListPlus className="w-3.5 h-3.5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52">
+        <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          Add to Community
+        </div>
+        <DropdownMenuSeparator />
+        {lists.length === 0 ? (
+          <div className="px-3 py-2 text-xs text-muted-foreground">No lists yet</div>
+        ) : (
+          lists.map((list) => {
+            const isMember = list.memberUserIds.includes(creatorId);
+            return (
+              <DropdownMenuItem
+                key={list.id}
+                onClick={() => toggle(list)}
+                disabled={loading === list.id}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <span
+                  className={cn(
+                    "w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors",
+                    isMember
+                      ? "bg-violet-600 border-violet-600 text-white"
+                      : "border-zinc-300 dark:border-zinc-600",
+                  )}
+                >
+                  {isMember && <Check className="w-2.5 h-2.5" />}
+                </span>
+                <span className="truncate text-sm">{list.name}</span>
+                <span className="ml-auto text-xs text-muted-foreground shrink-0">
+                  {list.memberCount}
+                </span>
+              </DropdownMenuItem>
+            );
+          })
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={onCreateList} className="flex items-center gap-2 cursor-pointer">
+          <Plus className="w-3.5 h-3.5 text-primary" />
+          <span className="text-sm text-primary">New list…</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 // ─── Creator Card ─────────────────────────────────────────────────────────────
 
 const CreatorCard = ({
@@ -68,13 +190,60 @@ const CreatorCard = ({
   onSave,
   onViewProfile,
   onMessage,
+  communityLists,
+  onCreateCommunityList,
+  onMemberToggled,
+  connectionInfo,
+  onConnectionChange,
 }: {
   creator: Creator;
   isSaved: boolean;
   onSave: (target: SaveTarget) => void;
   onViewProfile: (c: Creator) => void;
   onMessage: (c: Creator) => void;
+  communityLists: CommunityListWithCount[];
+  onCreateCommunityList: () => void;
+  onMemberToggled: (listId: string, added: boolean) => void;
+  connectionInfo: ConnectionInfo;
+  onConnectionChange: (creatorId: string, status: ConnectionStatusResult, connectionId: string | null) => void;
 }) => {
+  const { toast } = useToast();
+  // Local state mirrors the server-sourced connectionInfo; updates immediately on action
+  const [connStatus, setConnStatus] = useState<ConnectionStatusResult>(connectionInfo.status);
+  const [connId, setConnId] = useState<string | null>(connectionInfo.connectionId);
+  const [connLoading, setConnLoading] = useState(false);
+
+  // Sync when parent updates (e.g. bulk fetch completes after initial render)
+  useEffect(() => {
+    setConnStatus(connectionInfo.status);
+    setConnId(connectionInfo.connectionId);
+  }, [connectionInfo.status, connectionInfo.connectionId]);
+
+  const handleConnect = async () => {
+    if (connStatus === "accepted" || connStatus === "pending_received") return;
+    setConnLoading(true);
+    if (connStatus === "pending_sent" && connId) {
+      const res = await withdrawConnectionAction(connId);
+      if (!res.error) {
+        setConnStatus("none");
+        setConnId(null);
+        onConnectionChange(creator.id, "none", null);
+        toast({ title: "Request withdrawn" });
+      }
+    } else if (connStatus === "none") {
+      const res = await sendConnectionRequestAction(creator.id);
+      if (!res.error && res.connectionId) {
+        setConnStatus("pending_sent");
+        setConnId(res.connectionId);
+        onConnectionChange(creator.id, "pending_sent", res.connectionId);
+        toast({ title: "Connection request sent!" });
+      } else if (res.error) {
+        toast({ title: "Error", description: res.error, variant: "destructive" });
+      }
+    }
+    setConnLoading(false);
+  };
+
   const tags = getNicheTags(creator.niche);
   const initials = creator.full_name
     ? creator.full_name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()
@@ -197,6 +366,39 @@ const CreatorCard = ({
           <Button size="sm" className="flex-1 h-8 text-xs btn-gradient rounded-xl font-semibold" onClick={() => onViewProfile(creator)}>
             View Profile
           </Button>
+
+          {/* Connect button — only shown for real DB profiles */}
+          {isRealProfile(creator.id) && <Button
+            variant="ghost"
+            size="sm"
+            disabled={connLoading || connStatus === "accepted" || connStatus === "pending_received"}
+            title={
+              connStatus === "accepted" ? "Connected" :
+              connStatus === "pending_sent" ? "Click to withdraw request" :
+              connStatus === "pending_received" ? "They sent you a request" :
+              "Send connection request"
+            }
+            onClick={handleConnect}
+            className={cn(
+              "h-8 w-8 p-0 rounded-xl border shrink-0 transition-colors",
+              connStatus === "accepted"
+                ? "border-green-300 dark:border-green-700 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10"
+                : connStatus === "pending_sent"
+                ? "border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10"
+                : connStatus === "pending_received"
+                ? "border-blue-300 dark:border-blue-700 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
+                : "border-zinc-200 dark:border-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-200 dark:hover:border-blue-500/40 hover:text-blue-600 dark:hover:text-blue-400",
+            )}
+          >
+            {connStatus === "accepted" ? (
+              <UserCheck className="w-3.5 h-3.5" />
+            ) : connStatus === "pending_sent" || connStatus === "pending_received" ? (
+              <Clock className="w-3.5 h-3.5" />
+            ) : (
+              <UserPlus className="w-3.5 h-3.5" />
+            )}
+          </Button>}
+
           <Button
             variant="ghost"
             size="sm"
@@ -206,6 +408,12 @@ const CreatorCard = ({
           >
             <MessageSquare className="w-3.5 h-3.5" />
           </Button>
+          <AddToCommunityMenu
+            creatorId={creator.id}
+            lists={communityLists}
+            onCreateList={onCreateCommunityList}
+            onMemberToggled={onMemberToggled}
+          />
         </div>
       </div>
     </div>
@@ -261,7 +469,6 @@ const EmptyState = ({ isFiltered, onClear }: { isFiltered: boolean; onClear: () 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const Discover = () => {
-  const router = useRouter();
   const { profile } = useAuth();
   const { creators } = useProfiles();
   const { isInAnyCollection } = useFavorites();
@@ -273,6 +480,83 @@ const Discover = () => {
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
+
+  // Community lists
+  const [communityLists, setCommunityLists] = useState<CommunityListWithCount[]>([]);
+  const [showCreateListModal, setShowCreateListModal] = useState(false);
+  const [newListName, setNewListName] = useState("");
+  const [creatingList, setCreatingList] = useState(false);
+  const { toast } = useToast();
+
+  // ── Connection statuses (keyed by creator userId) ──────────────────────────
+  // Server-sourced on load so status persists across refreshes.
+  const [connectionStatuses, setConnectionStatuses] = useState<
+    Record<string, ConnectionInfo>
+  >({});
+
+  // Fetch lists on mount
+  useEffect(() => {
+    getCommunityListsAction().then((res) => {
+      if (!res.error) setCommunityLists(res.data);
+    });
+  }, []);
+
+  // Fetch all connection statuses once creators are loaded (single batch call)
+  useEffect(() => {
+    if (creators.length === 0) return;
+    const ids = creators.map((c) => c.id);
+    getConnectionStatusesAction(ids).then(setConnectionStatuses);
+  }, [creators]);
+
+  // Optimistic update for community list membership
+  const handleMemberToggled = useCallback(
+    (listId: string, creatorId: string, added: boolean) => {
+      setCommunityLists((prev) =>
+        prev.map((l) => {
+          if (l.id !== listId) return l;
+          const ids = added
+            ? [...l.memberUserIds, creatorId]
+            : l.memberUserIds.filter((id) => id !== creatorId);
+          return {
+            ...l,
+            memberUserIds: ids,
+            memberCount: ids.length,
+          };
+        }),
+      );
+    },
+    [],
+  );
+
+  // Optimistic update for connection status
+  const handleConnectionChange = useCallback(
+    (
+      creatorId: string,
+      status: ConnectionStatusResult,
+      connectionId: string | null,
+    ) => {
+      setConnectionStatuses((prev) => ({
+        ...prev,
+        [creatorId]: { status, connectionId },
+      }));
+    },
+    [],
+  );
+
+  const handleCreateList = async () => {
+    if (!newListName.trim()) return;
+    setCreatingList(true);
+    const res = await createCommunityListAction(newListName);
+    setCreatingList(false);
+    if (res.error) {
+      toast({ title: "Error", description: res.error, variant: "destructive" });
+    } else if (res.data) {
+      setCommunityLists((prev) => [...prev, res.data!]);
+      setNewListName("");
+      setShowCreateListModal(false);
+      toast({ title: "List created", description: `"${res.data.name}" is ready.` });
+    }
+  };
 
   // Search & filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -417,7 +701,7 @@ const Discover = () => {
           </div>
         </div>
 
-        {/* Count */}
+        {/* Active filter chips + count */}
         <div className="flex items-center justify-between mb-6 gap-4 min-h-[28px]">
           <div className="flex flex-wrap gap-2">
             {[
@@ -456,6 +740,11 @@ const Discover = () => {
                 onSave={setSaveTarget}
                 onViewProfile={openProfile}
                 onMessage={handleMessage}
+                communityLists={communityLists}
+                onCreateCommunityList={() => setShowCreateListModal(true)}
+                onMemberToggled={(listId, added) => handleMemberToggled(listId, c.id, added)}
+                connectionInfo={connectionStatuses[c.id] ?? { status: "none", connectionId: null }}
+                onConnectionChange={handleConnectionChange}
               />
             ))
           ) : (
@@ -463,6 +752,34 @@ const Discover = () => {
           )}
         </div>
       </div>
+
+      {/* Create Community List Modal */}
+      <Dialog open={showCreateListModal} onOpenChange={setShowCreateListModal}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Create Community List</DialogTitle>
+          </DialogHeader>
+          <div className="py-2">
+            <Input
+              placeholder='e.g. "Gamer Creators", "Beauty Influencers"'
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleCreateList(); }}
+              maxLength={60}
+              autoFocus
+            />
+            <p className="text-xs text-muted-foreground mt-1.5">{newListName.length}/60 characters</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setShowCreateListModal(false); setNewListName(""); }}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreateList} disabled={creatingList || !newListName.trim()} className="btn-gradient">
+              {creatingList ? "Creating…" : "Create List"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 };
