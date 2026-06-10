@@ -106,6 +106,11 @@ function toProfile(fp: FullProfile): Profile {
 // ── Provider ───────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { data: session, isPending } = useSession();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const sessionUser = session?.user ?? null;
 
@@ -136,7 +141,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const profile: Profile | null = dbProfile ? toProfile(dbProfile) : null;
 
   // True while we're still waiting for either the session cookie OR the DB fetch.
-  const loading = isPending || profileLoading;
+  // `mounted` ensures server and client both start with loading=true, preventing hydration mismatch.
+  const loading = !mounted || isPending || profileLoading;
 
   // ── Auth handlers ──────────────────────────────────────────────────────
   const handleSignUp = async (

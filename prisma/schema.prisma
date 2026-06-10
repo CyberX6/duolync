@@ -34,6 +34,12 @@ enum LeadStatus {
   REJECTED
 }
 
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 // ── CORE USER MODEL (Better Auth Compatible & Profile Relations) ─────────────
 model User {
   id                     String          @id @default(cuid())
@@ -53,6 +59,9 @@ model User {
   platformStats    PlatformStats[]
   sentMessages     Message[]        @relation("SentMessages")
   receivedMessages Message[]        @relation("ReceivedMessages")
+  notifications    Notification[]
+  sentConnections      Connection[] @relation("SentConnections")
+  receivedConnections  Connection[] @relation("ReceivedConnections")
 
   // Polymorphic Profile Relations (One-to-One)
   brandProfile   BrandProfile?
@@ -71,8 +80,11 @@ model BrandProfile {
   bio              String?
   location         String?
 
-  campaigns Campaign[]
-  crmLeads  CRMLead[]
+  socialLinks     Json?   // [{ platform: string, url: string }]
+
+  campaigns       Campaign[]
+  crmLeads        CRMLead[]
+  communityLists  CommunityList[]
 }
 
 // ── CREATOR PROFILE (Media Kit & Cached Metrics) ─────────────────────────────
@@ -89,6 +101,7 @@ model CreatorProfile {
   totalFollowers    Int       @default(0)
   avgEngagementRate Float     @default(0)
   lastStatsUpdate   DateTime?
+  socialLinks       Json?     // [{ platform: string, url: string }]
 
   contracts Contract[]
   proposals Proposal[]
@@ -267,4 +280,59 @@ model Task {
   dueDate    DateTime
   status     String    @default("TODO") // TODO, IN_PROGRESS, DONE
   createdAt  DateTime  @default(now())
+}
+
+// ── CONNECTIONS (LinkedIn-style request/accept) ───────────────────────────────
+model Connection {
+  id         String           @id @default(cuid())
+  senderId   String
+  sender     User             @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User             @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     ConnectionStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+// ── COMMUNITY LISTS (Brand-curated creator groups) ───────────────────────────
+model CommunityList {
+  id             String                @id @default(cuid())
+  brandProfileId String
+  brand          BrandProfile          @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
+  name           String
+  createdAt      DateTime              @default(now())
+  members        CommunityListMember[]
+
+  @@index([brandProfileId])
+}
+
+model CommunityListMember {
+  id            String        @id @default(cuid())
+  listId        String
+  list          CommunityList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  creatorUserId String
+  addedAt       DateTime      @default(now())
+
+  @@unique([listId, creatorUserId])
+  @@index([listId])
+}
+
+// ── NOTIFICATION SYSTEM ───────────────────────────────────────────────────────
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // "PROPOSAL_RECEIVED" | "PROPOSAL_ACCEPTED" | "PROPOSAL_REJECTED" | "MESSAGE"
+  title     String
+  body      String?
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }

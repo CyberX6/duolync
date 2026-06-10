@@ -105,6 +105,174 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
   };
 }
 
+// ── Public profile view (any authenticated user can look up another user) ─────
+
+export interface SocialLink {
+  platform: string;
+  url: string;
+}
+
+export interface PublicProfile {
+  id: string;
+  userId: string;
+  user_type: "brand" | "creator";
+  full_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  location: string | null;
+  connectionCount: number;
+  socialLinks: SocialLink[];
+  // Creator fields
+  niche: string | null;
+  primary_platform: string | null;
+  total_followers: number;
+  avg_engagement_rate: number;
+  platformStats: {
+    platform: string;
+    followerCount: number | null;
+    followingCount: number | null;
+    postCount: number | null;
+    engagementRate: number | null;
+    fetchedAt: string;
+  }[];
+  // Brand fields
+  company_name: string | null;
+  industry: string | null;
+  website: string | null;
+  communityListCount: number;
+  campaigns: {
+    id: string;
+    title: string;
+    description: string;
+    budget: number;
+    status: string;
+    createdAt: string;
+  }[];
+}
+
+export async function getProfileAction(
+  targetUserId: string,
+): Promise<PublicProfile | null> {
+  try {
+  const session = await getSessionOrNull();
+  if (!session) return null;
+
+  const [user, connectionCount] = await Promise.all([
+    db.user.findUnique({
+      where: { id: targetUserId },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        role: true,
+        platformStats: {
+          orderBy: { fetchedAt: "desc" },
+          select: {
+            platform: true,
+            followerCount: true,
+            followingCount: true,
+            postCount: true,
+            engagementRate: true,
+            fetchedAt: true,
+          },
+        },
+        brandProfile: {
+          select: {
+            id: true,
+            companyName: true,
+            industry: true,
+            website: true,
+            bio: true,
+            location: true,
+            socialLinks: true,
+            _count: { select: { communityLists: true } },
+            campaigns: {
+              where: { status: { not: "DRAFT" } },
+              orderBy: { createdAt: "desc" },
+              take: 10,
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                budget: true,
+                status: true,
+                createdAt: true,
+              },
+            },
+          },
+        },
+        creatorProfile: {
+          select: {
+            id: true,
+            bio: true,
+            niche: true,
+            primaryPlatform: true,
+            location: true,
+            totalFollowers: true,
+            avgEngagementRate: true,
+            socialLinks: true,
+          },
+        },
+      },
+    }),
+    db.connection.count({
+      where: {
+        OR: [{ senderId: targetUserId }, { receiverId: targetUserId }],
+        status: "ACCEPTED",
+      },
+    }),
+  ]);
+
+  if (!user) return null;
+
+  const userType = fromPrismaRole(user.role);
+  const brand = user.brandProfile;
+  const creator = user.creatorProfile;
+  const rawLinks = (userType === "brand" ? brand?.socialLinks : creator?.socialLinks) ?? [];
+  const socialLinks = Array.isArray(rawLinks) ? (rawLinks as unknown as SocialLink[]) : [];
+
+  return {
+    id: brand?.id ?? creator?.id ?? user.id,
+    userId: user.id,
+    user_type: userType,
+    full_name: user.name ?? null,
+    avatar_url: user.image ?? null,
+    bio: (userType === "brand" ? brand?.bio : creator?.bio) ?? null,
+    location:
+      (userType === "brand" ? brand?.location : creator?.location) ?? null,
+    connectionCount,
+    socialLinks,
+    niche: creator?.niche ?? null,
+    primary_platform: (creator?.primaryPlatform ?? null) as string | null,
+    total_followers: creator?.totalFollowers ?? 0,
+    avg_engagement_rate: creator?.avgEngagementRate ?? 0,
+    platformStats: user.platformStats.map((s) => ({
+      platform: s.platform,
+      followerCount: s.followerCount,
+      followingCount: s.followingCount,
+      postCount: s.postCount,
+      engagementRate: s.engagementRate,
+      fetchedAt: s.fetchedAt.toISOString(),
+    })),
+    company_name: brand?.companyName ?? null,
+    industry: brand?.industry ?? null,
+    website: brand?.website ?? null,
+    communityListCount: brand?._count?.communityLists ?? 0,
+    campaigns: (brand?.campaigns ?? []).map((c) => ({
+      id: c.id,
+      title: c.title,
+      description: c.description,
+      budget: c.budget,
+      status: c.status,
+      createdAt: c.createdAt.toISOString(),
+    })),
+  };
+  } catch (e) {
+    console.error("[getProfileAction]", e);
+    return null;
+  }
+}
+
 export interface OnboardingData {
   imageUrl?: string;
   // Creator
@@ -204,6 +372,37 @@ export async function updateProfileAction(data: {
           : {}),
         ...(data.location !== undefined ? { location: data.location } : {}),
       },
+    });
+  }
+
+  return { error: null };
+}
+
+export async function updateSocialLinksAction(
+  links: SocialLink[],
+): Promise<{ error: string | null }> {
+  const session = await getSessionOrNull();
+  if (!session) return { error: "Unauthorized" };
+
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+  if (!user) return { error: "User not found" };
+
+  const sanitized = links
+    .filter((l) => l.platform && l.url)
+    .map((l) => ({ platform: l.platform.trim(), url: l.url.trim() }));
+
+  if (user.role === Role.BRAND) {
+    await db.brandProfile.updateMany({
+      where: { userId: session.user.id },
+      data: { socialLinks: sanitized },
+    });
+  } else {
+    await db.creatorProfile.updateMany({
+      where: { userId: session.user.id },
+      data: { socialLinks: sanitized },
     });
   }
 
