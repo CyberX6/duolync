@@ -1,29 +1,20 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
-import { BarChart3, Users, Eye, TrendingUp, Link2, Plus, Settings, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BarChart3, Users, Eye, TrendingUp, Link2, ArrowRight, LayoutDashboard } from "lucide-react";
 import MainLayout from "@/components/layout/MainLayout";
+import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
 import { useAuth } from "@/hooks/useAuth";
 
-interface SocialAccount {
-  id: string;
-  platform: string;
-  username: string;
-  profile_url: string | null;
-  followers: number;
-  total_views: number;
-  engagement_rate: number;
-  is_primary: boolean;
-}
+const VIOLET = "#c084fc";
+const CYAN = "#67e8f9";
 
 const CreatorDashboard = () => {
   const { profile } = useAuth();
-  const [socialAccounts, setSocialAccounts] = useState<SocialAccount[]>([]);
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalViews: 0,
-    profileViews: 0,
     savedBy: 0,
-    conversations: 0,
   });
 
   const formatNumber = (num: number) => {
@@ -32,29 +23,43 @@ const CreatorDashboard = () => {
     return num.toString();
   };
 
-  const platformEmoji: Record<string, string> = {
-    youtube: "▶️",
-    tiktok: "📱",
-    instagram: "📷",
-    twitter: "🐦",
-    twitch: "🎮",
-    linkedin: "💼",
-  };
+  const firstName = profile?.full_name?.split(" ")[0] || "Creator";
 
   return (
     <MainLayout>
-      <div className="max-w-4xl mx-auto p-6">
-        {/* Welcome Header */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Command Center header */}
         <div className="mb-8">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4"
+            style={{
+              background: "rgba(192,132,252,0.12)",
+              border: "1px solid rgba(192,132,252,0.35)",
+              color: VIOLET,
+            }}
+          >
+            <LayoutDashboard size={11} />
+            Command Center
+          </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
-            Welcome back, {profile?.full_name?.split(" ")[0] || "Creator"}! 🎨
+            Welcome back, {firstName}!{" "}
+            <span
+              style={{
+                background: `linear-gradient(90deg, ${VIOLET}, ${CYAN})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              One command center.
+            </span>
           </h1>
-          <p className="text-muted-foreground text-lg">
-            Manage your profile and track your growth.
+          <p className="text-muted-foreground text-lg max-w-2xl">
+            Plan, schedule, and track your brand campaigns across every platform — all in one place.
           </p>
         </div>
 
-        {/* Stats */}
+        {/* KPI cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="stat-card">
             <Users className="w-6 h-6 text-primary mb-2" />
@@ -84,8 +89,23 @@ const CreatorDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
+        {/* Smart Calendar — main section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-xl font-bold">Smart Content Calendar</h2>
+            <Link
+              href="/creator/campaigns"
+              className="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors"
+            >
+              View campaigns
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <SmartCalendarWidget />
+        </div>
+
+        {/* Quick actions */}
+        <div className="grid md:grid-cols-2 gap-4">
           <Link href="/creator/accounts" className="card-interactive p-6 flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center">
               <Link2 className="w-7 h-7 text-accent" />
@@ -112,94 +132,6 @@ const CreatorDashboard = () => {
             <ArrowRight className="w-5 h-5 text-muted-foreground" />
           </Link>
         </div>
-
-        {/* Connected Accounts */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-xl font-bold">Connected Accounts</h2>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/creator/accounts" className="gap-2">
-                <Plus className="w-4 h-4" />
-                Add Account
-              </Link>
-            </Button>
-          </div>
-
-          {socialAccounts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {socialAccounts.map((account) => (
-                <div key={account.id} className="card-elevated p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-2xl">
-                      {platformEmoji[account.platform] || "📱"}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold capitalize flex items-center gap-2">
-                        {account.platform}
-                        {account.is_primary && (
-                          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                            Primary
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-sm text-muted-foreground truncate">
-                        @{account.username}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                    <div>
-                      <div className="font-semibold">{formatNumber(account.followers)}</div>
-                      <div className="text-xs text-muted-foreground">Followers</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold">{formatNumber(Number(account.total_views))}</div>
-                      <div className="text-xs text-muted-foreground">Views</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-green-600">{account.engagement_rate}%</div>
-                      <div className="text-xs text-muted-foreground">ER</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="card-elevated p-8 text-center">
-              <Link2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-display text-lg font-bold mb-2">No accounts connected</h3>
-              <p className="text-muted-foreground mb-4">
-                Connect your social media accounts to showcase your stats
-              </p>
-              <Button asChild>
-                <Link href="/creator/accounts">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Connect Account
-                </Link>
-              </Button>
-            </div>
-          )}
-        </div>
-
-        {/* Profile Completion */}
-        {(!profile?.bio || !profile?.niche) && (
-          <div className="card-elevated p-6 bg-accent/5 border-accent/20">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
-                <Settings className="w-6 h-6 text-accent" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-display font-bold text-lg mb-1">Complete Your Profile</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  A complete profile helps brands find and connect with you.
-                </p>
-                <Button asChild size="sm" variant="outline">
-                  <Link href="/creator/settings">Update Profile</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </MainLayout>
   );

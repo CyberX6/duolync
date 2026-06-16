@@ -69,6 +69,16 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  */
 export type Campaign = $Result.DefaultSelection<Prisma.$CampaignPayload>
 /**
+ * Model CampaignEvent
+ * 
+ */
+export type CampaignEvent = $Result.DefaultSelection<Prisma.$CampaignEventPayload>
+/**
+ * Model CampaignEventUpdate
+ * 
+ */
+export type CampaignEventUpdate = $Result.DefaultSelection<Prisma.$CampaignEventUpdatePayload>
+/**
  * Model Contract
  * 
  */
@@ -187,6 +197,37 @@ export const CampaignStatus: {
 export type CampaignStatus = (typeof CampaignStatus)[keyof typeof CampaignStatus]
 
 
+export const CampaignEventType: {
+  POST: 'POST',
+  STORY: 'STORY',
+  MEETING: 'MEETING',
+  DEADLINE: 'DEADLINE'
+};
+
+export type CampaignEventType = (typeof CampaignEventType)[keyof typeof CampaignEventType]
+
+
+export const CampaignEventStatus: {
+  SCHEDULED: 'SCHEDULED',
+  GOING_LIVE: 'GOING_LIVE',
+  QUEUED: 'QUEUED',
+  SYNCED: 'SYNCED',
+  PENDING: 'PENDING',
+  DONE: 'DONE'
+};
+
+export type CampaignEventStatus = (typeof CampaignEventStatus)[keyof typeof CampaignEventStatus]
+
+
+export const EventUpdateStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type EventUpdateStatus = (typeof EventUpdateStatus)[keyof typeof EventUpdateStatus]
+
+
 export const NotificationType: {
   CAMPAIGN_UPDATE: 'CAMPAIGN_UPDATE',
   APPLICATION_UPDATE: 'APPLICATION_UPDATE',
@@ -225,6 +266,18 @@ export const ApplicationStatus: typeof $Enums.ApplicationStatus
 export type CampaignStatus = $Enums.CampaignStatus
 
 export const CampaignStatus: typeof $Enums.CampaignStatus
+
+export type CampaignEventType = $Enums.CampaignEventType
+
+export const CampaignEventType: typeof $Enums.CampaignEventType
+
+export type CampaignEventStatus = $Enums.CampaignEventStatus
+
+export const CampaignEventStatus: typeof $Enums.CampaignEventStatus
+
+export type EventUpdateStatus = $Enums.EventUpdateStatus
+
+export const EventUpdateStatus: typeof $Enums.EventUpdateStatus
 
 export type NotificationType = $Enums.NotificationType
 
@@ -460,6 +513,26 @@ export class PrismaClient<
     * ```
     */
   get campaign(): Prisma.CampaignDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.campaignEvent`: Exposes CRUD operations for the **CampaignEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CampaignEvents
+    * const campaignEvents = await prisma.campaignEvent.findMany()
+    * ```
+    */
+  get campaignEvent(): Prisma.CampaignEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.campaignEventUpdate`: Exposes CRUD operations for the **CampaignEventUpdate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CampaignEventUpdates
+    * const campaignEventUpdates = await prisma.campaignEventUpdate.findMany()
+    * ```
+    */
+  get campaignEventUpdate(): Prisma.CampaignEventUpdateDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.contract`: Exposes CRUD operations for the **Contract** model.
@@ -995,6 +1068,8 @@ export namespace Prisma {
     Waitlist: 'Waitlist',
     Message: 'Message',
     Campaign: 'Campaign',
+    CampaignEvent: 'CampaignEvent',
+    CampaignEventUpdate: 'CampaignEventUpdate',
     Contract: 'Contract',
     Milestone: 'Milestone',
     CRMLead: 'CRMLead',
@@ -1019,7 +1094,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "brandProfile" | "creatorProfile" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application"
+      modelProps: "user" | "brandProfile" | "creatorProfile" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1837,6 +1912,154 @@ export namespace Prisma {
           }
         }
       }
+      CampaignEvent: {
+        payload: Prisma.$CampaignEventPayload<ExtArgs>
+        fields: Prisma.CampaignEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CampaignEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CampaignEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          findFirst: {
+            args: Prisma.CampaignEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CampaignEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          findMany: {
+            args: Prisma.CampaignEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>[]
+          }
+          create: {
+            args: Prisma.CampaignEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          createMany: {
+            args: Prisma.CampaignEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CampaignEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>[]
+          }
+          delete: {
+            args: Prisma.CampaignEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          update: {
+            args: Prisma.CampaignEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.CampaignEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CampaignEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CampaignEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.CampaignEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventPayload>
+          }
+          aggregate: {
+            args: Prisma.CampaignEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCampaignEvent>
+          }
+          groupBy: {
+            args: Prisma.CampaignEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CampaignEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CampaignEventCountArgs<ExtArgs>
+            result: $Utils.Optional<CampaignEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      CampaignEventUpdate: {
+        payload: Prisma.$CampaignEventUpdatePayload<ExtArgs>
+        fields: Prisma.CampaignEventUpdateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CampaignEventUpdateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CampaignEventUpdateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          findFirst: {
+            args: Prisma.CampaignEventUpdateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CampaignEventUpdateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          findMany: {
+            args: Prisma.CampaignEventUpdateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>[]
+          }
+          create: {
+            args: Prisma.CampaignEventUpdateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          createMany: {
+            args: Prisma.CampaignEventUpdateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CampaignEventUpdateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>[]
+          }
+          delete: {
+            args: Prisma.CampaignEventUpdateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          update: {
+            args: Prisma.CampaignEventUpdateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          deleteMany: {
+            args: Prisma.CampaignEventUpdateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CampaignEventUpdateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CampaignEventUpdateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>[]
+          }
+          upsert: {
+            args: Prisma.CampaignEventUpdateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignEventUpdatePayload>
+          }
+          aggregate: {
+            args: Prisma.CampaignEventUpdateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCampaignEventUpdate>
+          }
+          groupBy: {
+            args: Prisma.CampaignEventUpdateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CampaignEventUpdateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CampaignEventUpdateCountArgs<ExtArgs>
+            result: $Utils.Optional<CampaignEventUpdateCountAggregateOutputType> | number
+          }
+        }
+      }
       Contract: {
         payload: Prisma.$ContractPayload<ExtArgs>
         fields: Prisma.ContractFieldRefs
@@ -2622,6 +2845,8 @@ export namespace Prisma {
     waitlist?: WaitlistOmit
     message?: MessageOmit
     campaign?: CampaignOmit
+    campaignEvent?: CampaignEventOmit
+    campaignEventUpdate?: CampaignEventUpdateOmit
     contract?: ContractOmit
     milestone?: MilestoneOmit
     cRMLead?: CRMLeadOmit
@@ -2720,6 +2945,9 @@ export namespace Prisma {
     platformStats: number
     platformTokens: number
     sessions: number
+    createdCampaignEvents: number
+    requestedEventUpdates: number
+    reviewedEventUpdates: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2732,6 +2960,9 @@ export namespace Prisma {
     platformStats?: boolean | UserCountOutputTypeCountPlatformStatsArgs
     platformTokens?: boolean | UserCountOutputTypeCountPlatformTokensArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    createdCampaignEvents?: boolean | UserCountOutputTypeCountCreatedCampaignEventsArgs
+    requestedEventUpdates?: boolean | UserCountOutputTypeCountRequestedEventUpdatesArgs
+    reviewedEventUpdates?: boolean | UserCountOutputTypeCountReviewedEventUpdatesArgs
   }
 
   // Custom InputTypes
@@ -2808,6 +3039,27 @@ export namespace Prisma {
     where?: SessionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedCampaignEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRequestedEventUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventUpdateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedEventUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventUpdateWhereInput
+  }
+
 
   /**
    * Count Type BrandProfileCountOutputType
@@ -2865,11 +3117,13 @@ export namespace Prisma {
   export type CreatorProfileCountOutputType = {
     applications: number
     contracts: number
+    campaignEvents: number
   }
 
   export type CreatorProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CreatorProfileCountOutputTypeCountApplicationsArgs
     contracts?: boolean | CreatorProfileCountOutputTypeCountContractsArgs
+    campaignEvents?: boolean | CreatorProfileCountOutputTypeCountCampaignEventsArgs
   }
 
   // Custom InputTypes
@@ -2897,6 +3151,13 @@ export namespace Prisma {
     where?: ContractWhereInput
   }
 
+  /**
+   * CreatorProfileCountOutputType without action
+   */
+  export type CreatorProfileCountOutputTypeCountCampaignEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventWhereInput
+  }
+
 
   /**
    * Count Type CampaignCountOutputType
@@ -2905,11 +3166,13 @@ export namespace Prisma {
   export type CampaignCountOutputType = {
     applications: number
     contracts: number
+    events: number
   }
 
   export type CampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CampaignCountOutputTypeCountApplicationsArgs
     contracts?: boolean | CampaignCountOutputTypeCountContractsArgs
+    events?: boolean | CampaignCountOutputTypeCountEventsArgs
   }
 
   // Custom InputTypes
@@ -2935,6 +3198,44 @@ export namespace Prisma {
    */
   export type CampaignCountOutputTypeCountContractsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContractWhereInput
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventWhereInput
+  }
+
+
+  /**
+   * Count Type CampaignEventCountOutputType
+   */
+
+  export type CampaignEventCountOutputType = {
+    updates: number
+  }
+
+  export type CampaignEventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updates?: boolean | CampaignEventCountOutputTypeCountUpdatesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CampaignEventCountOutputType without action
+   */
+  export type CampaignEventCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventCountOutputType
+     */
+    select?: CampaignEventCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CampaignEventCountOutputType without action
+   */
+  export type CampaignEventCountOutputTypeCountUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventUpdateWhereInput
   }
 
 
@@ -3220,6 +3521,9 @@ export namespace Prisma {
     platformStats?: boolean | User$platformStatsArgs<ExtArgs>
     platformTokens?: boolean | User$platformTokensArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    createdCampaignEvents?: boolean | User$createdCampaignEventsArgs<ExtArgs>
+    requestedEventUpdates?: boolean | User$requestedEventUpdatesArgs<ExtArgs>
+    reviewedEventUpdates?: boolean | User$reviewedEventUpdatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3272,6 +3576,9 @@ export namespace Prisma {
     platformStats?: boolean | User$platformStatsArgs<ExtArgs>
     platformTokens?: boolean | User$platformTokensArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    createdCampaignEvents?: boolean | User$createdCampaignEventsArgs<ExtArgs>
+    requestedEventUpdates?: boolean | User$requestedEventUpdatesArgs<ExtArgs>
+    reviewedEventUpdates?: boolean | User$reviewedEventUpdatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3291,6 +3598,9 @@ export namespace Prisma {
       platformStats: Prisma.$PlatformStatsPayload<ExtArgs>[]
       platformTokens: Prisma.$PlatformTokenPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      createdCampaignEvents: Prisma.$CampaignEventPayload<ExtArgs>[]
+      requestedEventUpdates: Prisma.$CampaignEventUpdatePayload<ExtArgs>[]
+      reviewedEventUpdates: Prisma.$CampaignEventUpdatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3707,6 +4017,9 @@ export namespace Prisma {
     platformStats<T extends User$platformStatsArgs<ExtArgs> = {}>(args?: Subset<T, User$platformStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformStatsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     platformTokens<T extends User$platformTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$platformTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdCampaignEvents<T extends User$createdCampaignEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCampaignEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    requestedEventUpdates<T extends User$requestedEventUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$requestedEventUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewedEventUpdates<T extends User$reviewedEventUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedEventUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4389,6 +4702,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdCampaignEvents
+   */
+  export type User$createdCampaignEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    where?: CampaignEventWhereInput
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    cursor?: CampaignEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
+   * User.requestedEventUpdates
+   */
+  export type User$requestedEventUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    where?: CampaignEventUpdateWhereInput
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviewedEventUpdates
+   */
+  export type User$reviewedEventUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    where?: CampaignEventUpdateWhereInput
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
   }
 
   /**
@@ -5847,6 +6232,7 @@ export namespace Prisma {
     socialLinks?: boolean
     applications?: boolean | CreatorProfile$applicationsArgs<ExtArgs>
     contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
+    campaignEvents?: boolean | CreatorProfile$campaignEventsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["creatorProfile"]>
@@ -5896,6 +6282,7 @@ export namespace Prisma {
   export type CreatorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CreatorProfile$applicationsArgs<ExtArgs>
     contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
+    campaignEvents?: boolean | CreatorProfile$campaignEventsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5911,6 +6298,7 @@ export namespace Prisma {
     objects: {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
       contracts: Prisma.$ContractPayload<ExtArgs>[]
+      campaignEvents: Prisma.$CampaignEventPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6320,6 +6708,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     applications<T extends CreatorProfile$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contracts<T extends CreatorProfile$contractsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    campaignEvents<T extends CreatorProfile$campaignEventsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$campaignEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6806,6 +7195,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContractScalarFieldEnum | ContractScalarFieldEnum[]
+  }
+
+  /**
+   * CreatorProfile.campaignEvents
+   */
+  export type CreatorProfile$campaignEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    where?: CampaignEventWhereInput
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    cursor?: CampaignEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
   }
 
   /**
@@ -14734,6 +15147,7 @@ export namespace Prisma {
     applications?: boolean | Campaign$applicationsArgs<ExtArgs>
     brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
     contracts?: boolean | Campaign$contractsArgs<ExtArgs>
+    events?: boolean | Campaign$eventsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
@@ -14795,6 +15209,7 @@ export namespace Prisma {
     applications?: boolean | Campaign$applicationsArgs<ExtArgs>
     brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
     contracts?: boolean | Campaign$contractsArgs<ExtArgs>
+    events?: boolean | Campaign$eventsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14810,6 +15225,7 @@ export namespace Prisma {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
       brand: Prisma.$BrandProfilePayload<ExtArgs>
       contracts: Prisma.$ContractPayload<ExtArgs>[]
+      events: Prisma.$CampaignEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15223,6 +15639,7 @@ export namespace Prisma {
     applications<T extends Campaign$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     brand<T extends BrandProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfileDefaultArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     contracts<T extends Campaign$contractsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends Campaign$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15715,6 +16132,30 @@ export namespace Prisma {
   }
 
   /**
+   * Campaign.events
+   */
+  export type Campaign$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    where?: CampaignEventWhereInput
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    cursor?: CampaignEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
    * Campaign without action
    */
   export type CampaignDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15730,6 +16171,2388 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CampaignInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CampaignEvent
+   */
+
+  export type AggregateCampaignEvent = {
+    _count: CampaignEventCountAggregateOutputType | null
+    _min: CampaignEventMinAggregateOutputType | null
+    _max: CampaignEventMaxAggregateOutputType | null
+  }
+
+  export type CampaignEventMinAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    creatorProfileId: string | null
+    title: string | null
+    type: $Enums.CampaignEventType | null
+    platform: string | null
+    scheduledAt: Date | null
+    status: $Enums.CampaignEventStatus | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CampaignEventMaxAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    creatorProfileId: string | null
+    title: string | null
+    type: $Enums.CampaignEventType | null
+    platform: string | null
+    scheduledAt: Date | null
+    status: $Enums.CampaignEventStatus | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CampaignEventCountAggregateOutputType = {
+    id: number
+    campaignId: number
+    creatorProfileId: number
+    title: number
+    type: number
+    platform: number
+    scheduledAt: number
+    status: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CampaignEventMinAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    title?: true
+    type?: true
+    platform?: true
+    scheduledAt?: true
+    status?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CampaignEventMaxAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    title?: true
+    type?: true
+    platform?: true
+    scheduledAt?: true
+    status?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CampaignEventCountAggregateInputType = {
+    id?: true
+    campaignId?: true
+    creatorProfileId?: true
+    title?: true
+    type?: true
+    platform?: true
+    scheduledAt?: true
+    status?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CampaignEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignEvent to aggregate.
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEvents to fetch.
+     */
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CampaignEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CampaignEvents
+    **/
+    _count?: true | CampaignEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CampaignEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CampaignEventMaxAggregateInputType
+  }
+
+  export type GetCampaignEventAggregateType<T extends CampaignEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateCampaignEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCampaignEvent[P]>
+      : GetScalarType<T[P], AggregateCampaignEvent[P]>
+  }
+
+
+
+
+  export type CampaignEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventWhereInput
+    orderBy?: CampaignEventOrderByWithAggregationInput | CampaignEventOrderByWithAggregationInput[]
+    by: CampaignEventScalarFieldEnum[] | CampaignEventScalarFieldEnum
+    having?: CampaignEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CampaignEventCountAggregateInputType | true
+    _min?: CampaignEventMinAggregateInputType
+    _max?: CampaignEventMaxAggregateInputType
+  }
+
+  export type CampaignEventGroupByOutputType = {
+    id: string
+    campaignId: string
+    creatorProfileId: string | null
+    title: string | null
+    type: $Enums.CampaignEventType
+    platform: string | null
+    scheduledAt: Date
+    status: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: CampaignEventCountAggregateOutputType | null
+    _min: CampaignEventMinAggregateOutputType | null
+    _max: CampaignEventMaxAggregateOutputType | null
+  }
+
+  type GetCampaignEventGroupByPayload<T extends CampaignEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CampaignEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CampaignEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CampaignEventGroupByOutputType[P]>
+            : GetScalarType<T[P], CampaignEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CampaignEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    title?: boolean
+    type?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    status?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updates?: boolean | CampaignEvent$updatesArgs<ExtArgs>
+    _count?: boolean | CampaignEventCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEvent"]>
+
+  export type CampaignEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    title?: boolean
+    type?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    status?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEvent"]>
+
+  export type CampaignEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    title?: boolean
+    type?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    status?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEvent"]>
+
+  export type CampaignEventSelectScalar = {
+    id?: boolean
+    campaignId?: boolean
+    creatorProfileId?: boolean
+    title?: boolean
+    type?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    status?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CampaignEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorProfileId" | "title" | "type" | "platform" | "scheduledAt" | "status" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignEvent"]>
+  export type CampaignEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    updates?: boolean | CampaignEvent$updatesArgs<ExtArgs>
+    _count?: boolean | CampaignEventCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CampaignEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CampaignEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    creator?: boolean | CampaignEvent$creatorArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CampaignEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CampaignEvent"
+    objects: {
+      campaign: Prisma.$CampaignPayload<ExtArgs>
+      creator: Prisma.$CreatorProfilePayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      updates: Prisma.$CampaignEventUpdatePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      campaignId: string
+      creatorProfileId: string | null
+      title: string | null
+      type: $Enums.CampaignEventType
+      platform: string | null
+      scheduledAt: Date
+      status: $Enums.CampaignEventStatus
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["campaignEvent"]>
+    composites: {}
+  }
+
+  type CampaignEventGetPayload<S extends boolean | null | undefined | CampaignEventDefaultArgs> = $Result.GetResult<Prisma.$CampaignEventPayload, S>
+
+  type CampaignEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CampaignEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CampaignEventCountAggregateInputType | true
+    }
+
+  export interface CampaignEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CampaignEvent'], meta: { name: 'CampaignEvent' } }
+    /**
+     * Find zero or one CampaignEvent that matches the filter.
+     * @param {CampaignEventFindUniqueArgs} args - Arguments to find a CampaignEvent
+     * @example
+     * // Get one CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CampaignEventFindUniqueArgs>(args: SelectSubset<T, CampaignEventFindUniqueArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CampaignEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CampaignEventFindUniqueOrThrowArgs} args - Arguments to find a CampaignEvent
+     * @example
+     * // Get one CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CampaignEventFindUniqueOrThrowArgs>(args: SelectSubset<T, CampaignEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventFindFirstArgs} args - Arguments to find a CampaignEvent
+     * @example
+     * // Get one CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CampaignEventFindFirstArgs>(args?: SelectSubset<T, CampaignEventFindFirstArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventFindFirstOrThrowArgs} args - Arguments to find a CampaignEvent
+     * @example
+     * // Get one CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CampaignEventFindFirstOrThrowArgs>(args?: SelectSubset<T, CampaignEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CampaignEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CampaignEvents
+     * const campaignEvents = await prisma.campaignEvent.findMany()
+     * 
+     * // Get first 10 CampaignEvents
+     * const campaignEvents = await prisma.campaignEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const campaignEventWithIdOnly = await prisma.campaignEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CampaignEventFindManyArgs>(args?: SelectSubset<T, CampaignEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CampaignEvent.
+     * @param {CampaignEventCreateArgs} args - Arguments to create a CampaignEvent.
+     * @example
+     * // Create one CampaignEvent
+     * const CampaignEvent = await prisma.campaignEvent.create({
+     *   data: {
+     *     // ... data to create a CampaignEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends CampaignEventCreateArgs>(args: SelectSubset<T, CampaignEventCreateArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CampaignEvents.
+     * @param {CampaignEventCreateManyArgs} args - Arguments to create many CampaignEvents.
+     * @example
+     * // Create many CampaignEvents
+     * const campaignEvent = await prisma.campaignEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CampaignEventCreateManyArgs>(args?: SelectSubset<T, CampaignEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CampaignEvents and returns the data saved in the database.
+     * @param {CampaignEventCreateManyAndReturnArgs} args - Arguments to create many CampaignEvents.
+     * @example
+     * // Create many CampaignEvents
+     * const campaignEvent = await prisma.campaignEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CampaignEvents and only return the `id`
+     * const campaignEventWithIdOnly = await prisma.campaignEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CampaignEventCreateManyAndReturnArgs>(args?: SelectSubset<T, CampaignEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CampaignEvent.
+     * @param {CampaignEventDeleteArgs} args - Arguments to delete one CampaignEvent.
+     * @example
+     * // Delete one CampaignEvent
+     * const CampaignEvent = await prisma.campaignEvent.delete({
+     *   where: {
+     *     // ... filter to delete one CampaignEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CampaignEventDeleteArgs>(args: SelectSubset<T, CampaignEventDeleteArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CampaignEvent.
+     * @param {CampaignEventUpdateArgs} args - Arguments to update one CampaignEvent.
+     * @example
+     * // Update one CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CampaignEventUpdateArgs>(args: SelectSubset<T, CampaignEventUpdateArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CampaignEvents.
+     * @param {CampaignEventDeleteManyArgs} args - Arguments to filter CampaignEvents to delete.
+     * @example
+     * // Delete a few CampaignEvents
+     * const { count } = await prisma.campaignEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CampaignEventDeleteManyArgs>(args?: SelectSubset<T, CampaignEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CampaignEvents
+     * const campaignEvent = await prisma.campaignEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CampaignEventUpdateManyArgs>(args: SelectSubset<T, CampaignEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignEvents and returns the data updated in the database.
+     * @param {CampaignEventUpdateManyAndReturnArgs} args - Arguments to update many CampaignEvents.
+     * @example
+     * // Update many CampaignEvents
+     * const campaignEvent = await prisma.campaignEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CampaignEvents and only return the `id`
+     * const campaignEventWithIdOnly = await prisma.campaignEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CampaignEventUpdateManyAndReturnArgs>(args: SelectSubset<T, CampaignEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CampaignEvent.
+     * @param {CampaignEventUpsertArgs} args - Arguments to update or create a CampaignEvent.
+     * @example
+     * // Update or create a CampaignEvent
+     * const campaignEvent = await prisma.campaignEvent.upsert({
+     *   create: {
+     *     // ... data to create a CampaignEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CampaignEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CampaignEventUpsertArgs>(args: SelectSubset<T, CampaignEventUpsertArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CampaignEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventCountArgs} args - Arguments to filter CampaignEvents to count.
+     * @example
+     * // Count the number of CampaignEvents
+     * const count = await prisma.campaignEvent.count({
+     *   where: {
+     *     // ... the filter for the CampaignEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends CampaignEventCountArgs>(
+      args?: Subset<T, CampaignEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CampaignEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CampaignEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CampaignEventAggregateArgs>(args: Subset<T, CampaignEventAggregateArgs>): Prisma.PrismaPromise<GetCampaignEventAggregateType<T>>
+
+    /**
+     * Group by CampaignEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CampaignEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CampaignEventGroupByArgs['orderBy'] }
+        : { orderBy?: CampaignEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CampaignEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampaignEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CampaignEvent model
+   */
+  readonly fields: CampaignEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CampaignEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CampaignEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    creator<T extends CampaignEvent$creatorArgs<ExtArgs> = {}>(args?: Subset<T, CampaignEvent$creatorArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    updates<T extends CampaignEvent$updatesArgs<ExtArgs> = {}>(args?: Subset<T, CampaignEvent$updatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CampaignEvent model
+   */
+  interface CampaignEventFieldRefs {
+    readonly id: FieldRef<"CampaignEvent", 'String'>
+    readonly campaignId: FieldRef<"CampaignEvent", 'String'>
+    readonly creatorProfileId: FieldRef<"CampaignEvent", 'String'>
+    readonly title: FieldRef<"CampaignEvent", 'String'>
+    readonly type: FieldRef<"CampaignEvent", 'CampaignEventType'>
+    readonly platform: FieldRef<"CampaignEvent", 'String'>
+    readonly scheduledAt: FieldRef<"CampaignEvent", 'DateTime'>
+    readonly status: FieldRef<"CampaignEvent", 'CampaignEventStatus'>
+    readonly createdById: FieldRef<"CampaignEvent", 'String'>
+    readonly createdAt: FieldRef<"CampaignEvent", 'DateTime'>
+    readonly updatedAt: FieldRef<"CampaignEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CampaignEvent findUnique
+   */
+  export type CampaignEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEvent to fetch.
+     */
+    where: CampaignEventWhereUniqueInput
+  }
+
+  /**
+   * CampaignEvent findUniqueOrThrow
+   */
+  export type CampaignEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEvent to fetch.
+     */
+    where: CampaignEventWhereUniqueInput
+  }
+
+  /**
+   * CampaignEvent findFirst
+   */
+  export type CampaignEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEvent to fetch.
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEvents to fetch.
+     */
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignEvents.
+     */
+    cursor?: CampaignEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEvents.
+     */
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEvent findFirstOrThrow
+   */
+  export type CampaignEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEvent to fetch.
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEvents to fetch.
+     */
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignEvents.
+     */
+    cursor?: CampaignEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEvents.
+     */
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEvent findMany
+   */
+  export type CampaignEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEvents to fetch.
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEvents to fetch.
+     */
+    orderBy?: CampaignEventOrderByWithRelationInput | CampaignEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CampaignEvents.
+     */
+    cursor?: CampaignEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEvents.
+     */
+    distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEvent create
+   */
+  export type CampaignEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CampaignEvent.
+     */
+    data: XOR<CampaignEventCreateInput, CampaignEventUncheckedCreateInput>
+  }
+
+  /**
+   * CampaignEvent createMany
+   */
+  export type CampaignEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CampaignEvents.
+     */
+    data: CampaignEventCreateManyInput | CampaignEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CampaignEvent createManyAndReturn
+   */
+  export type CampaignEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many CampaignEvents.
+     */
+    data: CampaignEventCreateManyInput | CampaignEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignEvent update
+   */
+  export type CampaignEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CampaignEvent.
+     */
+    data: XOR<CampaignEventUpdateInput, CampaignEventUncheckedUpdateInput>
+    /**
+     * Choose, which CampaignEvent to update.
+     */
+    where: CampaignEventWhereUniqueInput
+  }
+
+  /**
+   * CampaignEvent updateMany
+   */
+  export type CampaignEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CampaignEvents.
+     */
+    data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignEvents to update
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * Limit how many CampaignEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignEvent updateManyAndReturn
+   */
+  export type CampaignEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * The data used to update CampaignEvents.
+     */
+    data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignEvents to update
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * Limit how many CampaignEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignEvent upsert
+   */
+  export type CampaignEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CampaignEvent to update in case it exists.
+     */
+    where: CampaignEventWhereUniqueInput
+    /**
+     * In case the CampaignEvent found by the `where` argument doesn't exist, create a new CampaignEvent with this data.
+     */
+    create: XOR<CampaignEventCreateInput, CampaignEventUncheckedCreateInput>
+    /**
+     * In case the CampaignEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CampaignEventUpdateInput, CampaignEventUncheckedUpdateInput>
+  }
+
+  /**
+   * CampaignEvent delete
+   */
+  export type CampaignEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+    /**
+     * Filter which CampaignEvent to delete.
+     */
+    where: CampaignEventWhereUniqueInput
+  }
+
+  /**
+   * CampaignEvent deleteMany
+   */
+  export type CampaignEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignEvents to delete
+     */
+    where?: CampaignEventWhereInput
+    /**
+     * Limit how many CampaignEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignEvent.creator
+   */
+  export type CampaignEvent$creatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CreatorProfile
+     */
+    select?: CreatorProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CreatorProfile
+     */
+    omit?: CreatorProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CreatorProfileInclude<ExtArgs> | null
+    where?: CreatorProfileWhereInput
+  }
+
+  /**
+   * CampaignEvent.updates
+   */
+  export type CampaignEvent$updatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    where?: CampaignEventUpdateWhereInput
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEvent without action
+   */
+  export type CampaignEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEvent
+     */
+    select?: CampaignEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEvent
+     */
+    omit?: CampaignEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CampaignEventUpdate
+   */
+
+  export type AggregateCampaignEventUpdate = {
+    _count: CampaignEventUpdateCountAggregateOutputType | null
+    _min: CampaignEventUpdateMinAggregateOutputType | null
+    _max: CampaignEventUpdateMaxAggregateOutputType | null
+  }
+
+  export type CampaignEventUpdateMinAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    requestedById: string | null
+    status: $Enums.EventUpdateStatus | null
+    title: string | null
+    platform: string | null
+    scheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+  }
+
+  export type CampaignEventUpdateMaxAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    requestedById: string | null
+    status: $Enums.EventUpdateStatus | null
+    title: string | null
+    platform: string | null
+    scheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+  }
+
+  export type CampaignEventUpdateCountAggregateOutputType = {
+    id: number
+    eventId: number
+    requestedById: number
+    status: number
+    title: number
+    platform: number
+    scheduledAt: number
+    createdAt: number
+    updatedAt: number
+    reviewedById: number
+    reviewedAt: number
+    _all: number
+  }
+
+
+  export type CampaignEventUpdateMinAggregateInputType = {
+    id?: true
+    eventId?: true
+    requestedById?: true
+    status?: true
+    title?: true
+    platform?: true
+    scheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    reviewedById?: true
+    reviewedAt?: true
+  }
+
+  export type CampaignEventUpdateMaxAggregateInputType = {
+    id?: true
+    eventId?: true
+    requestedById?: true
+    status?: true
+    title?: true
+    platform?: true
+    scheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    reviewedById?: true
+    reviewedAt?: true
+  }
+
+  export type CampaignEventUpdateCountAggregateInputType = {
+    id?: true
+    eventId?: true
+    requestedById?: true
+    status?: true
+    title?: true
+    platform?: true
+    scheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
+    reviewedById?: true
+    reviewedAt?: true
+    _all?: true
+  }
+
+  export type CampaignEventUpdateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignEventUpdate to aggregate.
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEventUpdates to fetch.
+     */
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEventUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEventUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CampaignEventUpdates
+    **/
+    _count?: true | CampaignEventUpdateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CampaignEventUpdateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CampaignEventUpdateMaxAggregateInputType
+  }
+
+  export type GetCampaignEventUpdateAggregateType<T extends CampaignEventUpdateAggregateArgs> = {
+        [P in keyof T & keyof AggregateCampaignEventUpdate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCampaignEventUpdate[P]>
+      : GetScalarType<T[P], AggregateCampaignEventUpdate[P]>
+  }
+
+
+
+
+  export type CampaignEventUpdateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignEventUpdateWhereInput
+    orderBy?: CampaignEventUpdateOrderByWithAggregationInput | CampaignEventUpdateOrderByWithAggregationInput[]
+    by: CampaignEventUpdateScalarFieldEnum[] | CampaignEventUpdateScalarFieldEnum
+    having?: CampaignEventUpdateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CampaignEventUpdateCountAggregateInputType | true
+    _min?: CampaignEventUpdateMinAggregateInputType
+    _max?: CampaignEventUpdateMaxAggregateInputType
+  }
+
+  export type CampaignEventUpdateGroupByOutputType = {
+    id: string
+    eventId: string
+    requestedById: string
+    status: $Enums.EventUpdateStatus
+    title: string | null
+    platform: string | null
+    scheduledAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    reviewedById: string | null
+    reviewedAt: Date | null
+    _count: CampaignEventUpdateCountAggregateOutputType | null
+    _min: CampaignEventUpdateMinAggregateOutputType | null
+    _max: CampaignEventUpdateMaxAggregateOutputType | null
+  }
+
+  type GetCampaignEventUpdateGroupByPayload<T extends CampaignEventUpdateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CampaignEventUpdateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CampaignEventUpdateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CampaignEventUpdateGroupByOutputType[P]>
+            : GetScalarType<T[P], CampaignEventUpdateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CampaignEventUpdateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    requestedById?: boolean
+    status?: boolean
+    title?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEventUpdate"]>
+
+  export type CampaignEventUpdateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    requestedById?: boolean
+    status?: boolean
+    title?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEventUpdate"]>
+
+  export type CampaignEventUpdateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    requestedById?: boolean
+    status?: boolean
+    title?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignEventUpdate"]>
+
+  export type CampaignEventUpdateSelectScalar = {
+    id?: boolean
+    eventId?: boolean
+    requestedById?: boolean
+    status?: boolean
+    title?: boolean
+    platform?: boolean
+    scheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+  }
+
+  export type CampaignEventUpdateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "requestedById" | "status" | "title" | "platform" | "scheduledAt" | "createdAt" | "updatedAt" | "reviewedById" | "reviewedAt", ExtArgs["result"]["campaignEventUpdate"]>
+  export type CampaignEventUpdateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }
+  export type CampaignEventUpdateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }
+  export type CampaignEventUpdateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | CampaignEventDefaultArgs<ExtArgs>
+    requestedBy?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | CampaignEventUpdate$reviewedByArgs<ExtArgs>
+  }
+
+  export type $CampaignEventUpdatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CampaignEventUpdate"
+    objects: {
+      event: Prisma.$CampaignEventPayload<ExtArgs>
+      requestedBy: Prisma.$UserPayload<ExtArgs>
+      reviewedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventId: string
+      requestedById: string
+      status: $Enums.EventUpdateStatus
+      title: string | null
+      platform: string | null
+      scheduledAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      reviewedById: string | null
+      reviewedAt: Date | null
+    }, ExtArgs["result"]["campaignEventUpdate"]>
+    composites: {}
+  }
+
+  type CampaignEventUpdateGetPayload<S extends boolean | null | undefined | CampaignEventUpdateDefaultArgs> = $Result.GetResult<Prisma.$CampaignEventUpdatePayload, S>
+
+  type CampaignEventUpdateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CampaignEventUpdateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CampaignEventUpdateCountAggregateInputType | true
+    }
+
+  export interface CampaignEventUpdateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CampaignEventUpdate'], meta: { name: 'CampaignEventUpdate' } }
+    /**
+     * Find zero or one CampaignEventUpdate that matches the filter.
+     * @param {CampaignEventUpdateFindUniqueArgs} args - Arguments to find a CampaignEventUpdate
+     * @example
+     * // Get one CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CampaignEventUpdateFindUniqueArgs>(args: SelectSubset<T, CampaignEventUpdateFindUniqueArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CampaignEventUpdate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CampaignEventUpdateFindUniqueOrThrowArgs} args - Arguments to find a CampaignEventUpdate
+     * @example
+     * // Get one CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CampaignEventUpdateFindUniqueOrThrowArgs>(args: SelectSubset<T, CampaignEventUpdateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignEventUpdate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateFindFirstArgs} args - Arguments to find a CampaignEventUpdate
+     * @example
+     * // Get one CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CampaignEventUpdateFindFirstArgs>(args?: SelectSubset<T, CampaignEventUpdateFindFirstArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignEventUpdate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateFindFirstOrThrowArgs} args - Arguments to find a CampaignEventUpdate
+     * @example
+     * // Get one CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CampaignEventUpdateFindFirstOrThrowArgs>(args?: SelectSubset<T, CampaignEventUpdateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CampaignEventUpdates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CampaignEventUpdates
+     * const campaignEventUpdates = await prisma.campaignEventUpdate.findMany()
+     * 
+     * // Get first 10 CampaignEventUpdates
+     * const campaignEventUpdates = await prisma.campaignEventUpdate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const campaignEventUpdateWithIdOnly = await prisma.campaignEventUpdate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CampaignEventUpdateFindManyArgs>(args?: SelectSubset<T, CampaignEventUpdateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CampaignEventUpdate.
+     * @param {CampaignEventUpdateCreateArgs} args - Arguments to create a CampaignEventUpdate.
+     * @example
+     * // Create one CampaignEventUpdate
+     * const CampaignEventUpdate = await prisma.campaignEventUpdate.create({
+     *   data: {
+     *     // ... data to create a CampaignEventUpdate
+     *   }
+     * })
+     * 
+     */
+    create<T extends CampaignEventUpdateCreateArgs>(args: SelectSubset<T, CampaignEventUpdateCreateArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CampaignEventUpdates.
+     * @param {CampaignEventUpdateCreateManyArgs} args - Arguments to create many CampaignEventUpdates.
+     * @example
+     * // Create many CampaignEventUpdates
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CampaignEventUpdateCreateManyArgs>(args?: SelectSubset<T, CampaignEventUpdateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CampaignEventUpdates and returns the data saved in the database.
+     * @param {CampaignEventUpdateCreateManyAndReturnArgs} args - Arguments to create many CampaignEventUpdates.
+     * @example
+     * // Create many CampaignEventUpdates
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CampaignEventUpdates and only return the `id`
+     * const campaignEventUpdateWithIdOnly = await prisma.campaignEventUpdate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CampaignEventUpdateCreateManyAndReturnArgs>(args?: SelectSubset<T, CampaignEventUpdateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CampaignEventUpdate.
+     * @param {CampaignEventUpdateDeleteArgs} args - Arguments to delete one CampaignEventUpdate.
+     * @example
+     * // Delete one CampaignEventUpdate
+     * const CampaignEventUpdate = await prisma.campaignEventUpdate.delete({
+     *   where: {
+     *     // ... filter to delete one CampaignEventUpdate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CampaignEventUpdateDeleteArgs>(args: SelectSubset<T, CampaignEventUpdateDeleteArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CampaignEventUpdate.
+     * @param {CampaignEventUpdateUpdateArgs} args - Arguments to update one CampaignEventUpdate.
+     * @example
+     * // Update one CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CampaignEventUpdateUpdateArgs>(args: SelectSubset<T, CampaignEventUpdateUpdateArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CampaignEventUpdates.
+     * @param {CampaignEventUpdateDeleteManyArgs} args - Arguments to filter CampaignEventUpdates to delete.
+     * @example
+     * // Delete a few CampaignEventUpdates
+     * const { count } = await prisma.campaignEventUpdate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CampaignEventUpdateDeleteManyArgs>(args?: SelectSubset<T, CampaignEventUpdateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignEventUpdates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CampaignEventUpdates
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CampaignEventUpdateUpdateManyArgs>(args: SelectSubset<T, CampaignEventUpdateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignEventUpdates and returns the data updated in the database.
+     * @param {CampaignEventUpdateUpdateManyAndReturnArgs} args - Arguments to update many CampaignEventUpdates.
+     * @example
+     * // Update many CampaignEventUpdates
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CampaignEventUpdates and only return the `id`
+     * const campaignEventUpdateWithIdOnly = await prisma.campaignEventUpdate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CampaignEventUpdateUpdateManyAndReturnArgs>(args: SelectSubset<T, CampaignEventUpdateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CampaignEventUpdate.
+     * @param {CampaignEventUpdateUpsertArgs} args - Arguments to update or create a CampaignEventUpdate.
+     * @example
+     * // Update or create a CampaignEventUpdate
+     * const campaignEventUpdate = await prisma.campaignEventUpdate.upsert({
+     *   create: {
+     *     // ... data to create a CampaignEventUpdate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CampaignEventUpdate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CampaignEventUpdateUpsertArgs>(args: SelectSubset<T, CampaignEventUpdateUpsertArgs<ExtArgs>>): Prisma__CampaignEventUpdateClient<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CampaignEventUpdates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateCountArgs} args - Arguments to filter CampaignEventUpdates to count.
+     * @example
+     * // Count the number of CampaignEventUpdates
+     * const count = await prisma.campaignEventUpdate.count({
+     *   where: {
+     *     // ... the filter for the CampaignEventUpdates we want to count
+     *   }
+     * })
+    **/
+    count<T extends CampaignEventUpdateCountArgs>(
+      args?: Subset<T, CampaignEventUpdateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CampaignEventUpdateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CampaignEventUpdate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CampaignEventUpdateAggregateArgs>(args: Subset<T, CampaignEventUpdateAggregateArgs>): Prisma.PrismaPromise<GetCampaignEventUpdateAggregateType<T>>
+
+    /**
+     * Group by CampaignEventUpdate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignEventUpdateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CampaignEventUpdateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CampaignEventUpdateGroupByArgs['orderBy'] }
+        : { orderBy?: CampaignEventUpdateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CampaignEventUpdateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampaignEventUpdateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CampaignEventUpdate model
+   */
+  readonly fields: CampaignEventUpdateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CampaignEventUpdate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CampaignEventUpdateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends CampaignEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignEventDefaultArgs<ExtArgs>>): Prisma__CampaignEventClient<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    requestedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewedBy<T extends CampaignEventUpdate$reviewedByArgs<ExtArgs> = {}>(args?: Subset<T, CampaignEventUpdate$reviewedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CampaignEventUpdate model
+   */
+  interface CampaignEventUpdateFieldRefs {
+    readonly id: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly eventId: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly requestedById: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly status: FieldRef<"CampaignEventUpdate", 'EventUpdateStatus'>
+    readonly title: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly platform: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly scheduledAt: FieldRef<"CampaignEventUpdate", 'DateTime'>
+    readonly createdAt: FieldRef<"CampaignEventUpdate", 'DateTime'>
+    readonly updatedAt: FieldRef<"CampaignEventUpdate", 'DateTime'>
+    readonly reviewedById: FieldRef<"CampaignEventUpdate", 'String'>
+    readonly reviewedAt: FieldRef<"CampaignEventUpdate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CampaignEventUpdate findUnique
+   */
+  export type CampaignEventUpdateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEventUpdate to fetch.
+     */
+    where: CampaignEventUpdateWhereUniqueInput
+  }
+
+  /**
+   * CampaignEventUpdate findUniqueOrThrow
+   */
+  export type CampaignEventUpdateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEventUpdate to fetch.
+     */
+    where: CampaignEventUpdateWhereUniqueInput
+  }
+
+  /**
+   * CampaignEventUpdate findFirst
+   */
+  export type CampaignEventUpdateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEventUpdate to fetch.
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEventUpdates to fetch.
+     */
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignEventUpdates.
+     */
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEventUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEventUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEventUpdates.
+     */
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEventUpdate findFirstOrThrow
+   */
+  export type CampaignEventUpdateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEventUpdate to fetch.
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEventUpdates to fetch.
+     */
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignEventUpdates.
+     */
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEventUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEventUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEventUpdates.
+     */
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEventUpdate findMany
+   */
+  export type CampaignEventUpdateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignEventUpdates to fetch.
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignEventUpdates to fetch.
+     */
+    orderBy?: CampaignEventUpdateOrderByWithRelationInput | CampaignEventUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CampaignEventUpdates.
+     */
+    cursor?: CampaignEventUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignEventUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignEventUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignEventUpdates.
+     */
+    distinct?: CampaignEventUpdateScalarFieldEnum | CampaignEventUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignEventUpdate create
+   */
+  export type CampaignEventUpdateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CampaignEventUpdate.
+     */
+    data: XOR<CampaignEventUpdateCreateInput, CampaignEventUpdateUncheckedCreateInput>
+  }
+
+  /**
+   * CampaignEventUpdate createMany
+   */
+  export type CampaignEventUpdateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CampaignEventUpdates.
+     */
+    data: CampaignEventUpdateCreateManyInput | CampaignEventUpdateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CampaignEventUpdate createManyAndReturn
+   */
+  export type CampaignEventUpdateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * The data used to create many CampaignEventUpdates.
+     */
+    data: CampaignEventUpdateCreateManyInput | CampaignEventUpdateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignEventUpdate update
+   */
+  export type CampaignEventUpdateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CampaignEventUpdate.
+     */
+    data: XOR<CampaignEventUpdateUpdateInput, CampaignEventUpdateUncheckedUpdateInput>
+    /**
+     * Choose, which CampaignEventUpdate to update.
+     */
+    where: CampaignEventUpdateWhereUniqueInput
+  }
+
+  /**
+   * CampaignEventUpdate updateMany
+   */
+  export type CampaignEventUpdateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CampaignEventUpdates.
+     */
+    data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignEventUpdates to update
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * Limit how many CampaignEventUpdates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignEventUpdate updateManyAndReturn
+   */
+  export type CampaignEventUpdateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * The data used to update CampaignEventUpdates.
+     */
+    data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignEventUpdates to update
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * Limit how many CampaignEventUpdates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignEventUpdate upsert
+   */
+  export type CampaignEventUpdateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CampaignEventUpdate to update in case it exists.
+     */
+    where: CampaignEventUpdateWhereUniqueInput
+    /**
+     * In case the CampaignEventUpdate found by the `where` argument doesn't exist, create a new CampaignEventUpdate with this data.
+     */
+    create: XOR<CampaignEventUpdateCreateInput, CampaignEventUpdateUncheckedCreateInput>
+    /**
+     * In case the CampaignEventUpdate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CampaignEventUpdateUpdateInput, CampaignEventUpdateUncheckedUpdateInput>
+  }
+
+  /**
+   * CampaignEventUpdate delete
+   */
+  export type CampaignEventUpdateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
+    /**
+     * Filter which CampaignEventUpdate to delete.
+     */
+    where: CampaignEventUpdateWhereUniqueInput
+  }
+
+  /**
+   * CampaignEventUpdate deleteMany
+   */
+  export type CampaignEventUpdateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignEventUpdates to delete
+     */
+    where?: CampaignEventUpdateWhereInput
+    /**
+     * Limit how many CampaignEventUpdates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignEventUpdate.reviewedBy
+   */
+  export type CampaignEventUpdate$reviewedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * CampaignEventUpdate without action
+   */
+  export type CampaignEventUpdateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignEventUpdate
+     */
+    select?: CampaignEventUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignEventUpdate
+     */
+    omit?: CampaignEventUpdateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignEventUpdateInclude<ExtArgs> | null
   }
 
 
@@ -25970,6 +28793,40 @@ export namespace Prisma {
   export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
 
 
+  export const CampaignEventScalarFieldEnum: {
+    id: 'id',
+    campaignId: 'campaignId',
+    creatorProfileId: 'creatorProfileId',
+    title: 'title',
+    type: 'type',
+    platform: 'platform',
+    scheduledAt: 'scheduledAt',
+    status: 'status',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CampaignEventScalarFieldEnum = (typeof CampaignEventScalarFieldEnum)[keyof typeof CampaignEventScalarFieldEnum]
+
+
+  export const CampaignEventUpdateScalarFieldEnum: {
+    id: 'id',
+    eventId: 'eventId',
+    requestedById: 'requestedById',
+    status: 'status',
+    title: 'title',
+    platform: 'platform',
+    scheduledAt: 'scheduledAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    reviewedById: 'reviewedById',
+    reviewedAt: 'reviewedAt'
+  };
+
+  export type CampaignEventUpdateScalarFieldEnum = (typeof CampaignEventUpdateScalarFieldEnum)[keyof typeof CampaignEventUpdateScalarFieldEnum]
+
+
   export const ContractScalarFieldEnum: {
     id: 'id',
     campaignId: 'campaignId',
@@ -26238,6 +29095,48 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'CampaignEventType'
+   */
+  export type EnumCampaignEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignEventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignEventType[]'
+   */
+  export type ListEnumCampaignEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignEventType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignEventStatus'
+   */
+  export type EnumCampaignEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignEventStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignEventStatus[]'
+   */
+  export type ListEnumCampaignEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignEventStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventUpdateStatus'
+   */
+  export type EnumEventUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventUpdateStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventUpdateStatus[]'
+   */
+  export type ListEnumEventUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventUpdateStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ContractStatus'
    */
   export type EnumContractStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContractStatus'>
@@ -26334,6 +29233,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsListRelationFilter
     platformTokens?: PlatformTokenListRelationFilter
     sessions?: SessionListRelationFilter
+    createdCampaignEvents?: CampaignEventListRelationFilter
+    requestedEventUpdates?: CampaignEventUpdateListRelationFilter
+    reviewedEventUpdates?: CampaignEventUpdateListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -26357,6 +29259,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsOrderByRelationAggregateInput
     platformTokens?: PlatformTokenOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    createdCampaignEvents?: CampaignEventOrderByRelationAggregateInput
+    requestedEventUpdates?: CampaignEventUpdateOrderByRelationAggregateInput
+    reviewedEventUpdates?: CampaignEventUpdateOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -26383,6 +29288,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsListRelationFilter
     platformTokens?: PlatformTokenListRelationFilter
     sessions?: SessionListRelationFilter
+    createdCampaignEvents?: CampaignEventListRelationFilter
+    requestedEventUpdates?: CampaignEventUpdateListRelationFilter
+    reviewedEventUpdates?: CampaignEventUpdateListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -26515,6 +29423,7 @@ export namespace Prisma {
     socialLinks?: JsonNullableFilter<"CreatorProfile">
     applications?: ApplicationListRelationFilter
     contracts?: ContractListRelationFilter
+    campaignEvents?: CampaignEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -26531,6 +29440,7 @@ export namespace Prisma {
     socialLinks?: SortOrderInput | SortOrder
     applications?: ApplicationOrderByRelationAggregateInput
     contracts?: ContractOrderByRelationAggregateInput
+    campaignEvents?: CampaignEventOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -26550,6 +29460,7 @@ export namespace Prisma {
     socialLinks?: JsonNullableFilter<"CreatorProfile">
     applications?: ApplicationListRelationFilter
     contracts?: ContractListRelationFilter
+    campaignEvents?: CampaignEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
@@ -27099,6 +30010,7 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
     contracts?: ContractListRelationFilter
+    events?: CampaignEventListRelationFilter
   }
 
   export type CampaignOrderByWithRelationInput = {
@@ -27119,6 +30031,7 @@ export namespace Prisma {
     applications?: ApplicationOrderByRelationAggregateInput
     brand?: BrandProfileOrderByWithRelationInput
     contracts?: ContractOrderByRelationAggregateInput
+    events?: CampaignEventOrderByRelationAggregateInput
   }
 
   export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -27142,6 +30055,7 @@ export namespace Prisma {
     applications?: ApplicationListRelationFilter
     brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
     contracts?: ContractListRelationFilter
+    events?: CampaignEventListRelationFilter
   }, "id">
 
   export type CampaignOrderByWithAggregationInput = {
@@ -27184,6 +30098,191 @@ export namespace Prisma {
     minFollowers?: IntNullableWithAggregatesFilter<"Campaign"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Campaign"> | Date | string
+  }
+
+  export type CampaignEventWhereInput = {
+    AND?: CampaignEventWhereInput | CampaignEventWhereInput[]
+    OR?: CampaignEventWhereInput[]
+    NOT?: CampaignEventWhereInput | CampaignEventWhereInput[]
+    id?: StringFilter<"CampaignEvent"> | string
+    campaignId?: StringFilter<"CampaignEvent"> | string
+    creatorProfileId?: StringNullableFilter<"CampaignEvent"> | string | null
+    title?: StringNullableFilter<"CampaignEvent"> | string | null
+    type?: EnumCampaignEventTypeFilter<"CampaignEvent"> | $Enums.CampaignEventType
+    platform?: StringNullableFilter<"CampaignEvent"> | string | null
+    scheduledAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    status?: EnumCampaignEventStatusFilter<"CampaignEvent"> | $Enums.CampaignEventStatus
+    createdById?: StringFilter<"CampaignEvent"> | string
+    createdAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    updates?: CampaignEventUpdateListRelationFilter
+  }
+
+  export type CampaignEventOrderByWithRelationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    campaign?: CampaignOrderByWithRelationInput
+    creator?: CreatorProfileOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    updates?: CampaignEventUpdateOrderByRelationAggregateInput
+  }
+
+  export type CampaignEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CampaignEventWhereInput | CampaignEventWhereInput[]
+    OR?: CampaignEventWhereInput[]
+    NOT?: CampaignEventWhereInput | CampaignEventWhereInput[]
+    campaignId?: StringFilter<"CampaignEvent"> | string
+    creatorProfileId?: StringNullableFilter<"CampaignEvent"> | string | null
+    title?: StringNullableFilter<"CampaignEvent"> | string | null
+    type?: EnumCampaignEventTypeFilter<"CampaignEvent"> | $Enums.CampaignEventType
+    platform?: StringNullableFilter<"CampaignEvent"> | string | null
+    scheduledAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    status?: EnumCampaignEventStatusFilter<"CampaignEvent"> | $Enums.CampaignEventStatus
+    createdById?: StringFilter<"CampaignEvent"> | string
+    createdAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    creator?: XOR<CreatorProfileNullableScalarRelationFilter, CreatorProfileWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    updates?: CampaignEventUpdateListRelationFilter
+  }, "id">
+
+  export type CampaignEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
+    type?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CampaignEventCountOrderByAggregateInput
+    _max?: CampaignEventMaxOrderByAggregateInput
+    _min?: CampaignEventMinOrderByAggregateInput
+  }
+
+  export type CampaignEventScalarWhereWithAggregatesInput = {
+    AND?: CampaignEventScalarWhereWithAggregatesInput | CampaignEventScalarWhereWithAggregatesInput[]
+    OR?: CampaignEventScalarWhereWithAggregatesInput[]
+    NOT?: CampaignEventScalarWhereWithAggregatesInput | CampaignEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CampaignEvent"> | string
+    campaignId?: StringWithAggregatesFilter<"CampaignEvent"> | string
+    creatorProfileId?: StringNullableWithAggregatesFilter<"CampaignEvent"> | string | null
+    title?: StringNullableWithAggregatesFilter<"CampaignEvent"> | string | null
+    type?: EnumCampaignEventTypeWithAggregatesFilter<"CampaignEvent"> | $Enums.CampaignEventType
+    platform?: StringNullableWithAggregatesFilter<"CampaignEvent"> | string | null
+    scheduledAt?: DateTimeWithAggregatesFilter<"CampaignEvent"> | Date | string
+    status?: EnumCampaignEventStatusWithAggregatesFilter<"CampaignEvent"> | $Enums.CampaignEventStatus
+    createdById?: StringWithAggregatesFilter<"CampaignEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CampaignEvent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CampaignEvent"> | Date | string
+  }
+
+  export type CampaignEventUpdateWhereInput = {
+    AND?: CampaignEventUpdateWhereInput | CampaignEventUpdateWhereInput[]
+    OR?: CampaignEventUpdateWhereInput[]
+    NOT?: CampaignEventUpdateWhereInput | CampaignEventUpdateWhereInput[]
+    id?: StringFilter<"CampaignEventUpdate"> | string
+    eventId?: StringFilter<"CampaignEventUpdate"> | string
+    requestedById?: StringFilter<"CampaignEventUpdate"> | string
+    status?: EnumEventUpdateStatusFilter<"CampaignEventUpdate"> | $Enums.EventUpdateStatus
+    title?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    platform?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    scheduledAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+    createdAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    reviewedById?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+    event?: XOR<CampaignEventScalarRelationFilter, CampaignEventWhereInput>
+    requestedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type CampaignEventUpdateOrderByWithRelationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    requestedById?: SortOrder
+    status?: SortOrder
+    title?: SortOrderInput | SortOrder
+    platform?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    event?: CampaignEventOrderByWithRelationInput
+    requestedBy?: UserOrderByWithRelationInput
+    reviewedBy?: UserOrderByWithRelationInput
+  }
+
+  export type CampaignEventUpdateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CampaignEventUpdateWhereInput | CampaignEventUpdateWhereInput[]
+    OR?: CampaignEventUpdateWhereInput[]
+    NOT?: CampaignEventUpdateWhereInput | CampaignEventUpdateWhereInput[]
+    eventId?: StringFilter<"CampaignEventUpdate"> | string
+    requestedById?: StringFilter<"CampaignEventUpdate"> | string
+    status?: EnumEventUpdateStatusFilter<"CampaignEventUpdate"> | $Enums.EventUpdateStatus
+    title?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    platform?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    scheduledAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+    createdAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    reviewedById?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+    event?: XOR<CampaignEventScalarRelationFilter, CampaignEventWhereInput>
+    requestedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type CampaignEventUpdateOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    requestedById?: SortOrder
+    status?: SortOrder
+    title?: SortOrderInput | SortOrder
+    platform?: SortOrderInput | SortOrder
+    scheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    _count?: CampaignEventUpdateCountOrderByAggregateInput
+    _max?: CampaignEventUpdateMaxOrderByAggregateInput
+    _min?: CampaignEventUpdateMinOrderByAggregateInput
+  }
+
+  export type CampaignEventUpdateScalarWhereWithAggregatesInput = {
+    AND?: CampaignEventUpdateScalarWhereWithAggregatesInput | CampaignEventUpdateScalarWhereWithAggregatesInput[]
+    OR?: CampaignEventUpdateScalarWhereWithAggregatesInput[]
+    NOT?: CampaignEventUpdateScalarWhereWithAggregatesInput | CampaignEventUpdateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CampaignEventUpdate"> | string
+    eventId?: StringWithAggregatesFilter<"CampaignEventUpdate"> | string
+    requestedById?: StringWithAggregatesFilter<"CampaignEventUpdate"> | string
+    status?: EnumEventUpdateStatusWithAggregatesFilter<"CampaignEventUpdate"> | $Enums.EventUpdateStatus
+    title?: StringNullableWithAggregatesFilter<"CampaignEventUpdate"> | string | null
+    platform?: StringNullableWithAggregatesFilter<"CampaignEventUpdate"> | string | null
+    scheduledAt?: DateTimeNullableWithAggregatesFilter<"CampaignEventUpdate"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CampaignEventUpdate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CampaignEventUpdate"> | Date | string
+    reviewedById?: StringNullableWithAggregatesFilter<"CampaignEventUpdate"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"CampaignEventUpdate"> | Date | string | null
   }
 
   export type ContractWhereInput = {
@@ -27816,6 +30915,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -27839,6 +30941,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUpdateInput = {
@@ -27862,6 +30967,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -27885,6 +30993,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -28030,6 +31141,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     contracts?: ContractCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -28046,6 +31158,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type CreatorProfileUpdateInput = {
@@ -28060,6 +31173,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -28076,6 +31190,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CreatorProfileCreateManyInput = {
@@ -28666,6 +31781,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateInput = {
@@ -28685,6 +31801,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUpdateInput = {
@@ -28704,6 +31821,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateInput = {
@@ -28723,6 +31841,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignCreateManyInput = {
@@ -28773,6 +31892,200 @@ export namespace Prisma {
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventCreateInput = {
+    id?: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutEventsInput
+    creator?: CreatorProfileCreateNestedOneWithoutCampaignEventsInput
+    createdBy: UserCreateNestedOneWithoutCreatedCampaignEventsInput
+    updates?: CampaignEventUpdateCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventUncheckedCreateInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    updates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutEventsNestedInput
+    creator?: CreatorProfileUpdateOneWithoutCampaignEventsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCampaignEventsNestedInput
+    updates?: CampaignEventUpdateUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updates?: CampaignEventUpdateUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventCreateManyInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CampaignEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventUpdateCreateInput = {
+    id?: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
+    event: CampaignEventCreateNestedOneWithoutUpdatesInput
+    requestedBy: UserCreateNestedOneWithoutRequestedEventUpdatesInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedEventUpdatesInput
+  }
+
+  export type CampaignEventUpdateUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    event?: CampaignEventUpdateOneRequiredWithoutUpdatesNestedInput
+    requestedBy?: UserUpdateOneRequiredWithoutRequestedEventUpdatesNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedEventUpdatesNestedInput
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateCreateManyInput = {
+    id?: string
+    eventId: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContractCreateInput = {
@@ -29503,6 +32816,18 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type CampaignEventListRelationFilter = {
+    every?: CampaignEventWhereInput
+    some?: CampaignEventWhereInput
+    none?: CampaignEventWhereInput
+  }
+
+  export type CampaignEventUpdateListRelationFilter = {
+    every?: CampaignEventUpdateWhereInput
+    some?: CampaignEventUpdateWhereInput
+    none?: CampaignEventUpdateWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -29533,6 +32858,14 @@ export namespace Prisma {
   }
 
   export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CampaignEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CampaignEventUpdateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -30298,16 +33631,161 @@ export namespace Prisma {
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
 
-  export type EnumContractStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumContractStatusFilter<$PrismaModel> | $Enums.ContractStatus
+  export type EnumCampaignEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventType | EnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventTypeFilter<$PrismaModel> | $Enums.CampaignEventType
+  }
+
+  export type EnumCampaignEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventStatus | EnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventStatusFilter<$PrismaModel> | $Enums.CampaignEventStatus
   }
 
   export type CampaignScalarRelationFilter = {
     is?: CampaignWhereInput
     isNot?: CampaignWhereInput
+  }
+
+  export type CampaignEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CampaignEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CampaignEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    creatorProfileId?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumCampaignEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventType | EnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.CampaignEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumCampaignEventTypeFilter<$PrismaModel>
+  }
+
+  export type EnumCampaignEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventStatus | EnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignEventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumCampaignEventStatusFilter<$PrismaModel>
+  }
+
+  export type EnumEventUpdateStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventUpdateStatus | EnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventUpdateStatusFilter<$PrismaModel> | $Enums.EventUpdateStatus
+  }
+
+  export type CampaignEventScalarRelationFilter = {
+    is?: CampaignEventWhereInput
+    isNot?: CampaignEventWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type CampaignEventUpdateCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    requestedById?: SortOrder
+    status?: SortOrder
+    title?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type CampaignEventUpdateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    requestedById?: SortOrder
+    status?: SortOrder
+    title?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type CampaignEventUpdateMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    requestedById?: SortOrder
+    status?: SortOrder
+    title?: SortOrder
+    platform?: SortOrder
+    scheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type EnumEventUpdateStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventUpdateStatus | EnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventUpdateStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventUpdateStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventUpdateStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventUpdateStatusFilter<$PrismaModel>
+  }
+
+  export type EnumContractStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContractStatusFilter<$PrismaModel> | $Enums.ContractStatus
   }
 
   export type CreatorProfileScalarRelationFilter = {
@@ -30829,6 +34307,27 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type CampaignEventCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput> | CampaignEventCreateWithoutCreatedByInput[] | CampaignEventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatedByInput | CampaignEventCreateOrConnectWithoutCreatedByInput[]
+    createMany?: CampaignEventCreateManyCreatedByInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
+  export type CampaignEventUpdateCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput> | CampaignEventUpdateCreateWithoutRequestedByInput[] | CampaignEventUpdateUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutRequestedByInput | CampaignEventUpdateCreateOrConnectWithoutRequestedByInput[]
+    createMany?: CampaignEventUpdateCreateManyRequestedByInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
+  export type CampaignEventUpdateCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput> | CampaignEventUpdateCreateWithoutReviewedByInput[] | CampaignEventUpdateUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutReviewedByInput | CampaignEventUpdateCreateOrConnectWithoutReviewedByInput[]
+    createMany?: CampaignEventUpdateCreateManyReviewedByInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -30902,6 +34401,27 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput> | CampaignEventCreateWithoutCreatedByInput[] | CampaignEventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatedByInput | CampaignEventCreateOrConnectWithoutCreatedByInput[]
+    createMany?: CampaignEventCreateManyCreatedByInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput> | CampaignEventUpdateCreateWithoutRequestedByInput[] | CampaignEventUpdateUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutRequestedByInput | CampaignEventUpdateCreateOrConnectWithoutRequestedByInput[]
+    createMany?: CampaignEventUpdateCreateManyRequestedByInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput> | CampaignEventUpdateCreateWithoutReviewedByInput[] | CampaignEventUpdateUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutReviewedByInput | CampaignEventUpdateCreateOrConnectWithoutReviewedByInput[]
+    createMany?: CampaignEventUpdateCreateManyReviewedByInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -31070,6 +34590,48 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type CampaignEventUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput> | CampaignEventCreateWithoutCreatedByInput[] | CampaignEventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatedByInput | CampaignEventCreateOrConnectWithoutCreatedByInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCreatedByInput | CampaignEventUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: CampaignEventCreateManyCreatedByInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCreatedByInput | CampaignEventUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCreatedByInput | CampaignEventUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
+  export type CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput> | CampaignEventUpdateCreateWithoutRequestedByInput[] | CampaignEventUpdateUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutRequestedByInput | CampaignEventUpdateCreateOrConnectWithoutRequestedByInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutRequestedByInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: CampaignEventUpdateCreateManyRequestedByInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutRequestedByInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutRequestedByInput | CampaignEventUpdateUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+  }
+
+  export type CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput> | CampaignEventUpdateCreateWithoutReviewedByInput[] | CampaignEventUpdateUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutReviewedByInput | CampaignEventUpdateCreateOrConnectWithoutReviewedByInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutReviewedByInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: CampaignEventUpdateCreateManyReviewedByInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutReviewedByInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutReviewedByInput | CampaignEventUpdateUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -31214,6 +34776,48 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput> | CampaignEventCreateWithoutCreatedByInput[] | CampaignEventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatedByInput | CampaignEventCreateOrConnectWithoutCreatedByInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCreatedByInput | CampaignEventUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: CampaignEventCreateManyCreatedByInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCreatedByInput | CampaignEventUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCreatedByInput | CampaignEventUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput> | CampaignEventUpdateCreateWithoutRequestedByInput[] | CampaignEventUpdateUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutRequestedByInput | CampaignEventUpdateCreateOrConnectWithoutRequestedByInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutRequestedByInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: CampaignEventUpdateCreateManyRequestedByInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutRequestedByInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutRequestedByInput | CampaignEventUpdateUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput> | CampaignEventUpdateCreateWithoutReviewedByInput[] | CampaignEventUpdateUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutReviewedByInput | CampaignEventUpdateCreateOrConnectWithoutReviewedByInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutReviewedByInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: CampaignEventUpdateCreateManyReviewedByInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutReviewedByInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutReviewedByInput | CampaignEventUpdateUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutBrandProfileInput = {
@@ -31370,6 +34974,13 @@ export namespace Prisma {
     connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
   }
 
+  export type CampaignEventCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput> | CampaignEventCreateWithoutCreatorInput[] | CampaignEventUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatorInput | CampaignEventCreateOrConnectWithoutCreatorInput[]
+    createMany?: CampaignEventCreateManyCreatorInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutCreatorProfileInput = {
     create?: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatorProfileInput
@@ -31388,6 +34999,13 @@ export namespace Prisma {
     connectOrCreate?: ContractCreateOrConnectWithoutCreatorInput | ContractCreateOrConnectWithoutCreatorInput[]
     createMany?: ContractCreateManyCreatorInputEnvelope
     connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type CampaignEventUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput> | CampaignEventCreateWithoutCreatorInput[] | CampaignEventUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatorInput | CampaignEventCreateOrConnectWithoutCreatorInput[]
+    createMany?: CampaignEventCreateManyCreatorInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -31438,6 +35056,20 @@ export namespace Prisma {
     deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
   }
 
+  export type CampaignEventUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput> | CampaignEventCreateWithoutCreatorInput[] | CampaignEventUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatorInput | CampaignEventCreateOrConnectWithoutCreatorInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCreatorInput | CampaignEventUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: CampaignEventCreateManyCreatorInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCreatorInput | CampaignEventUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCreatorInput | CampaignEventUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutCreatorProfileNestedInput = {
     create?: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatorProfileInput
@@ -31472,6 +35104,20 @@ export namespace Prisma {
     update?: ContractUpdateWithWhereUniqueWithoutCreatorInput | ContractUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: ContractUpdateManyWithWhereWithoutCreatorInput | ContractUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput> | CampaignEventCreateWithoutCreatorInput[] | CampaignEventUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatorInput | CampaignEventCreateOrConnectWithoutCreatorInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCreatorInput | CampaignEventUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: CampaignEventCreateManyCreatorInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCreatorInput | CampaignEventUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCreatorInput | CampaignEventUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -31602,6 +35248,13 @@ export namespace Prisma {
     connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
   }
 
+  export type CampaignEventCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput> | CampaignEventCreateWithoutCampaignInput[] | CampaignEventUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCampaignInput | CampaignEventCreateOrConnectWithoutCampaignInput[]
+    createMany?: CampaignEventCreateManyCampaignInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
   export type ApplicationUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<ApplicationCreateWithoutCampaignInput, ApplicationUncheckedCreateWithoutCampaignInput> | ApplicationCreateWithoutCampaignInput[] | ApplicationUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutCampaignInput | ApplicationCreateOrConnectWithoutCampaignInput[]
@@ -31614,6 +35267,13 @@ export namespace Prisma {
     connectOrCreate?: ContractCreateOrConnectWithoutCampaignInput | ContractCreateOrConnectWithoutCampaignInput[]
     createMany?: ContractCreateManyCampaignInputEnvelope
     connect?: ContractWhereUniqueInput | ContractWhereUniqueInput[]
+  }
+
+  export type CampaignEventUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput> | CampaignEventCreateWithoutCampaignInput[] | CampaignEventUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCampaignInput | CampaignEventCreateOrConnectWithoutCampaignInput[]
+    createMany?: CampaignEventCreateManyCampaignInputEnvelope
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -31666,6 +35326,20 @@ export namespace Prisma {
     deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
   }
 
+  export type CampaignEventUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput> | CampaignEventCreateWithoutCampaignInput[] | CampaignEventUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCampaignInput | CampaignEventCreateOrConnectWithoutCampaignInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCampaignInput | CampaignEventUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: CampaignEventCreateManyCampaignInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCampaignInput | CampaignEventUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCampaignInput | CampaignEventUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
   export type ApplicationUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<ApplicationCreateWithoutCampaignInput, ApplicationUncheckedCreateWithoutCampaignInput> | ApplicationCreateWithoutCampaignInput[] | ApplicationUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutCampaignInput | ApplicationCreateOrConnectWithoutCampaignInput[]
@@ -31692,6 +35366,162 @@ export namespace Prisma {
     update?: ContractUpdateWithWhereUniqueWithoutCampaignInput | ContractUpdateWithWhereUniqueWithoutCampaignInput[]
     updateMany?: ContractUpdateManyWithWhereWithoutCampaignInput | ContractUpdateManyWithWhereWithoutCampaignInput[]
     deleteMany?: ContractScalarWhereInput | ContractScalarWhereInput[]
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput> | CampaignEventCreateWithoutCampaignInput[] | CampaignEventUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutCampaignInput | CampaignEventCreateOrConnectWithoutCampaignInput[]
+    upsert?: CampaignEventUpsertWithWhereUniqueWithoutCampaignInput | CampaignEventUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: CampaignEventCreateManyCampaignInputEnvelope
+    set?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    disconnect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    delete?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+    update?: CampaignEventUpdateWithWhereUniqueWithoutCampaignInput | CampaignEventUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: CampaignEventUpdateManyWithWhereWithoutCampaignInput | CampaignEventUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
+  export type CampaignCreateNestedOneWithoutEventsInput = {
+    create?: XOR<CampaignCreateWithoutEventsInput, CampaignUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutEventsInput
+    connect?: CampaignWhereUniqueInput
+  }
+
+  export type CreatorProfileCreateNestedOneWithoutCampaignEventsInput = {
+    create?: XOR<CreatorProfileCreateWithoutCampaignEventsInput, CreatorProfileUncheckedCreateWithoutCampaignEventsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutCampaignEventsInput
+    connect?: CreatorProfileWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedCampaignEventsInput = {
+    create?: XOR<UserCreateWithoutCreatedCampaignEventsInput, UserUncheckedCreateWithoutCreatedCampaignEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedCampaignEventsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CampaignEventUpdateCreateNestedManyWithoutEventInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput> | CampaignEventUpdateCreateWithoutEventInput[] | CampaignEventUpdateUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutEventInput | CampaignEventUpdateCreateOrConnectWithoutEventInput[]
+    createMany?: CampaignEventUpdateCreateManyEventInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput> | CampaignEventUpdateCreateWithoutEventInput[] | CampaignEventUpdateUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutEventInput | CampaignEventUpdateCreateOrConnectWithoutEventInput[]
+    createMany?: CampaignEventUpdateCreateManyEventInputEnvelope
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
+  export type EnumCampaignEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.CampaignEventType
+  }
+
+  export type EnumCampaignEventStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CampaignEventStatus
+  }
+
+  export type CampaignUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<CampaignCreateWithoutEventsInput, CampaignUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutEventsInput
+    upsert?: CampaignUpsertWithoutEventsInput
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutEventsInput, CampaignUpdateWithoutEventsInput>, CampaignUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type CreatorProfileUpdateOneWithoutCampaignEventsNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutCampaignEventsInput, CreatorProfileUncheckedCreateWithoutCampaignEventsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutCampaignEventsInput
+    upsert?: CreatorProfileUpsertWithoutCampaignEventsInput
+    disconnect?: CreatorProfileWhereInput | boolean
+    delete?: CreatorProfileWhereInput | boolean
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutCampaignEventsInput, CreatorProfileUpdateWithoutCampaignEventsInput>, CreatorProfileUncheckedUpdateWithoutCampaignEventsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedCampaignEventsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedCampaignEventsInput, UserUncheckedCreateWithoutCreatedCampaignEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedCampaignEventsInput
+    upsert?: UserUpsertWithoutCreatedCampaignEventsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedCampaignEventsInput, UserUpdateWithoutCreatedCampaignEventsInput>, UserUncheckedUpdateWithoutCreatedCampaignEventsInput>
+  }
+
+  export type CampaignEventUpdateUpdateManyWithoutEventNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput> | CampaignEventUpdateCreateWithoutEventInput[] | CampaignEventUpdateUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutEventInput | CampaignEventUpdateCreateOrConnectWithoutEventInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: CampaignEventUpdateCreateManyEventInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutEventInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutEventInput | CampaignEventUpdateUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput> | CampaignEventUpdateCreateWithoutEventInput[] | CampaignEventUpdateUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutEventInput | CampaignEventUpdateCreateOrConnectWithoutEventInput[]
+    upsert?: CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput | CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: CampaignEventUpdateCreateManyEventInputEnvelope
+    set?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    disconnect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    delete?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+    update?: CampaignEventUpdateUpdateWithWhereUniqueWithoutEventInput | CampaignEventUpdateUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: CampaignEventUpdateUpdateManyWithWhereWithoutEventInput | CampaignEventUpdateUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+  }
+
+  export type CampaignEventCreateNestedOneWithoutUpdatesInput = {
+    create?: XOR<CampaignEventCreateWithoutUpdatesInput, CampaignEventUncheckedCreateWithoutUpdatesInput>
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutUpdatesInput
+    connect?: CampaignEventWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutRequestedEventUpdatesInput = {
+    create?: XOR<UserCreateWithoutRequestedEventUpdatesInput, UserUncheckedCreateWithoutRequestedEventUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRequestedEventUpdatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewedEventUpdatesInput = {
+    create?: XOR<UserCreateWithoutReviewedEventUpdatesInput, UserUncheckedCreateWithoutReviewedEventUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedEventUpdatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumEventUpdateStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EventUpdateStatus
+  }
+
+  export type CampaignEventUpdateOneRequiredWithoutUpdatesNestedInput = {
+    create?: XOR<CampaignEventCreateWithoutUpdatesInput, CampaignEventUncheckedCreateWithoutUpdatesInput>
+    connectOrCreate?: CampaignEventCreateOrConnectWithoutUpdatesInput
+    upsert?: CampaignEventUpsertWithoutUpdatesInput
+    connect?: CampaignEventWhereUniqueInput
+    update?: XOR<XOR<CampaignEventUpdateToOneWithWhereWithoutUpdatesInput, CampaignEventUpdateWithoutUpdatesInput>, CampaignEventUncheckedUpdateWithoutUpdatesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutRequestedEventUpdatesNestedInput = {
+    create?: XOR<UserCreateWithoutRequestedEventUpdatesInput, UserUncheckedCreateWithoutRequestedEventUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRequestedEventUpdatesInput
+    upsert?: UserUpsertWithoutRequestedEventUpdatesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRequestedEventUpdatesInput, UserUpdateWithoutRequestedEventUpdatesInput>, UserUncheckedUpdateWithoutRequestedEventUpdatesInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedEventUpdatesNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedEventUpdatesInput, UserUncheckedCreateWithoutReviewedEventUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedEventUpdatesInput
+    upsert?: UserUpsertWithoutReviewedEventUpdatesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedEventUpdatesInput, UserUpdateWithoutReviewedEventUpdatesInput>, UserUncheckedUpdateWithoutReviewedEventUpdatesInput>
   }
 
   export type CampaignCreateNestedOneWithoutContractsInput = {
@@ -32309,6 +36139,57 @@ export namespace Prisma {
     _max?: NestedEnumCampaignStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumCampaignEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventType | EnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventTypeFilter<$PrismaModel> | $Enums.CampaignEventType
+  }
+
+  export type NestedEnumCampaignEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventStatus | EnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventStatusFilter<$PrismaModel> | $Enums.CampaignEventStatus
+  }
+
+  export type NestedEnumCampaignEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventType | EnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventType[] | ListEnumCampaignEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.CampaignEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumCampaignEventTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCampaignEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignEventStatus | EnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignEventStatus[] | ListEnumCampaignEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignEventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumCampaignEventStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventUpdateStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventUpdateStatus | EnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventUpdateStatusFilter<$PrismaModel> | $Enums.EventUpdateStatus
+  }
+
+  export type NestedEnumEventUpdateStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventUpdateStatus | EnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventUpdateStatus[] | ListEnumEventUpdateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventUpdateStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventUpdateStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventUpdateStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventUpdateStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumContractStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ContractStatus | EnumContractStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
@@ -32531,6 +36412,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     contracts?: ContractCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
   }
 
   export type CreatorProfileUncheckedCreateWithoutUserInput = {
@@ -32545,6 +36427,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutUserInput = {
@@ -32728,6 +36611,116 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CampaignEventCreateWithoutCreatedByInput = {
+    id?: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutEventsInput
+    creator?: CreatorProfileCreateNestedOneWithoutCampaignEventsInput
+    updates?: CampaignEventUpdateCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    updates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventCreateOrConnectWithoutCreatedByInput = {
+    where: CampaignEventWhereUniqueInput
+    create: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type CampaignEventCreateManyCreatedByInputEnvelope = {
+    data: CampaignEventCreateManyCreatedByInput | CampaignEventCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignEventUpdateCreateWithoutRequestedByInput = {
+    id?: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
+    event: CampaignEventCreateNestedOneWithoutUpdatesInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedEventUpdatesInput
+  }
+
+  export type CampaignEventUpdateUncheckedCreateWithoutRequestedByInput = {
+    id?: string
+    eventId: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateCreateOrConnectWithoutRequestedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    create: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type CampaignEventUpdateCreateManyRequestedByInputEnvelope = {
+    data: CampaignEventUpdateCreateManyRequestedByInput | CampaignEventUpdateCreateManyRequestedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignEventUpdateCreateWithoutReviewedByInput = {
+    id?: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
+    event: CampaignEventCreateNestedOneWithoutUpdatesInput
+    requestedBy: UserCreateNestedOneWithoutRequestedEventUpdatesInput
+  }
+
+  export type CampaignEventUpdateUncheckedCreateWithoutReviewedByInput = {
+    id?: string
+    eventId: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateCreateOrConnectWithoutReviewedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    create: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type CampaignEventUpdateCreateManyReviewedByInputEnvelope = {
+    data: CampaignEventUpdateCreateManyReviewedByInput | CampaignEventUpdateCreateManyReviewedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -32869,6 +36862,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
   }
 
   export type CreatorProfileUncheckedUpdateWithoutUserInput = {
@@ -32883,6 +36877,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutReceiverInput = {
@@ -33052,6 +37047,88 @@ export namespace Prisma {
     userAgent?: StringNullableFilter<"Session"> | string | null
   }
 
+  export type CampaignEventUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: CampaignEventWhereUniqueInput
+    update: XOR<CampaignEventUpdateWithoutCreatedByInput, CampaignEventUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<CampaignEventCreateWithoutCreatedByInput, CampaignEventUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type CampaignEventUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: CampaignEventWhereUniqueInput
+    data: XOR<CampaignEventUpdateWithoutCreatedByInput, CampaignEventUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type CampaignEventUpdateManyWithWhereWithoutCreatedByInput = {
+    where: CampaignEventScalarWhereInput
+    data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type CampaignEventScalarWhereInput = {
+    AND?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+    OR?: CampaignEventScalarWhereInput[]
+    NOT?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+    id?: StringFilter<"CampaignEvent"> | string
+    campaignId?: StringFilter<"CampaignEvent"> | string
+    creatorProfileId?: StringNullableFilter<"CampaignEvent"> | string | null
+    title?: StringNullableFilter<"CampaignEvent"> | string | null
+    type?: EnumCampaignEventTypeFilter<"CampaignEvent"> | $Enums.CampaignEventType
+    platform?: StringNullableFilter<"CampaignEvent"> | string | null
+    scheduledAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    status?: EnumCampaignEventStatusFilter<"CampaignEvent"> | $Enums.CampaignEventStatus
+    createdById?: StringFilter<"CampaignEvent"> | string
+    createdAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEvent"> | Date | string
+  }
+
+  export type CampaignEventUpdateUpsertWithWhereUniqueWithoutRequestedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    update: XOR<CampaignEventUpdateUpdateWithoutRequestedByInput, CampaignEventUpdateUncheckedUpdateWithoutRequestedByInput>
+    create: XOR<CampaignEventUpdateCreateWithoutRequestedByInput, CampaignEventUpdateUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type CampaignEventUpdateUpdateWithWhereUniqueWithoutRequestedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    data: XOR<CampaignEventUpdateUpdateWithoutRequestedByInput, CampaignEventUpdateUncheckedUpdateWithoutRequestedByInput>
+  }
+
+  export type CampaignEventUpdateUpdateManyWithWhereWithoutRequestedByInput = {
+    where: CampaignEventUpdateScalarWhereInput
+    data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByInput>
+  }
+
+  export type CampaignEventUpdateScalarWhereInput = {
+    AND?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+    OR?: CampaignEventUpdateScalarWhereInput[]
+    NOT?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
+    id?: StringFilter<"CampaignEventUpdate"> | string
+    eventId?: StringFilter<"CampaignEventUpdate"> | string
+    requestedById?: StringFilter<"CampaignEventUpdate"> | string
+    status?: EnumEventUpdateStatusFilter<"CampaignEventUpdate"> | $Enums.EventUpdateStatus
+    title?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    platform?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    scheduledAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+    createdAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    updatedAt?: DateTimeFilter<"CampaignEventUpdate"> | Date | string
+    reviewedById?: StringNullableFilter<"CampaignEventUpdate"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"CampaignEventUpdate"> | Date | string | null
+  }
+
+  export type CampaignEventUpdateUpsertWithWhereUniqueWithoutReviewedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    update: XOR<CampaignEventUpdateUpdateWithoutReviewedByInput, CampaignEventUpdateUncheckedUpdateWithoutReviewedByInput>
+    create: XOR<CampaignEventUpdateCreateWithoutReviewedByInput, CampaignEventUpdateUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type CampaignEventUpdateUpdateWithWhereUniqueWithoutReviewedByInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    data: XOR<CampaignEventUpdateUpdateWithoutReviewedByInput, CampaignEventUpdateUncheckedUpdateWithoutReviewedByInput>
+  }
+
+  export type CampaignEventUpdateUpdateManyWithWhereWithoutReviewedByInput = {
+    where: CampaignEventUpdateScalarWhereInput
+    data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByInput>
+  }
+
   export type UserCreateWithoutBrandProfileInput = {
     id?: string
     email: string
@@ -33072,6 +37149,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutBrandProfileInput = {
@@ -33094,6 +37174,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutBrandProfileInput = {
@@ -33149,6 +37232,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutBrandInput = {
@@ -33167,6 +37251,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutBrandInput = {
@@ -33234,6 +37319,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBrandProfileInput = {
@@ -33256,6 +37344,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type CRMLeadUpsertWithWhereUniqueWithoutBrandInput = {
@@ -33419,6 +37510,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CampaignEventCreateWithoutCreatorInput = {
+    id?: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutEventsInput
+    createdBy: UserCreateNestedOneWithoutCreatedCampaignEventsInput
+    updates?: CampaignEventUpdateCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    campaignId: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    updates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventCreateOrConnectWithoutCreatorInput = {
+    where: CampaignEventWhereUniqueInput
+    create: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type CampaignEventCreateManyCreatorInputEnvelope = {
+    data: CampaignEventCreateManyCreatorInput | CampaignEventCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutCreatorProfileInput = {
     id?: string
     email: string
@@ -33439,6 +37568,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatorProfileInput = {
@@ -33461,6 +37593,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatorProfileInput = {
@@ -33530,6 +37665,22 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Contract"> | Date | string
   }
 
+  export type CampaignEventUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: CampaignEventWhereUniqueInput
+    update: XOR<CampaignEventUpdateWithoutCreatorInput, CampaignEventUncheckedUpdateWithoutCreatorInput>
+    create: XOR<CampaignEventCreateWithoutCreatorInput, CampaignEventUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type CampaignEventUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: CampaignEventWhereUniqueInput
+    data: XOR<CampaignEventUpdateWithoutCreatorInput, CampaignEventUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type CampaignEventUpdateManyWithWhereWithoutCreatorInput = {
+    where: CampaignEventScalarWhereInput
+    data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyWithoutCreatorInput>
+  }
+
   export type UserUpsertWithoutCreatorProfileInput = {
     update: XOR<UserUpdateWithoutCreatorProfileInput, UserUncheckedUpdateWithoutCreatorProfileInput>
     create: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
@@ -33561,6 +37712,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatorProfileInput = {
@@ -33583,6 +37737,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -33605,6 +37762,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -33627,6 +37787,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -33665,6 +37828,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -33687,6 +37853,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -33709,6 +37878,9 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -33731,6 +37903,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -33769,6 +37944,9 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -33791,6 +37969,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutPlatformTokensInput = {
@@ -33813,6 +37994,9 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPlatformTokensInput = {
@@ -33835,6 +38019,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPlatformTokensInput = {
@@ -33873,6 +38060,9 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlatformTokensInput = {
@@ -33895,6 +38085,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutPlatformStatsInput = {
@@ -33917,6 +38110,9 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutPlatformStatsInput = {
@@ -33939,6 +38135,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutPlatformStatsInput = {
@@ -33977,6 +38176,9 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlatformStatsInput = {
@@ -33999,6 +38201,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutReceivedMessagesInput = {
@@ -34021,6 +38226,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -34043,6 +38251,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -34070,6 +38281,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -34092,6 +38306,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -34130,6 +38347,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -34152,6 +38372,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutSentMessagesInput = {
@@ -34185,6 +38408,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -34207,6 +38433,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type ApplicationCreateWithoutCampaignInput = {
@@ -34310,6 +38539,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CampaignEventCreateWithoutCampaignInput = {
+    id?: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: CreatorProfileCreateNestedOneWithoutCampaignEventsInput
+    createdBy: UserCreateNestedOneWithoutCreatedCampaignEventsInput
+    updates?: CampaignEventUpdateCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    updates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type CampaignEventCreateOrConnectWithoutCampaignInput = {
+    where: CampaignEventWhereUniqueInput
+    create: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type CampaignEventCreateManyCampaignInputEnvelope = {
+    data: CampaignEventCreateManyCampaignInput | CampaignEventCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApplicationUpsertWithWhereUniqueWithoutCampaignInput = {
     where: ApplicationWhereUniqueInput
     update: XOR<ApplicationUpdateWithoutCampaignInput, ApplicationUncheckedUpdateWithoutCampaignInput>
@@ -34381,6 +38648,662 @@ export namespace Prisma {
     data: XOR<ContractUpdateManyMutationInput, ContractUncheckedUpdateManyWithoutCampaignInput>
   }
 
+  export type CampaignEventUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: CampaignEventWhereUniqueInput
+    update: XOR<CampaignEventUpdateWithoutCampaignInput, CampaignEventUncheckedUpdateWithoutCampaignInput>
+    create: XOR<CampaignEventCreateWithoutCampaignInput, CampaignEventUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type CampaignEventUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: CampaignEventWhereUniqueInput
+    data: XOR<CampaignEventUpdateWithoutCampaignInput, CampaignEventUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type CampaignEventUpdateManyWithWhereWithoutCampaignInput = {
+    where: CampaignEventScalarWhereInput
+    data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type CampaignCreateWithoutEventsInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: $Enums.CampaignStatus
+    imageUrl?: string | null
+    deadline?: Date | string | null
+    requirements?: string | null
+    platforms?: CampaignCreateplatformsInput | string[]
+    contentFormats?: CampaignCreatecontentFormatsInput | string[]
+    minFollowers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationCreateNestedManyWithoutCampaignInput
+    brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    contracts?: ContractCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutEventsInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: $Enums.CampaignStatus
+    imageUrl?: string | null
+    deadline?: Date | string | null
+    requirements?: string | null
+    platforms?: CampaignCreateplatformsInput | string[]
+    contentFormats?: CampaignCreatecontentFormatsInput | string[]
+    minFollowers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutEventsInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutEventsInput, CampaignUncheckedCreateWithoutEventsInput>
+  }
+
+  export type CreatorProfileCreateWithoutCampaignEventsInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    applications?: ApplicationCreateNestedManyWithoutCreatorInput
+    contracts?: ContractCreateNestedManyWithoutCreatorInput
+    user: UserCreateNestedOneWithoutCreatorProfileInput
+  }
+
+  export type CreatorProfileUncheckedCreateWithoutCampaignEventsInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileCreateOrConnectWithoutCampaignEventsInput = {
+    where: CreatorProfileWhereUniqueInput
+    create: XOR<CreatorProfileCreateWithoutCampaignEventsInput, CreatorProfileUncheckedCreateWithoutCampaignEventsInput>
+  }
+
+  export type UserCreateWithoutCreatedCampaignEventsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedCampaignEventsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionUncheckedCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionUncheckedCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedCampaignEventsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedCampaignEventsInput, UserUncheckedCreateWithoutCreatedCampaignEventsInput>
+  }
+
+  export type CampaignEventUpdateCreateWithoutEventInput = {
+    id?: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
+    requestedBy: UserCreateNestedOneWithoutRequestedEventUpdatesInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedEventUpdatesInput
+  }
+
+  export type CampaignEventUpdateUncheckedCreateWithoutEventInput = {
+    id?: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateCreateOrConnectWithoutEventInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    create: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput>
+  }
+
+  export type CampaignEventUpdateCreateManyEventInputEnvelope = {
+    data: CampaignEventUpdateCreateManyEventInput | CampaignEventUpdateCreateManyEventInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignUpsertWithoutEventsInput = {
+    update: XOR<CampaignUpdateWithoutEventsInput, CampaignUncheckedUpdateWithoutEventsInput>
+    create: XOR<CampaignCreateWithoutEventsInput, CampaignUncheckedCreateWithoutEventsInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutEventsInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutEventsInput, CampaignUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type CampaignUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    platforms?: CampaignUpdateplatformsInput | string[]
+    contentFormats?: CampaignUpdatecontentFormatsInput | string[]
+    minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUpdateManyWithoutCampaignNestedInput
+    brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    contracts?: ContractUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    platforms?: CampaignUpdateplatformsInput | string[]
+    contentFormats?: CampaignUpdatecontentFormatsInput | string[]
+    minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CreatorProfileUpsertWithoutCampaignEventsInput = {
+    update: XOR<CreatorProfileUpdateWithoutCampaignEventsInput, CreatorProfileUncheckedUpdateWithoutCampaignEventsInput>
+    create: XOR<CreatorProfileCreateWithoutCampaignEventsInput, CreatorProfileUncheckedCreateWithoutCampaignEventsInput>
+    where?: CreatorProfileWhereInput
+  }
+
+  export type CreatorProfileUpdateToOneWithWhereWithoutCampaignEventsInput = {
+    where?: CreatorProfileWhereInput
+    data: XOR<CreatorProfileUpdateWithoutCampaignEventsInput, CreatorProfileUncheckedUpdateWithoutCampaignEventsInput>
+  }
+
+  export type CreatorProfileUpdateWithoutCampaignEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    applications?: ApplicationUpdateManyWithoutCreatorNestedInput
+    contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateWithoutCampaignEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedCampaignEventsInput = {
+    update: XOR<UserUpdateWithoutCreatedCampaignEventsInput, UserUncheckedUpdateWithoutCreatedCampaignEventsInput>
+    create: XOR<UserCreateWithoutCreatedCampaignEventsInput, UserUncheckedCreateWithoutCreatedCampaignEventsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedCampaignEventsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedCampaignEventsInput, UserUncheckedUpdateWithoutCreatedCampaignEventsInput>
+  }
+
+  export type UserUpdateWithoutCreatedCampaignEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedCampaignEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUncheckedUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUncheckedUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    update: XOR<CampaignEventUpdateUpdateWithoutEventInput, CampaignEventUpdateUncheckedUpdateWithoutEventInput>
+    create: XOR<CampaignEventUpdateCreateWithoutEventInput, CampaignEventUpdateUncheckedCreateWithoutEventInput>
+  }
+
+  export type CampaignEventUpdateUpdateWithWhereUniqueWithoutEventInput = {
+    where: CampaignEventUpdateWhereUniqueInput
+    data: XOR<CampaignEventUpdateUpdateWithoutEventInput, CampaignEventUpdateUncheckedUpdateWithoutEventInput>
+  }
+
+  export type CampaignEventUpdateUpdateManyWithWhereWithoutEventInput = {
+    where: CampaignEventUpdateScalarWhereInput
+    data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type CampaignEventCreateWithoutUpdatesInput = {
+    id?: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutEventsInput
+    creator?: CreatorProfileCreateNestedOneWithoutCampaignEventsInput
+    createdBy: UserCreateNestedOneWithoutCreatedCampaignEventsInput
+  }
+
+  export type CampaignEventUncheckedCreateWithoutUpdatesInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CampaignEventCreateOrConnectWithoutUpdatesInput = {
+    where: CampaignEventWhereUniqueInput
+    create: XOR<CampaignEventCreateWithoutUpdatesInput, CampaignEventUncheckedCreateWithoutUpdatesInput>
+  }
+
+  export type UserCreateWithoutRequestedEventUpdatesInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutRequestedEventUpdatesInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionUncheckedCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionUncheckedCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutRequestedEventUpdatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRequestedEventUpdatesInput, UserUncheckedCreateWithoutRequestedEventUpdatesInput>
+  }
+
+  export type UserCreateWithoutReviewedEventUpdatesInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedEventUpdatesInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionUncheckedCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionUncheckedCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedEventUpdatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedEventUpdatesInput, UserUncheckedCreateWithoutReviewedEventUpdatesInput>
+  }
+
+  export type CampaignEventUpsertWithoutUpdatesInput = {
+    update: XOR<CampaignEventUpdateWithoutUpdatesInput, CampaignEventUncheckedUpdateWithoutUpdatesInput>
+    create: XOR<CampaignEventCreateWithoutUpdatesInput, CampaignEventUncheckedCreateWithoutUpdatesInput>
+    where?: CampaignEventWhereInput
+  }
+
+  export type CampaignEventUpdateToOneWithWhereWithoutUpdatesInput = {
+    where?: CampaignEventWhereInput
+    data: XOR<CampaignEventUpdateWithoutUpdatesInput, CampaignEventUncheckedUpdateWithoutUpdatesInput>
+  }
+
+  export type CampaignEventUpdateWithoutUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutEventsNestedInput
+    creator?: CreatorProfileUpdateOneWithoutCampaignEventsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCampaignEventsNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateWithoutUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutRequestedEventUpdatesInput = {
+    update: XOR<UserUpdateWithoutRequestedEventUpdatesInput, UserUncheckedUpdateWithoutRequestedEventUpdatesInput>
+    create: XOR<UserCreateWithoutRequestedEventUpdatesInput, UserUncheckedCreateWithoutRequestedEventUpdatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRequestedEventUpdatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRequestedEventUpdatesInput, UserUncheckedUpdateWithoutRequestedEventUpdatesInput>
+  }
+
+  export type UserUpdateWithoutRequestedEventUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRequestedEventUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUncheckedUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUncheckedUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutReviewedEventUpdatesInput = {
+    update: XOR<UserUpdateWithoutReviewedEventUpdatesInput, UserUncheckedUpdateWithoutReviewedEventUpdatesInput>
+    create: XOR<UserCreateWithoutReviewedEventUpdatesInput, UserUncheckedCreateWithoutReviewedEventUpdatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewedEventUpdatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewedEventUpdatesInput, UserUncheckedUpdateWithoutReviewedEventUpdatesInput>
+  }
+
+  export type UserUpdateWithoutReviewedEventUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewedEventUpdatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUncheckedUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUncheckedUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+  }
+
   export type CampaignCreateWithoutContractsInput = {
     id?: string
     title: string
@@ -34397,6 +39320,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    events?: CampaignEventCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutContractsInput = {
@@ -34415,6 +39339,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutContractsInput = {
@@ -34433,6 +39358,7 @@ export namespace Prisma {
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -34448,6 +39374,7 @@ export namespace Prisma {
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutContractsInput = {
@@ -34536,6 +39463,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    events?: CampaignEventUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutContractsInput = {
@@ -34554,6 +39482,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CreatorProfileUpsertWithoutContractsInput = {
@@ -34578,6 +39507,7 @@ export namespace Prisma {
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -34593,6 +39523,7 @@ export namespace Prisma {
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type MilestoneUpsertWithWhereUniqueWithoutContractInput = {
@@ -34864,6 +39795,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivedConnectionsInput = {
@@ -34886,6 +39820,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivedConnectionsInput = {
@@ -34913,6 +39850,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutSentConnectionsInput = {
@@ -34935,6 +39875,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutSentConnectionsInput = {
@@ -34973,6 +39916,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedConnectionsInput = {
@@ -34995,6 +39941,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutSentConnectionsInput = {
@@ -35028,6 +39977,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentConnectionsInput = {
@@ -35050,6 +40002,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type BrandProfileCreateWithoutCommunityListsInput = {
@@ -35236,6 +40191,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -35258,6 +40216,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
     platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -35296,6 +40257,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -35318,6 +40282,9 @@ export namespace Prisma {
     platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
     platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type CampaignCreateWithoutApplicationsInput = {
@@ -35336,6 +40303,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutApplicationsInput = {
@@ -35354,6 +40322,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutApplicationsInput = {
@@ -35372,6 +40341,7 @@ export namespace Prisma {
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     contracts?: ContractCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -35387,6 +40357,7 @@ export namespace Prisma {
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutApplicationsInput = {
@@ -35421,6 +40392,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutApplicationsInput = {
@@ -35439,6 +40411,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CreatorProfileUpsertWithoutApplicationsInput = {
@@ -35463,6 +40436,7 @@ export namespace Prisma {
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -35478,6 +40452,7 @@ export namespace Prisma {
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -35567,6 +40542,45 @@ export namespace Prisma {
     updatedAt?: Date | string
     ipAddress?: string | null
     userAgent?: string | null
+  }
+
+  export type CampaignEventCreateManyCreatedByInput = {
+    id?: string
+    campaignId: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CampaignEventUpdateCreateManyRequestedByInput = {
+    id?: string
+    eventId: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateCreateManyReviewedByInput = {
+    id?: string
+    eventId: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedAt?: Date | string | null
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -35836,6 +40850,125 @@ export namespace Prisma {
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type CampaignEventUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutEventsNestedInput
+    creator?: CreatorProfileUpdateOneWithoutCampaignEventsNestedInput
+    updates?: CampaignEventUpdateUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updates?: CampaignEventUpdateUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventUpdateUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    event?: CampaignEventUpdateOneRequiredWithoutUpdatesNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedEventUpdatesNestedInput
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    event?: CampaignEventUpdateOneRequiredWithoutUpdatesNestedInput
+    requestedBy?: UserUpdateOneRequiredWithoutRequestedEventUpdatesNestedInput
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type CRMLeadCreateManyBrandInput = {
     id?: string
     handle: string
@@ -35918,6 +41051,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutBrandInput = {
@@ -35936,6 +41070,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutBrandInput = {
@@ -35994,6 +41129,19 @@ export namespace Prisma {
     status?: $Enums.ContractStatus
     totalBudget: number
     createdAt?: Date | string
+  }
+
+  export type CampaignEventCreateManyCreatorInput = {
+    id?: string
+    campaignId: string
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutCreatorInput = {
@@ -36066,6 +41214,47 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CampaignEventUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutEventsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCampaignEventsNestedInput
+    updates?: CampaignEventUpdateUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updates?: CampaignEventUpdateUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationCreateManyCampaignInput = {
     id?: string
     creatorProfileId: string
@@ -36086,6 +41275,19 @@ export namespace Prisma {
     status?: $Enums.ContractStatus
     totalBudget: number
     createdAt?: Date | string
+  }
+
+  export type CampaignEventCreateManyCampaignInput = {
+    id?: string
+    creatorProfileId?: string | null
+    title?: string | null
+    type: $Enums.CampaignEventType
+    platform?: string | null
+    scheduledAt: Date | string
+    status?: $Enums.CampaignEventStatus
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutCampaignInput = {
@@ -36156,6 +41358,99 @@ export namespace Prisma {
     status?: EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
     totalBudget?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: CreatorProfileUpdateOneWithoutCampaignEventsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedCampaignEventsNestedInput
+    updates?: CampaignEventUpdateUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updates?: CampaignEventUpdateUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type CampaignEventUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumCampaignEventTypeFieldUpdateOperationsInput | $Enums.CampaignEventType
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignEventUpdateCreateManyEventInput = {
+    id?: string
+    requestedById: string
+    status?: $Enums.EventUpdateStatus
+    title?: string | null
+    platform?: string | null
+    scheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+  }
+
+  export type CampaignEventUpdateUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedBy?: UserUpdateOneRequiredWithoutRequestedEventUpdatesNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedEventUpdatesNestedInput
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CampaignEventUpdateUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    requestedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumEventUpdateStatusFieldUpdateOperationsInput | $Enums.EventUpdateStatus
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MilestoneCreateManyContractInput = {

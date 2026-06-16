@@ -8,26 +8,29 @@ datasource db {
 }
 
 model User {
-  id                     String          @id @default(cuid())
-  email                  String          @unique
-  emailVerified          Boolean         @default(false)
+  id                     String                @id @default(cuid())
+  email                  String                @unique
+  emailVerified          Boolean               @default(false)
   name                   String?
   image                  String?
-  role                   Role            @default(CREATOR)
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-  hasCompletedOnboarding Boolean         @default(false) @map("onboardingCompleted")
+  role                   Role                  @default(CREATOR)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  hasCompletedOnboarding Boolean               @default(false) @map("onboardingCompleted")
   accounts               Account[]
   brandProfile           BrandProfile?
-  receivedConnections    Connection[]    @relation("ReceivedConnections")
-  sentConnections        Connection[]    @relation("SentConnections")
+  receivedConnections    Connection[]          @relation("ReceivedConnections")
+  sentConnections        Connection[]          @relation("SentConnections")
   creatorProfile         CreatorProfile?
-  receivedMessages       Message[]       @relation("ReceivedMessages")
-  sentMessages           Message[]       @relation("SentMessages")
+  receivedMessages       Message[]             @relation("ReceivedMessages")
+  sentMessages           Message[]             @relation("SentMessages")
   notifications          Notification[]
   platformStats          PlatformStats[]
   platformTokens         PlatformToken[]
   sessions               Session[]
+  createdCampaignEvents  CampaignEvent[]       @relation("EventCreatedBy")
+  requestedEventUpdates  CampaignEventUpdate[] @relation("EventUpdateRequestedBy")
+  reviewedEventUpdates   CampaignEventUpdate[] @relation("EventUpdateReviewedBy")
 }
 
 model BrandProfile {
@@ -47,19 +50,20 @@ model BrandProfile {
 }
 
 model CreatorProfile {
-  id                String        @id @default(cuid())
-  userId            String        @unique
+  id                String          @id @default(cuid())
+  userId            String          @unique
   bio               String?
   niche             String?
   primaryPlatform   String?
   location          String?
-  totalFollowers    Int           @default(0)
-  avgEngagementRate Float         @default(0)
+  totalFollowers    Int             @default(0)
+  avgEngagementRate Float           @default(0)
   lastStatsUpdate   DateTime?
   socialLinks       Json?
   applications      Application[]
   contracts         Contract[]
-  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignEvents    CampaignEvent[]
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -158,26 +162,70 @@ model Message {
 }
 
 model Campaign {
-  id             String         @id @default(cuid())
+  id             String          @id @default(cuid())
   brandProfileId String
   title          String
   description    String
   budget         Float
-  status         CampaignStatus @default(DRAFT)
+  status         CampaignStatus  @default(DRAFT)
   imageUrl       String?
   deadline       DateTime?
   requirements   String?
-  platforms      String[]       @default([])
-  contentFormats String[]       @default([])
+  platforms      String[]        @default([])
+  contentFormats String[]        @default([])
   minFollowers   Int?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   applications   Application[]
-  brand          BrandProfile   @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
+  brand          BrandProfile    @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   contracts      Contract[]
+  events         CampaignEvent[]
 
   @@index([brandProfileId])
   @@index([status])
+}
+
+model CampaignEvent {
+  id               String                @id @default(cuid())
+  campaignId       String
+  creatorProfileId String?
+  title            String?
+  type             CampaignEventType
+  platform         String?
+  scheduledAt      DateTime
+  status           CampaignEventStatus   @default(SCHEDULED)
+  createdById      String
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  campaign         Campaign              @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator          CreatorProfile?       @relation(fields: [creatorProfileId], references: [id], onDelete: SetNull)
+  createdBy        User                  @relation("EventCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  updates          CampaignEventUpdate[]
+
+  @@index([campaignId])
+  @@index([scheduledAt])
+  @@index([creatorProfileId])
+}
+
+model CampaignEventUpdate {
+  id            String            @id @default(cuid())
+  eventId       String
+  requestedById String
+  status        EventUpdateStatus @default(PENDING)
+  title         String?
+  platform      String?
+  scheduledAt   DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  reviewedById  String?
+  reviewedAt    DateTime?
+  event         CampaignEvent     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  requestedBy   User              @relation("EventUpdateRequestedBy", fields: [requestedById], references: [id], onDelete: Cascade)
+  reviewedBy    User?             @relation("EventUpdateReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([eventId])
+  @@index([eventId, status])
+  @@index([requestedById])
 }
 
 model Contract {
@@ -346,6 +394,28 @@ enum CampaignStatus {
   PAUSED
   COMPLETED
   CANCELLED
+}
+
+enum CampaignEventType {
+  POST
+  STORY
+  MEETING
+  DEADLINE
+}
+
+enum CampaignEventStatus {
+  SCHEDULED
+  GOING_LIVE
+  QUEUED
+  SYNCED
+  PENDING
+  DONE
+}
+
+enum EventUpdateStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum NotificationType {

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useTransition } from "react";
+import { useState, useEffect, useCallback, useTransition, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
-  ArrowLeft, DollarSign, Calendar, Clock, Building2, MapPin,
+  ArrowLeft, DollarSign, Clock, MapPin,
   Send, CheckCircle2, X, Loader2, MessageSquare, CalendarDays,
-  SlidersHorizontal, FileText, ChevronRight, Users, ExternalLink,
+  SlidersHorizontal, FileText, Users, ExternalLink,
   Star, Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import MainLayout from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { useMessaging, type ConversationRecipient } from "@/app/_components/messaging/MessagingContext";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import {
   getPublicCampaignDetailAction,
@@ -21,6 +22,12 @@ import {
   withdrawApplicationAction,
   type PublicCampaignDetail,
 } from "@/app/actions/creator-campaigns";
+import {
+  type DBMessage,
+  getConversationAction,
+  sendMessageAction,
+} from "@/app/actions/messages";
+import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -115,26 +122,154 @@ function NegotiationStatus({ campaign }: { campaign: PublicCampaignDetail }) {
   );
 }
 
-// ── Smart Calendar Placeholder ─────────────────────────────────────────────────
+// ── Smart Calendar ─────────────────────────────────────────────────────────────
 
-function SmartCalendarPlaceholder() {
+function CampaignSmartCalendar({ campaignId }: { campaignId: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 p-6 text-center bg-zinc-50/50 dark:bg-zinc-900/30">
-      <CalendarDays className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
-      <p className="text-sm font-semibold text-muted-foreground">Smart Calendar</p>
-      <p className="text-xs text-muted-foreground/60 mt-1 max-w-[220px] mx-auto">
-        Manage your availability and schedule post dates — coming soon.
-      </p>
-      <div className="mt-4 grid grid-cols-7 gap-1 max-w-[240px] mx-auto opacity-30 pointer-events-none select-none">
-        {["M","T","W","T","F","S","S"].map((d, i) => (
-          <div key={i} className="h-6 text-[10px] font-medium text-center text-muted-foreground flex items-center justify-center">{d}</div>
-        ))}
-        {Array.from({ length: 28 }).map((_, i) => (
-          <div key={i} className={cn(
-            "h-7 rounded-md text-[11px] flex items-center justify-center",
-            i === 9 || i === 15 ? "bg-primary text-primary-foreground font-bold" : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground",
-          )}>{i + 1}</div>
-        ))}
+    <div className="space-y-2">
+      <SmartCalendarWidget campaignId={campaignId} />
+    </div>
+  );
+}
+
+// ── Inline Campaign Chat ───────────────────────────────────────────────────────
+
+function formatChatTime(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+}
+
+function CampaignChat({
+  brandUserId,
+  brandName,
+  brandAvatarUrl,
+  currentUserId,
+}: {
+  brandUserId: string;
+  brandName: string;
+  brandAvatarUrl: string | null;
+  currentUserId: string;
+}) {
+  const { toast } = useToast();
+  const [messages, setMessages] = useState<DBMessage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getConversationAction(brandUserId).then((msgs) => {
+      setMessages(msgs);
+      setLoading(false);
+    });
+  }, [brandUserId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = async () => {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    setSending(true);
+    setText("");
+    const result = await sendMessageAction(brandUserId, trimmed);
+    if (result.error) {
+      toast({ variant: "destructive", title: result.error });
+      setText(trimmed);
+    } else {
+      const optimistic: DBMessage = {
+        id: `opt-${Date.now()}`,
+        text: trimmed,
+        senderId: currentUserId,
+        receiverId: brandUserId,
+        createdAt: new Date().toISOString(),
+        senderRole: "creator",
+        senderName: "You",
+        senderAvatarUrl: null,
+      };
+      setMessages((prev) => [...prev, optimistic]);
+    }
+    setSending(false);
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 justify-between">
+        <p className="text-xs text-muted-foreground">
+          Direct business communication with <span className="font-medium text-foreground">{brandName}</span>
+        </p>
+      </div>
+
+      {/* Messages area */}
+      <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex flex-col gap-2 p-3 min-h-[200px] max-h-[320px] overflow-y-auto">
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center gap-2">
+            <MessageSquare className="w-8 h-8 text-muted-foreground/30" />
+            <p className="text-sm text-muted-foreground">No messages yet</p>
+            <p className="text-xs text-muted-foreground">Start the conversation with the brand</p>
+          </div>
+        ) : (
+          messages.map((msg) => {
+            const isMe = msg.senderId === currentUserId;
+            return (
+              <div key={msg.id} className={cn("flex gap-2 items-end", isMe ? "flex-row-reverse" : "flex-row")}>
+                {!isMe && (
+                  <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 bg-zinc-200 dark:bg-zinc-700">
+                    {brandAvatarUrl ? (
+                      <img src={brandAvatarUrl} alt={brandName} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[9px] font-bold text-zinc-500">
+                        {brandName.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div className={cn("flex flex-col gap-0.5 max-w-[75%]", isMe ? "items-end" : "items-start")}>
+                  <div
+                    className={cn(
+                      "px-3 py-2 rounded-2xl text-sm leading-snug",
+                      isMe
+                        ? "bg-primary text-primary-foreground rounded-br-sm"
+                        : "bg-white dark:bg-zinc-800 text-foreground border border-zinc-200 dark:border-zinc-700 rounded-bl-sm",
+                    )}
+                  >
+                    {msg.text}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground px-1">{formatChatTime(msg.createdAt)}</span>
+                </div>
+              </div>
+            );
+          })
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input row */}
+      <div className="flex gap-2">
+        <Input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              void handleSend();
+            }
+          }}
+          placeholder={`Message ${brandName}…`}
+          className="flex-1 text-sm"
+        />
+        <Button
+          onClick={() => void handleSend()}
+          disabled={!text.trim() || sending}
+          size="icon"
+        >
+          {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+        </Button>
       </div>
     </div>
   );
@@ -144,10 +279,12 @@ function SmartCalendarPlaceholder() {
 
 function ApplyForm({
   campaign,
+  currentUserId,
   onApplied,
   onWithdraw,
 }: {
   campaign: PublicCampaignDetail;
+  currentUserId: string | null;
   onApplied: (appId: string) => void;
   onWithdraw: () => void;
 }) {
@@ -156,7 +293,9 @@ function ApplyForm({
   const [isWithdrawing, startWithdraw] = useTransition();
   const [rate, setRate] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
-  const [tab, setTab] = useState<"apply" | "calendar">("apply");
+  const [tab, setTab] = useState<"apply" | "messages" | "calendar">(
+    campaign.applicationStatus ? "apply" : "apply",
+  );
 
   const canApply = !campaign.applicationStatus;
   const canWithdraw = campaign.applicationStatus === "PENDING";
@@ -202,7 +341,8 @@ function ApplyForm({
       <div className="flex border-b border-border">
         {[
           { key: "apply", label: canApply ? "Apply & Negotiate" : "Your Application", icon: Send },
-          { key: "calendar", label: "Smart Calendar", icon: CalendarDays },
+          { key: "messages", label: "Messages", icon: MessageSquare },
+          { key: "calendar", label: "Calendar", icon: CalendarDays },
         ].map((t) => (
           <button
             key={t.key}
@@ -314,7 +454,22 @@ function ApplyForm({
           </>
         )}
 
-        {tab === "calendar" && <SmartCalendarPlaceholder />}
+        {tab === "messages" && (
+          currentUserId ? (
+            <CampaignChat
+              brandUserId={campaign.brand.userId}
+              brandName={campaign.brand.companyName}
+              brandAvatarUrl={campaign.brand.avatarUrl}
+              currentUserId={currentUserId}
+            />
+          ) : (
+            <div className="text-center py-8 text-sm text-muted-foreground">Sign in to message the brand.</div>
+          )
+        )}
+
+        {tab === "calendar" && (
+          <CampaignSmartCalendar campaignId={campaign.id} />
+        )}
       </div>
     </div>
   );
@@ -327,6 +482,7 @@ const CreatorCampaignDetail = () => {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const { openChatWindow } = useMessaging();
+  const { profile } = useAuth();
 
   const [campaign, setCampaign] = useState<PublicCampaignDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -527,6 +683,7 @@ const CreatorCampaignDetail = () => {
           </h2>
           <ApplyForm
             campaign={campaign}
+            currentUserId={profile?.user_id ?? null}
             onApplied={(appId) => {
               setCampaign((prev) => prev ? { ...prev, applicationStatus: "PENDING", applicationId: appId } : prev);
             }}
