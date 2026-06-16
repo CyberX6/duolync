@@ -27,6 +27,9 @@ import {
   type CampaignDetailData,
   type ApplicationDetail,
 } from "@/app/actions/brand-applications";
+import { AddEventButton } from "@/components/calendar/AddEventModal";
+import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
+import type { CalendarEventData } from "@/app/actions/calendar-events";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -568,6 +571,11 @@ const CampaignDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState<ApplicationDetail | null>(null);
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [calendarRefreshKey, setCalendarRefreshKey] = useState(0);
+
+  const handleEventCreated = (_event: CalendarEventData) => {
+    setCalendarRefreshKey((k) => k + 1);
+  };
 
   const load = useCallback(async () => {
     if (!campaignId) return;
@@ -704,7 +712,25 @@ const CampaignDetail = () => {
                 </div>
               )}
             </div>
+            <div className="shrink-0">
+              <AddEventButton
+                campaignId={campaign.id}
+                campaignTitle={campaign.title}
+                platforms={campaign.platforms}
+                onCreated={handleEventCreated}
+              />
+            </div>
           </div>
+        </div>
+
+        {/* Campaign Calendar */}
+        <div className="mb-6">
+          <h2 className="font-display text-lg font-bold mb-3">Campaign Calendar</h2>
+          <SmartCalendarWidget
+            campaignId={campaign.id}
+            canEdit
+            refreshKey={calendarRefreshKey}
+          />
         </div>
 
         {/* Stats */}

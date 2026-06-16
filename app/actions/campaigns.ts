@@ -219,6 +219,56 @@ export async function deleteCampaignAction(
   return { error: null };
 }
 
+export interface BrandDashboardStats {
+  activeCampaigns: number;
+  savedCreators: number;
+  activeConversations: number;
+}
+
+export async function getBrandDashboardStatsAction(): Promise<{
+  data: BrandDashboardStats;
+  error: string | null;
+}> {
+  const brand = await getBrandProfile();
+  if (!brand) {
+    return {
+      data: { activeCampaigns: 0, savedCreators: 0, activeConversations: 0 },
+      error: "Unauthorized",
+    };
+  }
+
+  const [activeCampaigns, savedCreators, activeConversations] = await Promise.all([
+    db.campaign.count({
+      where: {
+        brandProfileId: brand.profileId,
+        status: CampaignStatus.ACTIVE,
+      },
+    }),
+    db.cRMLead.count({
+      where: { brandProfileId: brand.profileId },
+    }),
+    db.message.findMany({
+      where: {
+        OR: [{ senderId: brand.userId }, { receiverId: brand.userId }],
+      },
+      select: { senderId: true, receiverId: true },
+      distinct: ["senderId", "receiverId"],
+    }).then((rows) => {
+      const partners = new Set<string>();
+      for (const r of rows) {
+        const other = r.senderId === brand.userId ? r.receiverId : r.senderId;
+        partners.add(other);
+      }
+      return partners.size;
+    }),
+  ]);
+
+  return {
+    data: { activeCampaigns, savedCreators, activeConversations },
+    error: null,
+  };
+}
+
 export async function getCampaignConnectionsAction(): Promise<{
   data: ConnectedCreator[];
   error: string | null;

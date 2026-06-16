@@ -28,6 +28,9 @@ model User {
   platformStats          PlatformStats[]
   platformTokens         PlatformToken[]
   sessions               Session[]
+  createdCampaignEvents  CampaignEvent[]       @relation("EventCreatedBy")
+  requestedEventUpdates  CampaignEventUpdate[] @relation("EventUpdateRequestedBy")
+  reviewedEventUpdates   CampaignEventUpdate[] @relation("EventUpdateReviewedBy")
 }
 
 model BrandProfile {
@@ -59,6 +62,7 @@ model CreatorProfile {
   socialLinks       Json?
   applications      Application[]
   contracts         Contract[]
+  campaignEvents    CampaignEvent[]
   user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -175,9 +179,53 @@ model Campaign {
   applications   Application[]
   brand          BrandProfile   @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   contracts      Contract[]
+  events         CampaignEvent[]
 
   @@index([brandProfileId])
   @@index([status])
+}
+
+model CampaignEvent {
+  id                 String              @id @default(cuid())
+  campaignId         String
+  creatorProfileId   String?
+  title              String?
+  type               CampaignEventType
+  platform           String?
+  scheduledAt        DateTime
+  status             CampaignEventStatus @default(SCHEDULED)
+  createdById        String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  campaign           Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator            CreatorProfile?     @relation(fields: [creatorProfileId], references: [id], onDelete: SetNull)
+  createdBy          User                @relation("EventCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  updates            CampaignEventUpdate[]
+
+  @@index([campaignId])
+  @@index([scheduledAt])
+  @@index([creatorProfileId])
+}
+
+model CampaignEventUpdate {
+  id            String            @id @default(cuid())
+  eventId       String
+  requestedById String
+  status        EventUpdateStatus @default(PENDING)
+  title         String?
+  platform      String?
+  scheduledAt   DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  reviewedById  String?
+  reviewedAt    DateTime?
+  event         CampaignEvent     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  requestedBy   User              @relation("EventUpdateRequestedBy", fields: [requestedById], references: [id], onDelete: Cascade)
+  reviewedBy    User?             @relation("EventUpdateReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([eventId])
+  @@index([eventId, status])
+  @@index([requestedById])
 }
 
 model Contract {
@@ -346,6 +394,28 @@ enum CampaignStatus {
   PAUSED
   COMPLETED
   CANCELLED
+}
+
+enum CampaignEventType {
+  POST
+  STORY
+  MEETING
+  DEADLINE
+}
+
+enum CampaignEventStatus {
+  SCHEDULED
+  GOING_LIVE
+  QUEUED
+  SYNCED
+  PENDING
+  DONE
+}
+
+enum EventUpdateStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum NotificationType {
