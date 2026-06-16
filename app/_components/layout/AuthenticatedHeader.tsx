@@ -182,11 +182,14 @@ function NotifItem({
 
   // ── All other notification types: standard item ───────────────────────────
   const typeIcon: Record<string, string> = {
+    APPLICATION_UPDATE: "📩",
+    CAMPAIGN_UPDATE: "📢",
     PROPOSAL_RECEIVED: "📩",
     PROPOSAL_ACCEPTED: "✅",
     PROPOSAL_REJECTED: "❌",
     MESSAGE: "💬",
     CONNECTION_ACCEPTED: "🤝",
+    SYSTEM: "🔔",
   };
   const icon = typeIcon[notif.type] ?? "🔔";
 

@@ -7,40 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// ── ENUMS & STATE MANAGEMENT ─────────────────────────────────────────────────
-enum Role {
-  BRAND
-  CREATOR
-}
-
-enum ContractStatus {
-  PENDING
-  ACTIVE
-  COMPLETED
-  CANCELLED
-}
-
-enum MilestoneStatus {
-  PENDING
-  IN_REVIEW
-  APPROVED
-  PAID
-}
-
-enum LeadStatus {
-  DISCOVERED
-  NEGOTIATING
-  INVITED
-  REJECTED
-}
-
-enum ConnectionStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
-// ── CORE USER MODEL (Better Auth Compatible & Profile Relations) ─────────────
 model User {
   id                     String          @id @default(cuid())
   email                  String          @unique
@@ -51,63 +17,51 @@ model User {
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
   hasCompletedOnboarding Boolean         @default(false) @map("onboardingCompleted")
-
-  // Better Auth & Messaging Relations
-  accounts         Account[]
-  sessions         Session[]
-  platformTokens   PlatformToken[]
-  platformStats    PlatformStats[]
-  sentMessages     Message[]        @relation("SentMessages")
-  receivedMessages Message[]        @relation("ReceivedMessages")
-  notifications    Notification[]
-  sentConnections      Connection[] @relation("SentConnections")
-  receivedConnections  Connection[] @relation("ReceivedConnections")
-
-  // Polymorphic Profile Relations (One-to-One)
-  brandProfile   BrandProfile?
-  creatorProfile CreatorProfile?
+  accounts               Account[]
+  brandProfile           BrandProfile?
+  receivedConnections    Connection[]    @relation("ReceivedConnections")
+  sentConnections        Connection[]    @relation("SentConnections")
+  creatorProfile         CreatorProfile?
+  receivedMessages       Message[]       @relation("ReceivedMessages")
+  sentMessages           Message[]       @relation("SentMessages")
+  notifications          Notification[]
+  platformStats          PlatformStats[]
+  platformTokens         PlatformToken[]
+  sessions               Session[]
 }
 
-// ── BRAND PROFILE ECOSYSTEM ──────────────────────────────────────────────────
 model BrandProfile {
-  id               String     @id @default(cuid())
-  userId           String     @unique
-  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               String          @id @default(cuid())
+  userId           String          @unique
   companyName      String
   industry         String?
   website          String?
-  brandAccountType String? // "company" | "personal"
+  brandAccountType String?
   bio              String?
   location         String?
-
-  socialLinks     Json?   // [{ platform: string, url: string }]
-
-  campaigns       Campaign[]
-  crmLeads        CRMLead[]
-  communityLists  CommunityList[]
+  socialLinks      Json?
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  crmLeads         CRMLead[]
+  campaigns        Campaign[]
+  communityLists   CommunityList[]
 }
 
-// ── CREATOR PROFILE (Media Kit & Cached Metrics) ─────────────────────────────
 model CreatorProfile {
-  id              String    @id @default(cuid())
-  userId          String    @unique
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bio             String?
-  niche           String? // Target niche / content categories
-  primaryPlatform String? // "youtube" | "tiktok" | "instagram"
-  location        String?
-
-  // Cached performance metrics for RapidAPI optimization
-  totalFollowers    Int       @default(0)
-  avgEngagementRate Float     @default(0)
+  id                String        @id @default(cuid())
+  userId            String        @unique
+  bio               String?
+  niche             String?
+  primaryPlatform   String?
+  location          String?
+  totalFollowers    Int           @default(0)
+  avgEngagementRate Float         @default(0)
   lastStatsUpdate   DateTime?
-  socialLinks       Json?     // [{ platform: string, url: string }]
-
-  contracts Contract[]
-  proposals Proposal[]
+  socialLinks       Json?
+  applications      Application[]
+  contracts         Contract[]
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// ── BETTER AUTH REQUIRED INTERFACES (Immutable for Auth Compliance) ──────────
 model Account {
   id                    String    @id @default(cuid())
   userId                String
@@ -150,11 +104,10 @@ model Verification {
   @@index([identifier])
 }
 
-// ── SOCIAL PLATFORMS & ACCESS TOKENS ─────────────────────────────────────────
 model PlatformToken {
   id             String    @id @default(cuid())
   userId         String
-  platform       String // "youtube" | "instagram" | "tiktok" | "facebook"
+  platform       String
   accessToken    String
   refreshToken   String?
   expiresAt      DateTime?
@@ -186,125 +139,116 @@ model PlatformStats {
 model Waitlist {
   id        String   @id @default(cuid())
   email     String   @unique
-  role      String // "brand" | "creator"
+  role      String
   createdAt DateTime @default(now())
 }
 
-// ── CORE MESSAGING SYSTEM ────────────────────────────────────────────────────
 model Message {
   id         String   @id @default(cuid())
   text       String
   createdAt  DateTime @default(now())
   senderId   String
   receiverId String
-
-  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
   @@index([senderId])
   @@index([receiverId])
   @@index([senderId, receiverId])
 }
 
-// ── MARKETPLACE ENGINE & CRM MODULES (Sprint 1 Core) ─────────────────────────
 model Campaign {
-  id             String       @id @default(cuid())
+  id             String         @id @default(cuid())
   brandProfileId String
-  brand          BrandProfile @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   title          String
   description    String
   budget         Float
-  status         String       @default("DRAFT") // DRAFT, ACTIVE, COMPLETED
-  createdAt      DateTime     @default(now())
+  status         CampaignStatus @default(DRAFT)
+  imageUrl       String?
+  deadline       DateTime?
+  requirements   String?
+  platforms      String[]       @default([])
+  contentFormats String[]       @default([])
+  minFollowers   Int?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  applications   Application[]
+  brand          BrandProfile   @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
+  contracts      Contract[]
 
-  proposals Proposal[]
-  contracts Contract[]
-}
-
-model Proposal {
-  id               String         @id @default(cuid())
-  campaignId       String
-  campaign         Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  creatorProfileId String
-  creator          CreatorProfile @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
-  coverLetter      String?
-  rate             Float
-  status           String         @default("PENDING") // PENDING, ACCEPTED, REJECTED
-  createdAt        DateTime       @default(now())
+  @@index([brandProfileId])
+  @@index([status])
 }
 
 model Contract {
   id               String         @id @default(cuid())
   campaignId       String
-  campaign         Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   brandProfileId   String
   creatorProfileId String
-  creator          CreatorProfile @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
   status           ContractStatus @default(PENDING)
   totalBudget      Float
   createdAt        DateTime       @default(now())
-
-  milestones Milestone[]
-  tasks      Task[]
+  campaign         Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator          CreatorProfile @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+  milestones       Milestone[]
+  tasks            Task[]
 }
 
 model Milestone {
   id         String          @id @default(cuid())
   contractId String
-  contract   Contract        @relation(fields: [contractId], references: [id], onDelete: Cascade)
   title      String
   percentage Float
   amount     Float
   status     MilestoneStatus @default(PENDING)
   dueDate    DateTime?
+  contract   Contract        @relation(fields: [contractId], references: [id], onDelete: Cascade)
 }
 
 model CRMLead {
   id             String       @id @default(cuid())
   brandProfileId String
-  brand          BrandProfile @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   handle         String
-  platform       String // INSTAGRAM, TIKTOK
+  platform       String
   avatarUrl      String?
   followers      Int          @default(0)
   status         LeadStatus   @default(DISCOVERED)
   notes          String?
   createdAt      DateTime     @default(now())
+  brand          BrandProfile @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
 }
 
 model Task {
   id         String    @id @default(cuid())
   contractId String?
-  contract   Contract? @relation(fields: [contractId], references: [id], onDelete: Cascade)
   title      String
   dueDate    DateTime
-  status     String    @default("TODO") // TODO, IN_PROGRESS, DONE
+  status     String    @default("TODO")
   createdAt  DateTime  @default(now())
+  contract   Contract? @relation(fields: [contractId], references: [id], onDelete: Cascade)
 }
 
-// ── CONNECTIONS (LinkedIn-style request/accept) ───────────────────────────────
 model Connection {
   id         String           @id @default(cuid())
   senderId   String
-  sender     User             @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
   receiverId String
-  receiver   User             @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
   status     ConnectionStatus @default(PENDING)
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
+  receiver   User             @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User             @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
 
   @@unique([senderId, receiverId])
   @@index([senderId])
   @@index([receiverId])
 }
 
-// ── COMMUNITY LISTS (Brand-curated creator groups) ───────────────────────────
 model CommunityList {
   id             String                @id @default(cuid())
   brandProfileId String
-  brand          BrandProfile          @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   name           String
   createdAt      DateTime              @default(now())
+  brand          BrandProfile          @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   members        CommunityListMember[]
 
   @@index([brandProfileId])
@@ -313,26 +257,100 @@ model CommunityList {
 model CommunityListMember {
   id            String        @id @default(cuid())
   listId        String
-  list          CommunityList @relation(fields: [listId], references: [id], onDelete: Cascade)
   creatorUserId String
   addedAt       DateTime      @default(now())
+  list          CommunityList @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   @@unique([listId, creatorUserId])
   @@index([listId])
 }
 
-// ── NOTIFICATION SYSTEM ───────────────────────────────────────────────────────
 model Notification {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String   // "PROPOSAL_RECEIVED" | "PROPOSAL_ACCEPTED" | "PROPOSAL_REJECTED" | "MESSAGE"
+  type      String
   title     String
   body      String?
   read      Boolean  @default(false)
   link      String?
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, read])
   @@index([userId, createdAt])
+}
+
+model Application {
+  id               String            @id @default(cuid())
+  campaignId       String
+  creatorProfileId String
+  coverLetter      String?
+  proposedRate     Float
+  negotiatedRate   Float?
+  contentFormats   String[]          @default([])
+  brandNote        String?
+  status           ApplicationStatus @default(PENDING)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  campaign         Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator          CreatorProfile    @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, creatorProfileId])
+  @@index([creatorProfileId])
+  @@index([campaignId, status])
+}
+
+enum Role {
+  BRAND
+  CREATOR
+}
+
+enum ContractStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  PAID
+}
+
+enum LeadStatus {
+  DISCOVERED
+  NEGOTIATING
+  INVITED
+  REJECTED
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum NotificationType {
+  CAMPAIGN_UPDATE
+  APPLICATION_UPDATE
+  MESSAGE
+  SYSTEM
 }

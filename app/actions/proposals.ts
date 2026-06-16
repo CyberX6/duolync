@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Role } from "@/lib/generated/prisma";
+import { Role, ApplicationStatus } from "@/lib/generated/prisma";
 import { headers } from "next/headers";
 
 async function getSession() {
@@ -31,7 +31,7 @@ export interface ProposalWithDetails {
   };
 }
 
-// Brand: get all proposals for their campaigns
+// Brand: get all applications for their campaigns
 export async function getProposalsAction(): Promise<{
   data: ProposalWithDetails[];
   error: string | null;
@@ -48,7 +48,7 @@ export async function getProposalsAction(): Promise<{
     return { data: [], error: "Brand profile not found" };
   }
 
-  const proposals = await db.proposal.findMany({
+  const applications = await db.application.findMany({
     where: {
       campaign: { brandProfileId: user.brandProfile.id },
     },
@@ -63,32 +63,32 @@ export async function getProposalsAction(): Promise<{
     orderBy: { createdAt: "desc" },
   });
 
-  const data: ProposalWithDetails[] = proposals.map((p) => ({
-    id: p.id,
-    status: p.status,
-    rate: p.rate,
-    coverLetter: p.coverLetter,
-    createdAt: p.createdAt.toISOString(),
+  const data: ProposalWithDetails[] = applications.map((a) => ({
+    id: a.id,
+    status: a.status,
+    rate: a.proposedRate,
+    coverLetter: a.coverLetter,
+    createdAt: a.createdAt.toISOString(),
     campaign: {
-      id: p.campaign.id,
-      title: p.campaign.title,
-      budget: p.campaign.budget,
+      id: a.campaign.id,
+      title: a.campaign.title,
+      budget: a.campaign.budget,
     },
     creator: {
-      id: p.creator.id,
-      userId: p.creator.userId,
-      name: p.creator.user.name,
-      avatarUrl: p.creator.user.image,
-      niche: p.creator.niche,
-      primaryPlatform: p.creator.primaryPlatform,
-      totalFollowers: p.creator.totalFollowers,
+      id: a.creator.id,
+      userId: a.creator.userId,
+      name: a.creator.user.name,
+      avatarUrl: a.creator.user.image,
+      niche: a.creator.niche,
+      primaryPlatform: a.creator.primaryPlatform,
+      totalFollowers: a.creator.totalFollowers,
     },
   }));
 
   return { data, error: null };
 }
 
-// Brand: approve or reject a proposal
+// Brand: approve or reject an application
 export async function updateProposalStatusAction(
   proposalId: string,
   status: "ACCEPTED" | "REJECTED",
@@ -105,8 +105,7 @@ export async function updateProposalStatusAction(
     return { error: "Brand profile not found" };
   }
 
-  // Verify this proposal belongs to this brand's campaign
-  const proposal = await db.proposal.findFirst({
+  const application = await db.application.findFirst({
     where: {
       id: proposalId,
       campaign: { brandProfileId: user.brandProfile.id },
@@ -117,23 +116,25 @@ export async function updateProposalStatusAction(
     },
   });
 
-  if (!proposal) return { error: "Proposal not found" };
+  if (!application) return { error: "Application not found" };
 
-  await db.proposal.update({
+  await db.application.update({
     where: { id: proposalId },
-    data: { status },
+    data: {
+      status:
+        status === "ACCEPTED" ? ApplicationStatus.ACCEPTED : ApplicationStatus.REJECTED,
+    },
   });
 
-  // Notify the creator
   const notifTitle =
     status === "ACCEPTED"
-      ? `Your proposal for "${proposal.campaign.title}" was accepted!`
-      : `Your proposal for "${proposal.campaign.title}" was not accepted.`;
+      ? `Your application for "${application.campaign.title}" was accepted!`
+      : `Your application for "${application.campaign.title}" was not accepted.`;
 
   await db.notification.create({
     data: {
-      userId: proposal.creator.userId,
-      type: status === "ACCEPTED" ? "PROPOSAL_ACCEPTED" : "PROPOSAL_REJECTED",
+      userId: application.creator.userId,
+      type: "APPLICATION_UPDATE",
       title: notifTitle,
       body:
         status === "ACCEPTED"
@@ -146,7 +147,7 @@ export async function updateProposalStatusAction(
   return { error: null };
 }
 
-// Creator: send a proposal on a campaign
+// Creator: submit an application for a campaign
 export async function sendProposalAction(input: {
   campaignId: string;
   rate: number;
@@ -164,8 +165,7 @@ export async function sendProposalAction(input: {
     return { error: "Creator profile not found" };
   }
 
-  // Check for duplicate
-  const existing = await db.proposal.findFirst({
+  const existing = await db.application.findFirst({
     where: {
       campaignId: input.campaignId,
       creatorProfileId: user.creatorProfile.id,
@@ -179,26 +179,25 @@ export async function sendProposalAction(input: {
   });
   if (!campaign) return { error: "Campaign not found" };
 
-  const proposal = await db.proposal.create({
+  const application = await db.application.create({
     data: {
       campaignId: input.campaignId,
       creatorProfileId: user.creatorProfile.id,
-      rate: input.rate,
+      proposedRate: input.rate,
       coverLetter: input.coverLetter ?? null,
-      status: "PENDING",
+      status: ApplicationStatus.PENDING,
     },
   });
 
-  // Notify the brand
   await db.notification.create({
     data: {
       userId: campaign.brand.user.id,
-      type: "PROPOSAL_RECEIVED",
-      title: `New proposal for "${campaign.title}"`,
-      body: `${user.name ?? "A creator"} submitted a proposal at $${input.rate}.`,
-      link: `/brand/proposals`,
+      type: "APPLICATION_UPDATE",
+      title: `New application for "${campaign.title}"`,
+      body: `${user.name ?? "A creator"} submitted an application at $${input.rate}.`,
+      link: `/brand/campaigns/${input.campaignId}`,
     },
   });
 
-  return { error: null, proposalId: proposal.id };
+  return { error: null, proposalId: application.id };
 }
