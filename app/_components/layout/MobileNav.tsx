@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   X, Home, Search, MessageSquare, Heart, Sparkles,
-  BarChart3, Link2, Compass, FileText, Users,
+  BarChart3, Link2, Compass, FileText, Users, Megaphone,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useMessaging } from "@/app/_components/messaging/MessagingContext";
+import { getPendingApplicationsCountAction } from "@/app/actions/brand-applications";
 import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
@@ -21,6 +22,14 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
   const { unreadCount } = useMessaging();
   const pathname = usePathname();
   const isBrand = profile?.user_type === "brand";
+  const [pendingApplications, setPendingApplications] = useState(0);
+
+  useEffect(() => {
+    if (!isBrand) return;
+    getPendingApplicationsCountAction()
+      .then((res) => setPendingApplications(res.count))
+      .catch(() => setPendingApplications(0));
+  }, [isBrand]);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -39,6 +48,7 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
         { icon: Search, label: "Discover", path: "/brand/discover" },
         { icon: Sparkles, label: "Smart Match", path: "/brand/smart-match" },
         { icon: FileText, label: "Proposals", path: "/brand/proposals" },
+        { icon: Megaphone, label: "Campaigns", path: "/brand/campaigns" },
         { icon: Heart, label: "Saved", path: "/brand/saved" },
         { icon: MessageSquare, label: "Messages", path: "/messages" },
         { icon: Users, label: "Community", path: "/community" },
@@ -47,6 +57,8 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
         { icon: Compass, label: "Feed", path: "/feed" },
         { icon: Home, label: "Dashboard", path: "/creator/dashboard" },
         { icon: Search, label: "Discover", path: "/creator/discover" },
+        { icon: Megaphone, label: "Campaigns", path: "/creator/campaigns" },
+        { icon: FileText, label: "My Applications", path: "/creator/applications" },
         { icon: BarChart3, label: "Analytics", path: "/creator/analytics" },
         { icon: Link2, label: "Social Accounts", path: "/creator/accounts" },
         { icon: Heart, label: "Saved", path: "/creator/saved" },
@@ -112,9 +124,13 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
         {/* Nav links */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-1">
           {mainNavItems.map((item) => {
-            const isActive = pathname === item.path;
+            const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
             const isMessages = item.label === "Messages";
-            const hasUnread = isMessages && unreadCount > 0;
+            const isCampaigns = item.label === "Campaigns" && isBrand;
+            const hasUnreadMsg = isMessages && unreadCount > 0;
+            const hasPendingApps = isCampaigns && pendingApplications > 0;
+            const hasBadge = hasUnreadMsg || hasPendingApps;
+            const badgeCount = isMessages ? unreadCount : pendingApplications;
             const activeClass = isBrand
               ? "bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/25 dark:border-cyan-500/20"
               : "gradient-primary text-white shadow-sm shadow-primary/30";
@@ -129,15 +145,15 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
                     ? activeClass
                     : [
                         "hover:text-foreground hover:bg-secondary",
-                        hasUnread ? "font-bold text-foreground" : "font-medium text-muted-foreground",
+                        hasBadge ? "font-bold text-foreground" : "font-medium text-muted-foreground",
                       ],
                 )}
               >
                 <item.icon className="w-5 h-5 shrink-0" />
                 <span className="flex-1 truncate">{item.label}</span>
-                {hasUnread && !isActive && (
+                {hasBadge && !isActive && (
                   <span className="min-w-[18px] h-[18px] bg-red-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center px-1 leading-none shrink-0">
-                    {unreadCount > 9 ? "9+" : unreadCount}
+                    {badgeCount > 9 ? "9+" : badgeCount}
                   </span>
                 )}
               </Link>

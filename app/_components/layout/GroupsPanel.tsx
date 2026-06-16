@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Users, Plus, Home, Search, MessageSquare, Heart, Sparkles,
-  BarChart3, Link2, Compass, FileText, FolderOpen,
+  BarChart3, Link2, Compass, FileText, FolderOpen, Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -16,6 +16,7 @@ import {
   createCommunityListAction,
   type CommunityListWithCount,
 } from "@/app/actions/communities";
+import { getPendingApplicationsCountAction } from "@/app/actions/brand-applications";
 import { cn } from "@/lib/utils";
 
 const GroupsPanel = () => {
@@ -28,12 +29,16 @@ const GroupsPanel = () => {
   const [newListName, setNewListName] = useState("");
   const [showInput, setShowInput] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [pendingApplications, setPendingApplications] = useState(0);
 
   useEffect(() => {
     if (!isBrand) return;
     getCommunityListsAction().then((res) => {
       if (!res.error) setCommunityLists(res.data);
     });
+    getPendingApplicationsCountAction()
+      .then((res) => setPendingApplications(res.count))
+      .catch(() => setPendingApplications(0));
   }, [isBrand]);
 
   const handleCreate = async () => {
@@ -55,6 +60,7 @@ const GroupsPanel = () => {
         { icon: Search, label: "Discover", path: "/brand/discover" },
         { icon: Sparkles, label: "Smart Match", path: "/brand/smart-match" },
         { icon: FileText, label: "Proposals", path: "/brand/proposals" },
+        { icon: Megaphone, label: "Campaigns", path: "/brand/campaigns" },
         { icon: Heart, label: "Saved", path: "/brand/saved" },
         { icon: MessageSquare, label: "Messages", path: "/messages" },
         { icon: Users, label: "Community", path: "/community" },
@@ -63,6 +69,8 @@ const GroupsPanel = () => {
         { icon: Compass, label: "Feed", path: "/feed" },
         { icon: Home, label: "Dashboard", path: "/creator/dashboard" },
         { icon: Search, label: "Discover", path: "/creator/discover" },
+        { icon: Megaphone, label: "Campaigns", path: "/creator/campaigns" },
+        { icon: FileText, label: "My Applications", path: "/creator/applications" },
         { icon: BarChart3, label: "Analytics", path: "/creator/analytics" },
         { icon: Link2, label: "Social Accounts", path: "/creator/accounts" },
         { icon: Heart, label: "Saved", path: "/creator/saved" },
@@ -76,9 +84,13 @@ const GroupsPanel = () => {
         {/* Main Navigation */}
         <nav className="space-y-1 mb-6">
           {mainNavItems.map((item) => {
-            const isActive = pathname === item.path;
+            const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
             const isMessages = item.label === "Messages";
-            const hasUnread = isMessages && unreadCount > 0;
+            const isCampaigns = item.label === "Campaigns" && isBrand;
+            const hasUnreadMsg = isMessages && unreadCount > 0;
+            const hasPendingApps = isCampaigns && pendingApplications > 0;
+            const hasBadge = hasUnreadMsg || hasPendingApps;
+            const badgeCount = isMessages ? unreadCount : pendingApplications;
             const activeClass = isBrand
               ? "bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/25 dark:border-cyan-500/20 shadow-sm shadow-cyan-500/10"
               : "gradient-primary text-white shadow-sm shadow-primary/30";
@@ -92,7 +104,7 @@ const GroupsPanel = () => {
                     ? activeClass
                     : [
                         "hover:text-foreground hover:bg-secondary",
-                        hasUnread
+                        hasBadge
                           ? "font-bold text-foreground"
                           : "font-medium text-muted-foreground",
                       ],
@@ -100,9 +112,9 @@ const GroupsPanel = () => {
               >
                 <item.icon className="w-5 h-5 shrink-0" />
                 <span className="flex-1 truncate">{item.label}</span>
-                {hasUnread && !isActive && (
+                {hasBadge && !isActive && (
                   <span className="min-w-[18px] h-[18px] bg-red-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center px-1 leading-none shrink-0">
-                    {unreadCount > 9 ? "9+" : unreadCount}
+                    {badgeCount > 9 ? "9+" : badgeCount}
                   </span>
                 )}
               </Link>

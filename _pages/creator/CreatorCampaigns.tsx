@@ -1,0 +1,556 @@
+"use client";
+
+import { useState, useEffect, useCallback, useTransition } from "react";
+import Link from "next/link";
+import {
+  Search, DollarSign, Calendar, Clock, Target, Megaphone,
+  ChevronRight, X, CheckCircle2, Send, Loader2, Filter,
+  Building2, MapPin, ExternalLink,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from "@/components/ui/dialog";
+import MainLayout from "@/components/layout/MainLayout";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import {
+  getPublicCampaignsAction,
+  applyToCampaignAction,
+  withdrawApplicationAction,
+  type PublicCampaign,
+} from "@/app/actions/creator-campaigns";
+
+// ── Platform emoji map ────────────────────────────────────────────────────────
+
+const PLATFORM_EMOJI: Record<string, string> = {
+  instagram: "📸",
+  tiktok: "🎵",
+  youtube: "▶️",
+  twitter: "🐦",
+  linkedin: "💼",
+  pinterest: "📌",
+  twitch: "🎮",
+  snapchat: "👻",
+};
+
+// ── Status config ─────────────────────────────────────────────────────────────
+
+const APP_STATUS: Record<string, { label: string; color: string }> = {
+  PENDING: {
+    label: "Applied · Pending",
+    color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  },
+  UNDER_REVIEW: {
+    label: "Under Review",
+    color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  },
+  ACCEPTED: {
+    label: "Accepted 🎉",
+    color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  },
+  REJECTED: {
+    label: "Not Selected",
+    color: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  },
+  WITHDRAWN: {
+    label: "Withdrawn",
+    color: "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400",
+  },
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function formatBudget(n: number) {
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `$${(n / 1_000).toFixed(1)}K`;
+  return `$${n.toLocaleString()}`;
+}
+
+function timeUntilDeadline(iso: string | null): string | null {
+  if (!iso) return null;
+  const diff = new Date(iso).getTime() - Date.now();
+  if (diff < 0) return "Expired";
+  const days = Math.ceil(diff / 86_400_000);
+  if (days === 0) return "Due today";
+  if (days === 1) return "Due tomorrow";
+  return `${days}d left`;
+}
+
+function formatDate(iso: string | null) {
+  if (!iso) return null;
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short", day: "numeric", year: "numeric",
+  });
+}
+
+// ── Apply Modal ───────────────────────────────────────────────────────────────
+
+interface ApplyModalProps {
+  campaign: PublicCampaign | null;
+  onClose: () => void;
+  onApplied: (campaignId: string, applicationId: string) => void;
+}
+
+function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [rate, setRate] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+
+  useEffect(() => {
+    if (campaign) { setRate(""); setCoverLetter(""); }
+  }, [campaign]);
+
+  if (!campaign) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsedRate = parseFloat(rate);
+    if (isNaN(parsedRate) || parsedRate <= 0) {
+      toast({ variant: "destructive", title: "Please enter a valid rate." });
+      return;
+    }
+    startTransition(async () => {
+      const result = await applyToCampaignAction({
+        campaignId: campaign.id,
+        proposedRate: parsedRate,
+        coverLetter: coverLetter || undefined,
+      });
+      if (result.error || !result.data) {
+        toast({ variant: "destructive", title: result.error ?? "Failed to apply." });
+        return;
+      }
+      toast({ title: "Application submitted! 🎉", description: `You applied to "${campaign.title}".` });
+      onApplied(campaign.id, result.data.id);
+      onClose();
+    });
+  };
+
+  return (
+    <Dialog open={!!campaign} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="sm:max-w-lg w-[95vw] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold flex items-center gap-2">
+            <Send className="w-5 h-5 text-primary" />
+            Apply to Campaign
+          </DialogTitle>
+        </DialogHeader>
+
+        {/* Campaign summary */}
+        <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900/50 mb-1">
+          <p className="font-semibold text-sm line-clamp-1">{campaign.title}</p>
+          <p className="text-xs text-muted-foreground mt-0.5">{campaign.brand.companyName}</p>
+          <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Target className="w-3 h-3" />
+              Budget: {formatBudget(campaign.budget)}
+            </span>
+            {campaign.deadline && (
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {timeUntilDeadline(campaign.deadline)}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4 py-1">
+          {/* Rate */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Your Rate (USD) *</label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                type="number"
+                min={1}
+                step={0.01}
+                value={rate}
+                onChange={(e) => setRate(e.target.value)}
+                placeholder={`Suggested: ${formatBudget(campaign.budget * 0.1)}`}
+                className="pl-9"
+                required
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">Enter the total amount you'd charge for this campaign.</p>
+          </div>
+
+          {/* Cover Letter */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Cover Letter (optional)</label>
+            <textarea
+              value={coverLetter}
+              onChange={(e) => setCoverLetter(e.target.value)}
+              placeholder="Tell the brand why you're a great fit. Mention your audience, niche, past collaborations…"
+              rows={4}
+              maxLength={1000}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+            />
+            <p className="text-xs text-muted-foreground text-right">{coverLetter.length}/1000</p>
+          </div>
+
+          <DialogFooter className="pt-1 flex flex-col-reverse sm:flex-row gap-2">
+            <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isPending} className="w-full sm:w-auto">
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Submitting…
+                </span>
+              ) : "Submit Application"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ── Campaign Card ─────────────────────────────────────────────────────────────
+
+interface CampaignCardProps {
+  campaign: PublicCampaign;
+  onApply: (c: PublicCampaign) => void;
+  onWithdraw: (applicationId: string, campaignId: string) => void;
+  withdrawing: string | null;
+}
+
+function CampaignCard({ campaign, onApply, onWithdraw, withdrawing }: CampaignCardProps) {
+  const appStatus = campaign.applicationStatus;
+  const appMeta = appStatus ? APP_STATUS[appStatus] : null;
+  const deadline = timeUntilDeadline(campaign.deadline);
+  const isExpired = deadline === "Expired";
+  const canApply = !appStatus && !isExpired;
+  const canWithdraw = appStatus === "PENDING" && campaign.applicationId;
+  const isWithdrawing = withdrawing === campaign.applicationId;
+
+  return (
+    <article className="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md dark:hover:shadow-black/20 transition-all duration-200 flex flex-col">
+      {/* Image — clicking goes to detail page */}
+      <Link href={`/creator/campaigns/${campaign.id}`} className="block">
+        {campaign.imageUrl && (
+          <div className="w-full h-32 overflow-hidden shrink-0">
+            <img
+              src={campaign.imageUrl}
+              alt={campaign.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        )}
+      </Link>
+
+      <div className="flex flex-col flex-1 p-4 sm:p-5 gap-3">
+        {/* Header */}
+        <div>
+          {appMeta && (
+            <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold mb-2", appMeta.color)}>
+              {appMeta.label}
+            </span>
+          )}
+          <Link href={`/creator/campaigns/${campaign.id}`} className="hover:underline underline-offset-2">
+            <h3 className="font-bold text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+              {campaign.title}
+            </h3>
+          </Link>
+          <div className="flex items-center gap-1.5 mt-1 text-sm text-muted-foreground">
+            <Building2 className="w-3.5 h-3.5 shrink-0" />
+            <Link
+              href={`/profile/${campaign.brand.userId}`}
+              className="truncate font-medium hover:text-primary hover:underline underline-offset-2 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {campaign.brand.companyName}
+            </Link>
+            {campaign.brand.industry && (
+              <span className="text-muted-foreground/60">· {campaign.brand.industry}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-sm text-muted-foreground line-clamp-3 flex-1">
+          {campaign.description}
+        </p>
+
+        {/* Platforms */}
+        {campaign.platforms.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {campaign.platforms.slice(0, 4).map((pid) => (
+              <span
+                key={pid}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+              >
+                {PLATFORM_EMOJI[pid] ?? "🌐"} {pid}
+              </span>
+            ))}
+            {campaign.platforms.length > 4 && (
+              <span className="text-xs text-muted-foreground self-center">+{campaign.platforms.length - 4}</span>
+            )}
+          </div>
+        )}
+
+        {/* Meta */}
+        <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-1.5 font-semibold">
+            <DollarSign className="w-4 h-4 text-emerald-500" />
+            {formatBudget(campaign.budget)}
+          </div>
+          {deadline && (
+            <div className={cn("flex items-center gap-1.5 text-xs", isExpired ? "text-red-500" : "text-muted-foreground")}>
+              <Clock className="w-3.5 h-3.5" />
+              {deadline}
+            </div>
+          )}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-auto pt-1 space-y-2">
+          <Link
+            href={`/creator/campaigns/${campaign.id}`}
+            className="flex items-center justify-between text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            <span>View full details & negotiate</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+          {canApply ? (
+            <Button
+              onClick={() => onApply(campaign)}
+              className="w-full"
+              size="sm"
+            >
+              <Send className="w-3.5 h-3.5 mr-2" />
+              Apply Now
+            </Button>
+          ) : canWithdraw ? (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-muted-foreground hover:text-red-500 hover:border-red-300"
+              onClick={() => onWithdraw(campaign.applicationId!, campaign.id)}
+              disabled={isWithdrawing}
+            >
+              {isWithdrawing ? (
+                <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+              ) : (
+                <X className="w-3.5 h-3.5 mr-2" />
+              )}
+              Withdraw Application
+            </Button>
+          ) : appStatus === "ACCEPTED" ? (
+            <div className="flex items-center justify-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-semibold py-2">
+              <CheckCircle2 className="w-4 h-4" />
+              Application Accepted!
+            </div>
+          ) : appStatus === "REJECTED" || appStatus === "WITHDRAWN" ? (
+            <p className="text-center text-xs text-muted-foreground py-2">
+              {appStatus === "WITHDRAWN" ? "You withdrew this application." : "Not selected for this campaign."}
+            </p>
+          ) : isExpired ? (
+            <p className="text-center text-xs text-muted-foreground py-2">This campaign has closed.</p>
+          ) : null}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
+const CreatorCampaigns = () => {
+  const { toast } = useToast();
+  const [campaigns, setCampaigns] = useState<PublicCampaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [platformFilter, setPlatformFilter] = useState<string>("ALL");
+  const [applying, setApplying] = useState<PublicCampaign | null>(null);
+  const [withdrawing, setWithdrawing] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const result = await getPublicCampaignsAction();
+    if (!result.error) setCampaigns(result.data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  // Optimistic apply
+  const handleApplied = (campaignId: string, applicationId: string) => {
+    setCampaigns((prev) =>
+      prev.map((c) =>
+        c.id === campaignId
+          ? { ...c, applicationStatus: "PENDING", applicationId }
+          : c,
+      ),
+    );
+  };
+
+  // Optimistic withdraw
+  const handleWithdraw = async (applicationId: string, campaignId: string) => {
+    if (!confirm("Withdraw your application? You can re-apply later.")) return;
+    setWithdrawing(applicationId);
+    // Optimistic
+    setCampaigns((prev) =>
+      prev.map((c) =>
+        c.id === campaignId
+          ? { ...c, applicationStatus: "WITHDRAWN", applicationId: null }
+          : c,
+      ),
+    );
+    const result = await withdrawApplicationAction(applicationId);
+    if (result.error) {
+      toast({ variant: "destructive", title: result.error });
+      load(); // revert
+    } else {
+      toast({ title: "Application withdrawn." });
+    }
+    setWithdrawing(null);
+  };
+
+  // Filtering
+  const allPlatforms = Array.from(new Set(campaigns.flatMap((c) => c.platforms)));
+  const filtered = campaigns.filter((c) => {
+    const matchSearch =
+      !search ||
+      c.title.toLowerCase().includes(search.toLowerCase()) ||
+      c.brand.companyName.toLowerCase().includes(search.toLowerCase()) ||
+      c.description.toLowerCase().includes(search.toLowerCase());
+    const matchPlatform =
+      platformFilter === "ALL" || c.platforms.includes(platformFilter);
+    return matchSearch && matchPlatform;
+  });
+
+  const appliedCount = campaigns.filter((c) => c.applicationStatus).length;
+
+  return (
+    <MainLayout>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Header */}
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
+            <Megaphone className="w-7 h-7 text-primary" />
+            Browse Campaigns
+          </h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            Discover active campaigns from brands looking for creators like you.
+          </p>
+          {appliedCount > 0 && (
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              <Send className="w-3.5 h-3.5" />
+              {appliedCount} application{appliedCount !== 1 ? "s" : ""} submitted
+            </div>
+          )}
+        </div>
+
+        {/* Search + Platform filter */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search campaigns or brands…"
+              className="pl-9"
+            />
+          </div>
+
+          {allPlatforms.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-0.5 sm:pb-0 shrink-0">
+              <button
+                onClick={() => setPlatformFilter("ALL")}
+                className={cn(
+                  "shrink-0 px-3 py-2 rounded-lg text-xs font-medium border transition-all",
+                  platformFilter === "ALL"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-white dark:bg-zinc-900 text-muted-foreground border-zinc-200 dark:border-zinc-700 hover:border-zinc-300",
+                )}
+              >
+                All
+              </button>
+              {allPlatforms.slice(0, 6).map((pid) => (
+                <button
+                  key={pid}
+                  onClick={() => setPlatformFilter(pid)}
+                  className={cn(
+                    "shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium border transition-all",
+                    platformFilter === pid
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-white dark:bg-zinc-900 text-muted-foreground border-zinc-200 dark:border-zinc-700 hover:border-zinc-300",
+                  )}
+                >
+                  <span>{PLATFORM_EMOJI[pid] ?? "🌐"}</span>
+                  <span className="capitalize">{pid}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden animate-pulse">
+                <div className="h-28 bg-zinc-200 dark:bg-zinc-700" />
+                <div className="p-5 space-y-3">
+                  <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4" />
+                  <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-1/2" />
+                  <div className="h-12 bg-zinc-100 dark:bg-zinc-800 rounded" />
+                  <div className="h-9 bg-zinc-200 dark:bg-zinc-700 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center py-24 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+              <Megaphone className="w-8 h-8 text-primary" />
+            </div>
+            <h3 className="font-bold text-lg mb-2">
+              {search || platformFilter !== "ALL" ? "No campaigns match your search" : "No active campaigns yet"}
+            </h3>
+            <p className="text-muted-foreground text-sm max-w-xs">
+              {search || platformFilter !== "ALL"
+                ? "Try adjusting your search or filter."
+                : "Check back soon — brands are always launching new campaigns."}
+            </p>
+            {(search || platformFilter !== "ALL") && (
+              <Button variant="outline" className="mt-4" onClick={() => { setSearch(""); setPlatformFilter("ALL"); }}>
+                Clear filters
+              </Button>
+            )}
+          </div>
+        ) : (
+          <>
+            <p className="text-xs text-muted-foreground mb-3">
+              {filtered.length} campaign{filtered.length !== 1 ? "s" : ""} available
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtered.map((campaign) => (
+                <CampaignCard
+                  key={campaign.id}
+                  campaign={campaign}
+                  onApply={setApplying}
+                  onWithdraw={handleWithdraw}
+                  withdrawing={withdrawing}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Apply Modal */}
+      <ApplyModal
+        campaign={applying}
+        onClose={() => setApplying(null)}
+        onApplied={handleApplied}
+      />
+    </MainLayout>
+  );
+};
+
+export default CreatorCampaigns;

@@ -18,6 +18,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useMessaging } from "@/components/messaging/MessagingContext";
+import MainLayout from "@/components/layout/MainLayout";
 import {
   getProfileAction,
   updateProfileAction,
@@ -491,20 +492,24 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+        </div>
+      </MainLayout>
     );
   }
 
   if (notFound || !profileData) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <h1 className="font-display text-2xl font-bold mb-2">Profile not found</h1>
-          <Button asChild><Link href="/">Go Home</Link></Button>
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <h1 className="font-display text-2xl font-bold mb-2">Profile not found</h1>
+            <Button asChild><Link href="/">Go Home</Link></Button>
+          </div>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
@@ -512,21 +517,17 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
   const isOwnProfile = currentUser?.id === profileData.userId;
 
   return (
-    <>
-      {/* ── Top bar ── */}
-      <div className="sticky top-0 z-40 border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur">
-        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="shrink-0">
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm truncate">{profileData.full_name ?? "Profile"}</p>
-            <p className="text-xs text-muted-foreground capitalize">{profileData.user_type}</p>
-          </div>
-        </div>
-      </div>
+    <MainLayout>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+        {/* Back navigation */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back
+        </button>
 
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
         {/* ── Profile card (LinkedIn-style) ── */}
         <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl overflow-hidden shadow-sm">
           {/* Cover */}
@@ -763,7 +764,7 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </MainLayout>
   );
 };
 
