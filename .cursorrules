@@ -1,0 +1,46 @@
+# Nexly — AI Session Rules
+
+## Tech Stack
+- Next.js 15 (App Router) — no Pages Router
+- TypeScript strict mode — no `any`
+- Prisma ORM + PostgreSQL
+- Better Auth for authentication
+- Tailwind CSS + shadcn/ui components
+- pnpm — never npm or yarn
+
+## Design System
+- Dark-themed UI, minimalist aesthetic
+- Purple/lavender accents (`purple-500`, `violet-400`, etc.) for primary actions, CTAs, and highlights
+- Consistent use of shadcn/ui primitives — do not reinvent common UI patterns
+- Mobile-first responsive design on all new widgets and pages
+
+## Architecture
+- All API logic lives in `/app/api` or server actions — never in client components
+- Prefer server components by default; use `"use client"` only when interactivity requires it
+- Server actions are the preferred pattern for database mutations
+- Always run `prisma migrate dev` after schema changes; never edit the DB directly
+
+## Database
+- Always read `prisma/schema.prisma` before suggesting UI changes that touch data
+- Use proper Prisma migrations — never raw SQL patches outside of migration files
+- Prefer typed Prisma queries; avoid casting results
+
+## Coding Standards
+- Clean, modular components — one responsibility per file
+- No inline styles; use Tailwind utility classes
+- Extract reusable logic into custom hooks (`/hooks`) or utility files (`/lib`)
+- No comments that narrate what the code does — only explain non-obvious intent
+
+## State & Reactivity
+- Optimistic updates where UX benefits; avoid unnecessary full-page reloads
+- Prefer `useTransition` / `startTransition` for non-urgent state changes
+- Server state (DB data) should be fetched server-side and passed as props
+
+## Collaboration Features
+- Use bidirectional approval logic for any brand ↔ creator collaboration flow
+- Both parties must explicitly confirm before a collaboration is marked active
+
+## Communication Style
+- Be concise and technical
+- Prioritize security and performance in all suggestions
+- Surface trade-offs when multiple valid approaches exist

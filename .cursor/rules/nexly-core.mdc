@@ -1,0 +1,32 @@
+---
+description: Core project rules for Nexly — stack, design system, architecture, and coding standards
+alwaysApply: true
+---
+
+# Nexly — Core Rules
+
+## Tech Stack
+- Next.js 15 App Router, TypeScript strict, Prisma + PostgreSQL, Better Auth, Tailwind + shadcn/ui
+- pnpm only — never npm or yarn
+- No `any` in TypeScript
+
+## Design System
+- Dark-themed UI, minimalist aesthetic
+- Purple/lavender accents for primary actions and highlights
+- Mobile-first responsive design on all new components
+
+## Architecture
+- API logic in `/app/api` or server actions only — never in client components
+- Server components by default; `"use client"` only when interactivity requires it
+- Always read `prisma/schema.prisma` before suggesting UI changes that touch data
+- Run `prisma migrate dev` after schema changes; never skip migrations
+
+## Collaboration Features
+- Bidirectional approval logic for brand ↔ creator collaboration flows
+- Both parties must confirm before a collaboration is marked active
+
+## Code Style
+- One responsibility per component/file
+- No inline styles — Tailwind only
+- No comments narrating what code does; only explain non-obvious intent
+- Optimistic UI updates where beneficial; avoid unnecessary full-page reloads
