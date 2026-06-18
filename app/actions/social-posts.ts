@@ -56,6 +56,31 @@ export async function getSocialPostsAction(): Promise<{
   };
 }
 
+/**
+ * Clears posts whose image URLs are known-broken patterns so the UI shows
+ * the platform emoji fallback cleanly until the user re-syncs.
+ * Called automatically on the Social Connections page load.
+ */
+export async function clearBrokenPostImagesAction(): Promise<void> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return;
+
+  const creator = await db.creatorProfile.findUnique({
+    where: { userId: session.user.id },
+    select: { id: true },
+  });
+  if (!creator) return;
+
+  // Null-out image URLs that point to the broken shortCode redirect pattern
+  await db.socialPost.updateMany({
+    where: {
+      creatorProfileId: creator.id,
+      imageUrl: { contains: "instagram.com/p/" },
+    },
+    data: { imageUrl: null },
+  });
+}
+
 export async function deletePostAction(postId: string): Promise<{ error: string | null }> {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return { error: "Unauthorized" };

@@ -28,7 +28,7 @@ import {
   type AccountPreview,
 } from "@/app/actions/apify-sync";
 import { getMyProfileAction, type FullProfile } from "@/app/actions/profile";
-import { getSocialPostsAction, deletePostAction, type SocialPostItem } from "@/app/actions/social-posts";
+import { getSocialPostsAction, deletePostAction, clearBrokenPostImagesAction, type SocialPostItem } from "@/app/actions/social-posts";
 import { removePlatformAction } from "@/app/actions/social-connections";
 
 // ─── Platform config ──────────────────────────────────────────────────────────
@@ -539,6 +539,8 @@ const PresencePage = () => {
   };
 
   useEffect(() => {
+    // Silently clear any posts with broken image URLs from a previous code version
+    clearBrokenPostImagesAction().catch(() => {});
     reload().finally(() => setLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
