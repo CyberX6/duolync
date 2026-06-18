@@ -971,9 +971,17 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
               {isCreator ? (
                 <>
                   <div className="border-x border-zinc-200/60 dark:border-zinc-800/80">
-                    <StatItem icon={BarChart3} value={`${profileData.avg_engagement_rate}%`} label="Eng Rate" />
+                    <StatItem
+                      icon={BarChart3}
+                      value={`${(profileData.averageEngagement ?? profileData.avg_engagement_rate).toFixed(2)}%`}
+                      label="Eng Rate"
+                    />
                   </div>
-                  <StatItem icon={Users} value={formatNumber(profileData.total_followers)} label="Followers" />
+                  <StatItem
+                    icon={Users}
+                    value={formatNumber(profileData.followerCount ?? profileData.total_followers)}
+                    label="Followers"
+                  />
                 </>
               ) : (
                 <>

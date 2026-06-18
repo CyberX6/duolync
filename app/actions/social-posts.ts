@@ -81,6 +81,50 @@ export async function clearBrokenPostImagesAction(): Promise<void> {
   });
 }
 
+/** Fetch posts for any creator by their user ID (brand-side discovery view). */
+export async function getCreatorPostsByUserIdAction(
+  creatorUserId: string,
+  limit = 6
+): Promise<{ data: SocialPostItem[]; error: string | null }> {
+  const creator = await db.creatorProfile.findUnique({
+    where: { userId: creatorUserId },
+    select: {
+      socialPosts: {
+        orderBy: { fetchedAt: "desc" },
+        take: limit,
+        select: {
+          id: true,
+          platform: true,
+          postUrl: true,
+          imageUrl: true,
+          caption: true,
+          likes: true,
+          comments: true,
+          views: true,
+          postedAt: true,
+        },
+      },
+    },
+  });
+
+  if (!creator) return { data: [], error: null };
+
+  return {
+    data: creator.socialPosts.map((p) => ({
+      ...p,
+      postedAt: p.postedAt?.toISOString() ?? null,
+    })),
+    error: null,
+  };
+}
+
+/** Fetch ALL posts for any creator (used by portfolio "View All" page). */
+export async function getAllCreatorPostsByUserIdAction(
+  creatorUserId: string
+): Promise<{ data: SocialPostItem[]; error: string | null }> {
+  return getCreatorPostsByUserIdAction(creatorUserId, 100);
+}
+
 export async function deletePostAction(postId: string): Promise<{ error: string | null }> {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return { error: "Unauthorized" };
