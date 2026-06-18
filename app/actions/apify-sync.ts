@@ -120,15 +120,26 @@ function getApifyToken(): string {
   return token;
 }
 
+// ─── Image proxy ─────────────────────────────────────────────────────────────
+// CDN URLs from Instagram (fbcdn.net) and TikTok expire within hours.
+// Routing through wsrv.nl proxies the image, bypasses CORS/CSP, and caches
+// it on first load so subsequent views work even after the original URL expires.
+function proxyImage(url: string | null | undefined): string | null {
+  if (!url) return null;
+  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&n=-1&output=jpg`;
+}
+
 function buildActorInput(platform: Platform, handle: string, full: boolean) {
   if (platform === "instagram") {
-    // full=true → include latestPosts, false → profile metadata only
+    // resultsLimit controls how many recent posts are included in latestPosts
     return { usernames: [handle], resultsLimit: full ? 3 : 0 };
   }
-  // TikTok: resultsPerPage controls how many videos to scrape
+  // TikTok: the scraper batches in page-sized increments. Requesting a small
+  // number like 3 can cause it to under-fetch (returns 1). Request a larger
+  // batch and slice to 3 in extractTikTokSync / extractTikTokPreview.
   return {
     profiles: [`https://www.tiktok.com/@${handle}`],
-    resultsPerPage: full ? 3 : 1,
+    resultsPerPage: full ? 20 : 5,
   };
 }
 
@@ -136,7 +147,8 @@ function extractInstagramPreview(item: InstagramProfileItem, handle: string): Ac
   return {
     handle: item.username ?? handle,
     displayName: item.fullName ?? null,
-    avatarUrl: item.profilePicUrl ?? null,
+    // Instagram profile pic CDN URL expires — proxy through wsrv.nl
+    avatarUrl: proxyImage(item.profilePicUrl),
     followerCount: item.followersCount ?? null,
     isPrivate: item.private ?? false,
   };
@@ -147,26 +159,37 @@ function extractTikTokPreview(item: TikTokVideoItem, handle: string): AccountPre
   return {
     handle: meta.name ?? handle,
     displayName: meta.nickName ?? null,
-    avatarUrl: meta.avatar ?? null,
+    // TikTok avatar CDN URL also expires — proxy through wsrv.nl
+    avatarUrl: proxyImage(meta.avatar),
     followerCount: meta.fans ?? null,
-    isPrivate: false, // TikTok accounts accessible to scraper are always public
+    isPrivate: false,
   };
 }
 
 function extractInstagramSync(item: InstagramProfileItem) {
   const followerCount = item.followersCount ?? 0;
-  const engagementRate = 0; // Instagram profile scraper doesn't give engagement rate directly
+  const engagementRate = 0;
 
-  const posts = (item.latestPosts ?? []).slice(0, 3).map((p) => ({
-    postUrl: p.url ?? null,
-    imageUrl: p.displayUrl ?? p.imageUrl ?? null,
-    caption: p.caption ?? null,
-    likes: p.likesCount ?? null,
-    comments: p.commentsCount ?? null,
-    views: p.videoViewCount ?? null,
-    engagementRate: null as number | null,
-    postedAt: p.timestamp ? new Date(p.timestamp) : null,
-  }));
+  const rawPosts = item.latestPosts ?? [];
+  console.info(`[apify] Instagram raw post count: ${rawPosts.length}`);
+
+  const posts = rawPosts.slice(0, 3).map((p) => {
+    // Instagram CDN URLs (fbcdn.net / cdninstagram.com) expire within hours.
+    // Route through wsrv.nl which caches on first fetch, bypassing both expiry and CORS.
+    // NOTE: instagram.com/p/{shortCode}/media/ requires an auth session since 2023 — do not use.
+    const imageUrl = proxyImage(p.displayUrl ?? p.imageUrl);
+
+    return {
+      postUrl: p.url ?? null,
+      imageUrl,
+      caption: p.caption ?? null,
+      likes: p.likesCount ?? null,
+      comments: p.commentsCount ?? null,
+      views: p.videoViewCount ?? null,
+      engagementRate: null as number | null,
+      postedAt: p.timestamp ? new Date(p.timestamp) : null,
+    };
+  });
 
   const niches: string[] = [];
   if (item.categoryName) niches.push(item.categoryName);
@@ -184,16 +207,23 @@ function extractTikTokSync(items: TikTokVideoItem[]) {
     ? Math.min(100, parseFloat(((hearts / fans) * 100).toFixed(2)))
     : 0;
 
-  const posts = items.slice(0, 3).map((v) => ({
-    postUrl: v.webVideoUrl ?? null,
-    imageUrl: v.videoMeta?.coverUrl ?? null,
-    caption: v.text ?? null,
-    likes: v.diggCount ?? null,
-    comments: v.commentCount ?? null,
-    views: v.playCount ?? null,
-    engagementRate: null as number | null,
-    postedAt: v.createTime ? new Date(v.createTime * 1000) : null,
-  }));
+  console.info(`[apify] TikTok raw item count: ${items.length}`);
+
+  // Each item is a video; take up to 3, skip items with no usable data
+  const posts = items
+    .filter((v) => v.webVideoUrl || v.diggCount != null)
+    .slice(0, 3)
+    .map((v) => ({
+      postUrl: v.webVideoUrl ?? null,
+      // Proxy the cover URL through wsrv.nl to avoid CDN expiry + CORS issues
+      imageUrl: proxyImage(v.videoMeta?.coverUrl),
+      caption: v.text ?? null,
+      likes: v.diggCount ?? null,
+      comments: v.commentCount ?? null,
+      views: v.playCount ?? null,
+      engagementRate: null as number | null,
+      postedAt: v.createTime ? new Date(v.createTime * 1000) : null,
+    }));
 
   // Extract niches from hashtags
   const niches: string[] = [];
@@ -204,6 +234,7 @@ function extractTikTokSync(items: TikTokVideoItem[]) {
     }
   }
 
+  console.info(`[apify] TikTok extracted posts: ${posts.length}`);
   return { followerCount: fans, engagementRate, posts, niches };
 }
 
