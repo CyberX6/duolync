@@ -27,7 +27,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

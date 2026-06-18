@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Users, Plus, Home, Search, MessageSquare, Heart, Sparkles,
-  BarChart3, Link2, Compass, FileText, FolderOpen, Megaphone,
+  Compass, FileText, FolderOpen, Megaphone, Radio,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -66,13 +66,12 @@ const GroupsPanel = () => {
         { icon: Users, label: "Community", path: "/community" },
       ]
     : [
-        { icon: Compass, label: "Feed", path: "/feed" },
         { icon: Home, label: "Dashboard", path: "/creator/dashboard" },
-        { icon: Search, label: "Discover", path: "/creator/discover" },
         { icon: Megaphone, label: "Campaigns", path: "/creator/campaigns" },
+        { icon: Radio, label: "Social Connections", path: "/creator/presence" },
+        { icon: Compass, label: "Feed", path: "/feed" },
+        { icon: Search, label: "Discover", path: "/creator/discover" },
         { icon: FileText, label: "My Applications", path: "/creator/applications" },
-        { icon: BarChart3, label: "Analytics", path: "/creator/analytics" },
-        { icon: Link2, label: "Social Accounts", path: "/creator/accounts" },
         { icon: Heart, label: "Saved", path: "/creator/saved" },
         { icon: MessageSquare, label: "Messages", path: "/messages" },
         { icon: Users, label: "Community", path: "/community" },

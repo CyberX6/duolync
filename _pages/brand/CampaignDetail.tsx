@@ -27,9 +27,12 @@ import {
   type CampaignDetailData,
   type ApplicationDetail,
 } from "@/app/actions/brand-applications";
+import { updateCampaignStatusAction, startCampaignWorkflowAction } from "@/app/actions/campaigns";
+import { CAMPAIGN_WORKFLOW_STATUSES, type WorkflowStatus } from "@/lib/campaign-workflow";
 import { AddEventButton } from "@/components/calendar/AddEventModal";
 import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
 import type { CalendarEventData } from "@/app/actions/calendar-events";
+import { CampaignBriefForm } from "@/app/_components/campaigns/CampaignBriefForm";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -227,6 +230,7 @@ function NegotiationModal({ application, campaignBudget, onClose, onUpdated }: N
   return (
     <Dialog open={!!application} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="sm:max-w-2xl w-[95vw] max-h-[92vh] overflow-hidden flex flex-col p-0">
+        <DialogTitle className="sr-only">Negotiation</DialogTitle>
         {/* Creator header */}
         <div className="p-5 sm:p-6 border-b border-border flex items-start gap-4 shrink-0">
           <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-zinc-200 dark:ring-zinc-700 shrink-0">
@@ -484,6 +488,200 @@ function NegotiationModal({ application, campaignBudget, onClose, onUpdated }: N
   );
 }
 
+// ── Campaign Status Tracker ───────────────────────────────────────────────────
+
+const WORKFLOW_META: Record<WorkflowStatus, { label: string; color: string; description: string }> = {
+  PENDING:     { label: "Pending",     color: "#f59e0b", description: "Awaiting acceptance from creator(s)" },
+  ACCEPTED:    { label: "Accepted",    color: "#8b5cf6", description: "Creator(s) accepted — ready to start" },
+  IN_PROGRESS: { label: "In Progress", color: "#3b82f6", description: "Content creation is underway" },
+  SUBMITTED:   { label: "Submitted",   color: "#06b6d4", description: "Creator(s) submitted deliverables for review" },
+  COMPLETED:   { label: "Completed",   color: "#10b981", description: "Campaign finished and approved" },
+};
+
+function CampaignStatusTracker({
+  campaignId,
+  currentStatus,
+  onStatusChange,
+}: {
+  campaignId: string;
+  currentStatus: string;
+  onStatusChange: (newStatus: string) => void;
+}) {
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
+  const workflowIndex = CAMPAIGN_WORKFLOW_STATUSES.indexOf(currentStatus as WorkflowStatus);
+  const isWorkflowStatus = workflowIndex >= 0;
+
+  const handleStatusUpdate = (newStatus: string) => {
+    startTransition(async () => {
+      const result = await updateCampaignStatusAction(campaignId, newStatus);
+      if (result.error) {
+        toast({ variant: "destructive", title: result.error });
+        return;
+      }
+      toast({ title: `Campaign status updated to ${WORKFLOW_META[newStatus as WorkflowStatus]?.label ?? newStatus}` });
+      onStatusChange(newStatus);
+    });
+  };
+
+  return (
+    <div className="rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="text-sm font-semibold">Campaign Workflow Status</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {isWorkflowStatus
+              ? WORKFLOW_META[currentStatus as WorkflowStatus].description
+              : "Set a workflow status to track progress"}
+          </p>
+        </div>
+        {isWorkflowStatus && (
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+            style={{
+              background: `${WORKFLOW_META[currentStatus as WorkflowStatus].color}18`,
+              color: WORKFLOW_META[currentStatus as WorkflowStatus].color,
+              border: `1px solid ${WORKFLOW_META[currentStatus as WorkflowStatus].color}30`,
+            }}
+          >
+            {WORKFLOW_META[currentStatus as WorkflowStatus].label}
+          </span>
+        )}
+      </div>
+
+      {/* Progress stepper */}
+      <div className="flex items-center gap-0 mb-5 overflow-x-auto pb-1">
+        {CAMPAIGN_WORKFLOW_STATUSES.map((s, idx) => {
+          const meta = WORKFLOW_META[s];
+          const isDone = workflowIndex > idx;
+          const isCurrent = workflowIndex === idx;
+          return (
+            <div key={s} className="flex items-center min-w-0 shrink-0">
+              <div className="flex flex-col items-center gap-1">
+                <div
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
+                  style={{
+                    background: isDone
+                      ? "#10b981"
+                      : isCurrent
+                        ? meta.color
+                        : "rgba(113,113,122,0.15)",
+                    color: isDone || isCurrent ? "#fff" : "#71717a",
+                    boxShadow: isCurrent ? `0 0 0 3px ${meta.color}30` : undefined,
+                  }}
+                >
+                  {isDone ? (
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    idx + 1
+                  )}
+                </div>
+                <span
+                  className="text-[9px] font-medium whitespace-nowrap"
+                  style={{ color: isCurrent ? meta.color : isDone ? "#10b981" : "#71717a" }}
+                >
+                  {meta.label}
+                </span>
+              </div>
+              {idx < CAMPAIGN_WORKFLOW_STATUSES.length - 1 && (
+                <div
+                  className="flex-1 h-px w-8 sm:w-12 mx-1 mt-[-12px]"
+                  style={{ background: isDone ? "#10b98160" : "rgba(113,113,122,0.2)" }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex flex-wrap gap-2">
+        {currentStatus === "PENDING" && (
+          <>
+            <Button
+              size="sm"
+              className="bg-violet-600 hover:bg-violet-500 text-white font-semibold h-8 px-4 rounded-xl"
+              onClick={() => handleStatusUpdate("ACCEPTED")}
+              disabled={isPending}
+            >
+              {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <BadgeCheck className="w-3.5 h-3.5 mr-1.5" />}
+              Accept Campaign
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 px-4 rounded-xl text-red-500 border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-950/30"
+              onClick={() => handleStatusUpdate("CANCELLED")}
+              disabled={isPending}
+            >
+              <XCircle className="w-3.5 h-3.5 mr-1.5" />
+              Decline
+            </Button>
+          </>
+        )}
+        {currentStatus === "ACCEPTED" && (
+          <Button
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold h-8 px-4 rounded-xl"
+            onClick={() => handleStatusUpdate("IN_PROGRESS")}
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
+            Mark as In Progress
+          </Button>
+        )}
+        {currentStatus === "IN_PROGRESS" && (
+          <Button
+            size="sm"
+            className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold h-8 px-4 rounded-xl"
+            onClick={() => handleStatusUpdate("SUBMITTED")}
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
+            Mark as Submitted
+          </Button>
+        )}
+        {currentStatus === "SUBMITTED" && (
+          <Button
+            size="sm"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold h-8 px-4 rounded-xl"
+            onClick={() => handleStatusUpdate("COMPLETED")}
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
+            <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
+            Approve &amp; Complete
+          </Button>
+        )}
+        {!isWorkflowStatus && (
+          <Button
+            size="sm"
+            className="bg-amber-500 hover:bg-amber-400 text-white font-semibold h-8 px-4 rounded-xl"
+            onClick={() => {
+              startTransition(async () => {
+                const result = await startCampaignWorkflowAction(campaignId);
+                if (result.error) {
+                  toast({ variant: "destructive", title: result.error });
+                  return;
+                }
+                toast({ title: "Workflow started! Creators have been notified." });
+                onStatusChange("PENDING");
+              });
+            }}
+            disabled={isPending}
+          >
+            {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
+            Start Workflow
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Applicant row card ────────────────────────────────────────────────────────
 
 function ApplicantCard({
@@ -568,6 +766,7 @@ const CampaignDetail = () => {
   const campaignId = params.id;
 
   const [campaign, setCampaign] = useState<CampaignDetailData | null>(null);
+  const [campaignStatus, setCampaignStatus] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState<ApplicationDetail | null>(null);
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -585,6 +784,7 @@ const CampaignDetail = () => {
       toast({ variant: "destructive", title: result.error });
     } else {
       setCampaign(result.data);
+      setCampaignStatus(result.data?.status ?? "");
     }
     setLoading(false);
   }, [campaignId, toast]);
@@ -712,7 +912,7 @@ const CampaignDetail = () => {
                 </div>
               )}
             </div>
-            <div className="shrink-0">
+            <div className="shrink-0 flex flex-col gap-2 items-end">
               <AddEventButton
                 campaignId={campaign.id}
                 campaignTitle={campaign.title}
@@ -722,6 +922,31 @@ const CampaignDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Campaign Status Tracker */}
+        <CampaignStatusTracker
+          campaignId={campaign.id}
+          currentStatus={campaignStatus}
+          onStatusChange={setCampaignStatus}
+        />
+
+        {/* Collaboration Brief */}
+        <CampaignBriefForm
+          campaignId={campaign.id}
+          initialData={{
+            briefDescription: campaign.briefDescription ?? null,
+            goal: campaign.goal ?? null,
+            dosAndDonts: campaign.dosAndDonts ?? null,
+          }}
+          onSaved={(data) => {
+            // Sync parent campaign state immediately so initialData stays accurate
+            setCampaign((prev) =>
+              prev
+                ? { ...prev, briefDescription: data.briefDescription, goal: data.goal, dosAndDonts: data.dosAndDonts }
+                : prev,
+            );
+          }}
+        />
 
         {/* Campaign Calendar */}
         <div className="mb-6">

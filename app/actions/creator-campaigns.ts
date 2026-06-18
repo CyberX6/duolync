@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Role, ApplicationStatus } from "@/lib/generated/prisma";
+import { Role, ApplicationStatus, CampaignStatus, CampaignEventType } from "@/lib/generated/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
@@ -36,6 +36,9 @@ export interface PublicCampaign {
   platforms: string[];
   contentFormats: string[];
   requirements: string | null;
+  briefDescription: string | null;
+  goal: string | null;
+  dosAndDonts: string | null;
   brand: {
     companyName: string;
     industry: string | null;
@@ -123,6 +126,9 @@ export async function getPublicCampaignsAction(): Promise<{
         platforms: c.platforms ?? [],
         contentFormats: c.contentFormats ?? [],
         requirements: c.requirements ?? null,
+        briefDescription: c.briefDescription ?? null,
+        goal: c.goal ?? null,
+        dosAndDonts: c.dosAndDonts ?? null,
         brand: {
           companyName: c.brand.companyName,
           industry: c.brand.industry,
@@ -247,7 +253,7 @@ export async function getPublicCampaignDetailAction(campaignId: string): Promise
   if (!creator) return { data: null, error: "Unauthorized" };
 
   const campaign = await db.campaign.findFirst({
-    where: { id: campaignId, status: "ACTIVE" },
+    where: { id: campaignId, status: { in: ["ACTIVE", "PENDING", "ACCEPTED", "IN_PROGRESS", "SUBMITTED", "COMPLETED"] } },
     include: {
       brand: { include: { user: { select: { id: true, image: true } } } },
       _count: { select: { applications: true } },
@@ -276,6 +282,9 @@ export async function getPublicCampaignDetailAction(campaignId: string): Promise
       platforms: campaign.platforms ?? [],
       contentFormats: campaign.contentFormats ?? [],
       requirements: campaign.requirements ?? null,
+      briefDescription: campaign.briefDescription ?? null,
+      goal: campaign.goal ?? null,
+      dosAndDonts: campaign.dosAndDonts ?? null,
       brand: {
         companyName: campaign.brand.companyName,
         industry: campaign.brand.industry,
@@ -292,6 +301,118 @@ export async function getPublicCampaignDetailAction(campaignId: string): Promise
     },
     error: null,
   };
+}
+
+export async function respondToCampaignAction(
+  campaignId: string,
+  response: "ACCEPTED" | "DECLINED",
+  declineReason?: string,
+): Promise<{ error: string | null }> {
+  const creator = await getCreatorProfile();
+  if (!creator) return { error: "Unauthorized" };
+
+  // Fetch the campaign and verify creator has an accepted application
+  const campaign = await db.campaign.findFirst({
+    where: { id: campaignId, status: CampaignStatus.PENDING },
+    include: {
+      brand: {
+        include: {
+          user: { select: { id: true, name: true } },
+        },
+      },
+    },
+  });
+  if (!campaign) return { error: "Campaign not found or not awaiting your response." };
+
+  const application = await db.application.findFirst({
+    where: {
+      campaignId,
+      creatorProfileId: creator.profileId,
+      status: ApplicationStatus.ACCEPTED,
+    },
+  });
+  if (!application) return { error: "No accepted application found for this campaign." };
+
+  const brandUserId = campaign.brand.user.id;
+
+  if (response === "ACCEPTED") {
+    // Update campaign to ACCEPTED
+    await db.campaign.update({
+      where: { id: campaignId },
+      data: { status: CampaignStatus.ACCEPTED },
+    });
+
+    // Auto-create a deadline calendar event if the campaign has a deadline
+    if (campaign.deadline) {
+      await db.campaignEvent.create({
+        data: {
+          campaignId,
+          creatorProfileId: creator.profileId,
+          title: `Deadline — ${campaign.title}`,
+          type: CampaignEventType.DEADLINE,
+          scheduledAt: campaign.deadline,
+          createdById: creator.userId,
+        },
+      });
+    }
+
+    // Notify brand via system message
+    await db.message.create({
+      data: {
+        senderId: creator.userId,
+        receiverId: brandUserId,
+        text: `✅ ${creator.name ?? "The creator"} has accepted the campaign "${campaign.title}". The collaboration is now active — let's get started!`,
+      },
+    });
+
+    // Notify brand via notification
+    await db.notification.create({
+      data: {
+        userId: brandUserId,
+        type: "APPLICATION_UPDATE",
+        title: `Creator accepted "${campaign.title}"`,
+        body: `${creator.name ?? "A creator"} has accepted your campaign workflow. The campaign is now active.`,
+        link: `/brand/campaigns/${campaignId}`,
+      },
+    });
+  } else {
+    // DECLINED — revert campaign to ACTIVE so brand can find another creator
+    await db.campaign.update({
+      where: { id: campaignId },
+      data: { status: CampaignStatus.ACTIVE },
+    });
+
+    const reason = declineReason?.trim();
+
+    // Notify brand via system message
+    await db.message.create({
+      data: {
+        senderId: creator.userId,
+        receiverId: brandUserId,
+        text: reason
+          ? `❌ ${creator.name ?? "The creator"} has declined the campaign "${campaign.title}". Reason: ${reason}`
+          : `❌ ${creator.name ?? "The creator"} has declined the campaign "${campaign.title}".`,
+      },
+    });
+
+    // Notify brand via notification
+    await db.notification.create({
+      data: {
+        userId: brandUserId,
+        type: "APPLICATION_UPDATE",
+        title: `Creator declined "${campaign.title}"`,
+        body: `${creator.name ?? "A creator"} declined the campaign workflow.${reason ? ` Reason: ${reason}` : ""}`,
+        link: `/brand/campaigns/${campaignId}`,
+      },
+    });
+  }
+
+  revalidatePath(`/creator/campaigns/${campaignId}`);
+  revalidatePath(`/brand/campaigns/${campaignId}`);
+  revalidatePath("/brand/dashboard");
+  revalidatePath("/creator/campaigns");
+
+  return { error: null };
 }
 
 export async function withdrawApplicationAction(

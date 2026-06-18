@@ -219,10 +219,80 @@ export async function deleteCampaignAction(
   return { error: null };
 }
 
+// ── Campaign status workflow ───────────────────────────────────────────────────
+
+export async function startCampaignWorkflowAction(
+  campaignId: string,
+): Promise<{ error: string | null }> {
+  const brand = await getBrandProfile();
+  if (!brand) return { error: "Unauthorized" };
+
+  const campaign = await db.campaign.findFirst({
+    where: { id: campaignId, brandProfileId: brand.profileId },
+    select: {
+      id: true,
+      applications: {
+        where: { status: { not: "REJECTED" } },
+        select: { creator: { select: { userId: true } } },
+      },
+    },
+  });
+  if (!campaign) return { error: "Campaign not found" };
+
+  await db.campaign.update({
+    where: { id: campaignId },
+    data: { status: CampaignStatus.PENDING },
+  });
+
+  // Send a system message to each connected creator
+  if (campaign.applications.length > 0) {
+    await db.message.createMany({
+      data: campaign.applications.map((app) => ({
+        senderId: brand.userId,
+        receiverId: app.creator.userId,
+        text: "Campaign workflow has started. Please review the campaign details and accept to proceed.",
+      })),
+    });
+  }
+
+  revalidatePath("/brand/campaigns");
+  revalidatePath(`/brand/campaigns/${campaignId}`);
+  revalidatePath("/brand/dashboard");
+  return { error: null };
+}
+
+export async function updateCampaignStatusAction(
+  campaignId: string,
+  status: string,
+): Promise<{ error: string | null }> {
+  const brand = await getBrandProfile();
+  if (!brand) return { error: "Unauthorized" };
+
+  const validStatuses = Object.values(CampaignStatus) as string[];
+  if (!validStatuses.includes(status)) return { error: "Invalid status" };
+
+  const campaign = await db.campaign.findFirst({
+    where: { id: campaignId, brandProfileId: brand.profileId },
+    select: { id: true },
+  });
+  if (!campaign) return { error: "Campaign not found" };
+
+  await db.campaign.update({
+    where: { id: campaignId },
+    data: { status: status as CampaignStatus },
+  });
+
+  revalidatePath("/brand/campaigns");
+  revalidatePath(`/brand/campaigns/${campaignId}`);
+  revalidatePath("/brand/dashboard");
+  return { error: null };
+}
+
 export interface BrandDashboardStats {
   activeCampaigns: number;
   savedCreators: number;
   activeConversations: number;
+  availableCreators: number;
 }
 
 export async function getBrandDashboardStatsAction(): Promise<{
@@ -232,21 +302,29 @@ export async function getBrandDashboardStatsAction(): Promise<{
   const brand = await getBrandProfile();
   if (!brand) {
     return {
-      data: { activeCampaigns: 0, savedCreators: 0, activeConversations: 0 },
+      data: { activeCampaigns: 0, savedCreators: 0, activeConversations: 0, availableCreators: 0 },
       error: "Unauthorized",
     };
   }
 
-  const [activeCampaigns, savedCreators, activeConversations] = await Promise.all([
+  const [activeCampaigns, savedCreators, availableCreators, activeConversations] = await Promise.all([
     db.campaign.count({
       where: {
         brandProfileId: brand.profileId,
-        status: CampaignStatus.ACTIVE,
+        status: {
+          in: [
+            CampaignStatus.ACTIVE,
+            CampaignStatus.PENDING,
+            CampaignStatus.ACCEPTED,
+            CampaignStatus.IN_PROGRESS,
+          ],
+        },
       },
     }),
     db.cRMLead.count({
       where: { brandProfileId: brand.profileId },
     }),
+    db.creatorProfile.count(),
     db.message.findMany({
       where: {
         OR: [{ senderId: brand.userId }, { receiverId: brand.userId }],
@@ -264,7 +342,7 @@ export async function getBrandDashboardStatsAction(): Promise<{
   ]);
 
   return {
-    data: { activeCampaigns, savedCreators, activeConversations },
+    data: { activeCampaigns, savedCreators, activeConversations, availableCreators },
     error: null,
   };
 }
@@ -324,4 +402,36 @@ export async function getCampaignConnectionsAction(): Promise<{
     .filter((c): c is ConnectedCreator => c !== null);
 
   return { data: creators, error: null };
+}
+
+// ── Campaign brief ────────────────────────────────────────────────────────────
+
+export async function updateCampaignBriefAction(
+  campaignId: string,
+  input: {
+    briefDescription: string | null;
+    goal: string | null;
+    dosAndDonts: string | null;
+  },
+): Promise<{ error: string | null }> {
+  const brand = await getBrandProfile();
+  if (!brand) return { error: "Unauthorized" };
+
+  const campaign = await db.campaign.findFirst({
+    where: { id: campaignId, brandProfileId: brand.profileId },
+    select: { id: true },
+  });
+  if (!campaign) return { error: "Campaign not found" };
+
+  await db.campaign.update({
+    where: { id: campaignId },
+    data: {
+      briefDescription: input.briefDescription?.trim() || null,
+      goal: input.goal?.trim() || null,
+      dosAndDonts: input.dosAndDonts?.trim() || null,
+    },
+  });
+
+  revalidatePath(`/brand/campaigns/${campaignId}`);
+  return { error: null };
 }

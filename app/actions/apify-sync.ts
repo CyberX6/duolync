@@ -1,0 +1,530 @@
+"use server";
+
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+
+// ─── Apify actor IDs ──────────────────────────────────────────────────────────
+const ACTOR_IDS = {
+  instagram: "apify/instagram-profile-scraper",
+  tiktok: "clockworks/free-tiktok-scraper",
+} as const;
+
+export type Platform = keyof typeof ACTOR_IDS;
+
+// ─── Apify response types ─────────────────────────────────────────────────────
+
+interface ApifyRunResponse {
+  data: {
+    id: string;
+    status: string;
+    defaultDatasetId: string;
+  };
+}
+
+// Instagram profile item (first element of dataset)
+interface InstagramProfileItem {
+  username?: string;
+  fullName?: string;
+  profilePicUrl?: string;
+  followersCount?: number;
+  private?: boolean;
+  categoryName?: string;
+  latestPosts?: {
+    url?: string;
+    displayUrl?: string;
+    imageUrl?: string;
+    caption?: string;
+    likesCount?: number;
+    commentsCount?: number;
+    videoViewCount?: number;
+    timestamp?: string;
+  }[];
+  [key: string]: unknown;
+}
+
+// TikTok video item — profile data is nested under authorMeta
+interface TikTokAuthorMeta {
+  name?: string;        // handle
+  nickName?: string;    // display name
+  avatar?: string;
+  fans?: number;        // follower count ← THE BUG WAS HERE
+  heart?: number;       // total likes
+  video?: number;
+  following?: number;
+  verified?: boolean;
+  signature?: string;
+}
+
+interface TikTokVideoItem {
+  id?: string;
+  text?: string;
+  createTime?: number;
+  authorMeta?: TikTokAuthorMeta;
+  webVideoUrl?: string;
+  videoMeta?: { coverUrl?: string; duration?: number };
+  diggCount?: number;
+  commentCount?: number;
+  playCount?: number;
+  shareCount?: number;
+  hashtags?: { name?: string }[];
+  [key: string]: unknown;
+}
+
+// ─── Public result types ──────────────────────────────────────────────────────
+
+export interface AccountPreview {
+  handle: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  followerCount: number | null;
+  isPrivate: boolean;
+}
+
+export interface SyncResult {
+  success: boolean;
+  error?: string;
+  data?: {
+    followerCount: number;
+    averageEngagement: number;
+    topNiches: string[];
+    lastSyncedAt: string;
+  };
+}
+
+export type VerifyStatus =
+  | { state: "running" }
+  | { state: "found"; preview: AccountPreview; datasetId: string }
+  | { state: "not_found" }
+  | { state: "private"; handle: string }
+  | { state: "failed"; error: string };
+
+export type PollStatus =
+  | { state: "running" }
+  | {
+      state: "succeeded";
+      data: NonNullable<SyncResult["data"]> & {
+        platform: Platform;
+        platformFollowers: number;
+        platformEngagement: number;
+      };
+    }
+  | { state: "failed"; error: string };
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getApifyToken(): string {
+  const token = process.env.APIFY_API_TOKEN;
+  if (!token) throw new Error("APIFY_API_TOKEN environment variable is not set.");
+  return token;
+}
+
+function buildActorInput(platform: Platform, handle: string, full: boolean) {
+  if (platform === "instagram") {
+    // full=true → include latestPosts, false → profile metadata only
+    return { usernames: [handle], resultsLimit: full ? 3 : 0 };
+  }
+  // TikTok: resultsPerPage controls how many videos to scrape
+  return {
+    profiles: [`https://www.tiktok.com/@${handle}`],
+    resultsPerPage: full ? 3 : 1,
+  };
+}
+
+function extractInstagramPreview(item: InstagramProfileItem, handle: string): AccountPreview {
+  return {
+    handle: item.username ?? handle,
+    displayName: item.fullName ?? null,
+    avatarUrl: item.profilePicUrl ?? null,
+    followerCount: item.followersCount ?? null,
+    isPrivate: item.private ?? false,
+  };
+}
+
+function extractTikTokPreview(item: TikTokVideoItem, handle: string): AccountPreview {
+  const meta = item.authorMeta ?? {};
+  return {
+    handle: meta.name ?? handle,
+    displayName: meta.nickName ?? null,
+    avatarUrl: meta.avatar ?? null,
+    followerCount: meta.fans ?? null,
+    isPrivate: false, // TikTok accounts accessible to scraper are always public
+  };
+}
+
+function extractInstagramSync(item: InstagramProfileItem) {
+  const followerCount = item.followersCount ?? 0;
+  const engagementRate = 0; // Instagram profile scraper doesn't give engagement rate directly
+
+  const posts = (item.latestPosts ?? []).slice(0, 3).map((p) => ({
+    postUrl: p.url ?? null,
+    imageUrl: p.displayUrl ?? p.imageUrl ?? null,
+    caption: p.caption ?? null,
+    likes: p.likesCount ?? null,
+    comments: p.commentsCount ?? null,
+    views: p.videoViewCount ?? null,
+    engagementRate: null as number | null,
+    postedAt: p.timestamp ? new Date(p.timestamp) : null,
+  }));
+
+  const niches: string[] = [];
+  if (item.categoryName) niches.push(item.categoryName);
+
+  return { followerCount, engagementRate, posts, niches };
+}
+
+function extractTikTokSync(items: TikTokVideoItem[]) {
+  if (!items.length) return { followerCount: 0, engagementRate: 0, posts: [], niches: [] };
+
+  const meta = items[0].authorMeta ?? {};
+  const fans = meta.fans ?? 0;
+  const hearts = meta.heart ?? 0;
+  const engagementRate = fans > 0 && hearts > 0
+    ? Math.min(100, parseFloat(((hearts / fans) * 100).toFixed(2)))
+    : 0;
+
+  const posts = items.slice(0, 3).map((v) => ({
+    postUrl: v.webVideoUrl ?? null,
+    imageUrl: v.videoMeta?.coverUrl ?? null,
+    caption: v.text ?? null,
+    likes: v.diggCount ?? null,
+    comments: v.commentCount ?? null,
+    views: v.playCount ?? null,
+    engagementRate: null as number | null,
+    postedAt: v.createTime ? new Date(v.createTime * 1000) : null,
+  }));
+
+  // Extract niches from hashtags
+  const niches: string[] = [];
+  for (const item of items.slice(0, 3)) {
+    for (const tag of (item.hashtags ?? []) as { name?: string }[]) {
+      const name = tag.name?.trim();
+      if (name && !niches.includes(name) && niches.length < 5) niches.push(name);
+    }
+  }
+
+  return { followerCount: fans, engagementRate, posts, niches };
+}
+
+async function triggerRun(
+  platform: Platform,
+  handle: string,
+  full: boolean,
+  token: string,
+): Promise<{ runId: string } | { error: string }> {
+  const actorId = ACTOR_IDS[platform];
+  const input = buildActorInput(platform, handle, full);
+
+  try {
+    const res = await fetch(
+      `https://api.apify.com/v2/acts/${encodeURIComponent(actorId)}/runs?token=${token}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) },
+    );
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Trigger failed (${res.status}): ${body}`);
+    }
+    const json = (await res.json()) as ApifyRunResponse;
+    console.info(`[apify] Run started: ${json.data.id} (${platform}, full=${full})`);
+    return { runId: json.data.id };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Failed to start run" };
+  }
+}
+
+async function fetchRunStatus(runId: string, token: string) {
+  const res = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`);
+  if (!res.ok) throw new Error(`Status check failed: ${res.status} ${res.statusText}`);
+  return ((await res.json()) as ApifyRunResponse).data;
+}
+
+async function fetchDataset(datasetId: string, token: string) {
+  const res = await fetch(
+    `https://api.apify.com/v2/datasets/${datasetId}/items?token=${token}&clean=true&format=json`,
+  );
+  if (!res.ok) throw new Error(`Dataset fetch failed (${res.status})`);
+  return res.json();
+}
+
+// ─── AUTH helper ─────────────────────────────────────────────────────────────
+
+async function requireSession() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) throw new Error("Unauthorized");
+  return session;
+}
+
+// ─── Action 1: Start verify run (lightweight, no DB writes) ──────────────────
+
+/**
+ * Triggers a lightweight Apify run to retrieve profile preview data only.
+ * Does NOT write to the database.
+ */
+export async function startVerifyAction(
+  handle: string,
+  platform: Platform,
+): Promise<{ runId: string } | { error: string }> {
+  try { await requireSession(); } catch { return { error: "Unauthorized" }; }
+
+  const h = handle.replace(/^@/, "").trim();
+  if (!h) return { error: "Username is required." };
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  return triggerRun(platform, h, false, token);
+}
+
+// ─── Action 2: Poll verify run (returns preview, no DB writes) ────────────────
+
+/**
+ * Checks the verify run status and returns profile preview when ready.
+ * Safe to call repeatedly — never writes to DB.
+ */
+export async function pollVerifyAction(
+  runId: string,
+  platform: Platform,
+  handle: string,
+): Promise<VerifyStatus> {
+  try { await requireSession(); } catch { return { state: "failed", error: "Unauthorized" }; }
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { state: "failed", error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  let runData: ApifyRunResponse["data"];
+  try {
+    runData = await fetchRunStatus(runId, token);
+  } catch (err) {
+    return { state: "failed", error: err instanceof Error ? err.message : "Status check error" };
+  }
+
+  const { status, defaultDatasetId } = runData;
+
+  if (["RUNNING", "READY", "CREATED"].includes(status)) return { state: "running" };
+  if (status !== "SUCCEEDED") return { state: "failed", error: `Run ended with status: ${status}` };
+
+  let items: unknown[];
+  try { items = await fetchDataset(defaultDatasetId, token); } catch (err) {
+    return { state: "failed", error: err instanceof Error ? err.message : "Dataset fetch error" };
+  }
+
+  if (!items.length) return { state: "not_found" };
+
+  let preview: AccountPreview;
+  if (platform === "instagram") {
+    const item = items[0] as InstagramProfileItem;
+    if (item.private) return { state: "private", handle: item.username ?? handle };
+    preview = extractInstagramPreview(item, handle);
+  } else {
+    const item = items[0] as TikTokVideoItem;
+    if (!item.authorMeta?.fans && !item.authorMeta?.name) return { state: "not_found" };
+    preview = extractTikTokPreview(item, handle);
+  }
+
+  if (!preview.followerCount && platform === "instagram") {
+    const item = items[0] as InstagramProfileItem;
+    if (item.private) return { state: "private", handle: item.username ?? handle };
+  }
+
+  return { state: "found", preview, datasetId: defaultDatasetId };
+}
+
+// ─── Action 3: Confirm sync (reads existing dataset → saves to DB) ────────────
+
+/**
+ * Called after user confirms their account preview.
+ * Re-fetches the already-completed dataset (no new Apify run) and saves to DB.
+ */
+export async function confirmSyncAction(
+  datasetId: string,
+  creatorUserId: string,
+  platform: Platform,
+): Promise<{ success: true; platformFollowers: number; platformEngagement: number } | { success: false; error: string }> {
+  let session: Awaited<ReturnType<typeof requireSession>>;
+  try { session = await requireSession(); } catch { return { success: false, error: "Unauthorized" }; }
+  if (session.user.id !== creatorUserId) return { success: false, error: "You can only sync your own profile." };
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  let items: unknown[];
+  try { items = await fetchDataset(datasetId, token); } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Failed to read data" };
+  }
+
+  if (!items.length) return { success: false, error: "No data available. Please try syncing again." };
+
+  let followerCount: number;
+  let engagementRate: number;
+  let posts: { postUrl: string | null; imageUrl: string | null; caption: string | null; likes: number | null; comments: number | null; views: number | null; engagementRate: number | null; postedAt: Date | null }[];
+  let niches: string[];
+
+  if (platform === "instagram") {
+    const item = items[0] as InstagramProfileItem;
+    if (item.private) return { success: false, error: "This account is private. Please make it public first." };
+    ({ followerCount, engagementRate, posts, niches } = extractInstagramSync(item));
+  } else {
+    ({ followerCount, engagementRate, posts, niches } = extractTikTokSync(items as TikTokVideoItem[]));
+  }
+
+  if (followerCount === 0) {
+    return {
+      success: false,
+      error: platform === "instagram"
+        ? "This account appears to be private or has no public data."
+        : "Could not read follower data. Ensure the account is public and not restricted.",
+    };
+  }
+
+  const lastSyncedAt = new Date();
+
+  try {
+    const creatorProfile = await db.creatorProfile.findUnique({
+      where: { userId: creatorUserId },
+      select: { id: true, connectedPlatforms: true },
+    });
+    if (!creatorProfile) return { success: false, error: "Creator profile not found." };
+
+    // Per-platform upsert
+    await db.platformStats.deleteMany({ where: { userId: creatorUserId, platform } });
+    await db.platformStats.create({
+      data: { userId: creatorUserId, platform, followerCount, engagementRate, fetchedAt: lastSyncedAt },
+    });
+
+    // Aggregate
+    const allStats = await db.platformStats.findMany({
+      where: { userId: creatorUserId },
+      select: { followerCount: true, engagementRate: true },
+    });
+    const totalFollowers = allStats.reduce((s, r) => s + (r.followerCount ?? 0), 0);
+    const avgEng = allStats.length
+      ? allStats.reduce((s, r) => s + (r.engagementRate ?? 0), 0) / allStats.length
+      : engagementRate;
+
+    const connectedPlatforms = Array.from(new Set([...creatorProfile.connectedPlatforms, platform]));
+
+    await db.creatorProfile.update({
+      where: { userId: creatorUserId },
+      data: {
+        followerCount: totalFollowers,
+        averageEngagement: parseFloat(avgEng.toFixed(2)),
+        topNiches: niches,
+        lastSyncedAt,
+        connectedPlatforms,
+      },
+    });
+
+    // Upsert posts
+    if (posts.length) {
+      await db.socialPost.deleteMany({ where: { creatorProfileId: creatorProfile.id, platform } });
+      await db.socialPost.createMany({
+        data: posts.map((p) => ({ creatorProfileId: creatorProfile.id, platform, ...p })),
+      });
+    }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Database update failed" };
+  }
+
+  console.info(`[apify] Confirmed sync: ${platform} for user ${creatorUserId}`);
+  revalidatePath("/creator/presence");
+  revalidatePath("/creator/dashboard");
+  revalidatePath(`/profile/${creatorUserId}`);
+
+  return { success: true, platformFollowers: followerCount, platformEngagement: engagementRate };
+}
+
+// ─── Legacy: start full sync run (used by poll action below) ─────────────────
+
+export async function startApifySyncAction(
+  creatorUserId: string,
+  socialHandle: string,
+  platform: Platform = "instagram",
+): Promise<{ runId: string } | { error: string }> {
+  let session: Awaited<ReturnType<typeof requireSession>>;
+  try { session = await requireSession(); } catch { return { error: "Unauthorized" }; }
+  if (session.user.id !== creatorUserId) return { error: "You can only sync your own profile." };
+
+  const handle = socialHandle.replace(/^@/, "").trim();
+  if (!handle) return { error: "A social handle is required." };
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  return triggerRun(platform, handle, true, token);
+}
+
+// ─── Legacy: poll full sync run (kept for existing callers) ──────────────────
+
+export async function pollApifyRunAction(
+  runId: string,
+  creatorUserId: string,
+  platform: Platform = "instagram",
+): Promise<PollStatus> {
+  let session: Awaited<ReturnType<typeof requireSession>>;
+  try { session = await requireSession(); } catch { return { state: "failed", error: "Unauthorized" }; }
+  if (session.user.id !== creatorUserId) return { state: "failed", error: "Unauthorized" };
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { state: "failed", error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  let runData: ApifyRunResponse["data"];
+  try { runData = await fetchRunStatus(runId, token); } catch (err) {
+    return { state: "failed", error: err instanceof Error ? err.message : "Status check error" };
+  }
+
+  const { status, defaultDatasetId } = runData;
+  if (["RUNNING", "READY", "CREATED"].includes(status)) return { state: "running" };
+  if (status !== "SUCCEEDED") return { state: "failed", error: `Run ended with status: ${status}` };
+
+  const result = await confirmSyncAction(defaultDatasetId, creatorUserId, platform);
+  if (!result.success) return { state: "failed", error: result.error };
+
+  const creatorProfile = await db.creatorProfile.findUnique({
+    where: { userId: creatorUserId },
+    select: { followerCount: true, averageEngagement: true, topNiches: true, lastSyncedAt: true },
+  });
+
+  return {
+    state: "succeeded",
+    data: {
+      followerCount: creatorProfile?.followerCount ?? result.platformFollowers,
+      averageEngagement: creatorProfile?.averageEngagement ?? result.platformEngagement,
+      topNiches: creatorProfile?.topNiches ?? [],
+      lastSyncedAt: (creatorProfile?.lastSyncedAt ?? new Date()).toISOString(),
+      platform,
+      platformFollowers: result.platformFollowers,
+      platformEngagement: result.platformEngagement,
+    },
+  };
+}
+
+// ─── Legacy wrapper ───────────────────────────────────────────────────────────
+
+export async function syncCreatorProfileAction(
+  creatorUserId: string,
+  socialHandle: string,
+  platform: Platform = "instagram",
+): Promise<SyncResult> {
+  const startResult = await startApifySyncAction(creatorUserId, socialHandle, platform);
+  if ("error" in startResult) return { success: false, error: startResult.error };
+  const { runId } = startResult;
+  const deadline = Date.now() + 110_000;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 3_000));
+    const poll = await pollApifyRunAction(runId, creatorUserId, platform);
+    if (poll.state === "succeeded") return { success: true, data: poll.data };
+    if (poll.state === "failed") return { success: false, error: poll.error };
+  }
+  return { success: false, error: "Timed out." };
+}

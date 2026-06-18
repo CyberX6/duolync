@@ -141,6 +141,7 @@ export function AddEventModal({
         className="sm:max-w-md p-0 overflow-hidden border-white/[0.08] rounded-3xl"
         style={{ background: "#09090f" }}
       >
+        <DialogTitle className="sr-only">Schedule Event</DialogTitle>
         {/* Header */}
         <div
           className="px-6 pt-6 pb-5"

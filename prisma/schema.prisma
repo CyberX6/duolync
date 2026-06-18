@@ -50,20 +50,44 @@ model BrandProfile {
 }
 
 model CreatorProfile {
-  id                String        @id @default(cuid())
-  userId            String        @unique
-  bio               String?
-  niche             String?
-  primaryPlatform   String?
-  location          String?
-  totalFollowers    Int           @default(0)
-  avgEngagementRate Float         @default(0)
-  lastStatsUpdate   DateTime?
-  socialLinks       Json?
-  applications      Application[]
-  contracts         Contract[]
-  campaignEvents    CampaignEvent[]
-  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String        @id @default(cuid())
+  userId             String        @unique
+  bio                String?
+  niche              String?
+  primaryPlatform    String?
+  location           String?
+  totalFollowers     Int           @default(0)
+  avgEngagementRate  Float         @default(0)
+  lastStatsUpdate    DateTime?
+  socialLinks        Json?
+  followerCount      Int?
+  averageEngagement  Float?
+  topNiches          String[]      @default([])
+  lastSyncedAt       DateTime?
+  connectedPlatforms String[]      @default([])
+  applications       Application[]
+  contracts          Contract[]
+  campaignEvents     CampaignEvent[]
+  socialPosts        SocialPost[]
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SocialPost {
+  id               String         @id @default(cuid())
+  creatorProfileId String
+  platform         String
+  postUrl          String?
+  imageUrl         String?
+  caption          String?
+  likes            Int?
+  comments         Int?
+  views            Int?
+  engagementRate   Float?
+  postedAt         DateTime?
+  fetchedAt        DateTime       @default(now())
+  creatorProfile   CreatorProfile @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+
+  @@index([creatorProfileId, platform])
 }
 
 model Account {
@@ -170,10 +194,13 @@ model Campaign {
   status         CampaignStatus @default(DRAFT)
   imageUrl       String?
   deadline       DateTime?
-  requirements   String?
-  platforms      String[]       @default([])
-  contentFormats String[]       @default([])
-  minFollowers   Int?
+  requirements      String?
+  briefDescription  String?
+  goal              String?
+  dosAndDonts       String?
+  platforms         String[]       @default([])
+  contentFormats    String[]       @default([])
+  minFollowers      Int?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   applications   Application[]
@@ -394,6 +421,10 @@ enum CampaignStatus {
   PAUSED
   COMPLETED
   CANCELLED
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  SUBMITTED
 }
 
 enum CampaignEventType {

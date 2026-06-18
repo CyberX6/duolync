@@ -31,6 +31,12 @@ export interface FullProfile {
   languages: string[];
   total_followers: number;
   avg_engagement_rate: number;
+  followerCount: number | null;
+  averageEngagement: number | null;
+  topNiches: string[];
+  lastSyncedAt: string | null;
+  connectedPlatforms: string[];
+  platformStats: { platform: string; followerCount: number | null; engagementRate: number | null }[];
   hasCompletedOnboarding: boolean;
 }
 
@@ -51,6 +57,10 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
       image: true,
       role: true,
       hasCompletedOnboarding: true,
+      platformStats: {
+        orderBy: { fetchedAt: "desc" },
+        select: { platform: true, followerCount: true, engagementRate: true },
+      },
       brandProfile: {
         select: {
           bio: true,
@@ -69,6 +79,11 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
           location: true,
           totalFollowers: true,
           avgEngagementRate: true,
+          followerCount: true,
+          averageEngagement: true,
+          topNiches: true,
+          lastSyncedAt: true,
+          connectedPlatforms: true,
         },
       },
     },
@@ -101,6 +116,16 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
     languages: ["English"],
     total_followers: creator?.totalFollowers ?? 0,
     avg_engagement_rate: creator?.avgEngagementRate ?? 0,
+    followerCount: creator?.followerCount ?? null,
+    averageEngagement: creator?.averageEngagement ?? null,
+    topNiches: creator?.topNiches ?? [],
+    lastSyncedAt: creator?.lastSyncedAt?.toISOString() ?? null,
+    connectedPlatforms: creator?.connectedPlatforms ?? [],
+    platformStats: user.platformStats.map((s) => ({
+      platform: s.platform,
+      followerCount: s.followerCount,
+      engagementRate: s.engagementRate,
+    })),
     hasCompletedOnboarding: user.hasCompletedOnboarding,
   };
 }
@@ -127,6 +152,23 @@ export interface PublicProfile {
   primary_platform: string | null;
   total_followers: number;
   avg_engagement_rate: number;
+  // Apify analytics fields
+  followerCount: number | null;
+  averageEngagement: number | null;
+  topNiches: string[];
+  lastSyncedAt: string | null;
+  connectedPlatforms: string[];
+  socialPosts: {
+    id: string;
+    platform: string;
+    postUrl: string | null;
+    imageUrl: string | null;
+    caption: string | null;
+    likes: number | null;
+    comments: number | null;
+    views: number | null;
+    postedAt: string | null;
+  }[];
   platformStats: {
     platform: string;
     followerCount: number | null;
@@ -211,6 +253,26 @@ export async function getProfileAction(
             totalFollowers: true,
             avgEngagementRate: true,
             socialLinks: true,
+            followerCount: true,
+            averageEngagement: true,
+            topNiches: true,
+            lastSyncedAt: true,
+            connectedPlatforms: true,
+            socialPosts: {
+              orderBy: { fetchedAt: "desc" },
+              take: 9,
+              select: {
+                id: true,
+                platform: true,
+                postUrl: true,
+                imageUrl: true,
+                caption: true,
+                likes: true,
+                comments: true,
+                views: true,
+                postedAt: true,
+              },
+            },
           },
         },
       },
@@ -246,6 +308,22 @@ export async function getProfileAction(
     primary_platform: (creator?.primaryPlatform ?? null) as string | null,
     total_followers: creator?.totalFollowers ?? 0,
     avg_engagement_rate: creator?.avgEngagementRate ?? 0,
+    followerCount: creator?.followerCount ?? null,
+    averageEngagement: creator?.averageEngagement ?? null,
+    topNiches: creator?.topNiches ?? [],
+    lastSyncedAt: creator?.lastSyncedAt?.toISOString() ?? null,
+    connectedPlatforms: creator?.connectedPlatforms ?? [],
+    socialPosts: (creator?.socialPosts ?? []).map((p) => ({
+      id: p.id,
+      platform: p.platform,
+      postUrl: p.postUrl,
+      imageUrl: p.imageUrl,
+      caption: p.caption,
+      likes: p.likes,
+      comments: p.comments,
+      views: p.views,
+      postedAt: p.postedAt?.toISOString() ?? null,
+    })),
     platformStats: user.platformStats.map((s) => ({
       platform: s.platform,
       followerCount: s.followerCount,

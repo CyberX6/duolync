@@ -48,6 +48,7 @@ export interface CalendarEventData {
   creatorProfileId?: string | null;
   partner?: CalendarPartnerData | null;
   hasPendingUpdate?: boolean;
+  campaignImageUrl?: string | null;
 }
 
 export interface CalendarEventDetailData extends CalendarEventData {
@@ -55,6 +56,7 @@ export interface CalendarEventDetailData extends CalendarEventData {
   updateHistory: EventUpdateData[];
   createdBy: CalendarPartnerData;
   campaignImageUrl: string | null;
+  campaignDescription: string | null;
 }
 
 export interface CreateEventInput {
@@ -103,6 +105,7 @@ const eventInclude = {
   campaign: {
     select: {
       title: true,
+      description: true,
       deadline: true,
       brandProfileId: true,
       imageUrl: true,
@@ -142,6 +145,7 @@ type RawEvent = {
   status: CampaignEventStatus;
   campaign: {
     title: string;
+    description: string;
     imageUrl: string | null;
     brand: {
       companyName: string;
@@ -213,6 +217,8 @@ function buildSyntheticDeadline(
   campaignId: string,
   campaignTitle: string,
   deadline: Date,
+  imageUrl?: string | null,
+  partner?: CalendarPartnerData,
 ): CalendarEventData {
   return {
     id: `deadline-${campaignId}`,
@@ -224,6 +230,8 @@ function buildSyntheticDeadline(
     scheduledAt: deadline.toISOString(),
     status: "SCHEDULED",
     isSynthetic: true,
+    campaignImageUrl: imageUrl ?? null,
+    partner: partner ?? null,
   };
 }
 
@@ -307,7 +315,18 @@ async function fetchEventsForCampaigns(
     }),
     db.campaign.findMany({
       where: { id: { in: campaignIds }, deadline: { not: null } },
-      select: { id: true, title: true, deadline: true },
+      select: {
+        id: true,
+        title: true,
+        deadline: true,
+        imageUrl: true,
+        brand: {
+          select: {
+            companyName: true,
+            user: { select: { id: true, name: true, image: true, role: true } },
+          },
+        },
+      },
     }),
   ]);
 
@@ -320,7 +339,13 @@ async function fetchEventsForCampaigns(
     if (!c.deadline || hasDeadlineEvent.has(c.id)) continue;
     const deadline = c.deadline;
     if (rangeStart && rangeEnd && (deadline < rangeStart || deadline > rangeEnd)) continue;
-    mapped.push(buildSyntheticDeadline(c.id, c.title, deadline));
+    // Resolve partner: if viewer is NOT the brand owner, show brand as partner
+    const brandUserId = c.brand.user.id;
+    const partner: CalendarPartnerData | undefined =
+      viewerUserId !== brandUserId
+        ? mapPartner(c.brand.user, c.brand.companyName)
+        : undefined;
+    mapped.push(buildSyntheticDeadline(c.id, c.title, deadline, c.imageUrl ?? null, partner));
   }
 
   return mapped.sort(
@@ -488,6 +513,7 @@ export async function getCalendarEventDetailAction(
         .filter((u) => u.status !== EventUpdateStatus.PENDING)
         .map(mapEventUpdate),
       campaignImageUrl: event.campaign.imageUrl ?? null,
+      campaignDescription: event.campaign.description ?? null,
     },
     error: null,
   };
@@ -703,6 +729,62 @@ export async function updateCampaignEventAction(input: {
 
   revalidateCalendarPaths(access.event.campaignId);
   return { data: mapEvent(event as RawEvent, user.id), error: null };
+}
+
+// ── Campaign applicants for sidebar ───────────────────────────────────────────
+
+export interface CampaignApplicant {
+  userId: string;
+  name: string;
+  image: string | null;
+  niche: string | null;
+  totalFollowers: number;
+  status: string;
+}
+
+export async function getCampaignApplicantsAction(
+  campaignId: string,
+): Promise<{ data: CampaignApplicant[]; error: string | null }> {
+  const user = await getSessionUser();
+  if (!user || user.role !== Role.BRAND || !user.brandProfile) {
+    return { data: [], error: "Unauthorized" };
+  }
+
+  const campaign = await db.campaign.findFirst({
+    where: { id: campaignId, brandProfileId: user.brandProfile.id },
+    select: { id: true },
+  });
+  if (!campaign) return { data: [], error: "Campaign not found" };
+
+  const applications = await db.application.findMany({
+    where: {
+      campaignId,
+      status: { in: [ApplicationStatus.ACCEPTED, ApplicationStatus.UNDER_REVIEW, ApplicationStatus.PENDING] },
+    },
+    include: {
+      creator: {
+        select: {
+          niche: true,
+          totalFollowers: true,
+          user: { select: { id: true, name: true, image: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+    take: 10,
+  });
+
+  return {
+    data: applications.map((a) => ({
+      userId: a.creator.user.id,
+      name: a.creator.user.name ?? "Creator",
+      image: a.creator.user.image,
+      niche: a.creator.niche,
+      totalFollowers: a.creator.totalFollowers,
+      status: a.status,
+    })),
+    error: null,
+  };
 }
 
 export async function deleteCampaignEventAction(
