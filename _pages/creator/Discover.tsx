@@ -277,7 +277,13 @@ const CreatorCard = ({
         )}
         {platformEntries.length > 0 && (
           <div className="flex items-center gap-3 py-2.5 mb-3 border-y border-zinc-200/60 dark:border-zinc-800/60">
-            {platformEntries.map(([p, count]) => <div key={p} className="flex items-center gap-1.5"><PlatformBadge platform={p} /><span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{count}</span></div>)}
+            {platformEntries.map(([p, count]) => {
+              const url = creator.social_links?.[p];
+              const badge = <div className="flex items-center gap-1.5"><PlatformBadge platform={p} /><span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{count}</span></div>;
+              return url ? (
+                <a key={p} href={url.startsWith("http") ? url : `https://${url}`} target="_blank" rel="noopener noreferrer" title={`Open ${PLATFORM_META[p]?.label ?? p} profile`} className="hover:opacity-80 transition-opacity" onClick={(e) => e.stopPropagation()}>{badge}</a>
+              ) : <div key={p}>{badge}</div>;
+            })}
           </div>
         )}
         {creator.bio && <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-4 leading-relaxed">{creator.bio}</p>}

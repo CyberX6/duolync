@@ -16,6 +16,10 @@ import {
   DollarSign,
   Check,
   ArrowRight,
+  Heart,
+  MessageCircle,
+  Eye,
+  Grid3X3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +33,22 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  getCreatorPostsByUserIdAction,
+  getAllCreatorPostsByUserIdAction,
+  type SocialPostItem,
+} from "@/app/actions/social-posts";
 
 // ─── Shared types (re-exported for discover pages) ───────────────────────────
 
@@ -44,7 +64,10 @@ export interface Creator {
   location: string | null;
   languages: string[];
   verified?: boolean;
+  /** platform key → formatted follower count string (e.g. "12.3M") */
   platforms?: Record<string, string>;
+  /** platform key (lowercase) → profile URL */
+  social_links?: Record<string, string> | null;
 }
 
 type DrawerTab = "overview" | "analytics";
@@ -101,15 +124,6 @@ export const PLATFORM_META: Record<
     barColor: "bg-blue-400",
   },
 };
-
-const MOCK_PORTFOLIO = [
-  "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&h=400&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1546961342-ea5f62d5a07b?w=400&h=400&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=400&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=400&fit=crop&auto=format",
-];
 
 /** Audience demographics — replaced by real API data when backend is live */
 const MOCK_DEMOGRAPHICS = {
@@ -249,6 +263,63 @@ const EngagementTrend = ({ data }: { data: number[] }) => {
   );
 };
 
+// ─── Portfolio Thumbnail ──────────────────────────────────────────────────────
+
+function fmt(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  return n.toString();
+}
+
+function PortfolioPostThumbnail({ post }: { post: SocialPostItem }) {
+  const [imgErr, setImgErr] = useState(false);
+  const emoji = post.platform === "instagram" ? "📷" : "📱";
+
+  const inner = (
+    <div className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-neutral-800 group cursor-pointer">
+      {post.imageUrl && !imgErr ? (
+        <img
+          src={post.imageUrl}
+          alt={post.caption ?? "Post"}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          onError={() => setImgErr(true)}
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center text-3xl">{emoji}</div>
+      )}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200" />
+      {/* Hover stats overlay */}
+      <div className="absolute inset-x-0 bottom-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2">
+        {post.likes != null && (
+          <span className="flex items-center gap-0.5 text-[10px] text-white font-medium">
+            <Heart className="w-2.5 h-2.5" />{fmt(post.likes)}
+          </span>
+        )}
+        {post.comments != null && (
+          <span className="flex items-center gap-0.5 text-[10px] text-white font-medium">
+            <MessageCircle className="w-2.5 h-2.5" />{fmt(post.comments)}
+          </span>
+        )}
+        {post.views != null && (
+          <span className="flex items-center gap-0.5 text-[10px] text-white font-medium">
+            <Eye className="w-2.5 h-2.5" />{fmt(post.views)}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+
+  if (post.postUrl) {
+    return (
+      <a href={post.postUrl} target="_blank" rel="noopener noreferrer" className="block">
+        {inner}
+      </a>
+    );
+  }
+  return inner;
+}
+
 // ─── Main Drawer ──────────────────────────────────────────────────────────────
 
 const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerProps) => {
@@ -258,6 +329,12 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
   // Panel state
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [activeTab, setActiveTab] = useState<DrawerTab>("overview");
+
+  // Portfolio data
+  const [previewPosts, setPreviewPosts] = useState<SocialPostItem[]>([]);
+  const [allPosts, setAllPosts] = useState<SocialPostItem[]>([]);
+  const [portfolioLoading, setPortfolioLoading] = useState(false);
+  const [showAllPosts, setShowAllPosts] = useState(false);
 
   // Proposal modal
   const [showProposal, setShowProposal] = useState(false);
@@ -277,14 +354,31 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
         setActiveTab("overview");
         setShowProposal(false);
         setShowQuickMessage(false);
+        setShowAllPosts(false);
         setCampaign("");
         setBudget("");
         setBrief("");
         setMessageText("");
+        setPreviewPosts([]);
+        setAllPosts([]);
       }, 320);
       return () => clearTimeout(t);
     }
   }, [isOpen]);
+
+  // ── Fetch creator posts when drawer opens ─────────────────────────────────
+  useEffect(() => {
+    if (!isOpen || !creator) return;
+    let cancelled = false;
+    setPortfolioLoading(true);
+    getCreatorPostsByUserIdAction(creator.id, 6).then(({ data }) => {
+      if (!cancelled) {
+        setPreviewPosts(data);
+        setPortfolioLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [isOpen, creator?.id]);
 
   // ── Keyboard shortcuts ────────────────────────────────────────────────────
   const handleKeyDown = useCallback(
@@ -532,36 +626,90 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
                   <div className="space-y-2">
                     {platformEntries.map(([platform, count]) => {
                       const meta = PLATFORM_META[platform];
-                      return (
-                        <div key={platform} className="flex items-center justify-between px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
+                      const url = creator.social_links?.[platform];
+                      const inner = (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
                           <div className="flex items-center gap-3">
                             <PlatformBadge platform={platform} />
                             <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{meta?.label ?? platform}</span>
                           </div>
-                          <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{count}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{count}</span>
+                            {url && <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />}
+                          </div>
                         </div>
+                      );
+                      return url ? (
+                        <a
+                          key={platform}
+                          href={url.startsWith("http") ? url : `https://${url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block"
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        <div key={platform}>{inner}</div>
                       );
                     })}
                   </div>
                 </div>
               )}
 
-              {/* Media portfolio */}
+              {/* Content Portfolio */}
               <div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">Content Portfolio</h3>
-                  <button className="text-xs text-primary hover:text-primary/70 flex items-center gap-1 transition-colors">
-                    View all <ChevronRight className="w-3 h-3" />
-                  </button>
+                  {previewPosts.length > 0 && (
+                    <button
+                      onClick={async () => {
+                        if (allPosts.length === 0) {
+                          const { data } = await getAllCreatorPostsByUserIdAction(creator.id);
+                          setAllPosts(data);
+                        }
+                        setShowAllPosts(true);
+                      }}
+                      className="text-xs text-primary hover:text-primary/70 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ChevronRight className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {MOCK_PORTFOLIO.map((src, i) => (
-                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-neutral-800 group cursor-pointer">
-                      <img src={src} alt={`Post ${i + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-200" />
-                    </div>
-                  ))}
-                </div>
+
+                {portfolioLoading ? (
+                  <div className="grid grid-cols-3 gap-2">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="aspect-square rounded-xl bg-zinc-100 dark:bg-neutral-800 animate-pulse" />
+                    ))}
+                  </div>
+                ) : previewPosts.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-600">
+                    <Grid3X3 className="w-8 h-8 mb-2 opacity-40" />
+                    <p className="text-xs">No posts synced yet</p>
+                  </div>
+                ) : (
+                  <div className="space-y-5">
+                    {(["instagram", "tiktok"] as const).map((platform) => {
+                      const posts = previewPosts.filter((p) => p.platform === platform);
+                      if (posts.length === 0) return null;
+                      const emoji = platform === "instagram" ? "📷" : "📱";
+                      const label = platform === "instagram" ? "Instagram Posts" : "TikTok Posts";
+                      return (
+                        <div key={platform}>
+                          <p className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-2 flex items-center gap-1.5">
+                            <span>{emoji}</span>{label}
+                          </p>
+                          <div className="grid grid-cols-3 gap-2">
+                            {posts.map((post) => (
+                              <PortfolioPostThumbnail key={post.id} post={post} />
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -570,7 +718,91 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
           {activeTab === "analytics" && (
             <div className="p-6 space-y-8">
 
-              {/* 1. Performance Scores */}
+              {/* 1. Engagement Trend (recharts AreaChart) */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">
+                    14-Day Engagement Trend
+                  </h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-semibold">
+                    +18% vs last month
+                  </span>
+                </div>
+                <ResponsiveContainer width="100%" height={140}>
+                  <AreaChart
+                    data={MOCK_DEMOGRAPHICS.engagementTrend.map((v, i) => ({
+                      day: i === 0 ? "14d ago" : i === 13 ? "Today" : `Day ${i + 1}`,
+                      views: v,
+                    }))}
+                    margin={{ top: 4, right: 4, left: -28, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id="engGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                    <XAxis
+                      dataKey="day"
+                      tick={{ fontSize: 9, fill: "#71717a" }}
+                      tickLine={false}
+                      axisLine={false}
+                      interval={6}
+                    />
+                    <YAxis tick={{ fontSize: 9, fill: "#71717a" }} tickLine={false} axisLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        background: "#18181b",
+                        border: "1px solid #3f3f46",
+                        borderRadius: 8,
+                        fontSize: 11,
+                        color: "#e4e4e7",
+                      }}
+                      formatter={(v: number) => [`${v}K views`, "Engagement"]}
+                      labelStyle={{ color: "#a1a1aa" }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="views"
+                      stroke="#8b5cf6"
+                      strokeWidth={2}
+                      fill="url(#engGradient)"
+                      dot={false}
+                      activeDot={{ r: 4, fill: "#8b5cf6" }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 2. Platform Reach Breakdown (recharts BarChart) */}
+              {platformEntries.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-4">
+                    Platform Reach Breakdown
+                  </h3>
+                  <ResponsiveContainer width="100%" height={120}>
+                    <BarChart
+                      data={platformEntries.map(([platform, countStr]) => ({
+                        name: PLATFORM_META[platform]?.abbr ?? platform.slice(0, 2).toUpperCase(),
+                        followers: parseFollowerStr(countStr),
+                      }))}
+                      margin={{ top: 4, right: 4, left: -28, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#71717a" }} tickLine={false} axisLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: "#71717a" }} tickLine={false} axisLine={false} tickFormatter={(v: number) => v >= 1_000_000 ? `${(v/1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v/1_000).toFixed(0)}K` : String(v)} />
+                      <Tooltip
+                        contentStyle={{ background: "#18181b", border: "1px solid #3f3f46", borderRadius: 8, fontSize: 11, color: "#e4e4e7" }}
+                        formatter={(v: number) => [v >= 1_000_000 ? `${(v/1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v/1_000).toFixed(0)}K` : String(v), "Followers"]}
+                      />
+                      <Bar dataKey="followers" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              {/* 3. Performance Scores */}
               <div>
                 <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
                   Performance Scores
@@ -599,26 +831,12 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
                 </div>
               </div>
 
-              {/* 2. Engagement Trend */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">
-                    30-Day Engagement Trend
-                  </h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-semibold">
-                    +18% vs last month
-                  </span>
-                </div>
-                <EngagementTrend data={MOCK_DEMOGRAPHICS.engagementTrend} />
-              </div>
-
-              {/* 3. Audience Demographics */}
+              {/* 4. Audience Demographics */}
               <div>
                 <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
                   Audience Demographics
                 </h3>
 
-                {/* Top Countries */}
                 <div className="space-y-3 mb-6">
                   <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Top Countries</p>
                   {MOCK_DEMOGRAPHICS.topCountries.map((c) => (
@@ -631,23 +849,16 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
                         <span className="font-bold text-zinc-800 dark:text-zinc-200">{c.pct}%</span>
                       </div>
                       <div className="h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-violet-600 rounded-full transition-all duration-700 ease-out"
-                          style={{ width: `${c.pct}%` }}
-                        />
+                        <div className="h-full bg-violet-600 rounded-full transition-all duration-700 ease-out" style={{ width: `${c.pct}%` }} />
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Gender Split */}
                 <div className="space-y-3 mb-6">
                   <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Gender Split</p>
                   <div className="h-3.5 rounded-full overflow-hidden flex">
-                    <div
-                      className="h-full bg-rose-400 transition-all duration-700 ease-out"
-                      style={{ width: `${MOCK_DEMOGRAPHICS.gender.female}%` }}
-                    />
+                    <div className="h-full bg-rose-400 transition-all duration-700 ease-out" style={{ width: `${MOCK_DEMOGRAPHICS.gender.female}%` }} />
                     <div className="h-full bg-sky-400 flex-1" />
                   </div>
                   <div className="flex items-center justify-between text-xs">
@@ -664,59 +875,19 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
                   </div>
                 </div>
 
-                {/* Age Groups */}
                 <div className="space-y-2.5">
                   <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400 mb-3">Age Groups</p>
                   {MOCK_DEMOGRAPHICS.ageGroups.map((ag) => (
                     <div key={ag.range} className="flex items-center gap-3">
-                      <span className="text-xs text-zinc-500 dark:text-muted-foreground w-11 shrink-0 font-medium">
-                        {ag.range}
-                      </span>
+                      <span className="text-xs text-zinc-500 dark:text-muted-foreground w-11 shrink-0 font-medium">{ag.range}</span>
                       <div className="flex-1 h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary/70 rounded-full transition-all duration-700 ease-out"
-                          style={{ width: `${ag.pct}%` }}
-                        />
+                        <div className="h-full bg-primary/70 rounded-full transition-all duration-700 ease-out" style={{ width: `${ag.pct}%` }} />
                       </div>
-                      <span className="text-xs font-bold w-7 text-right shrink-0 text-zinc-800 dark:text-zinc-200">
-                        {ag.pct}%
-                      </span>
+                      <span className="text-xs font-bold w-7 text-right shrink-0 text-zinc-800 dark:text-zinc-200">{ag.pct}%</span>
                     </div>
                   ))}
                 </div>
               </div>
-
-              {/* 4. Platform Reach Breakdown */}
-              {platformEntries.length > 0 && (
-                <div>
-                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
-                    Platform Reach Breakdown
-                  </h3>
-                  <div className="space-y-5">
-                    {platformEntries.map(([platform, countStr]) => {
-                      const meta = PLATFORM_META[platform];
-                      const count = parseFollowerStr(countStr);
-                      return (
-                        <div key={platform} className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2.5">
-                              <PlatformBadge platform={platform} />
-                              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{meta?.label ?? platform}</span>
-                            </div>
-                            <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{countStr}</span>
-                          </div>
-                          <div className="h-2.5 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                            <div
-                              className={cn("h-full rounded-full transition-all duration-700 ease-out", meta?.barColor ?? "bg-neutral-500")}
-                              style={{ width: `${(count / maxPlatformFollowers) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
 
               {/* 5. Availability callout */}
               <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/[0.07] border border-primary/20">
@@ -831,6 +1002,57 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
           </p>
         </div>
       </div>
+
+      {/* ── View All Portfolio Modal ──────────────────────────────── */}
+      {showAllPosts && (
+        <div className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-16 overflow-y-auto">
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={() => setShowAllPosts(false)}
+          />
+          <div className="relative z-10 w-full max-w-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden mb-8">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800">
+              <div>
+                <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Full Portfolio</h2>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{creator.full_name} · {allPosts.length} posts</p>
+              </div>
+              <button
+                onClick={() => setShowAllPosts(false)}
+                className="w-8 h-8 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="p-5 space-y-6">
+              {(["instagram", "tiktok"] as const).map((platform) => {
+                const posts = allPosts.filter((p) => p.platform === platform);
+                if (posts.length === 0) return null;
+                const emoji = platform === "instagram" ? "📷" : "📱";
+                const label = platform === "instagram" ? "Instagram Posts" : "TikTok Posts";
+                return (
+                  <div key={platform}>
+                    <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-1.5">
+                      <span>{emoji}</span>{label}
+                      <span className="ml-1 text-zinc-400 dark:text-zinc-600">({posts.length})</span>
+                    </p>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {posts.map((post) => (
+                        <PortfolioPostThumbnail key={post.id} post={post} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              {allPosts.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-16 text-zinc-400">
+                  <Grid3X3 className="w-10 h-10 mb-3 opacity-30" />
+                  <p className="text-sm">No posts available</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Proposal Modal ────────────────────────────────────────── */}
       {showProposal && (
