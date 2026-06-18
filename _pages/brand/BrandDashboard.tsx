@@ -12,6 +12,8 @@ import {
   Sparkles,
   TrendingUp,
   Users,
+  CheckCircle2,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
@@ -22,6 +24,12 @@ import {
   getBrandDashboardStatsAction,
   type BrandDashboardStats,
 } from "@/app/actions/campaigns";
+import {
+  getActiveCollaborationsAction,
+  type ActiveCollaboration,
+} from "@/app/actions/proposals";
+import { cn } from "@/lib/utils";
+import { useMessaging, type ConversationRecipient } from "@/app/_components/messaging/MessagingContext";
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
 
@@ -72,9 +80,21 @@ function StatCard({ href, icon: Icon, iconColor, value, label, accent }: StatCar
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
+const PLATFORM_EMOJI: Record<string, string> = {
+  instagram: "📸",
+  tiktok: "🎵",
+  youtube: "▶️",
+  twitter: "🐦",
+  linkedin: "💼",
+  pinterest: "📌",
+  twitch: "🎮",
+  snapchat: "👻",
+};
+
 const BrandDashboard = () => {
   const { profile } = useAuth();
   const { getAllSavedItems } = useFavorites();
+  const { openChatWindow } = useMessaging();
   const savedCreatorsCount = getAllSavedItems().length;
   const [stats, setStats] = useState<BrandDashboardStats>({
     activeCampaigns: 0,
@@ -83,11 +103,17 @@ const BrandDashboard = () => {
     availableCreators: 0,
   });
   const [statsLoading, setStatsLoading] = useState(true);
+  const [collabs, setCollabs] = useState<ActiveCollaboration[]>([]);
+  const [collabsLoading, setCollabsLoading] = useState(true);
 
   useEffect(() => {
     getBrandDashboardStatsAction().then(({ data }) => {
       setStats(data);
       setStatsLoading(false);
+    });
+    getActiveCollaborationsAction().then(({ data }) => {
+      setCollabs(data);
+      setCollabsLoading(false);
     });
   }, []);
 
@@ -251,6 +277,137 @@ const BrandDashboard = () => {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* ── Active Collaborations ─────────────────────────────────────── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <h2 className="font-display text-base font-semibold">Active Collaborations</h2>
+              {collabs.length > 0 && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                  {collabs.length}
+                </span>
+              )}
+            </div>
+            <Link
+              href="/brand/proposals?tab=ACCEPTED"
+              className="text-xs text-violet-400 font-medium hover:underline flex items-center gap-1"
+            >
+              View all
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+
+          {collabsLoading ? (
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[1, 2].map((i) => (
+                <div key={i} className="rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 p-4 animate-pulse">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-zinc-200 dark:bg-zinc-800 shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3.5 bg-zinc-200 dark:bg-zinc-800 rounded w-2/3" />
+                      <div className="h-3 bg-zinc-100 dark:bg-zinc-800/50 rounded w-1/2" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : collabs.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-6 text-center">
+              <CheckCircle2 className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">No active collaborations yet.</p>
+              <Link href="/brand/proposals" className="mt-2 inline-block text-xs text-violet-400 hover:underline">
+                Review pending proposals →
+              </Link>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-3">
+              {collabs.slice(0, 4).map((c) => {
+                const initials = (c.creator.name ?? "?")
+                  .split(" ")
+                  .map((w) => w[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase();
+                const platform = c.selectedPlatform ?? c.creator.primaryPlatform;
+                return (
+                  <div
+                    key={c.proposalId}
+                    className="group relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-4 transition-all hover:border-emerald-500/40 hover:shadow-md hover:shadow-emerald-500/5"
+                  >
+                    <div className="absolute top-3 right-3">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        Active
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      {/* Avatar */}
+                      <div className="w-10 h-10 rounded-xl overflow-hidden ring-1 ring-zinc-200 dark:ring-zinc-700 shrink-0">
+                        {c.creator.avatarUrl ? (
+                          <img src={c.creator.avatarUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-violet-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                            {initials}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0 pr-10">
+                        <Link
+                          href={`/profile/${c.creator.userId}`}
+                          className="font-semibold text-sm leading-tight hover:text-violet-400 transition-colors truncate block"
+                        >
+                          {c.creator.name ?? "Creator"}
+                        </Link>
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">
+                          {c.campaignTitle}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                          {platform && (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                              {PLATFORM_EMOJI[platform.toLowerCase()] ?? "🌐"} {platform}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                            <DollarSign className="w-3 h-3" />
+                            {c.rate.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick actions */}
+                    <div className="flex gap-2 mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                      <button
+                        onClick={() => openChatWindow({
+                          id: c.creator.userId,
+                          full_name: c.creator.name,
+                          avatar_url: c.creator.avatarUrl,
+                          user_type: "creator",
+                        } as ConversationRecipient)}
+                        className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        Message
+                      </button>
+                      <Link
+                        href={`/brand/campaigns/${c.campaignId}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                      >
+                        <Megaphone className="w-3.5 h-3.5" />
+                        Campaign
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* ── CTA Banner ────────────────────────────────────────────────── */}

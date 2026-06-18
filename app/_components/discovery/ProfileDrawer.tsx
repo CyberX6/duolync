@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useTransition } from "react";
 import { useMessaging } from "@/components/messaging/MessagingContext";
 import {
   X,
@@ -20,6 +20,8 @@ import {
   MessageCircle,
   Eye,
   Grid3X3,
+  Loader2,
+  Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +33,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  getBrandCampaignsAction,
+  type CampaignData,
+} from "@/app/actions/campaigns";
+import { sendBrandInvitationAction } from "@/app/actions/invitations";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import {
@@ -145,14 +152,6 @@ const MOCK_DEMOGRAPHICS = {
   /** Daily views (K) for the past 14 days */
   engagementTrend: [42, 38, 55, 48, 61, 52, 75, 68, 82, 71, 90, 85, 78, 95],
 };
-
-const MOCK_CAMPAIGNS = [
-  "Summer Launch 2026",
-  "Tech Review Series",
-  "Holiday Gifting Campaign",
-  "Brand Awareness Q3",
-  "Creator Partnership Program",
-];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -336,11 +335,13 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
   const [portfolioLoading, setPortfolioLoading] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
 
-  // Proposal modal
+  // Invitation modal (replaces mock proposal)
   const [showProposal, setShowProposal] = useState(false);
   const [campaign, setCampaign] = useState("");
   const [budget, setBudget] = useState("");
   const [brief, setBrief] = useState("");
+  const [brandCampaigns, setBrandCampaigns] = useState<CampaignData[]>([]);
+  const [invitePending, startInviteTransition] = useTransition();
 
   // Quick message panel
   const [showQuickMessage, setShowQuickMessage] = useState(false);
@@ -358,6 +359,7 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
         setCampaign("");
         setBudget("");
         setBrief("");
+        setBrandCampaigns([]);
         setMessageText("");
         setPreviewPosts([]);
         setAllPosts([]);
@@ -402,16 +404,42 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
+  // ── Fetch brand campaigns when proposal overlay opens ─────────────────────
+  useEffect(() => {
+    if (!showProposal) return;
+    getBrandCampaignsAction().then(({ data }) => {
+      const active = data.filter((c) => c.status === "ACTIVE");
+      setBrandCampaigns(active);
+      if (active.length === 1) setCampaign(active[0].id);
+    });
+  }, [showProposal]);
+
   // ── Action handlers ───────────────────────────────────────────────────────
   const handleSubmitProposal = () => {
-    toast({
-      title: "Proposal sent! 🎉",
-      description: `Your collaboration request was delivered to ${creator?.full_name}.`,
+    if (!creator || !campaign) {
+      toast({ variant: "destructive", title: "Please select a campaign." });
+      return;
+    }
+    startInviteTransition(async () => {
+      const result = await sendBrandInvitationAction({
+        creatorUserId: creator.id,
+        campaignId: campaign,
+        message: brief || undefined,
+        proposedBudget: budget ? parseFloat(budget) : undefined,
+      });
+      if (result.error) {
+        toast({ variant: "destructive", title: result.error });
+        return;
+      }
+      toast({
+        title: "Invitation sent! 🎉",
+        description: `${creator.full_name} will be notified about your campaign.`,
+      });
+      setShowProposal(false);
+      setCampaign("");
+      setBudget("");
+      setBrief("");
     });
-    setShowProposal(false);
-    setCampaign("");
-    setBudget("");
-    setBrief("");
   };
 
   const handleSendMessage = () => {
@@ -1073,7 +1101,7 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
             <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-neutral-800">
               <div>
                 <h2 className="font-display text-[17px] font-bold leading-tight">
-                  Send Collaboration Proposal
+                  Invite to Campaign
                 </h2>
                 <p className="text-sm text-muted-foreground mt-0.5">
                   to{" "}
@@ -1098,18 +1126,31 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
                 <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Select Active Campaign
                 </label>
-                <Select value={campaign} onValueChange={setCampaign}>
-                  <SelectTrigger className="border-neutral-800 bg-neutral-950/50 h-10 text-sm focus:ring-primary/40">
-                    <SelectValue placeholder="Choose a campaign…" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-neutral-900 border-neutral-800">
-                    {MOCK_CAMPAIGNS.map((c) => (
-                      <SelectItem key={c} value={c} className="focus:bg-neutral-800">
-                        {c}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {brandCampaigns.length === 0 ? (
+                  <div className="rounded-lg border border-dashed border-neutral-700 p-3 text-sm text-muted-foreground text-center">
+                    No active campaigns found.{" "}
+                    <a href="/brand/campaigns" className="text-primary hover:underline">
+                      Create one first →
+                    </a>
+                  </div>
+                ) : (
+                  <Select value={campaign} onValueChange={setCampaign}>
+                    <SelectTrigger className="border-neutral-800 bg-neutral-950/50 h-10 text-sm focus:ring-primary/40">
+                      <SelectValue placeholder="Choose a campaign…" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-neutral-900 border-neutral-800">
+                      {brandCampaigns.map((c) => (
+                        <SelectItem key={c.id} value={c.id} className="focus:bg-neutral-800">
+                          <div className="flex items-center gap-2">
+                            <Megaphone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                            <span>{c.title}</span>
+                            <span className="text-xs text-muted-foreground ml-1">${c.budget.toLocaleString()}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
 
               {/* Budget */}
@@ -1150,15 +1191,20 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
               <Button
                 className="flex-1 h-10 btn-gradient rounded-xl font-semibold gap-2"
                 onClick={handleSubmitProposal}
-                disabled={!campaign && !budget && !brief}
+                disabled={invitePending || !campaign}
               >
-                <Check className="w-4 h-4" />
-                Submit Proposal
+                {invitePending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                Send Invitation
               </Button>
               <Button
                 variant="outline"
                 className="flex-1 h-10 rounded-xl border-neutral-700 hover:border-neutral-500 font-semibold"
                 onClick={() => setShowProposal(false)}
+                disabled={invitePending}
               >
                 Cancel
               </Button>

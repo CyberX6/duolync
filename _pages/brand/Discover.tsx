@@ -1,9 +1,9 @@
 "use client";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useTransition } from "react";
 import {
   Search, SlidersHorizontal, Heart, MessageSquare, X,
   MapPin, BadgeCheck, Users, TrendingUp, ChevronDown, ListPlus, Check, Plus,
-  UserPlus, UserCheck, Clock,
+  UserPlus, UserCheck, Clock, Send, DollarSign, Loader2, Megaphone, Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
 import MainLayout from "@/components/layout/MainLayout";
 import ProfileDrawer, {
@@ -40,6 +40,11 @@ import {
   type ConnectionStatusResult,
   type ConnectionInfo,
 } from "@/app/actions/connections";
+import {
+  getBrandCampaignsAction,
+  type CampaignData,
+} from "@/app/actions/campaigns";
+import { sendBrandInvitationAction } from "@/app/actions/invitations";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -85,6 +90,161 @@ function matchesReach(followers: number, range: string): boolean {
   if (range === "mid")   return followers >= 200_000 && followers < 1_000_000;
   if (range === "mega")  return followers >= 1_000_000;
   return true;
+}
+
+// ─── Invite to Campaign Modal ─────────────────────────────────────────────────
+
+interface InviteModalProps {
+  creator: Creator | null;
+  onClose: () => void;
+}
+
+function InviteToCampaignModal({ creator, onClose }: InviteModalProps) {
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
+  const [campaignId, setCampaignId] = useState("");
+  const [message, setMessage] = useState("");
+  const [budget, setBudget] = useState("");
+
+  useEffect(() => {
+    if (!creator) return;
+    setCampaignId(""); setMessage(""); setBudget("");
+    getBrandCampaignsAction().then(({ data }) => {
+      const active = data.filter((c) => c.status === "ACTIVE");
+      setCampaigns(active);
+      if (active.length === 1) setCampaignId(active[0].id);
+    });
+  }, [creator]);
+
+  if (!creator) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!campaignId) {
+      toast({ variant: "destructive", title: "Please select a campaign." });
+      return;
+    }
+    startTransition(async () => {
+      const result = await sendBrandInvitationAction({
+        creatorUserId: creator.id,
+        campaignId,
+        message: message || undefined,
+        proposedBudget: budget ? parseFloat(budget) : undefined,
+      });
+      if (result.error) {
+        toast({ variant: "destructive", title: result.error });
+        return;
+      }
+      toast({
+        title: "Invitation sent! 🎉",
+        description: `${creator.full_name} will be notified about your campaign.`,
+      });
+      onClose();
+    });
+  };
+
+  return (
+    <Dialog open={!!creator} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="sm:max-w-lg w-[95vw] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Mail className="w-5 h-5 text-primary" />
+            Invite to Campaign
+          </DialogTitle>
+          <DialogDescription>
+            Send a collaboration invite to{" "}
+            <span className="font-semibold text-foreground">{creator.full_name}</span>.
+            They&apos;ll receive a notification and can accept or decline.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-4 py-1">
+          {/* Campaign selector */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Select Campaign *</label>
+            {campaigns.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4 text-sm text-muted-foreground text-center">
+                No active campaigns found.{" "}
+                <a href="/brand/campaigns" className="text-primary hover:underline">
+                  Create one first →
+                </a>
+              </div>
+            ) : (
+              <Select value={campaignId} onValueChange={setCampaignId} required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose an active campaign…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {campaigns.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      <div className="flex items-center gap-2">
+                        <Megaphone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="truncate">{c.title}</span>
+                        <span className="text-xs text-muted-foreground ml-auto shrink-0">
+                          ${c.budget.toLocaleString()}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+
+          {/* Budget offer */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Offered Budget (USD)</label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                type="number"
+                min={1}
+                step={100}
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                placeholder="e.g. 1500"
+                className="pl-9"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">Optional — leave blank to discuss budget later.</p>
+          </div>
+
+          {/* Message */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Message / Brief</label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Introduce your brand, describe the deliverables, timeline, and any creative direction…"
+              rows={4}
+              maxLength={1000}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+            />
+            <p className="text-xs text-muted-foreground text-right">{message.length}/1000</p>
+          </div>
+
+          <DialogFooter className="pt-1 flex-col-reverse sm:flex-row gap-2">
+            <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isPending || campaigns.length === 0}
+              className="w-full sm:w-auto gap-2"
+            >
+              {isPending ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Send className="w-3.5 h-3.5" />
+              )}
+              Send Invitation
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 // ─── Add to Community Dropdown ────────────────────────────────────────────────
@@ -190,6 +350,7 @@ const CreatorCard = ({
   onSave,
   onViewProfile,
   onMessage,
+  onInvite,
   communityLists,
   onCreateCommunityList,
   onMemberToggled,
@@ -201,6 +362,7 @@ const CreatorCard = ({
   onSave: (target: SaveTarget) => void;
   onViewProfile: (c: Creator) => void;
   onMessage: (c: Creator) => void;
+  onInvite: (c: Creator) => void;
   communityLists: CommunityListWithCount[];
   onCreateCommunityList: () => void;
   onMemberToggled: (listId: string, added: boolean) => void;
@@ -378,10 +540,12 @@ const CreatorCard = ({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
-          <Button size="sm" className="flex-1 h-8 text-xs btn-gradient rounded-xl font-semibold" onClick={() => onViewProfile(creator)}>
-            View Profile
-          </Button>
+        <div className="flex flex-col gap-2">
+          {/* Primary row */}
+          <div className="flex gap-2">
+            <Button size="sm" className="flex-1 h-8 text-xs btn-gradient rounded-xl font-semibold" onClick={() => onViewProfile(creator)}>
+              View Profile
+            </Button>
 
           {/* Connect button — only shown for real DB profiles */}
           {isRealProfile(creator.id) && <Button
@@ -430,6 +594,19 @@ const CreatorCard = ({
             onCreateList={onCreateCommunityList}
             onMemberToggled={onMemberToggled}
           />
+          </div>
+          {/* Invite button — only for real DB profiles */}
+          {isRealProfile(creator.id) && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full h-8 text-xs rounded-xl font-semibold gap-1.5 border-primary/30 text-primary hover:bg-primary/5 hover:border-primary/60 transition-colors"
+              onClick={() => onInvite(creator)}
+            >
+              <Mail className="w-3.5 h-3.5" />
+              Invite to Campaign
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -580,6 +757,9 @@ const Discover = () => {
   const [niche, setNiche] = useState("All Niches");
   const [reachRange, setReachRange] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Invite to campaign state
+  const [inviteTarget, setInviteTarget] = useState<Creator | null>(null);
 
   const handleMessage = (creator: Creator) => {
     if (!profile) return;
@@ -756,6 +936,7 @@ const Discover = () => {
                 onSave={setSaveTarget}
                 onViewProfile={openProfile}
                 onMessage={handleMessage}
+                onInvite={setInviteTarget}
                 communityLists={communityLists}
                 onCreateCommunityList={() => setShowCreateListModal(true)}
                 onMemberToggled={(listId, added) => handleMemberToggled(listId, c.id, added)}
@@ -768,6 +949,12 @@ const Discover = () => {
           )}
         </div>
       </div>
+
+      {/* Invite to Campaign Modal */}
+      <InviteToCampaignModal
+        creator={inviteTarget}
+        onClose={() => setInviteTarget(null)}
+      />
 
       {/* Create Community List Modal */}
       <Dialog open={showCreateListModal} onOpenChange={setShowCreateListModal}>

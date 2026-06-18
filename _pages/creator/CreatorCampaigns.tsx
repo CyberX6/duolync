@@ -19,6 +19,7 @@ import {
   getPublicCampaignsAction,
   applyToCampaignAction,
   withdrawApplicationAction,
+  getCreatorConnectedPlatformsAction,
   type PublicCampaign,
 } from "@/app/actions/creator-campaigns";
 
@@ -87,6 +88,17 @@ function formatDate(iso: string | null) {
 
 // ── Apply Modal ───────────────────────────────────────────────────────────────
 
+const PLATFORM_LABEL: Record<string, string> = {
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+  twitter: "X / Twitter",
+  linkedin: "LinkedIn",
+  pinterest: "Pinterest",
+  twitch: "Twitch",
+  snapchat: "Snapchat",
+};
+
 interface ApplyModalProps {
   campaign: PublicCampaign | null;
   onClose: () => void;
@@ -98,9 +110,29 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
   const [isPending, startTransition] = useTransition();
   const [rate, setRate] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
+  const [selectedPlatform, setSelectedPlatform] = useState<string>("");
+  const [availablePlatforms, setAvailablePlatforms] = useState<string[]>([]);
+  const [platformsLoading, setPlatformsLoading] = useState(false);
 
   useEffect(() => {
-    if (campaign) { setRate(""); setCoverLetter(""); }
+    if (!campaign) return;
+    setRate("");
+    setCoverLetter("");
+    setSelectedPlatform("");
+    setPlatformsLoading(true);
+    getCreatorConnectedPlatformsAction().then((res) => {
+      const platforms = res.connectedPlatforms.length > 0
+        ? res.connectedPlatforms
+        : res.primaryPlatform
+          ? [res.primaryPlatform]
+          : [];
+      setAvailablePlatforms(platforms);
+      // Pre-select the first platform that matches campaign's required platforms, else first connected
+      const campaignPlatforms = campaign.platforms.map((p) => p.toLowerCase());
+      const match = platforms.find((p) => campaignPlatforms.includes(p.toLowerCase()));
+      setSelectedPlatform(match ?? platforms[0] ?? "");
+      setPlatformsLoading(false);
+    });
   }, [campaign]);
 
   if (!campaign) return null;
@@ -117,12 +149,16 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
         campaignId: campaign.id,
         proposedRate: parsedRate,
         coverLetter: coverLetter || undefined,
+        selectedPlatform: selectedPlatform || undefined,
       });
       if (result.error || !result.data) {
         toast({ variant: "destructive", title: result.error ?? "Failed to apply." });
         return;
       }
-      toast({ title: "Application submitted! 🎉", description: `You applied to "${campaign.title}".` });
+      toast({
+        title: "Proposal sent! 🎉",
+        description: `Your proposal for "${campaign.title}" was delivered to the brand.`,
+      });
       onApplied(campaign.id, result.data.id);
       onClose();
     });
@@ -134,7 +170,7 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
         <DialogHeader>
           <DialogTitle className="text-lg font-bold flex items-center gap-2">
             <Send className="w-5 h-5 text-primary" />
-            Apply to Campaign
+            Send Proposal
           </DialogTitle>
         </DialogHeader>
 
@@ -157,6 +193,40 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-1">
+          {/* Platform selector */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Applying with account</label>
+            {platformsLoading ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Loading your accounts…
+              </div>
+            ) : availablePlatforms.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {availablePlatforms.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setSelectedPlatform(p)}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium transition-all",
+                      selectedPlatform === p
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-muted-foreground hover:border-primary/50",
+                    )}
+                  >
+                    <span>{PLATFORM_EMOJI[p.toLowerCase()] ?? "🌐"}</span>
+                    <span>{PLATFORM_LABEL[p.toLowerCase()] ?? p}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-3 text-sm text-muted-foreground">
+                No connected accounts found — you can still apply without selecting one.
+              </div>
+            )}
+          </div>
+
           {/* Rate */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium">Your Rate (USD) *</label>
@@ -176,9 +246,9 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
             <p className="text-xs text-muted-foreground">Enter the total amount you'd charge for this campaign.</p>
           </div>
 
-          {/* Cover Letter */}
+          {/* Message to brand */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Cover Letter (optional)</label>
+            <label className="text-sm font-medium">Message to brand</label>
             <textarea
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
@@ -198,9 +268,14 @@ function ApplyModal({ campaign, onClose, onApplied }: ApplyModalProps) {
               {isPending ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Submitting…
+                  Sending…
                 </span>
-              ) : "Submit Application"}
+              ) : (
+                <span className="flex items-center gap-2">
+                  <Send className="w-3.5 h-3.5" />
+                  Send Proposal
+                </span>
+              )}
             </Button>
           </DialogFooter>
         </form>

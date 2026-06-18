@@ -31,6 +31,7 @@ model User {
   createdCampaignEvents  CampaignEvent[]       @relation("EventCreatedBy")
   requestedEventUpdates  CampaignEventUpdate[] @relation("EventUpdateRequestedBy")
   reviewedEventUpdates   CampaignEventUpdate[] @relation("EventUpdateReviewedBy")
+  receivedInvitations    Invitation[]          @relation("ReceivedInvitations")
 }
 
 model BrandProfile {
@@ -47,6 +48,7 @@ model BrandProfile {
   crmLeads         CRMLead[]
   campaigns        Campaign[]
   communityLists   CommunityList[]
+  invitations      Invitation[]
 }
 
 model CreatorProfile {
@@ -207,6 +209,7 @@ model Campaign {
   brand            BrandProfile    @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   contracts        Contract[]
   events           CampaignEvent[]
+  invitations      Invitation[]
 
   @@index([brandProfileId])
   @@index([status])
@@ -364,6 +367,7 @@ model Application {
   negotiatedRate   Float?
   contentFormats   String[]          @default([])
   brandNote        String?
+  selectedPlatform String?
   status           ApplicationStatus @default(PENDING)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -454,4 +458,29 @@ enum NotificationType {
   APPLICATION_UPDATE
   MESSAGE
   SYSTEM
+}
+
+model Invitation {
+  id             String           @id @default(cuid())
+  campaignId     String
+  brandProfileId String
+  creatorUserId  String
+  message        String?
+  proposedBudget Float?
+  status         InvitationStatus @default(PENDING)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  campaign       Campaign         @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  brand          BrandProfile     @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
+  creator        User             @relation("ReceivedInvitations", fields: [creatorUserId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, creatorUserId])
+  @@index([creatorUserId, status])
+  @@index([brandProfileId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
