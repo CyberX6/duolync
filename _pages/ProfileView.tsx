@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft, MessageSquare, MapPin, Globe, ExternalLink,
   Users, Send, Edit2, Plus, Trash2, Check, X, UserPlus,
-  UserCheck, Clock, Briefcase, BarChart3, Link2,
+  UserCheck, Clock, Briefcase, BarChart3, Link2, RefreshCw, Radio,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,8 @@ import {
   type PublicProfile,
   type SocialLink,
 } from "@/app/actions/profile";
+import { startApifySyncAction, pollApifyRunAction } from "@/app/actions/apify-sync";
+import { deletePostAction } from "@/app/actions/social-posts";
 import { sendMessageAction } from "@/app/actions/messages";
 import {
   getConnectionStatusAction,
@@ -392,6 +394,323 @@ function StatItem({ icon: Icon, value, label, href }: { icon: React.ElementType;
   return content;
 }
 
+// ─── Sync Data Modal ──────────────────────────────────────────────────────────
+
+const SYNC_PLATFORMS = ["instagram", "tiktok"] as const;
+type SyncPlatform = (typeof SYNC_PLATFORMS)[number];
+
+function SyncDataModal({
+  userId,
+  onSynced,
+  onClose,
+}: {
+  userId: string;
+  onSynced: () => void;
+  onClose: () => void;
+}) {
+  const [handle, setHandle] = useState("");
+  const [platform, setPlatform] = useState<SyncPlatform>("instagram");
+  const [syncing, setSyncing] = useState(false);
+  const [statusMsg, setStatusMsg] = useState("Starting scrape…");
+  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const { toast } = useToast();
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopPolling = () => {
+    if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+  };
+
+  // Clean up interval on unmount
+  useEffect(() => () => stopPolling(), []);
+
+  const handleSync = async () => {
+    if (!handle.trim()) return;
+    setSyncing(true);
+    setResult(null);
+    setStatusMsg("Starting scrape…");
+
+    const start = await startApifySyncAction(userId, handle.trim(), platform);
+    if ("error" in start) {
+      setSyncing(false);
+      setResult({ ok: false, message: start.error });
+      toast({ title: "Sync failed", description: start.error, variant: "destructive" });
+      return;
+    }
+
+    const { runId } = start;
+    let elapsed = 0;
+    pollRef.current = setInterval(async () => {
+      elapsed += 3;
+      setStatusMsg(`Scraping ${platform} data… ${elapsed}s`);
+
+      const poll = await pollApifyRunAction(runId, userId);
+
+      if (poll.state === "running") return; // keep waiting
+
+      stopPolling();
+      setSyncing(false);
+
+      if (poll.state === "succeeded") {
+        const { followerCount, averageEngagement } = poll.data;
+        setResult({ ok: true, message: `Synced — ${followerCount.toLocaleString()} followers, ${averageEngagement}% engagement.` });
+        toast({ title: "Analytics synced!", description: `Data updated from ${platform}.` });
+        onSynced();
+      } else {
+        setResult({ ok: false, message: poll.error });
+        toast({ title: "Sync failed", description: poll.error, variant: "destructive" });
+      }
+    }, 3_000);
+  };
+
+  return (
+    <DialogContent className="sm:max-w-sm">
+      <DialogHeader>
+        <DialogTitle className="flex items-center gap-2">
+          <RefreshCw className="w-4 h-4 text-primary" />
+          Sync Analytics
+        </DialogTitle>
+        <DialogDescription>
+          Pull real-time follower count, engagement, and niches from Apify.
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="space-y-4 py-2">
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Platform</label>
+          <div className="grid grid-cols-2 gap-2">
+            {SYNC_PLATFORMS.map((p) => (
+              <button
+                key={p}
+                onClick={() => setPlatform(p)}
+                className={cn(
+                  "h-9 rounded-lg border text-sm font-medium capitalize transition-all",
+                  platform === p
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-zinc-200 dark:border-zinc-700 text-muted-foreground hover:border-primary/50",
+                )}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+            {platform === "instagram" ? "Instagram" : "TikTok"} Username
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">@</span>
+            <Input
+              value={handle}
+              onChange={(e) => setHandle(e.target.value.replace(/^@/, ""))}
+              placeholder={platform === "instagram" ? "username" : "username"}
+              className="pl-7"
+              disabled={syncing}
+              onKeyDown={(e) => e.key === "Enter" && handleSync()}
+            />
+          </div>
+        </div>
+
+        {result && (
+          <div
+            className={cn(
+              "rounded-lg border px-3 py-2.5 text-sm",
+              result.ok
+                ? "border-emerald-200 dark:border-emerald-700/50 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
+                : "border-red-200 dark:border-red-700/50 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400",
+            )}
+          >
+            {result.message}
+          </div>
+        )}
+
+        {syncing && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <RefreshCw className="w-3.5 h-3.5 animate-spin shrink-0" />
+            {statusMsg} — this may take up to 2 minutes.
+          </div>
+        )}
+      </div>
+
+      <DialogFooter>
+        <Button variant="outline" onClick={onClose} disabled={syncing}>Cancel</Button>
+        <Button
+          onClick={handleSync}
+          disabled={syncing || !handle.trim()}
+          className="btn-gradient gap-2"
+        >
+          {syncing ? (
+            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Syncing…</>
+          ) : (
+            <><RefreshCw className="w-3.5 h-3.5" /> Sync Now</>
+          )}
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  );
+}
+
+// ─── Latest Posts Section ─────────────────────────────────────────────────────
+
+type PostItem = NonNullable<PublicProfile["socialPosts"]>[number];
+
+const PLATFORM_META_POSTS: Record<string, { label: string; emoji: string }> = {
+  instagram: { label: "Instagram Posts", emoji: "📷" },
+  tiktok: { label: "TikTok Posts", emoji: "📱" },
+};
+
+function PostThumbnail({
+  post,
+  isOwn,
+  onDeleted,
+}: {
+  post: PostItem;
+  isOwn: boolean;
+  onDeleted: (id: string) => void;
+}) {
+  const [imgError, setImgError] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const { toast } = useToast();
+
+  const emoji = PLATFORM_META_POSTS[post.platform]?.emoji ?? "📱";
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDeleting(true);
+    const res = await deletePostAction(post.id);
+    setDeleting(false);
+    if (res.error) {
+      toast({ title: "Failed to remove post", description: res.error, variant: "destructive" });
+    } else {
+      onDeleted(post.id);
+    }
+  };
+
+  const card = (
+    <div className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 group relative cursor-pointer">
+      {isOwn && (
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-black/70 border border-zinc-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80"
+          title="Remove post"
+        >
+          {deleting ? (
+            <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <X className="w-3 h-3 text-white" />
+          )}
+        </button>
+      )}
+
+      {post.imageUrl && !imgError ? (
+        <div className="aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+          <img
+            src={post.imageUrl}
+            alt={post.caption ?? "Post"}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        </div>
+      ) : (
+        <div className="aspect-square w-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-3xl">
+          {emoji}
+        </div>
+      )}
+
+      <div className="p-2.5">
+        {post.caption && (
+          <p className="text-[11px] text-muted-foreground line-clamp-1 mb-1">{post.caption}</p>
+        )}
+        <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+          {post.likes != null && <span>❤️ {formatNumber(post.likes)}</span>}
+          {post.comments != null && <span>💬 {formatNumber(post.comments)}</span>}
+        </div>
+      </div>
+    </div>
+  );
+
+  return post.postUrl ? (
+    <a href={post.postUrl} target="_blank" rel="noopener noreferrer">{card}</a>
+  ) : (
+    card
+  );
+}
+
+function LatestPostsSection({
+  posts,
+  isOwn,
+  onPostDeleted,
+}: {
+  posts: PostItem[];
+  isOwn: boolean;
+  onPostDeleted: (id: string) => void;
+}) {
+  const groups = Object.entries(PLATFORM_META_POSTS).map(([key, meta]) => ({
+    key,
+    meta,
+    items: posts.filter((p) => p.platform === key).slice(0, 3),
+  })).filter((g) => g.items.length > 0);
+
+  return (
+    <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="font-display font-bold">Latest Posts</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Recent content from connected platforms</p>
+        </div>
+        {isOwn && (
+          <Button size="sm" asChild variant="outline" className="gap-2">
+            <Link href="/creator/presence">
+              <Radio className="w-3.5 h-3.5" /> Manage Connections
+            </Link>
+          </Button>
+        )}
+      </div>
+
+      {groups.length > 0 ? (
+        <div className="space-y-6">
+          {groups.map(({ key, meta, items }) => (
+            <div key={key}>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                <span>{meta.emoji}</span> {meta.label}
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                {items.map((post) => (
+                  <PostThumbnail
+                    key={post.id}
+                    post={post}
+                    isOwn={isOwn}
+                    onDeleted={onPostDeleted}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center py-8 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-3">
+            <Radio className="w-7 h-7 text-violet-400" />
+          </div>
+          <p className="font-semibold text-sm mb-1">No posts yet</p>
+          <p className="text-xs text-muted-foreground mb-4 max-w-xs">
+            Connect and sync your social accounts to display your latest content here.
+          </p>
+          {isOwn && (
+            <Button size="sm" asChild className="gap-2 btn-gradient">
+              <Link href="/creator/presence">Connect Accounts</Link>
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const ProfileView = ({ profileId }: { profileId?: string }) => {
@@ -410,6 +729,7 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
   const [connId, setConnId] = useState<string | null>(null);
 
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showSyncModal, setShowSyncModal] = useState(false);
   const [showProposalModal, setShowProposalModal] = useState(false);
   const [proposalText, setProposalText] = useState("");
   const [sendingProposal, setSendingProposal] = useState(false);
@@ -559,9 +879,23 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
               {/* Action buttons */}
               <div className="flex items-center gap-2 flex-wrap justify-end">
                 {isOwnProfile ? (
-                  <Button size="sm" variant="outline" className="gap-2" onClick={() => setShowEditModal(true)}>
-                    <Edit2 className="w-3.5 h-3.5" /> Edit Profile
-                  </Button>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button size="sm" variant="outline" className="gap-2" onClick={() => setShowEditModal(true)}>
+                      <Edit2 className="w-3.5 h-3.5" /> Edit Profile
+                    </Button>
+                    {isCreator && (
+                      <>
+                        <Button size="sm" variant="outline" className="gap-2" onClick={() => setShowSyncModal(true)}>
+                          <RefreshCw className="w-3.5 h-3.5" /> Sync Data
+                        </Button>
+                        <Button size="sm" asChild className="gap-2 btn-gradient">
+                          <Link href="/creator/presence">
+                            <Radio className="w-3.5 h-3.5" /> Manage Connections
+                          </Link>
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 ) : currentUser ? (
                   <>
                     {connStatus === "none" ? (
@@ -696,6 +1030,102 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
           </div>
         )}
 
+        {/* ── Apify Analytics (creator only) ── */}
+        {isCreator && (
+          <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="font-display font-bold">Rich Analytics</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">Powered by Apify</p>
+              </div>
+              <div className="flex items-center gap-2">
+              {profileData.lastSyncedAt ? (
+                <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/40 px-2.5 py-1 rounded-full font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  Synced {new Date(profileData.lastSyncedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-2.5 py-1 rounded-full font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 shrink-0" />
+                  Not Connected
+                </span>
+              )}
+              {isOwnProfile && (
+                <button
+                  onClick={() => setShowSyncModal(true)}
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                  title="Sync analytics"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                </button>
+              )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              {/* Follower Count */}
+              <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4">
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">Follower Count</p>
+                {profileData.followerCount != null ? (
+                  <p className="text-2xl font-bold">
+                    {profileData.followerCount >= 1_000_000
+                      ? `${(profileData.followerCount / 1_000_000).toFixed(1)}M`
+                      : profileData.followerCount >= 1_000
+                        ? `${(profileData.followerCount / 1_000).toFixed(0)}K`
+                        : profileData.followerCount.toLocaleString()}
+                  </p>
+                ) : (
+                  <p className="text-sm text-zinc-500 font-medium mt-1">Not Connected</p>
+                )}
+              </div>
+
+              {/* Average Engagement */}
+              <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4">
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">Avg. Engagement</p>
+                {profileData.averageEngagement != null ? (
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                    {profileData.averageEngagement.toFixed(2)}%
+                  </p>
+                ) : (
+                  <p className="text-sm text-zinc-500 font-medium mt-1">Not Connected</p>
+                )}
+              </div>
+            </div>
+
+            {/* Top Niches */}
+            <div className="mb-1">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-2">Top Niches</p>
+              {profileData.topNiches.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {profileData.topNiches.map((niche) => (
+                    <span
+                      key={niche}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20"
+                    >
+                      {niche}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-zinc-500 font-medium">Not Connected</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Latest Posts (creator) ── */}
+        {isCreator && (
+          <LatestPostsSection
+            posts={profileData.socialPosts ?? []}
+            isOwn={isOwnProfile}
+            onPostDeleted={(id) => {
+              setProfileData((prev) =>
+                prev ? { ...prev, socialPosts: (prev.socialPosts ?? []).filter((p) => p.id !== id) } : prev,
+              );
+            }}
+          />
+        )}
+
         {/* ── Active Campaigns (for brands) ── */}
         {!isCreator && profileData.campaigns.length > 0 && (
           <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl p-6 shadow-sm">
@@ -722,6 +1152,20 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
           </div>
         )}
       </div>
+
+      {/* Sync Analytics Modal */}
+      <Dialog open={showSyncModal} onOpenChange={setShowSyncModal}>
+        {showSyncModal && (
+          <SyncDataModal
+            userId={profileData.userId}
+            onSynced={() => {
+              setShowSyncModal(false);
+              if (id) getProfileAction(id).then((d) => { if (d) setProfileData(d); });
+            }}
+            onClose={() => setShowSyncModal(false)}
+          />
+        )}
+      </Dialog>
 
       {/* Edit Profile Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>

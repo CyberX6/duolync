@@ -29,7 +29,9 @@ import { cn } from "@/lib/utils";
 import {
   type CalendarEventData,
   type CalendarEventDetailData,
+  type CampaignApplicant,
   getCalendarEventDetailAction,
+  getCampaignApplicantsAction,
   requestEventUpdateAction,
   approveEventUpdateAction,
   rejectEventUpdateAction,
@@ -322,6 +324,8 @@ export function EventDetailSheet({
   const [showHistory, setShowHistory] = useState(false);
   const [detail, setDetail] = useState<CalendarEventDetailData | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [applicants, setApplicants] = useState<CampaignApplicant[]>([]);
+  const [loadingApplicants, setLoadingApplicants] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const display = detail ?? event;
@@ -350,6 +354,25 @@ export function EventDetailSheet({
     return () => { cancelled = true; };
   }, [open, event?.id, event?.isSynthetic]);
 
+  // Load campaign applicants for brand synthetic (deadline) events
+  useEffect(() => {
+    if (!open || !event || !event.isSynthetic || !canEdit) {
+      setApplicants([]);
+      return;
+    }
+
+    let cancelled = false;
+    setLoadingApplicants(true);
+
+    getCampaignApplicantsAction(event.campaignId).then((result) => {
+      if (cancelled) return;
+      setApplicants(result.data);
+      setLoadingApplicants(false);
+    });
+
+    return () => { cancelled = true; };
+  }, [open, event?.campaignId, event?.isSynthetic, canEdit]);
+
   if (!open || !display) return null;
 
   const color = getEventColor(display.type as "POST", display.platform);
@@ -372,7 +395,9 @@ export function EventDetailSheet({
       : display.partner?.name ?? null;
 
   const partnerProfilePath = display.partner
-    ? `/profile/${display.partner.userId}`
+    ? display.partner.role === "CREATOR"
+      ? `/creators/${display.partner.userId}`
+      : `/brands/${display.partner.userId}`
     : null;
 
   // ── Action handlers ──────────────────────────────────────────────────────
@@ -465,7 +490,10 @@ export function EventDetailSheet({
 
   // ── Render ────────────────────────────────────────────────────────────────
 
-  const campaignImageUrl = detail?.campaignImageUrl ?? null;
+  // For real events, imageUrl comes from the detail fetch.
+  // For synthetic events, it's embedded directly on the event object.
+  const campaignImageUrl = detail?.campaignImageUrl ?? display.campaignImageUrl ?? null;
+  const campaignDescription = detail?.campaignDescription ?? null;
 
   const panelContent = (
     <div className="flex flex-col h-full">
@@ -474,30 +502,43 @@ export function EventDetailSheet({
         className="relative flex-shrink-0"
         style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
-        {/* Campaign hero image */}
-        {campaignImageUrl && (
-          <div className="relative w-full h-28 overflow-hidden">
+        {/* Campaign hero image — always shown, real image or gradient placeholder */}
+        <div className="relative w-full h-28 overflow-hidden shrink-0">
+          {campaignImageUrl ? (
             <img
               src={campaignImageUrl}
               alt={display.campaignTitle}
               className="w-full h-full object-cover"
             />
+          ) : (
             <div
-              className="absolute inset-0"
+              className="w-full h-full flex items-end px-4 pb-3"
               style={{
-                background: "linear-gradient(to bottom, rgba(9,9,15,0.2) 0%, rgba(9,9,15,0.85) 100%)",
+                background: `linear-gradient(135deg, ${color}28 0%, rgba(9,9,15,0.95) 100%)`,
               }}
-            />
-          </div>
-        )}
+            >
+              <div
+                className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: `${color}22`, border: `1px solid ${color}40` }}
+              >
+                <Calendar className="w-5 h-5" style={{ color }} />
+              </div>
+            </div>
+          )}
+          {/* Gradient overlay for readability */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(to bottom, rgba(9,9,15,0.1) 0%, rgba(9,9,15,0.82) 100%)",
+            }}
+          />
+        </div>
 
         <div
-          className="relative px-5 pt-4 pb-4"
+          className="relative px-5 pt-3 pb-4"
           style={{
-            background: campaignImageUrl
-              ? "transparent"
-              : `linear-gradient(160deg, ${color}14 0%, transparent 60%)`,
-            marginTop: campaignImageUrl ? "-3rem" : 0,
+            background: "transparent",
+            marginTop: "-2.5rem",
           }}
         >
           {/* Close */}
@@ -511,9 +552,9 @@ export function EventDetailSheet({
           </button>
 
           {/* Drag handle — mobile only */}
-          {isMobile && !campaignImageUrl && (
-            <div className="flex justify-center mb-3">
-              <div className="w-10 h-1 rounded-full bg-zinc-700" />
+          {isMobile && (
+            <div className="flex justify-center mb-2">
+              <div className="w-10 h-1 rounded-full bg-zinc-600/60" />
             </div>
           )}
 
@@ -535,72 +576,6 @@ export function EventDetailSheet({
             <p className="text-xs text-zinc-400 mb-3">{display.title}</p>
           )}
 
-          {/* Partner hero */}
-          {display.partner && (
-            <div
-              className="flex items-center gap-3 mt-3 p-3 rounded-2xl"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <Avatar
-                name={partnerDisplayName ?? display.partner.name}
-                image={display.partner.image}
-                size="md"
-                color={color}
-              />
-              <div className="flex-1 min-w-0">
-                {partnerProfilePath ? (
-                  <Link
-                    href={partnerProfilePath}
-                    onClick={() => onOpenChange(false)}
-                    className="flex items-center gap-1 group"
-                  >
-                    <span className="text-sm font-semibold text-white group-hover:text-violet-300 transition-colors truncate">
-                      {partnerDisplayName ?? display.partner.name}
-                    </span>
-                    <ArrowUpRight className="w-3 h-3 text-zinc-500 group-hover:text-violet-400 transition-colors shrink-0" />
-                  </Link>
-                ) : (
-                  <p className="text-sm font-semibold text-white truncate">
-                    {partnerDisplayName ?? display.partner.name}
-                  </p>
-                )}
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-zinc-500">
-                    {display.partner.role === "BRAND" ? "Brand" : "Creator"}
-                  </span>
-                  {display.partner.niche && (
-                    <>
-                      <span className="text-zinc-700">·</span>
-                      <span className="text-[10px] text-zinc-500">{display.partner.niche}</span>
-                    </>
-                  )}
-                  {display.partner.totalFollowers != null && display.partner.totalFollowers > 0 && (
-                    <>
-                      <span className="text-zinc-700">·</span>
-                      <span className="text-[10px] text-zinc-500 flex items-center gap-0.5">
-                        <Users className="w-2.5 h-2.5" />
-                        {formatFollowers(display.partner.totalFollowers)}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {partnerProfilePath && (
-                <Link
-                  href={partnerProfilePath}
-                  onClick={() => onOpenChange(false)}
-                  className="shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold text-violet-300 hover:bg-violet-500/15 transition-colors"
-                  style={{ border: "1px solid rgba(192,132,252,0.3)" }}
-                >
-                  View Profile
-                </Link>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
@@ -729,6 +704,186 @@ export function EventDetailSheet({
             </>
           )}
         </div>
+
+        {/* Campaign applicants — shown for brand on synthetic deadline events */}
+        {isSynthetic && canEdit && (
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <p className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+                Creators Applied
+              </p>
+              {applicants.length > 0 && (
+                <span
+                  className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: `${VIOLET}18`, color: VIOLET }}
+                >
+                  {applicants.length}
+                </span>
+              )}
+            </div>
+
+            {loadingApplicants ? (
+              <div className="flex items-center justify-center py-5">
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
+              </div>
+            ) : applicants.length === 0 ? (
+              <div className="px-4 py-5 text-center">
+                <Users className="w-6 h-6 mx-auto mb-1.5 text-zinc-700" />
+                <p className="text-xs text-zinc-600">No creators have applied yet</p>
+              </div>
+            ) : (
+              <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+                {applicants.map((applicant) => (
+                  <div key={applicant.userId} className="flex items-center gap-3 px-4 py-3">
+                    <Avatar name={applicant.name} image={applicant.image} size="md" color={VIOLET} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-white truncate">{applicant.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <span
+                          className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                          style={
+                            applicant.status === "ACCEPTED"
+                              ? { background: "rgba(52,211,153,0.15)", color: "#34d399" }
+                              : applicant.status === "UNDER_REVIEW"
+                                ? { background: "rgba(251,191,36,0.15)", color: "#fbbf24" }
+                                : { background: "rgba(148,163,184,0.12)", color: "#94a3b8" }
+                          }
+                        >
+                          {applicant.status === "ACCEPTED" ? "Accepted" : applicant.status === "UNDER_REVIEW" ? "Under Review" : "Pending"}
+                        </span>
+                        {applicant.niche && (
+                          <span className="text-[10px] text-zinc-500 truncate">{applicant.niche}</span>
+                        )}
+                        {applicant.totalFollowers > 0 && (
+                          <span className="text-[10px] text-zinc-600 flex items-center gap-0.5">
+                            <Users className="w-2.5 h-2.5" />
+                            {formatFollowers(applicant.totalFollowers)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <Link
+                      href={`/profile/${applicant.userId}`}
+                      onClick={() => onOpenChange(false)}
+                      className="shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold text-violet-300 hover:bg-violet-500/15 transition-colors"
+                      style={{ border: "1px solid rgba(192,132,252,0.3)" }}
+                    >
+                      Profile
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Partner section */}
+        {display.partner ? (
+          <div
+            className="rounded-2xl p-4 space-y-3"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <p className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">Partner</p>
+            <div className="flex items-center gap-3">
+              <Avatar
+                name={partnerDisplayName ?? display.partner.name}
+                image={display.partner.image}
+                size="lg"
+                color={color}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white truncate">
+                  {partnerDisplayName ?? display.partner.name}
+                </p>
+                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                  <span
+                    className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                    style={{ background: `${color}18`, color }}
+                  >
+                    {display.partner.role === "BRAND" ? "Brand" : "Creator"}
+                  </span>
+                  {display.partner.niche && (
+                    <span className="text-[10px] text-zinc-500">{display.partner.niche}</span>
+                  )}
+                  {display.partner.totalFollowers != null && display.partner.totalFollowers > 0 && (
+                    <span className="text-[10px] text-zinc-500 flex items-center gap-0.5">
+                      <Users className="w-2.5 h-2.5" />
+                      {formatFollowers(display.partner.totalFollowers)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+            {partnerProfilePath && (
+              <Link
+                href={partnerProfilePath}
+                onClick={() => onOpenChange(false)}
+                className="flex items-center justify-center gap-1.5 w-full h-8 rounded-xl text-xs font-semibold text-violet-300 hover:bg-violet-500/15 transition-colors"
+                style={{ border: "1px solid rgba(192,132,252,0.3)" }}
+              >
+                <ArrowUpRight className="w-3.5 h-3.5" />
+                View Profile
+              </Link>
+            )}
+          </div>
+        ) : !isSynthetic && detail?.createdBy ? (
+          /* No creator assigned — show event creator as fallback partner */
+          <div
+            className="rounded-2xl p-4 space-y-3"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <p className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">Created by</p>
+            <div className="flex items-center gap-3">
+              <Avatar
+                name={detail.createdBy.name}
+                image={detail.createdBy.image}
+                size="lg"
+                color={color}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white truncate">{detail.createdBy.name}</p>
+                <span
+                  className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5 inline-block"
+                  style={{ background: `${color}18`, color }}
+                >
+                  {detail.createdBy.role === "BRAND" ? "Brand" : "Creator"}
+                </span>
+              </div>
+            </div>
+            <Link
+              href={`/profile/${detail.createdBy.userId}`}
+              onClick={() => onOpenChange(false)}
+              className="flex items-center justify-center gap-1.5 w-full h-8 rounded-xl text-xs font-semibold text-violet-300 hover:bg-violet-500/15 transition-colors"
+              style={{ border: "1px solid rgba(192,132,252,0.3)" }}
+            >
+              <ArrowUpRight className="w-3.5 h-3.5" />
+              View Profile
+            </Link>
+          </div>
+        ) : !isSynthetic && !loadingDetail ? (
+          /* Real event with no data loaded yet — show placeholder */
+          <div
+            className="rounded-2xl p-3 flex items-center gap-2"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+          >
+            <Users className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <p className="text-[11px] text-zinc-600 italic">No creator assigned to this event</p>
+          </div>
+        ) : null}
+
+        {/* Campaign notes/description */}
+        {campaignDescription && (
+          <div
+            className="rounded-2xl p-4 space-y-2"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <p className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">Campaign Notes</p>
+            <p className="text-xs text-zinc-300 leading-relaxed">{campaignDescription}</p>
+          </div>
+        )}
 
         {/* Date change form */}
         {isEditing && !isSynthetic && !pendingUpdate && (

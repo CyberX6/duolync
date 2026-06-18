@@ -54,6 +54,9 @@ export interface CampaignDetailData {
   platforms: string[];
   contentFormats: string[];
   requirements: string | null;
+  briefDescription: string | null;
+  goal: string | null;
+  dosAndDonts: string | null;
   createdAt: string;
   applications: ApplicationDetail[];
   stats: {
@@ -127,6 +130,9 @@ export async function getCampaignDetailAction(campaignId: string): Promise<{
         platforms: campaign.platforms ?? [],
         contentFormats: campaign.contentFormats ?? [],
         requirements: campaign.requirements,
+        briefDescription: campaign.briefDescription ?? null,
+        goal: campaign.goal ?? null,
+        dosAndDonts: campaign.dosAndDonts ?? null,
         createdAt: campaign.createdAt.toISOString(),
         applications,
         stats: {

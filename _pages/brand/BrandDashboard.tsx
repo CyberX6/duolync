@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
 import { useAuth } from "@/hooks/useAuth";
+import { useFavorites } from "@/components/favorites/FavoritesContext";
 import {
   getBrandDashboardStatsAction,
   type BrandDashboardStats,
@@ -73,10 +74,13 @@ function StatCard({ href, icon: Icon, iconColor, value, label, accent }: StatCar
 
 const BrandDashboard = () => {
   const { profile } = useAuth();
+  const { getAllSavedItems } = useFavorites();
+  const savedCreatorsCount = getAllSavedItems().length;
   const [stats, setStats] = useState<BrandDashboardStats>({
     activeCampaigns: 0,
     savedCreators: 0,
     activeConversations: 0,
+    availableCreators: 0,
   });
   const [statsLoading, setStatsLoading] = useState(true);
 
@@ -91,11 +95,11 @@ const BrandDashboard = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 overflow-x-hidden">
 
         {/* ── Welcome header ────────────────────────────────────────────── */}
         <div className="mb-8">
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
             Welcome back, {firstName}! 👋
           </h1>
           <p className="text-muted-foreground text-base">
@@ -119,26 +123,27 @@ const BrandDashboard = () => {
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
           </Link>
 
-          <Link
-            href="/brand/smart-match"
-            className="group relative overflow-hidden rounded-2xl border border-violet-500/30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 flex items-center gap-4 transition-all hover:border-violet-500/60 hover:shadow-lg hover:shadow-violet-500/10"
-          >
+          <div className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 flex items-center gap-4 opacity-70 cursor-not-allowed select-none">
             <div
-              className="absolute inset-0 opacity-30"
+              className="absolute inset-0 opacity-20"
               style={{
                 background:
                   "radial-gradient(ellipse at left, rgba(139,92,246,0.12) 0%, transparent 60%)",
               }}
             />
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-purple-600 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600/50 to-purple-600/50 flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-white/60" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm mb-0.5">Smart Match</h3>
+              <div className="flex items-center gap-2 mb-0.5">
+                <h3 className="font-semibold text-sm">Smart Match</h3>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide bg-violet-500/15 text-violet-400 border border-violet-500/25">
+                  COMING SOON
+                </span>
+              </div>
               <p className="text-xs text-muted-foreground">AI-powered creator recommendations</p>
             </div>
-            <ArrowRight className="w-4 h-4 text-violet-400 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
-          </Link>
+          </div>
         </div>
 
         {/* ── Metric cards ──────────────────────────────────────────────── */}
@@ -155,7 +160,7 @@ const BrandDashboard = () => {
             href="/brand/saved"
             icon={Heart}
             iconColor="#f472b6"
-            value={statsLoading ? "—" : stats.savedCreators}
+            value={savedCreatorsCount}
             label="Saved Creators"
             accent="#f472b6"
           />
@@ -171,7 +176,7 @@ const BrandDashboard = () => {
             href="/brand/discover"
             icon={TrendingUp}
             iconColor="#60a5fa"
-            value="50K+"
+            value={statsLoading ? "—" : stats.availableCreators.toLocaleString()}
             label="Available Creators"
             accent="#60a5fa"
           />
@@ -250,7 +255,7 @@ const BrandDashboard = () => {
 
         {/* ── CTA Banner ────────────────────────────────────────────────── */}
         <div
-          className="relative overflow-hidden rounded-3xl p-8"
+          className="relative overflow-hidden rounded-3xl p-5 sm:p-8"
           style={{
             background:
               "linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(109,40,217,0.1) 50%, rgba(76,29,149,0.15) 100%)",
@@ -265,22 +270,25 @@ const BrandDashboard = () => {
             }}
           />
           <div className="relative max-w-xl">
-            <h3 className="font-display text-xl font-bold mb-2">
+            <h3 className="font-display text-lg sm:text-xl font-bold mb-2">
               Ready to find your perfect match?
             </h3>
             <p className="text-muted-foreground text-sm mb-5">
-              Let our AI analyze your brand and surface the best-fit creators for your next campaign.
+              Our AI will analyze your brand and surface the best-fit creators for your next campaign.
             </p>
-            <Button
-              asChild
-              size="sm"
-              className="bg-violet-600 hover:bg-violet-500 text-white font-semibold border-0"
-            >
-              <Link href="/brand/smart-match">
+            <div className="flex items-center gap-3">
+              <Button
+                size="sm"
+                disabled
+                className="bg-violet-600/50 text-white/60 font-semibold border-0 cursor-not-allowed"
+              >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Try Smart Match
-              </Link>
-            </Button>
+              </Button>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-violet-500/15 text-violet-400 border border-violet-500/25">
+                COMING SOON
+              </span>
+            </div>
           </div>
         </div>
 

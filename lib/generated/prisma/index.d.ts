@@ -29,6 +29,11 @@ export type BrandProfile = $Result.DefaultSelection<Prisma.$BrandProfilePayload>
  */
 export type CreatorProfile = $Result.DefaultSelection<Prisma.$CreatorProfilePayload>
 /**
+ * Model SocialPost
+ * 
+ */
+export type SocialPost = $Result.DefaultSelection<Prisma.$SocialPostPayload>
+/**
  * Model Account
  * 
  */
@@ -191,7 +196,11 @@ export const CampaignStatus: {
   ACTIVE: 'ACTIVE',
   PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  SUBMITTED: 'SUBMITTED'
 };
 
 export type CampaignStatus = (typeof CampaignStatus)[keyof typeof CampaignStatus]
@@ -433,6 +442,16 @@ export class PrismaClient<
     * ```
     */
   get creatorProfile(): Prisma.CreatorProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.socialPost`: Exposes CRUD operations for the **SocialPost** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SocialPosts
+    * const socialPosts = await prisma.socialPost.findMany()
+    * ```
+    */
+  get socialPost(): Prisma.SocialPostDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
@@ -1060,6 +1079,7 @@ export namespace Prisma {
     User: 'User',
     BrandProfile: 'BrandProfile',
     CreatorProfile: 'CreatorProfile',
+    SocialPost: 'SocialPost',
     Account: 'Account',
     Session: 'Session',
     Verification: 'Verification',
@@ -1094,7 +1114,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "brandProfile" | "creatorProfile" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application"
+      modelProps: "user" | "brandProfile" | "creatorProfile" | "socialPost" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1317,6 +1337,80 @@ export namespace Prisma {
           count: {
             args: Prisma.CreatorProfileCountArgs<ExtArgs>
             result: $Utils.Optional<CreatorProfileCountAggregateOutputType> | number
+          }
+        }
+      }
+      SocialPost: {
+        payload: Prisma.$SocialPostPayload<ExtArgs>
+        fields: Prisma.SocialPostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SocialPostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SocialPostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          findFirst: {
+            args: Prisma.SocialPostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SocialPostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          findMany: {
+            args: Prisma.SocialPostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
+          }
+          create: {
+            args: Prisma.SocialPostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          createMany: {
+            args: Prisma.SocialPostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SocialPostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
+          }
+          delete: {
+            args: Prisma.SocialPostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          update: {
+            args: Prisma.SocialPostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          deleteMany: {
+            args: Prisma.SocialPostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SocialPostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SocialPostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
+          }
+          upsert: {
+            args: Prisma.SocialPostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialPostPayload>
+          }
+          aggregate: {
+            args: Prisma.SocialPostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSocialPost>
+          }
+          groupBy: {
+            args: Prisma.SocialPostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SocialPostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SocialPostCountArgs<ExtArgs>
+            result: $Utils.Optional<SocialPostCountAggregateOutputType> | number
           }
         }
       }
@@ -2837,6 +2931,7 @@ export namespace Prisma {
     user?: UserOmit
     brandProfile?: BrandProfileOmit
     creatorProfile?: CreatorProfileOmit
+    socialPost?: SocialPostOmit
     account?: AccountOmit
     session?: SessionOmit
     verification?: VerificationOmit
@@ -3118,12 +3213,14 @@ export namespace Prisma {
     applications: number
     contracts: number
     campaignEvents: number
+    socialPosts: number
   }
 
   export type CreatorProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CreatorProfileCountOutputTypeCountApplicationsArgs
     contracts?: boolean | CreatorProfileCountOutputTypeCountContractsArgs
     campaignEvents?: boolean | CreatorProfileCountOutputTypeCountCampaignEventsArgs
+    socialPosts?: boolean | CreatorProfileCountOutputTypeCountSocialPostsArgs
   }
 
   // Custom InputTypes
@@ -3156,6 +3253,13 @@ export namespace Prisma {
    */
   export type CreatorProfileCountOutputTypeCountCampaignEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignEventWhereInput
+  }
+
+  /**
+   * CreatorProfileCountOutputType without action
+   */
+  export type CreatorProfileCountOutputTypeCountSocialPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SocialPostWhereInput
   }
 
 
@@ -6007,11 +6111,15 @@ export namespace Prisma {
   export type CreatorProfileAvgAggregateOutputType = {
     totalFollowers: number | null
     avgEngagementRate: number | null
+    followerCount: number | null
+    averageEngagement: number | null
   }
 
   export type CreatorProfileSumAggregateOutputType = {
     totalFollowers: number | null
     avgEngagementRate: number | null
+    followerCount: number | null
+    averageEngagement: number | null
   }
 
   export type CreatorProfileMinAggregateOutputType = {
@@ -6024,6 +6132,9 @@ export namespace Prisma {
     totalFollowers: number | null
     avgEngagementRate: number | null
     lastStatsUpdate: Date | null
+    followerCount: number | null
+    averageEngagement: number | null
+    lastSyncedAt: Date | null
   }
 
   export type CreatorProfileMaxAggregateOutputType = {
@@ -6036,6 +6147,9 @@ export namespace Prisma {
     totalFollowers: number | null
     avgEngagementRate: number | null
     lastStatsUpdate: Date | null
+    followerCount: number | null
+    averageEngagement: number | null
+    lastSyncedAt: Date | null
   }
 
   export type CreatorProfileCountAggregateOutputType = {
@@ -6049,6 +6163,11 @@ export namespace Prisma {
     avgEngagementRate: number
     lastStatsUpdate: number
     socialLinks: number
+    followerCount: number
+    averageEngagement: number
+    topNiches: number
+    lastSyncedAt: number
+    connectedPlatforms: number
     _all: number
   }
 
@@ -6056,11 +6175,15 @@ export namespace Prisma {
   export type CreatorProfileAvgAggregateInputType = {
     totalFollowers?: true
     avgEngagementRate?: true
+    followerCount?: true
+    averageEngagement?: true
   }
 
   export type CreatorProfileSumAggregateInputType = {
     totalFollowers?: true
     avgEngagementRate?: true
+    followerCount?: true
+    averageEngagement?: true
   }
 
   export type CreatorProfileMinAggregateInputType = {
@@ -6073,6 +6196,9 @@ export namespace Prisma {
     totalFollowers?: true
     avgEngagementRate?: true
     lastStatsUpdate?: true
+    followerCount?: true
+    averageEngagement?: true
+    lastSyncedAt?: true
   }
 
   export type CreatorProfileMaxAggregateInputType = {
@@ -6085,6 +6211,9 @@ export namespace Prisma {
     totalFollowers?: true
     avgEngagementRate?: true
     lastStatsUpdate?: true
+    followerCount?: true
+    averageEngagement?: true
+    lastSyncedAt?: true
   }
 
   export type CreatorProfileCountAggregateInputType = {
@@ -6098,6 +6227,11 @@ export namespace Prisma {
     avgEngagementRate?: true
     lastStatsUpdate?: true
     socialLinks?: true
+    followerCount?: true
+    averageEngagement?: true
+    topNiches?: true
+    lastSyncedAt?: true
+    connectedPlatforms?: true
     _all?: true
   }
 
@@ -6198,6 +6332,11 @@ export namespace Prisma {
     avgEngagementRate: number
     lastStatsUpdate: Date | null
     socialLinks: JsonValue | null
+    followerCount: number | null
+    averageEngagement: number | null
+    topNiches: string[]
+    lastSyncedAt: Date | null
+    connectedPlatforms: string[]
     _count: CreatorProfileCountAggregateOutputType | null
     _avg: CreatorProfileAvgAggregateOutputType | null
     _sum: CreatorProfileSumAggregateOutputType | null
@@ -6230,9 +6369,15 @@ export namespace Prisma {
     avgEngagementRate?: boolean
     lastStatsUpdate?: boolean
     socialLinks?: boolean
+    followerCount?: boolean
+    averageEngagement?: boolean
+    topNiches?: boolean
+    lastSyncedAt?: boolean
+    connectedPlatforms?: boolean
     applications?: boolean | CreatorProfile$applicationsArgs<ExtArgs>
     contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
     campaignEvents?: boolean | CreatorProfile$campaignEventsArgs<ExtArgs>
+    socialPosts?: boolean | CreatorProfile$socialPostsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["creatorProfile"]>
@@ -6248,6 +6393,11 @@ export namespace Prisma {
     avgEngagementRate?: boolean
     lastStatsUpdate?: boolean
     socialLinks?: boolean
+    followerCount?: boolean
+    averageEngagement?: boolean
+    topNiches?: boolean
+    lastSyncedAt?: boolean
+    connectedPlatforms?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["creatorProfile"]>
 
@@ -6262,6 +6412,11 @@ export namespace Prisma {
     avgEngagementRate?: boolean
     lastStatsUpdate?: boolean
     socialLinks?: boolean
+    followerCount?: boolean
+    averageEngagement?: boolean
+    topNiches?: boolean
+    lastSyncedAt?: boolean
+    connectedPlatforms?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["creatorProfile"]>
 
@@ -6276,13 +6431,19 @@ export namespace Prisma {
     avgEngagementRate?: boolean
     lastStatsUpdate?: boolean
     socialLinks?: boolean
+    followerCount?: boolean
+    averageEngagement?: boolean
+    topNiches?: boolean
+    lastSyncedAt?: boolean
+    connectedPlatforms?: boolean
   }
 
-  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "niche" | "primaryPlatform" | "location" | "totalFollowers" | "avgEngagementRate" | "lastStatsUpdate" | "socialLinks", ExtArgs["result"]["creatorProfile"]>
+  export type CreatorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "bio" | "niche" | "primaryPlatform" | "location" | "totalFollowers" | "avgEngagementRate" | "lastStatsUpdate" | "socialLinks" | "followerCount" | "averageEngagement" | "topNiches" | "lastSyncedAt" | "connectedPlatforms", ExtArgs["result"]["creatorProfile"]>
   export type CreatorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CreatorProfile$applicationsArgs<ExtArgs>
     contracts?: boolean | CreatorProfile$contractsArgs<ExtArgs>
     campaignEvents?: boolean | CreatorProfile$campaignEventsArgs<ExtArgs>
+    socialPosts?: boolean | CreatorProfile$socialPostsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | CreatorProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -6299,6 +6460,7 @@ export namespace Prisma {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
       contracts: Prisma.$ContractPayload<ExtArgs>[]
       campaignEvents: Prisma.$CampaignEventPayload<ExtArgs>[]
+      socialPosts: Prisma.$SocialPostPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6312,6 +6474,11 @@ export namespace Prisma {
       avgEngagementRate: number
       lastStatsUpdate: Date | null
       socialLinks: Prisma.JsonValue | null
+      followerCount: number | null
+      averageEngagement: number | null
+      topNiches: string[]
+      lastSyncedAt: Date | null
+      connectedPlatforms: string[]
     }, ExtArgs["result"]["creatorProfile"]>
     composites: {}
   }
@@ -6709,6 +6876,7 @@ export namespace Prisma {
     applications<T extends CreatorProfile$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contracts<T extends CreatorProfile$contractsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaignEvents<T extends CreatorProfile$campaignEventsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$campaignEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    socialPosts<T extends CreatorProfile$socialPostsArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfile$socialPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6749,6 +6917,11 @@ export namespace Prisma {
     readonly avgEngagementRate: FieldRef<"CreatorProfile", 'Float'>
     readonly lastStatsUpdate: FieldRef<"CreatorProfile", 'DateTime'>
     readonly socialLinks: FieldRef<"CreatorProfile", 'Json'>
+    readonly followerCount: FieldRef<"CreatorProfile", 'Int'>
+    readonly averageEngagement: FieldRef<"CreatorProfile", 'Float'>
+    readonly topNiches: FieldRef<"CreatorProfile", 'String[]'>
+    readonly lastSyncedAt: FieldRef<"CreatorProfile", 'DateTime'>
+    readonly connectedPlatforms: FieldRef<"CreatorProfile", 'String[]'>
   }
     
 
@@ -7222,6 +7395,30 @@ export namespace Prisma {
   }
 
   /**
+   * CreatorProfile.socialPosts
+   */
+  export type CreatorProfile$socialPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    where?: SocialPostWhereInput
+    orderBy?: SocialPostOrderByWithRelationInput | SocialPostOrderByWithRelationInput[]
+    cursor?: SocialPostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SocialPostScalarFieldEnum | SocialPostScalarFieldEnum[]
+  }
+
+  /**
    * CreatorProfile without action
    */
   export type CreatorProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7237,6 +7434,1206 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CreatorProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SocialPost
+   */
+
+  export type AggregateSocialPost = {
+    _count: SocialPostCountAggregateOutputType | null
+    _avg: SocialPostAvgAggregateOutputType | null
+    _sum: SocialPostSumAggregateOutputType | null
+    _min: SocialPostMinAggregateOutputType | null
+    _max: SocialPostMaxAggregateOutputType | null
+  }
+
+  export type SocialPostAvgAggregateOutputType = {
+    likes: number | null
+    comments: number | null
+    views: number | null
+    engagementRate: number | null
+  }
+
+  export type SocialPostSumAggregateOutputType = {
+    likes: number | null
+    comments: number | null
+    views: number | null
+    engagementRate: number | null
+  }
+
+  export type SocialPostMinAggregateOutputType = {
+    id: string | null
+    creatorProfileId: string | null
+    platform: string | null
+    postUrl: string | null
+    imageUrl: string | null
+    caption: string | null
+    likes: number | null
+    comments: number | null
+    views: number | null
+    engagementRate: number | null
+    postedAt: Date | null
+    fetchedAt: Date | null
+  }
+
+  export type SocialPostMaxAggregateOutputType = {
+    id: string | null
+    creatorProfileId: string | null
+    platform: string | null
+    postUrl: string | null
+    imageUrl: string | null
+    caption: string | null
+    likes: number | null
+    comments: number | null
+    views: number | null
+    engagementRate: number | null
+    postedAt: Date | null
+    fetchedAt: Date | null
+  }
+
+  export type SocialPostCountAggregateOutputType = {
+    id: number
+    creatorProfileId: number
+    platform: number
+    postUrl: number
+    imageUrl: number
+    caption: number
+    likes: number
+    comments: number
+    views: number
+    engagementRate: number
+    postedAt: number
+    fetchedAt: number
+    _all: number
+  }
+
+
+  export type SocialPostAvgAggregateInputType = {
+    likes?: true
+    comments?: true
+    views?: true
+    engagementRate?: true
+  }
+
+  export type SocialPostSumAggregateInputType = {
+    likes?: true
+    comments?: true
+    views?: true
+    engagementRate?: true
+  }
+
+  export type SocialPostMinAggregateInputType = {
+    id?: true
+    creatorProfileId?: true
+    platform?: true
+    postUrl?: true
+    imageUrl?: true
+    caption?: true
+    likes?: true
+    comments?: true
+    views?: true
+    engagementRate?: true
+    postedAt?: true
+    fetchedAt?: true
+  }
+
+  export type SocialPostMaxAggregateInputType = {
+    id?: true
+    creatorProfileId?: true
+    platform?: true
+    postUrl?: true
+    imageUrl?: true
+    caption?: true
+    likes?: true
+    comments?: true
+    views?: true
+    engagementRate?: true
+    postedAt?: true
+    fetchedAt?: true
+  }
+
+  export type SocialPostCountAggregateInputType = {
+    id?: true
+    creatorProfileId?: true
+    platform?: true
+    postUrl?: true
+    imageUrl?: true
+    caption?: true
+    likes?: true
+    comments?: true
+    views?: true
+    engagementRate?: true
+    postedAt?: true
+    fetchedAt?: true
+    _all?: true
+  }
+
+  export type SocialPostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SocialPost to aggregate.
+     */
+    where?: SocialPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SocialPosts to fetch.
+     */
+    orderBy?: SocialPostOrderByWithRelationInput | SocialPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SocialPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SocialPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SocialPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SocialPosts
+    **/
+    _count?: true | SocialPostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SocialPostAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SocialPostSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SocialPostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SocialPostMaxAggregateInputType
+  }
+
+  export type GetSocialPostAggregateType<T extends SocialPostAggregateArgs> = {
+        [P in keyof T & keyof AggregateSocialPost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSocialPost[P]>
+      : GetScalarType<T[P], AggregateSocialPost[P]>
+  }
+
+
+
+
+  export type SocialPostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SocialPostWhereInput
+    orderBy?: SocialPostOrderByWithAggregationInput | SocialPostOrderByWithAggregationInput[]
+    by: SocialPostScalarFieldEnum[] | SocialPostScalarFieldEnum
+    having?: SocialPostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SocialPostCountAggregateInputType | true
+    _avg?: SocialPostAvgAggregateInputType
+    _sum?: SocialPostSumAggregateInputType
+    _min?: SocialPostMinAggregateInputType
+    _max?: SocialPostMaxAggregateInputType
+  }
+
+  export type SocialPostGroupByOutputType = {
+    id: string
+    creatorProfileId: string
+    platform: string
+    postUrl: string | null
+    imageUrl: string | null
+    caption: string | null
+    likes: number | null
+    comments: number | null
+    views: number | null
+    engagementRate: number | null
+    postedAt: Date | null
+    fetchedAt: Date
+    _count: SocialPostCountAggregateOutputType | null
+    _avg: SocialPostAvgAggregateOutputType | null
+    _sum: SocialPostSumAggregateOutputType | null
+    _min: SocialPostMinAggregateOutputType | null
+    _max: SocialPostMaxAggregateOutputType | null
+  }
+
+  type GetSocialPostGroupByPayload<T extends SocialPostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SocialPostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SocialPostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SocialPostGroupByOutputType[P]>
+            : GetScalarType<T[P], SocialPostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SocialPostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    creatorProfileId?: boolean
+    platform?: boolean
+    postUrl?: boolean
+    imageUrl?: boolean
+    caption?: boolean
+    likes?: boolean
+    comments?: boolean
+    views?: boolean
+    engagementRate?: boolean
+    postedAt?: boolean
+    fetchedAt?: boolean
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socialPost"]>
+
+  export type SocialPostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    creatorProfileId?: boolean
+    platform?: boolean
+    postUrl?: boolean
+    imageUrl?: boolean
+    caption?: boolean
+    likes?: boolean
+    comments?: boolean
+    views?: boolean
+    engagementRate?: boolean
+    postedAt?: boolean
+    fetchedAt?: boolean
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socialPost"]>
+
+  export type SocialPostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    creatorProfileId?: boolean
+    platform?: boolean
+    postUrl?: boolean
+    imageUrl?: boolean
+    caption?: boolean
+    likes?: boolean
+    comments?: boolean
+    views?: boolean
+    engagementRate?: boolean
+    postedAt?: boolean
+    fetchedAt?: boolean
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socialPost"]>
+
+  export type SocialPostSelectScalar = {
+    id?: boolean
+    creatorProfileId?: boolean
+    platform?: boolean
+    postUrl?: boolean
+    imageUrl?: boolean
+    caption?: boolean
+    likes?: boolean
+    comments?: boolean
+    views?: boolean
+    engagementRate?: boolean
+    postedAt?: boolean
+    fetchedAt?: boolean
+  }
+
+  export type SocialPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "creatorProfileId" | "platform" | "postUrl" | "imageUrl" | "caption" | "likes" | "comments" | "views" | "engagementRate" | "postedAt" | "fetchedAt", ExtArgs["result"]["socialPost"]>
+  export type SocialPostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+  export type SocialPostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+  export type SocialPostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creatorProfile?: boolean | CreatorProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $SocialPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SocialPost"
+    objects: {
+      creatorProfile: Prisma.$CreatorProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      creatorProfileId: string
+      platform: string
+      postUrl: string | null
+      imageUrl: string | null
+      caption: string | null
+      likes: number | null
+      comments: number | null
+      views: number | null
+      engagementRate: number | null
+      postedAt: Date | null
+      fetchedAt: Date
+    }, ExtArgs["result"]["socialPost"]>
+    composites: {}
+  }
+
+  type SocialPostGetPayload<S extends boolean | null | undefined | SocialPostDefaultArgs> = $Result.GetResult<Prisma.$SocialPostPayload, S>
+
+  type SocialPostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SocialPostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SocialPostCountAggregateInputType | true
+    }
+
+  export interface SocialPostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SocialPost'], meta: { name: 'SocialPost' } }
+    /**
+     * Find zero or one SocialPost that matches the filter.
+     * @param {SocialPostFindUniqueArgs} args - Arguments to find a SocialPost
+     * @example
+     * // Get one SocialPost
+     * const socialPost = await prisma.socialPost.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SocialPostFindUniqueArgs>(args: SelectSubset<T, SocialPostFindUniqueArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SocialPost that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SocialPostFindUniqueOrThrowArgs} args - Arguments to find a SocialPost
+     * @example
+     * // Get one SocialPost
+     * const socialPost = await prisma.socialPost.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SocialPostFindUniqueOrThrowArgs>(args: SelectSubset<T, SocialPostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SocialPost that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostFindFirstArgs} args - Arguments to find a SocialPost
+     * @example
+     * // Get one SocialPost
+     * const socialPost = await prisma.socialPost.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SocialPostFindFirstArgs>(args?: SelectSubset<T, SocialPostFindFirstArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SocialPost that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostFindFirstOrThrowArgs} args - Arguments to find a SocialPost
+     * @example
+     * // Get one SocialPost
+     * const socialPost = await prisma.socialPost.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SocialPostFindFirstOrThrowArgs>(args?: SelectSubset<T, SocialPostFindFirstOrThrowArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SocialPosts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SocialPosts
+     * const socialPosts = await prisma.socialPost.findMany()
+     * 
+     * // Get first 10 SocialPosts
+     * const socialPosts = await prisma.socialPost.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const socialPostWithIdOnly = await prisma.socialPost.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SocialPostFindManyArgs>(args?: SelectSubset<T, SocialPostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SocialPost.
+     * @param {SocialPostCreateArgs} args - Arguments to create a SocialPost.
+     * @example
+     * // Create one SocialPost
+     * const SocialPost = await prisma.socialPost.create({
+     *   data: {
+     *     // ... data to create a SocialPost
+     *   }
+     * })
+     * 
+     */
+    create<T extends SocialPostCreateArgs>(args: SelectSubset<T, SocialPostCreateArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SocialPosts.
+     * @param {SocialPostCreateManyArgs} args - Arguments to create many SocialPosts.
+     * @example
+     * // Create many SocialPosts
+     * const socialPost = await prisma.socialPost.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SocialPostCreateManyArgs>(args?: SelectSubset<T, SocialPostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SocialPosts and returns the data saved in the database.
+     * @param {SocialPostCreateManyAndReturnArgs} args - Arguments to create many SocialPosts.
+     * @example
+     * // Create many SocialPosts
+     * const socialPost = await prisma.socialPost.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SocialPosts and only return the `id`
+     * const socialPostWithIdOnly = await prisma.socialPost.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SocialPostCreateManyAndReturnArgs>(args?: SelectSubset<T, SocialPostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SocialPost.
+     * @param {SocialPostDeleteArgs} args - Arguments to delete one SocialPost.
+     * @example
+     * // Delete one SocialPost
+     * const SocialPost = await prisma.socialPost.delete({
+     *   where: {
+     *     // ... filter to delete one SocialPost
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SocialPostDeleteArgs>(args: SelectSubset<T, SocialPostDeleteArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SocialPost.
+     * @param {SocialPostUpdateArgs} args - Arguments to update one SocialPost.
+     * @example
+     * // Update one SocialPost
+     * const socialPost = await prisma.socialPost.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SocialPostUpdateArgs>(args: SelectSubset<T, SocialPostUpdateArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SocialPosts.
+     * @param {SocialPostDeleteManyArgs} args - Arguments to filter SocialPosts to delete.
+     * @example
+     * // Delete a few SocialPosts
+     * const { count } = await prisma.socialPost.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SocialPostDeleteManyArgs>(args?: SelectSubset<T, SocialPostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SocialPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SocialPosts
+     * const socialPost = await prisma.socialPost.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SocialPostUpdateManyArgs>(args: SelectSubset<T, SocialPostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SocialPosts and returns the data updated in the database.
+     * @param {SocialPostUpdateManyAndReturnArgs} args - Arguments to update many SocialPosts.
+     * @example
+     * // Update many SocialPosts
+     * const socialPost = await prisma.socialPost.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SocialPosts and only return the `id`
+     * const socialPostWithIdOnly = await prisma.socialPost.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SocialPostUpdateManyAndReturnArgs>(args: SelectSubset<T, SocialPostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SocialPost.
+     * @param {SocialPostUpsertArgs} args - Arguments to update or create a SocialPost.
+     * @example
+     * // Update or create a SocialPost
+     * const socialPost = await prisma.socialPost.upsert({
+     *   create: {
+     *     // ... data to create a SocialPost
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SocialPost we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SocialPostUpsertArgs>(args: SelectSubset<T, SocialPostUpsertArgs<ExtArgs>>): Prisma__SocialPostClient<$Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SocialPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostCountArgs} args - Arguments to filter SocialPosts to count.
+     * @example
+     * // Count the number of SocialPosts
+     * const count = await prisma.socialPost.count({
+     *   where: {
+     *     // ... the filter for the SocialPosts we want to count
+     *   }
+     * })
+    **/
+    count<T extends SocialPostCountArgs>(
+      args?: Subset<T, SocialPostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SocialPostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SocialPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SocialPostAggregateArgs>(args: Subset<T, SocialPostAggregateArgs>): Prisma.PrismaPromise<GetSocialPostAggregateType<T>>
+
+    /**
+     * Group by SocialPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialPostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SocialPostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SocialPostGroupByArgs['orderBy'] }
+        : { orderBy?: SocialPostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SocialPostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSocialPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SocialPost model
+   */
+  readonly fields: SocialPostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SocialPost.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SocialPostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    creatorProfile<T extends CreatorProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CreatorProfileDefaultArgs<ExtArgs>>): Prisma__CreatorProfileClient<$Result.GetResult<Prisma.$CreatorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SocialPost model
+   */
+  interface SocialPostFieldRefs {
+    readonly id: FieldRef<"SocialPost", 'String'>
+    readonly creatorProfileId: FieldRef<"SocialPost", 'String'>
+    readonly platform: FieldRef<"SocialPost", 'String'>
+    readonly postUrl: FieldRef<"SocialPost", 'String'>
+    readonly imageUrl: FieldRef<"SocialPost", 'String'>
+    readonly caption: FieldRef<"SocialPost", 'String'>
+    readonly likes: FieldRef<"SocialPost", 'Int'>
+    readonly comments: FieldRef<"SocialPost", 'Int'>
+    readonly views: FieldRef<"SocialPost", 'Int'>
+    readonly engagementRate: FieldRef<"SocialPost", 'Float'>
+    readonly postedAt: FieldRef<"SocialPost", 'DateTime'>
+    readonly fetchedAt: FieldRef<"SocialPost", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SocialPost findUnique
+   */
+  export type SocialPostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter, which SocialPost to fetch.
+     */
+    where: SocialPostWhereUniqueInput
+  }
+
+  /**
+   * SocialPost findUniqueOrThrow
+   */
+  export type SocialPostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter, which SocialPost to fetch.
+     */
+    where: SocialPostWhereUniqueInput
+  }
+
+  /**
+   * SocialPost findFirst
+   */
+  export type SocialPostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter, which SocialPost to fetch.
+     */
+    where?: SocialPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SocialPosts to fetch.
+     */
+    orderBy?: SocialPostOrderByWithRelationInput | SocialPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SocialPosts.
+     */
+    cursor?: SocialPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SocialPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SocialPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SocialPosts.
+     */
+    distinct?: SocialPostScalarFieldEnum | SocialPostScalarFieldEnum[]
+  }
+
+  /**
+   * SocialPost findFirstOrThrow
+   */
+  export type SocialPostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter, which SocialPost to fetch.
+     */
+    where?: SocialPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SocialPosts to fetch.
+     */
+    orderBy?: SocialPostOrderByWithRelationInput | SocialPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SocialPosts.
+     */
+    cursor?: SocialPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SocialPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SocialPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SocialPosts.
+     */
+    distinct?: SocialPostScalarFieldEnum | SocialPostScalarFieldEnum[]
+  }
+
+  /**
+   * SocialPost findMany
+   */
+  export type SocialPostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter, which SocialPosts to fetch.
+     */
+    where?: SocialPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SocialPosts to fetch.
+     */
+    orderBy?: SocialPostOrderByWithRelationInput | SocialPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SocialPosts.
+     */
+    cursor?: SocialPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SocialPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SocialPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SocialPosts.
+     */
+    distinct?: SocialPostScalarFieldEnum | SocialPostScalarFieldEnum[]
+  }
+
+  /**
+   * SocialPost create
+   */
+  export type SocialPostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SocialPost.
+     */
+    data: XOR<SocialPostCreateInput, SocialPostUncheckedCreateInput>
+  }
+
+  /**
+   * SocialPost createMany
+   */
+  export type SocialPostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SocialPosts.
+     */
+    data: SocialPostCreateManyInput | SocialPostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SocialPost createManyAndReturn
+   */
+  export type SocialPostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * The data used to create many SocialPosts.
+     */
+    data: SocialPostCreateManyInput | SocialPostCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SocialPost update
+   */
+  export type SocialPostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SocialPost.
+     */
+    data: XOR<SocialPostUpdateInput, SocialPostUncheckedUpdateInput>
+    /**
+     * Choose, which SocialPost to update.
+     */
+    where: SocialPostWhereUniqueInput
+  }
+
+  /**
+   * SocialPost updateMany
+   */
+  export type SocialPostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SocialPosts.
+     */
+    data: XOR<SocialPostUpdateManyMutationInput, SocialPostUncheckedUpdateManyInput>
+    /**
+     * Filter which SocialPosts to update
+     */
+    where?: SocialPostWhereInput
+    /**
+     * Limit how many SocialPosts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SocialPost updateManyAndReturn
+   */
+  export type SocialPostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * The data used to update SocialPosts.
+     */
+    data: XOR<SocialPostUpdateManyMutationInput, SocialPostUncheckedUpdateManyInput>
+    /**
+     * Filter which SocialPosts to update
+     */
+    where?: SocialPostWhereInput
+    /**
+     * Limit how many SocialPosts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SocialPost upsert
+   */
+  export type SocialPostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SocialPost to update in case it exists.
+     */
+    where: SocialPostWhereUniqueInput
+    /**
+     * In case the SocialPost found by the `where` argument doesn't exist, create a new SocialPost with this data.
+     */
+    create: XOR<SocialPostCreateInput, SocialPostUncheckedCreateInput>
+    /**
+     * In case the SocialPost was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SocialPostUpdateInput, SocialPostUncheckedUpdateInput>
+  }
+
+  /**
+   * SocialPost delete
+   */
+  export type SocialPostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
+    /**
+     * Filter which SocialPost to delete.
+     */
+    where: SocialPostWhereUniqueInput
+  }
+
+  /**
+   * SocialPost deleteMany
+   */
+  export type SocialPostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SocialPosts to delete
+     */
+    where?: SocialPostWhereInput
+    /**
+     * Limit how many SocialPosts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SocialPost without action
+   */
+  export type SocialPostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SocialPost
+     */
+    select?: SocialPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SocialPost
+     */
+    omit?: SocialPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialPostInclude<ExtArgs> | null
   }
 
 
@@ -14910,6 +16307,9 @@ export namespace Prisma {
     imageUrl: string | null
     deadline: Date | null
     requirements: string | null
+    briefDescription: string | null
+    goal: string | null
+    dosAndDonts: string | null
     minFollowers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14925,6 +16325,9 @@ export namespace Prisma {
     imageUrl: string | null
     deadline: Date | null
     requirements: string | null
+    briefDescription: string | null
+    goal: string | null
+    dosAndDonts: string | null
     minFollowers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14940,6 +16343,9 @@ export namespace Prisma {
     imageUrl: number
     deadline: number
     requirements: number
+    briefDescription: number
+    goal: number
+    dosAndDonts: number
     platforms: number
     contentFormats: number
     minFollowers: number
@@ -14969,6 +16375,9 @@ export namespace Prisma {
     imageUrl?: true
     deadline?: true
     requirements?: true
+    briefDescription?: true
+    goal?: true
+    dosAndDonts?: true
     minFollowers?: true
     createdAt?: true
     updatedAt?: true
@@ -14984,6 +16393,9 @@ export namespace Prisma {
     imageUrl?: true
     deadline?: true
     requirements?: true
+    briefDescription?: true
+    goal?: true
+    dosAndDonts?: true
     minFollowers?: true
     createdAt?: true
     updatedAt?: true
@@ -14999,6 +16411,9 @@ export namespace Prisma {
     imageUrl?: true
     deadline?: true
     requirements?: true
+    briefDescription?: true
+    goal?: true
+    dosAndDonts?: true
     platforms?: true
     contentFormats?: true
     minFollowers?: true
@@ -15103,6 +16518,9 @@ export namespace Prisma {
     imageUrl: string | null
     deadline: Date | null
     requirements: string | null
+    briefDescription: string | null
+    goal: string | null
+    dosAndDonts: string | null
     platforms: string[]
     contentFormats: string[]
     minFollowers: number | null
@@ -15139,6 +16557,9 @@ export namespace Prisma {
     imageUrl?: boolean
     deadline?: boolean
     requirements?: boolean
+    briefDescription?: boolean
+    goal?: boolean
+    dosAndDonts?: boolean
     platforms?: boolean
     contentFormats?: boolean
     minFollowers?: boolean
@@ -15161,6 +16582,9 @@ export namespace Prisma {
     imageUrl?: boolean
     deadline?: boolean
     requirements?: boolean
+    briefDescription?: boolean
+    goal?: boolean
+    dosAndDonts?: boolean
     platforms?: boolean
     contentFormats?: boolean
     minFollowers?: boolean
@@ -15179,6 +16603,9 @@ export namespace Prisma {
     imageUrl?: boolean
     deadline?: boolean
     requirements?: boolean
+    briefDescription?: boolean
+    goal?: boolean
+    dosAndDonts?: boolean
     platforms?: boolean
     contentFormats?: boolean
     minFollowers?: boolean
@@ -15197,6 +16624,9 @@ export namespace Prisma {
     imageUrl?: boolean
     deadline?: boolean
     requirements?: boolean
+    briefDescription?: boolean
+    goal?: boolean
+    dosAndDonts?: boolean
     platforms?: boolean
     contentFormats?: boolean
     minFollowers?: boolean
@@ -15204,7 +16634,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandProfileId" | "title" | "description" | "budget" | "status" | "imageUrl" | "deadline" | "requirements" | "platforms" | "contentFormats" | "minFollowers" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
+  export type CampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "brandProfileId" | "title" | "description" | "budget" | "status" | "imageUrl" | "deadline" | "requirements" | "briefDescription" | "goal" | "dosAndDonts" | "platforms" | "contentFormats" | "minFollowers" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | Campaign$applicationsArgs<ExtArgs>
     brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
@@ -15237,6 +16667,9 @@ export namespace Prisma {
       imageUrl: string | null
       deadline: Date | null
       requirements: string | null
+      briefDescription: string | null
+      goal: string | null
+      dosAndDonts: string | null
       platforms: string[]
       contentFormats: string[]
       minFollowers: number | null
@@ -15678,6 +17111,9 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"Campaign", 'String'>
     readonly deadline: FieldRef<"Campaign", 'DateTime'>
     readonly requirements: FieldRef<"Campaign", 'String'>
+    readonly briefDescription: FieldRef<"Campaign", 'String'>
+    readonly goal: FieldRef<"Campaign", 'String'>
+    readonly dosAndDonts: FieldRef<"Campaign", 'String'>
     readonly platforms: FieldRef<"Campaign", 'String[]'>
     readonly contentFormats: FieldRef<"Campaign", 'String[]'>
     readonly minFollowers: FieldRef<"Campaign", 'Int'>
@@ -28669,10 +30105,33 @@ export namespace Prisma {
     totalFollowers: 'totalFollowers',
     avgEngagementRate: 'avgEngagementRate',
     lastStatsUpdate: 'lastStatsUpdate',
-    socialLinks: 'socialLinks'
+    socialLinks: 'socialLinks',
+    followerCount: 'followerCount',
+    averageEngagement: 'averageEngagement',
+    topNiches: 'topNiches',
+    lastSyncedAt: 'lastSyncedAt',
+    connectedPlatforms: 'connectedPlatforms'
   };
 
   export type CreatorProfileScalarFieldEnum = (typeof CreatorProfileScalarFieldEnum)[keyof typeof CreatorProfileScalarFieldEnum]
+
+
+  export const SocialPostScalarFieldEnum: {
+    id: 'id',
+    creatorProfileId: 'creatorProfileId',
+    platform: 'platform',
+    postUrl: 'postUrl',
+    imageUrl: 'imageUrl',
+    caption: 'caption',
+    likes: 'likes',
+    comments: 'comments',
+    views: 'views',
+    engagementRate: 'engagementRate',
+    postedAt: 'postedAt',
+    fetchedAt: 'fetchedAt'
+  };
+
+  export type SocialPostScalarFieldEnum = (typeof SocialPostScalarFieldEnum)[keyof typeof SocialPostScalarFieldEnum]
 
 
   export const AccountScalarFieldEnum: {
@@ -28783,6 +30242,9 @@ export namespace Prisma {
     imageUrl: 'imageUrl',
     deadline: 'deadline',
     requirements: 'requirements',
+    briefDescription: 'briefDescription',
+    goal: 'goal',
+    dosAndDonts: 'dosAndDonts',
     platforms: 'platforms',
     contentFormats: 'contentFormats',
     minFollowers: 'minFollowers',
@@ -29421,9 +30883,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFilter<"CreatorProfile"> | number
     lastStatsUpdate?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
     socialLinks?: JsonNullableFilter<"CreatorProfile">
+    followerCount?: IntNullableFilter<"CreatorProfile"> | number | null
+    averageEngagement?: FloatNullableFilter<"CreatorProfile"> | number | null
+    topNiches?: StringNullableListFilter<"CreatorProfile">
+    lastSyncedAt?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
+    connectedPlatforms?: StringNullableListFilter<"CreatorProfile">
     applications?: ApplicationListRelationFilter
     contracts?: ContractListRelationFilter
     campaignEvents?: CampaignEventListRelationFilter
+    socialPosts?: SocialPostListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -29438,9 +30906,15 @@ export namespace Prisma {
     avgEngagementRate?: SortOrder
     lastStatsUpdate?: SortOrderInput | SortOrder
     socialLinks?: SortOrderInput | SortOrder
+    followerCount?: SortOrderInput | SortOrder
+    averageEngagement?: SortOrderInput | SortOrder
+    topNiches?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    connectedPlatforms?: SortOrder
     applications?: ApplicationOrderByRelationAggregateInput
     contracts?: ContractOrderByRelationAggregateInput
     campaignEvents?: CampaignEventOrderByRelationAggregateInput
+    socialPosts?: SocialPostOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -29458,9 +30932,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFilter<"CreatorProfile"> | number
     lastStatsUpdate?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
     socialLinks?: JsonNullableFilter<"CreatorProfile">
+    followerCount?: IntNullableFilter<"CreatorProfile"> | number | null
+    averageEngagement?: FloatNullableFilter<"CreatorProfile"> | number | null
+    topNiches?: StringNullableListFilter<"CreatorProfile">
+    lastSyncedAt?: DateTimeNullableFilter<"CreatorProfile"> | Date | string | null
+    connectedPlatforms?: StringNullableListFilter<"CreatorProfile">
     applications?: ApplicationListRelationFilter
     contracts?: ContractListRelationFilter
     campaignEvents?: CampaignEventListRelationFilter
+    socialPosts?: SocialPostListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
@@ -29475,6 +30955,11 @@ export namespace Prisma {
     avgEngagementRate?: SortOrder
     lastStatsUpdate?: SortOrderInput | SortOrder
     socialLinks?: SortOrderInput | SortOrder
+    followerCount?: SortOrderInput | SortOrder
+    averageEngagement?: SortOrderInput | SortOrder
+    topNiches?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    connectedPlatforms?: SortOrder
     _count?: CreatorProfileCountOrderByAggregateInput
     _avg?: CreatorProfileAvgOrderByAggregateInput
     _max?: CreatorProfileMaxOrderByAggregateInput
@@ -29496,6 +30981,103 @@ export namespace Prisma {
     avgEngagementRate?: FloatWithAggregatesFilter<"CreatorProfile"> | number
     lastStatsUpdate?: DateTimeNullableWithAggregatesFilter<"CreatorProfile"> | Date | string | null
     socialLinks?: JsonNullableWithAggregatesFilter<"CreatorProfile">
+    followerCount?: IntNullableWithAggregatesFilter<"CreatorProfile"> | number | null
+    averageEngagement?: FloatNullableWithAggregatesFilter<"CreatorProfile"> | number | null
+    topNiches?: StringNullableListFilter<"CreatorProfile">
+    lastSyncedAt?: DateTimeNullableWithAggregatesFilter<"CreatorProfile"> | Date | string | null
+    connectedPlatforms?: StringNullableListFilter<"CreatorProfile">
+  }
+
+  export type SocialPostWhereInput = {
+    AND?: SocialPostWhereInput | SocialPostWhereInput[]
+    OR?: SocialPostWhereInput[]
+    NOT?: SocialPostWhereInput | SocialPostWhereInput[]
+    id?: StringFilter<"SocialPost"> | string
+    creatorProfileId?: StringFilter<"SocialPost"> | string
+    platform?: StringFilter<"SocialPost"> | string
+    postUrl?: StringNullableFilter<"SocialPost"> | string | null
+    imageUrl?: StringNullableFilter<"SocialPost"> | string | null
+    caption?: StringNullableFilter<"SocialPost"> | string | null
+    likes?: IntNullableFilter<"SocialPost"> | number | null
+    comments?: IntNullableFilter<"SocialPost"> | number | null
+    views?: IntNullableFilter<"SocialPost"> | number | null
+    engagementRate?: FloatNullableFilter<"SocialPost"> | number | null
+    postedAt?: DateTimeNullableFilter<"SocialPost"> | Date | string | null
+    fetchedAt?: DateTimeFilter<"SocialPost"> | Date | string
+    creatorProfile?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+  }
+
+  export type SocialPostOrderByWithRelationInput = {
+    id?: SortOrder
+    creatorProfileId?: SortOrder
+    platform?: SortOrder
+    postUrl?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    caption?: SortOrderInput | SortOrder
+    likes?: SortOrderInput | SortOrder
+    comments?: SortOrderInput | SortOrder
+    views?: SortOrderInput | SortOrder
+    engagementRate?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    fetchedAt?: SortOrder
+    creatorProfile?: CreatorProfileOrderByWithRelationInput
+  }
+
+  export type SocialPostWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SocialPostWhereInput | SocialPostWhereInput[]
+    OR?: SocialPostWhereInput[]
+    NOT?: SocialPostWhereInput | SocialPostWhereInput[]
+    creatorProfileId?: StringFilter<"SocialPost"> | string
+    platform?: StringFilter<"SocialPost"> | string
+    postUrl?: StringNullableFilter<"SocialPost"> | string | null
+    imageUrl?: StringNullableFilter<"SocialPost"> | string | null
+    caption?: StringNullableFilter<"SocialPost"> | string | null
+    likes?: IntNullableFilter<"SocialPost"> | number | null
+    comments?: IntNullableFilter<"SocialPost"> | number | null
+    views?: IntNullableFilter<"SocialPost"> | number | null
+    engagementRate?: FloatNullableFilter<"SocialPost"> | number | null
+    postedAt?: DateTimeNullableFilter<"SocialPost"> | Date | string | null
+    fetchedAt?: DateTimeFilter<"SocialPost"> | Date | string
+    creatorProfile?: XOR<CreatorProfileScalarRelationFilter, CreatorProfileWhereInput>
+  }, "id">
+
+  export type SocialPostOrderByWithAggregationInput = {
+    id?: SortOrder
+    creatorProfileId?: SortOrder
+    platform?: SortOrder
+    postUrl?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    caption?: SortOrderInput | SortOrder
+    likes?: SortOrderInput | SortOrder
+    comments?: SortOrderInput | SortOrder
+    views?: SortOrderInput | SortOrder
+    engagementRate?: SortOrderInput | SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    fetchedAt?: SortOrder
+    _count?: SocialPostCountOrderByAggregateInput
+    _avg?: SocialPostAvgOrderByAggregateInput
+    _max?: SocialPostMaxOrderByAggregateInput
+    _min?: SocialPostMinOrderByAggregateInput
+    _sum?: SocialPostSumOrderByAggregateInput
+  }
+
+  export type SocialPostScalarWhereWithAggregatesInput = {
+    AND?: SocialPostScalarWhereWithAggregatesInput | SocialPostScalarWhereWithAggregatesInput[]
+    OR?: SocialPostScalarWhereWithAggregatesInput[]
+    NOT?: SocialPostScalarWhereWithAggregatesInput | SocialPostScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SocialPost"> | string
+    creatorProfileId?: StringWithAggregatesFilter<"SocialPost"> | string
+    platform?: StringWithAggregatesFilter<"SocialPost"> | string
+    postUrl?: StringNullableWithAggregatesFilter<"SocialPost"> | string | null
+    imageUrl?: StringNullableWithAggregatesFilter<"SocialPost"> | string | null
+    caption?: StringNullableWithAggregatesFilter<"SocialPost"> | string | null
+    likes?: IntNullableWithAggregatesFilter<"SocialPost"> | number | null
+    comments?: IntNullableWithAggregatesFilter<"SocialPost"> | number | null
+    views?: IntNullableWithAggregatesFilter<"SocialPost"> | number | null
+    engagementRate?: FloatNullableWithAggregatesFilter<"SocialPost"> | number | null
+    postedAt?: DateTimeNullableWithAggregatesFilter<"SocialPost"> | Date | string | null
+    fetchedAt?: DateTimeWithAggregatesFilter<"SocialPost"> | Date | string
   }
 
   export type AccountWhereInput = {
@@ -30002,6 +31584,9 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Campaign"> | string | null
     deadline?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     requirements?: StringNullableFilter<"Campaign"> | string | null
+    briefDescription?: StringNullableFilter<"Campaign"> | string | null
+    goal?: StringNullableFilter<"Campaign"> | string | null
+    dosAndDonts?: StringNullableFilter<"Campaign"> | string | null
     platforms?: StringNullableListFilter<"Campaign">
     contentFormats?: StringNullableListFilter<"Campaign">
     minFollowers?: IntNullableFilter<"Campaign"> | number | null
@@ -30023,6 +31608,9 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
     requirements?: SortOrderInput | SortOrder
+    briefDescription?: SortOrderInput | SortOrder
+    goal?: SortOrderInput | SortOrder
+    dosAndDonts?: SortOrderInput | SortOrder
     platforms?: SortOrder
     contentFormats?: SortOrder
     minFollowers?: SortOrderInput | SortOrder
@@ -30047,6 +31635,9 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Campaign"> | string | null
     deadline?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     requirements?: StringNullableFilter<"Campaign"> | string | null
+    briefDescription?: StringNullableFilter<"Campaign"> | string | null
+    goal?: StringNullableFilter<"Campaign"> | string | null
+    dosAndDonts?: StringNullableFilter<"Campaign"> | string | null
     platforms?: StringNullableListFilter<"Campaign">
     contentFormats?: StringNullableListFilter<"Campaign">
     minFollowers?: IntNullableFilter<"Campaign"> | number | null
@@ -30068,6 +31659,9 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
     requirements?: SortOrderInput | SortOrder
+    briefDescription?: SortOrderInput | SortOrder
+    goal?: SortOrderInput | SortOrder
+    dosAndDonts?: SortOrderInput | SortOrder
     platforms?: SortOrder
     contentFormats?: SortOrder
     minFollowers?: SortOrderInput | SortOrder
@@ -30093,6 +31687,9 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
     deadline?: DateTimeNullableWithAggregatesFilter<"Campaign"> | Date | string | null
     requirements?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
+    briefDescription?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
+    goal?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
+    dosAndDonts?: StringNullableWithAggregatesFilter<"Campaign"> | string | null
     platforms?: StringNullableListFilter<"Campaign">
     contentFormats?: StringNullableListFilter<"Campaign">
     minFollowers?: IntNullableWithAggregatesFilter<"Campaign"> | number | null
@@ -31139,9 +32736,15 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     contracts?: ContractCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostCreateNestedManyWithoutCreatorProfileInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -31156,9 +32759,15 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileUpdateInput = {
@@ -31171,9 +32780,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUpdateManyWithoutCreatorProfileNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -31188,9 +32803,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type CreatorProfileCreateManyInput = {
@@ -31204,6 +32825,11 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
   }
 
   export type CreatorProfileUpdateManyMutationInput = {
@@ -31216,6 +32842,11 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
   }
 
   export type CreatorProfileUncheckedUpdateManyInput = {
@@ -31229,6 +32860,115 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
+  }
+
+  export type SocialPostCreateInput = {
+    id?: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
+    creatorProfile: CreatorProfileCreateNestedOneWithoutSocialPostsInput
+  }
+
+  export type SocialPostUncheckedCreateInput = {
+    id?: string
+    creatorProfileId: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
+  }
+
+  export type SocialPostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creatorProfile?: CreatorProfileUpdateOneRequiredWithoutSocialPostsNestedInput
+  }
+
+  export type SocialPostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SocialPostCreateManyInput = {
+    id?: string
+    creatorProfileId: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
+  }
+
+  export type SocialPostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SocialPostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    creatorProfileId?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateInput = {
@@ -31773,6 +33513,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -31794,6 +33537,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -31813,6 +33559,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31834,6 +33583,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31854,6 +33606,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -31870,6 +33625,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31887,6 +33645,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -33124,6 +34885,36 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type ApplicationListRelationFilter = {
     every?: ApplicationWhereInput
     some?: ApplicationWhereInput
@@ -33136,11 +34927,21 @@ export namespace Prisma {
     none?: ContractWhereInput
   }
 
+  export type SocialPostListRelationFilter = {
+    every?: SocialPostWhereInput
+    some?: SocialPostWhereInput
+    none?: SocialPostWhereInput
+  }
+
   export type ApplicationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ContractOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SocialPostOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33155,11 +34956,18 @@ export namespace Prisma {
     avgEngagementRate?: SortOrder
     lastStatsUpdate?: SortOrder
     socialLinks?: SortOrder
+    followerCount?: SortOrder
+    averageEngagement?: SortOrder
+    topNiches?: SortOrder
+    lastSyncedAt?: SortOrder
+    connectedPlatforms?: SortOrder
   }
 
   export type CreatorProfileAvgOrderByAggregateInput = {
     totalFollowers?: SortOrder
     avgEngagementRate?: SortOrder
+    followerCount?: SortOrder
+    averageEngagement?: SortOrder
   }
 
   export type CreatorProfileMaxOrderByAggregateInput = {
@@ -33172,6 +34980,9 @@ export namespace Prisma {
     totalFollowers?: SortOrder
     avgEngagementRate?: SortOrder
     lastStatsUpdate?: SortOrder
+    followerCount?: SortOrder
+    averageEngagement?: SortOrder
+    lastSyncedAt?: SortOrder
   }
 
   export type CreatorProfileMinOrderByAggregateInput = {
@@ -33184,11 +34995,16 @@ export namespace Prisma {
     totalFollowers?: SortOrder
     avgEngagementRate?: SortOrder
     lastStatsUpdate?: SortOrder
+    followerCount?: SortOrder
+    averageEngagement?: SortOrder
+    lastSyncedAt?: SortOrder
   }
 
   export type CreatorProfileSumOrderByAggregateInput = {
     totalFollowers?: SortOrder
     avgEngagementRate?: SortOrder
+    followerCount?: SortOrder
+    averageEngagement?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -33235,6 +35051,102 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type CreatorProfileScalarRelationFilter = {
+    is?: CreatorProfileWhereInput
+    isNot?: CreatorProfileWhereInput
+  }
+
+  export type SocialPostCountOrderByAggregateInput = {
+    id?: SortOrder
+    creatorProfileId?: SortOrder
+    platform?: SortOrder
+    postUrl?: SortOrder
+    imageUrl?: SortOrder
+    caption?: SortOrder
+    likes?: SortOrder
+    comments?: SortOrder
+    views?: SortOrder
+    engagementRate?: SortOrder
+    postedAt?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type SocialPostAvgOrderByAggregateInput = {
+    likes?: SortOrder
+    comments?: SortOrder
+    views?: SortOrder
+    engagementRate?: SortOrder
+  }
+
+  export type SocialPostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    creatorProfileId?: SortOrder
+    platform?: SortOrder
+    postUrl?: SortOrder
+    imageUrl?: SortOrder
+    caption?: SortOrder
+    likes?: SortOrder
+    comments?: SortOrder
+    views?: SortOrder
+    engagementRate?: SortOrder
+    postedAt?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type SocialPostMinOrderByAggregateInput = {
+    id?: SortOrder
+    creatorProfileId?: SortOrder
+    platform?: SortOrder
+    postUrl?: SortOrder
+    imageUrl?: SortOrder
+    caption?: SortOrder
+    likes?: SortOrder
+    comments?: SortOrder
+    views?: SortOrder
+    engagementRate?: SortOrder
+    postedAt?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type SocialPostSumOrderByAggregateInput = {
+    likes?: SortOrder
+    comments?: SortOrder
+    views?: SortOrder
+    engagementRate?: SortOrder
   }
 
   export type AccountProviderIdAccountIdCompoundUniqueInput = {
@@ -33397,28 +35309,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type PlatformStatsCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -33465,38 +35355,6 @@ export namespace Prisma {
     followingCount?: SortOrder
     postCount?: SortOrder
     engagementRate?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type WaitlistCountOrderByAggregateInput = {
@@ -33551,14 +35409,6 @@ export namespace Prisma {
     not?: NestedEnumCampaignStatusFilter<$PrismaModel> | $Enums.CampaignStatus
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type BrandProfileScalarRelationFilter = {
     is?: BrandProfileWhereInput
     isNot?: BrandProfileWhereInput
@@ -33574,6 +35424,9 @@ export namespace Prisma {
     imageUrl?: SortOrder
     deadline?: SortOrder
     requirements?: SortOrder
+    briefDescription?: SortOrder
+    goal?: SortOrder
+    dosAndDonts?: SortOrder
     platforms?: SortOrder
     contentFormats?: SortOrder
     minFollowers?: SortOrder
@@ -33596,6 +35449,9 @@ export namespace Prisma {
     imageUrl?: SortOrder
     deadline?: SortOrder
     requirements?: SortOrder
+    briefDescription?: SortOrder
+    goal?: SortOrder
+    dosAndDonts?: SortOrder
     minFollowers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -33611,6 +35467,9 @@ export namespace Prisma {
     imageUrl?: SortOrder
     deadline?: SortOrder
     requirements?: SortOrder
+    briefDescription?: SortOrder
+    goal?: SortOrder
+    dosAndDonts?: SortOrder
     minFollowers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -33786,11 +35645,6 @@ export namespace Prisma {
     in?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ContractStatus[] | ListEnumContractStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumContractStatusFilter<$PrismaModel> | $Enums.ContractStatus
-  }
-
-  export type CreatorProfileScalarRelationFilter = {
-    is?: CreatorProfileWhereInput
-    isNot?: CreatorProfileWhereInput
   }
 
   export type MilestoneListRelationFilter = {
@@ -34960,6 +36814,14 @@ export namespace Prisma {
     deleteMany?: CommunityListScalarWhereInput | CommunityListScalarWhereInput[]
   }
 
+  export type CreatorProfileCreatetopNichesInput = {
+    set: string[]
+  }
+
+  export type CreatorProfileCreateconnectedPlatformsInput = {
+    set: string[]
+  }
+
   export type ApplicationCreateNestedManyWithoutCreatorInput = {
     create?: XOR<ApplicationCreateWithoutCreatorInput, ApplicationUncheckedCreateWithoutCreatorInput> | ApplicationCreateWithoutCreatorInput[] | ApplicationUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutCreatorInput | ApplicationCreateOrConnectWithoutCreatorInput[]
@@ -34979,6 +36841,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignEventCreateOrConnectWithoutCreatorInput | CampaignEventCreateOrConnectWithoutCreatorInput[]
     createMany?: CampaignEventCreateManyCreatorInputEnvelope
     connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
+  export type SocialPostCreateNestedManyWithoutCreatorProfileInput = {
+    create?: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput> | SocialPostCreateWithoutCreatorProfileInput[] | SocialPostUncheckedCreateWithoutCreatorProfileInput[]
+    connectOrCreate?: SocialPostCreateOrConnectWithoutCreatorProfileInput | SocialPostCreateOrConnectWithoutCreatorProfileInput[]
+    createMany?: SocialPostCreateManyCreatorProfileInputEnvelope
+    connect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatorProfileInput = {
@@ -35008,6 +36877,13 @@ export namespace Prisma {
     connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
   }
 
+  export type SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput = {
+    create?: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput> | SocialPostCreateWithoutCreatorProfileInput[] | SocialPostUncheckedCreateWithoutCreatorProfileInput[]
+    connectOrCreate?: SocialPostCreateOrConnectWithoutCreatorProfileInput | SocialPostCreateOrConnectWithoutCreatorProfileInput[]
+    createMany?: SocialPostCreateManyCreatorProfileInputEnvelope
+    connect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -35026,6 +36902,32 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type CreatorProfileUpdatetopNichesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type CreatorProfileUpdateconnectedPlatformsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type ApplicationUpdateManyWithoutCreatorNestedInput = {
@@ -35068,6 +36970,20 @@ export namespace Prisma {
     update?: CampaignEventUpdateWithWhereUniqueWithoutCreatorInput | CampaignEventUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: CampaignEventUpdateManyWithWhereWithoutCreatorInput | CampaignEventUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
+  export type SocialPostUpdateManyWithoutCreatorProfileNestedInput = {
+    create?: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput> | SocialPostCreateWithoutCreatorProfileInput[] | SocialPostUncheckedCreateWithoutCreatorProfileInput[]
+    connectOrCreate?: SocialPostCreateOrConnectWithoutCreatorProfileInput | SocialPostCreateOrConnectWithoutCreatorProfileInput[]
+    upsert?: SocialPostUpsertWithWhereUniqueWithoutCreatorProfileInput | SocialPostUpsertWithWhereUniqueWithoutCreatorProfileInput[]
+    createMany?: SocialPostCreateManyCreatorProfileInputEnvelope
+    set?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    disconnect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    delete?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    connect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    update?: SocialPostUpdateWithWhereUniqueWithoutCreatorProfileInput | SocialPostUpdateWithWhereUniqueWithoutCreatorProfileInput[]
+    updateMany?: SocialPostUpdateManyWithWhereWithoutCreatorProfileInput | SocialPostUpdateManyWithWhereWithoutCreatorProfileInput[]
+    deleteMany?: SocialPostScalarWhereInput | SocialPostScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatorProfileNestedInput = {
@@ -35120,6 +37036,34 @@ export namespace Prisma {
     deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
   }
 
+  export type SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput = {
+    create?: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput> | SocialPostCreateWithoutCreatorProfileInput[] | SocialPostUncheckedCreateWithoutCreatorProfileInput[]
+    connectOrCreate?: SocialPostCreateOrConnectWithoutCreatorProfileInput | SocialPostCreateOrConnectWithoutCreatorProfileInput[]
+    upsert?: SocialPostUpsertWithWhereUniqueWithoutCreatorProfileInput | SocialPostUpsertWithWhereUniqueWithoutCreatorProfileInput[]
+    createMany?: SocialPostCreateManyCreatorProfileInputEnvelope
+    set?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    disconnect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    delete?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    connect?: SocialPostWhereUniqueInput | SocialPostWhereUniqueInput[]
+    update?: SocialPostUpdateWithWhereUniqueWithoutCreatorProfileInput | SocialPostUpdateWithWhereUniqueWithoutCreatorProfileInput[]
+    updateMany?: SocialPostUpdateManyWithWhereWithoutCreatorProfileInput | SocialPostUpdateManyWithWhereWithoutCreatorProfileInput[]
+    deleteMany?: SocialPostScalarWhereInput | SocialPostScalarWhereInput[]
+  }
+
+  export type CreatorProfileCreateNestedOneWithoutSocialPostsInput = {
+    create?: XOR<CreatorProfileCreateWithoutSocialPostsInput, CreatorProfileUncheckedCreateWithoutSocialPostsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutSocialPostsInput
+    connect?: CreatorProfileWhereUniqueInput
+  }
+
+  export type CreatorProfileUpdateOneRequiredWithoutSocialPostsNestedInput = {
+    create?: XOR<CreatorProfileCreateWithoutSocialPostsInput, CreatorProfileUncheckedCreateWithoutSocialPostsInput>
+    connectOrCreate?: CreatorProfileCreateOrConnectWithoutSocialPostsInput
+    upsert?: CreatorProfileUpsertWithoutSocialPostsInput
+    connect?: CreatorProfileWhereUniqueInput
+    update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutSocialPostsInput, CreatorProfileUpdateWithoutSocialPostsInput>, CreatorProfileUncheckedUpdateWithoutSocialPostsInput>
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -35166,22 +37110,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutPlatformStatsInput, UserUncheckedCreateWithoutPlatformStatsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPlatformStatsInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutPlatformStatsNestedInput = {
@@ -36033,6 +37961,17 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -36077,17 +38016,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36410,9 +38338,15 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     contracts?: ContractCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileUncheckedCreateWithoutUserInput = {
@@ -36425,9 +38359,15 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutUserInput = {
@@ -36860,9 +38800,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type CreatorProfileUncheckedUpdateWithoutUserInput = {
@@ -36875,9 +38821,15 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutReceiverInput = {
@@ -37225,6 +39177,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -37244,6 +39199,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -37409,6 +39367,9 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Campaign"> | string | null
     deadline?: DateTimeNullableFilter<"Campaign"> | Date | string | null
     requirements?: StringNullableFilter<"Campaign"> | string | null
+    briefDescription?: StringNullableFilter<"Campaign"> | string | null
+    goal?: StringNullableFilter<"Campaign"> | string | null
+    dosAndDonts?: StringNullableFilter<"Campaign"> | string | null
     platforms?: StringNullableListFilter<"Campaign">
     contentFormats?: StringNullableListFilter<"Campaign">
     minFollowers?: IntNullableFilter<"Campaign"> | number | null
@@ -37548,6 +39509,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SocialPostCreateWithoutCreatorProfileInput = {
+    id?: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
+  }
+
+  export type SocialPostUncheckedCreateWithoutCreatorProfileInput = {
+    id?: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
+  }
+
+  export type SocialPostCreateOrConnectWithoutCreatorProfileInput = {
+    where: SocialPostWhereUniqueInput
+    create: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput>
+  }
+
+  export type SocialPostCreateManyCreatorProfileInputEnvelope = {
+    data: SocialPostCreateManyCreatorProfileInput | SocialPostCreateManyCreatorProfileInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutCreatorProfileInput = {
     id?: string
     email: string
@@ -37681,6 +39680,40 @@ export namespace Prisma {
     data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyWithoutCreatorInput>
   }
 
+  export type SocialPostUpsertWithWhereUniqueWithoutCreatorProfileInput = {
+    where: SocialPostWhereUniqueInput
+    update: XOR<SocialPostUpdateWithoutCreatorProfileInput, SocialPostUncheckedUpdateWithoutCreatorProfileInput>
+    create: XOR<SocialPostCreateWithoutCreatorProfileInput, SocialPostUncheckedCreateWithoutCreatorProfileInput>
+  }
+
+  export type SocialPostUpdateWithWhereUniqueWithoutCreatorProfileInput = {
+    where: SocialPostWhereUniqueInput
+    data: XOR<SocialPostUpdateWithoutCreatorProfileInput, SocialPostUncheckedUpdateWithoutCreatorProfileInput>
+  }
+
+  export type SocialPostUpdateManyWithWhereWithoutCreatorProfileInput = {
+    where: SocialPostScalarWhereInput
+    data: XOR<SocialPostUpdateManyMutationInput, SocialPostUncheckedUpdateManyWithoutCreatorProfileInput>
+  }
+
+  export type SocialPostScalarWhereInput = {
+    AND?: SocialPostScalarWhereInput | SocialPostScalarWhereInput[]
+    OR?: SocialPostScalarWhereInput[]
+    NOT?: SocialPostScalarWhereInput | SocialPostScalarWhereInput[]
+    id?: StringFilter<"SocialPost"> | string
+    creatorProfileId?: StringFilter<"SocialPost"> | string
+    platform?: StringFilter<"SocialPost"> | string
+    postUrl?: StringNullableFilter<"SocialPost"> | string | null
+    imageUrl?: StringNullableFilter<"SocialPost"> | string | null
+    caption?: StringNullableFilter<"SocialPost"> | string | null
+    likes?: IntNullableFilter<"SocialPost"> | number | null
+    comments?: IntNullableFilter<"SocialPost"> | number | null
+    views?: IntNullableFilter<"SocialPost"> | number | null
+    engagementRate?: FloatNullableFilter<"SocialPost"> | number | null
+    postedAt?: DateTimeNullableFilter<"SocialPost"> | Date | string | null
+    fetchedAt?: DateTimeFilter<"SocialPost"> | Date | string
+  }
+
   export type UserUpsertWithoutCreatorProfileInput = {
     update: XOR<UserUpdateWithoutCreatorProfileInput, UserUncheckedUpdateWithoutCreatorProfileInput>
     create: XOR<UserCreateWithoutCreatorProfileInput, UserUncheckedCreateWithoutCreatorProfileInput>
@@ -37740,6 +39773,106 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type CreatorProfileCreateWithoutSocialPostsInput = {
+    id?: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
+    applications?: ApplicationCreateNestedManyWithoutCreatorInput
+    contracts?: ContractCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
+    user: UserCreateNestedOneWithoutCreatorProfileInput
+  }
+
+  export type CreatorProfileUncheckedCreateWithoutSocialPostsInput = {
+    id?: string
+    userId: string
+    bio?: string | null
+    niche?: string | null
+    primaryPlatform?: string | null
+    location?: string | null
+    totalFollowers?: number
+    avgEngagementRate?: number
+    lastStatsUpdate?: Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type CreatorProfileCreateOrConnectWithoutSocialPostsInput = {
+    where: CreatorProfileWhereUniqueInput
+    create: XOR<CreatorProfileCreateWithoutSocialPostsInput, CreatorProfileUncheckedCreateWithoutSocialPostsInput>
+  }
+
+  export type CreatorProfileUpsertWithoutSocialPostsInput = {
+    update: XOR<CreatorProfileUpdateWithoutSocialPostsInput, CreatorProfileUncheckedUpdateWithoutSocialPostsInput>
+    create: XOR<CreatorProfileCreateWithoutSocialPostsInput, CreatorProfileUncheckedCreateWithoutSocialPostsInput>
+    where?: CreatorProfileWhereInput
+  }
+
+  export type CreatorProfileUpdateToOneWithWhereWithoutSocialPostsInput = {
+    where?: CreatorProfileWhereInput
+    data: XOR<CreatorProfileUpdateWithoutSocialPostsInput, CreatorProfileUncheckedUpdateWithoutSocialPostsInput>
+  }
+
+  export type CreatorProfileUpdateWithoutSocialPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
+    applications?: ApplicationUpdateManyWithoutCreatorNestedInput
+    contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
+    user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
+  }
+
+  export type CreatorProfileUncheckedUpdateWithoutSocialPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    niche?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryPlatform?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalFollowers?: IntFieldUpdateOperationsInput | number
+    avgEngagementRate?: FloatFieldUpdateOperationsInput | number
+    lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
+    applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -38673,6 +40806,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -38693,6 +40829,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -38717,8 +40856,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     contracts?: ContractCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostCreateNestedManyWithoutCreatorProfileInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -38733,8 +40878,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutCampaignEventsInput = {
@@ -38853,6 +41004,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -38873,6 +41027,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -38903,8 +41060,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUpdateManyWithoutCreatorProfileNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -38919,8 +41082,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type UserUpsertWithoutCreatedCampaignEventsInput = {
@@ -39313,6 +41482,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -39333,6 +41505,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -39357,8 +41532,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostCreateNestedManyWithoutCreatorProfileInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -39373,8 +41554,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutContractsInput = {
@@ -39456,6 +41643,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39476,6 +41666,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39506,8 +41699,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUpdateManyWithoutCreatorProfileNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -39522,8 +41721,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     applications?: ApplicationUncheckedUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type MilestoneUpsertWithWhereUniqueWithoutContractInput = {
@@ -40296,6 +42501,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -40316,6 +42524,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -40340,8 +42551,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     contracts?: ContractCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostCreateNestedManyWithoutCreatorProfileInput
     user: UserCreateNestedOneWithoutCreatorProfileInput
   }
 
@@ -40356,8 +42573,14 @@ export namespace Prisma {
     avgEngagementRate?: number
     lastStatsUpdate?: Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: number | null
+    averageEngagement?: number | null
+    topNiches?: CreatorProfileCreatetopNichesInput | string[]
+    lastSyncedAt?: Date | string | null
+    connectedPlatforms?: CreatorProfileCreateconnectedPlatformsInput | string[]
     contracts?: ContractUncheckedCreateNestedManyWithoutCreatorInput
     campaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatorInput
+    socialPosts?: SocialPostUncheckedCreateNestedManyWithoutCreatorProfileInput
   }
 
   export type CreatorProfileCreateOrConnectWithoutApplicationsInput = {
@@ -40385,6 +42608,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -40405,6 +42631,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -40435,8 +42664,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     contracts?: ContractUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUpdateManyWithoutCreatorProfileNestedInput
     user?: UserUpdateOneRequiredWithoutCreatorProfileNestedInput
   }
 
@@ -40451,8 +42686,14 @@ export namespace Prisma {
     avgEngagementRate?: FloatFieldUpdateOperationsInput | number
     lastStatsUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    followerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    averageEngagement?: NullableFloatFieldUpdateOperationsInput | number | null
+    topNiches?: CreatorProfileUpdatetopNichesInput | string[]
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    connectedPlatforms?: CreatorProfileUpdateconnectedPlatformsInput | string[]
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
+    socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -40989,6 +43230,9 @@ export namespace Prisma {
     imageUrl?: string | null
     deadline?: Date | string | null
     requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
     platforms?: CampaignCreateplatformsInput | string[]
     contentFormats?: CampaignCreatecontentFormatsInput | string[]
     minFollowers?: number | null
@@ -41044,6 +43288,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -41063,6 +43310,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -41082,6 +43332,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
     platforms?: CampaignUpdateplatformsInput | string[]
     contentFormats?: CampaignUpdatecontentFormatsInput | string[]
     minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -41142,6 +43395,20 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SocialPostCreateManyCreatorProfileInput = {
+    id?: string
+    platform: string
+    postUrl?: string | null
+    imageUrl?: string | null
+    caption?: string | null
+    likes?: number | null
+    comments?: number | null
+    views?: number | null
+    engagementRate?: number | null
+    postedAt?: Date | string | null
+    fetchedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutCreatorInput = {
@@ -41253,6 +43520,48 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SocialPostUpdateWithoutCreatorProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SocialPostUncheckedUpdateWithoutCreatorProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SocialPostUncheckedUpdateManyWithoutCreatorProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    postUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: NullableStringFieldUpdateOperationsInput | string | null
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    comments?: NullableIntFieldUpdateOperationsInput | number | null
+    views?: NullableIntFieldUpdateOperationsInput | number | null
+    engagementRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ApplicationCreateManyCampaignInput = {

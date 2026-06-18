@@ -48,46 +48,6 @@ function initials(name: string) {
   return name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 }
 
-function MiniAvatar({
-  name,
-  image,
-  color,
-  size = 16,
-  offset = 0,
-}: {
-  name: string;
-  image: string | null;
-  color: string;
-  size?: number;
-  offset?: number;
-}) {
-  return (
-    <div
-      className="rounded-full overflow-hidden ring-1 ring-zinc-900 absolute"
-      style={{
-        width: size,
-        height: size,
-        right: offset,
-        top: "50%",
-        transform: "translateY(-50%)",
-        background: image ? undefined : `linear-gradient(135deg, ${color}cc, ${color}66)`,
-        boxShadow: `0 0 0 1px ${color}55`,
-      }}
-    >
-      {image ? (
-        <img src={image} alt={name} className="w-full h-full object-cover" />
-      ) : (
-        <div
-          className="w-full h-full flex items-center justify-center text-white font-bold"
-          style={{ fontSize: size * 0.4 }}
-        >
-          {initials(name)}
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface SmartCalendarWidgetProps {
@@ -345,26 +305,21 @@ export function SmartCalendarWidget({
                     const todayCell = isToday(day);
                     const hasEvents = dayEvents.length > 0;
 
-                    // Pick the primary color from the first event
                     const primary = dayEvents[0];
                     const primaryColor = primary
                       ? getEventColor(primary.type as "POST", primary.platform)
                       : undefined;
 
-                    // Collect up to 3 partner avatars for the day
-                    const partners = dayEvents
-                      .filter((e) => e.partner)
-                      .slice(0, 3)
-                      .map((e) => ({
-                        name:
-                          e.partner!.role === "BRAND"
-                            ? (e.partner!.companyName ?? e.partner!.name)
-                            : e.partner!.name,
-                        image: e.partner!.image,
-                        color: getEventColor(e.type as "POST", e.platform),
-                      }));
-
                     const hasPending = dayEvents.some((e) => e.hasPendingUpdate);
+
+                    const getEventLabel = (e: CalendarEventData) => {
+                      if (e.partner) {
+                        return e.partner.role === "BRAND"
+                          ? (e.partner.companyName ?? e.partner.name)
+                          : e.partner.name;
+                      }
+                      return EVENT_TYPE_LABELS[e.type as keyof typeof EVENT_TYPE_LABELS] ?? e.type;
+                    };
 
                     return (
                       <button
@@ -375,71 +330,61 @@ export function SmartCalendarWidget({
                         }}
                         disabled={!hasEvents}
                         className={cn(
-                          "relative flex flex-col items-center justify-start pt-1.5 pb-1 rounded-xl transition-all",
+                          "relative flex flex-col items-start justify-start pt-1 pb-1.5 px-0.5 rounded-xl transition-all",
                           "text-[10px] sm:text-[11px] font-medium",
                           hasEvents
-                            ? "cursor-pointer hover:scale-105 hover:z-10"
+                            ? "cursor-pointer hover:scale-[1.03] hover:z-10"
                             : "cursor-default",
                           !hasEvents && "text-zinc-700",
                         )}
                         style={{
-                          background: primaryColor ? `${primaryColor}18` : "transparent",
+                          background: primaryColor ? `${primaryColor}12` : "transparent",
                           border: todayCell
                             ? "1px solid rgba(234,179,8,0.6)"
                             : hasEvents
-                              ? `1px solid ${primaryColor}35`
+                              ? `1px solid ${primaryColor}30`
                               : "1px solid transparent",
                           color: hasEvents ? primaryColor : undefined,
-                          minHeight: 44,
+                          minHeight: 52,
                         }}
                       >
-                        <span>{day}</span>
+                        {/* Day number */}
+                        <span className="self-center leading-none mb-1">{day}</span>
 
-                        {/* Partner avatar stack */}
-                        {partners.length > 0 && (
-                          <div
-                            className="relative mt-0.5"
-                            style={{ width: 16 + (partners.length - 1) * 6, height: 16 }}
-                          >
-                            {partners.map((p, idx) => (
-                              <MiniAvatar
-                                key={idx}
-                                name={p.name}
-                                image={p.image}
-                                color={p.color}
-                                size={14}
-                                offset={idx * 6}
-                              />
-                            ))}
+                        {/* Event pills */}
+                        {hasEvents && (
+                          <div className="w-full flex flex-col gap-0.5 min-w-0">
+                            {/* First event pill */}
+                            <div
+                              className="rounded-sm px-1 py-0.5 text-[7px] sm:text-[8px] font-semibold leading-tight truncate w-full"
+                              style={{
+                                background: `${primaryColor}22`,
+                                color: primaryColor,
+                                border: `1px solid ${primaryColor}30`,
+                              }}
+                            >
+                              {getEventLabel(primary)}
+                            </div>
+
+                            {/* +N more badge */}
+                            {dayEvents.length > 1 && (
+                              <div
+                                className="rounded-sm px-1 py-0.5 text-[7px] sm:text-[8px] font-bold leading-tight"
+                                style={{
+                                  background: `${VIOLET}18`,
+                                  color: VIOLET,
+                                  border: `1px solid ${VIOLET}28`,
+                                }}
+                              >
+                                +{dayEvents.length - 1} more
+                              </div>
+                            )}
                           </div>
-                        )}
-
-                        {/* Dot indicators */}
-                        {hasEvents && partners.length === 0 && (
-                          <div className="flex gap-0.5 mt-0.5">
-                            {dayEvents.slice(0, 3).map((e, idx) => (
-                              <span
-                                key={idx}
-                                className="w-1 h-1 rounded-full"
-                                style={{ background: getEventColor(e.type as "POST", e.platform) }}
-                              />
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Multi-event badge */}
-                        {dayEvents.length > 1 && (
-                          <span
-                            className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-bold text-white"
-                            style={{ background: VIOLET }}
-                          >
-                            {dayEvents.length}
-                          </span>
                         )}
 
                         {/* Pending change amber dot */}
                         {hasPending && (
-                          <span className="absolute bottom-0.5 right-1 w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-amber-400" />
                         )}
                       </button>
                     );
