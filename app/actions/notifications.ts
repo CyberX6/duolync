@@ -33,7 +33,7 @@ export async function getNotificationsAction(): Promise<{
   const notifications = await db.notification.findMany({
     where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
-    take: 20,
+    take: 15,
   });
 
   const unreadCount = notifications.filter((n) => !n.read).length;

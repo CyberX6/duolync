@@ -1,18 +1,19 @@
 "use client";
 
-import { useState, useEffect, useCallback, useTransition } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Check, X, Clock, Users, DollarSign, TrendingUp, FileText, Filter,
   MessageSquare, ExternalLink, ChevronRight, Eye, SlidersHorizontal,
-  Megaphone, CheckCircle2, XCircle, ArrowLeft, Loader2,
+  Megaphone, CheckCircle2, XCircle, ArrowLeft, Loader2, Smartphone,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
 import MainLayout from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +24,103 @@ import {
   type ProposalWithDetails,
 } from "@/app/actions/proposals";
 import { cn } from "@/lib/utils";
+
+// ── Platform helpers ──────────────────────────────────────────────────────────
+
+const PLATFORM_EMOJI: Record<string, string> = {
+  instagram: "📸",
+  tiktok: "🎵",
+  youtube: "▶️",
+  twitter: "🐦",
+  linkedin: "💼",
+  pinterest: "📌",
+  twitch: "🎮",
+  snapchat: "👻",
+};
+
+const PLATFORM_LABEL: Record<string, string> = {
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+  twitter: "X / Twitter",
+  linkedin: "LinkedIn",
+  pinterest: "Pinterest",
+  twitch: "Twitch",
+  snapchat: "Snapchat",
+};
+
+function PlatformBadge({ platform }: { platform: string }) {
+  const key = platform.toLowerCase();
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
+      <span>{PLATFORM_EMOJI[key] ?? "🌐"}</span>
+      <span>{PLATFORM_LABEL[key] ?? platform}</span>
+    </span>
+  );
+}
+
+// ── Reject reason modal ───────────────────────────────────────────────────────
+
+interface RejectModalProps {
+  open: boolean;
+  creatorName: string | null;
+  onConfirm: (reason: string) => void;
+  onCancel: () => void;
+  loading: boolean;
+}
+
+function RejectReasonModal({ open, creatorName, onConfirm, onCancel, loading }: RejectModalProps) {
+  const [reason, setReason] = useState("");
+
+  // Reset on open
+  useEffect(() => {
+    if (open) setReason("");
+  }, [open]);
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onCancel()}>
+      <DialogContent className="sm:max-w-md w-[95vw]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-red-500" />
+            Decline proposal
+          </DialogTitle>
+          <DialogDescription>
+            Let {creatorName ?? "the creator"} know why their proposal wasn&apos;t the right fit. This helps them improve future applications.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="py-2 space-y-2">
+          <label className="text-sm font-medium">Reason (optional)</label>
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="e.g. Not the right niche for this campaign, budget mismatch, looking for a different content format…"
+            rows={4}
+            maxLength={500}
+            className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+          />
+          <p className="text-xs text-muted-foreground text-right">{reason.length}/500</p>
+        </div>
+
+        <DialogFooter className="flex-col-reverse sm:flex-row gap-2">
+          <Button variant="outline" onClick={onCancel} disabled={loading}>
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={() => onConfirm(reason)}
+            disabled={loading}
+            className="gap-2"
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+            Decline proposal
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 // ── Status badge ───────────────────────────────────────────────────────────────
 
@@ -93,11 +191,11 @@ interface DetailModalProps {
   proposal: ProposalWithDetails | null;
   onClose: () => void;
   onAccept: (id: string) => void;
-  onReject: (id: string) => void;
+  onRequestReject: (p: ProposalWithDetails) => void;
   loading: boolean;
 }
 
-function ApplicationDetailModal({ proposal, onClose, onAccept, onReject, loading }: DetailModalProps) {
+function ApplicationDetailModal({ proposal, onClose, onAccept, onRequestReject, loading }: DetailModalProps) {
   const { openChatWindow } = useMessaging();
 
   if (!proposal) return null;
@@ -149,10 +247,15 @@ function ApplicationDetailModal({ proposal, onClose, onAccept, onReject, loading
               <StatusBadge status={proposal.status} />
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5 flex-wrap">
-              {creator.primaryPlatform && <span className="capitalize">{creator.primaryPlatform}</span>}
-              {creator.niche && <span>· {creator.niche}</span>}
+              {creator.niche && <span>{creator.niche}</span>}
               {creator.totalFollowers > 0 && <span>· {formatFollowers(creator.totalFollowers)} followers</span>}
             </div>
+            {proposal.selectedPlatform && (
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <span className="text-xs text-muted-foreground">Applying with:</span>
+                <PlatformBadge platform={proposal.selectedPlatform} />
+              </div>
+            )}
 
             {/* Message + Profile actions */}
             <div className="flex gap-2 mt-3">
@@ -235,11 +338,11 @@ function ApplicationDetailModal({ proposal, onClose, onAccept, onReject, loading
             <Button
               variant="outline"
               className="flex-1 gap-1.5 hover:border-red-300 hover:text-red-600"
-              onClick={() => { onReject(proposal.id); onClose(); }}
+              onClick={() => { onRequestReject(proposal); onClose(); }}
               disabled={loading}
             >
               <X className="w-4 h-4" />
-              Reject
+              Decline
             </Button>
           </div>
         )}
@@ -253,13 +356,13 @@ function ApplicationDetailModal({ proposal, onClose, onAccept, onReject, loading
 const ProposalCard = ({
   proposal,
   onAccept,
-  onReject,
+  onRequestReject,
   onOpenDetail,
   loading,
 }: {
   proposal: ProposalWithDetails;
   onAccept: (id: string) => void;
-  onReject: (id: string) => void;
+  onRequestReject: (p: ProposalWithDetails) => void;
   onOpenDetail: (p: ProposalWithDetails) => void;
   loading: boolean;
 }) => {
@@ -315,7 +418,6 @@ const ProposalCard = ({
                 {creator.niche}
               </span>
             )}
-            {creator.primaryPlatform && <span className="capitalize">{creator.primaryPlatform}</span>}
             {creator.totalFollowers > 0 && (
               <span className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
@@ -324,6 +426,13 @@ const ProposalCard = ({
             )}
             <span>{timeAgo(proposal.createdAt)}</span>
           </div>
+          {proposal.selectedPlatform && (
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <Smartphone className="w-3 h-3 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Applying with:</span>
+              <PlatformBadge platform={proposal.selectedPlatform} />
+            </div>
+          )}
         </div>
 
         {/* Rate + message button */}
@@ -362,11 +471,19 @@ const ProposalCard = ({
         <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
       </div>
 
-      {/* Cover letter */}
+      {/* Creator message */}
       {proposal.coverLetter && (
         <p className="mt-3 text-sm text-muted-foreground bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-3 line-clamp-2 italic">
           &ldquo;{proposal.coverLetter}&rdquo;
         </p>
+      )}
+
+      {/* Rejection reason (brand note) */}
+      {proposal.status === "REJECTED" && proposal.brandNote && (
+        <div className="mt-2 flex items-start gap-2 rounded-xl bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/20 px-3 py-2">
+          <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+          <p className="text-xs text-red-600 dark:text-red-400">{proposal.brandNote}</p>
+        </div>
       )}
 
       {/* Quick actions — only for pending, stop propagation */}
@@ -394,12 +511,12 @@ const ProposalCard = ({
           <Button
             size="sm"
             variant="outline"
-            onClick={(e) => { e.stopPropagation(); onReject(proposal.id); }}
+            onClick={(e) => { e.stopPropagation(); onRequestReject(proposal); }}
             disabled={loading}
             className="flex-1 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-500/10 gap-1.5"
           >
             <X className="w-3.5 h-3.5" />
-            Reject
+            Decline
           </Button>
         </div>
       )}
@@ -419,6 +536,8 @@ const Proposals = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [detailProposal, setDetailProposal] = useState<ProposalWithDetails | null>(null);
+  // Reject reason modal
+  const [rejectTarget, setRejectTarget] = useState<ProposalWithDetails | null>(null);
 
   const load = useCallback(async () => {
     const result = await getProposalsAction();
@@ -432,17 +551,32 @@ const Proposals = () => {
 
   useEffect(() => { load(); }, [load]);
 
-  const handleStatusUpdate = async (proposalId: string, status: "ACCEPTED" | "REJECTED") => {
+  const handleAccept = async (proposalId: string) => {
     setActionLoading(true);
-    const result = await updateProposalStatusAction(proposalId, status);
+    const result = await updateProposalStatusAction(proposalId, "ACCEPTED");
     if (result.error) {
       toast({ title: "Error", description: result.error, variant: "destructive" });
     } else {
-      toast({
-        title: status === "ACCEPTED" ? "Proposal accepted! 🎉" : "Proposal rejected.",
-        description: "The creator has been notified.",
-      });
-      setProposals((prev) => prev.map((p) => (p.id === proposalId ? { ...p, status } : p)));
+      toast({ title: "Proposal accepted! 🎉", description: "The creator has been notified." });
+      setProposals((prev) => prev.map((p) => (p.id === proposalId ? { ...p, status: "ACCEPTED" } : p)));
+    }
+    setActionLoading(false);
+  };
+
+  const handleRejectConfirm = async (reason: string) => {
+    if (!rejectTarget) return;
+    setActionLoading(true);
+    const result = await updateProposalStatusAction(rejectTarget.id, "REJECTED", reason);
+    if (result.error) {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    } else {
+      toast({ title: "Proposal declined.", description: "The creator has been notified." });
+      setProposals((prev) =>
+        prev.map((p) =>
+          p.id === rejectTarget.id ? { ...p, status: "REJECTED", brandNote: reason || null } : p,
+        ),
+      );
+      setRejectTarget(null);
     }
     setActionLoading(false);
   };
@@ -542,8 +676,8 @@ const Proposals = () => {
               <ProposalCard
                 key={p.id}
                 proposal={p}
-                onAccept={(id) => handleStatusUpdate(id, "ACCEPTED")}
-                onReject={(id) => handleStatusUpdate(id, "REJECTED")}
+                onAccept={handleAccept}
+                onRequestReject={setRejectTarget}
                 onOpenDetail={setDetailProposal}
                 loading={actionLoading}
               />
@@ -556,8 +690,17 @@ const Proposals = () => {
       <ApplicationDetailModal
         proposal={detailProposal}
         onClose={() => setDetailProposal(null)}
-        onAccept={(id) => handleStatusUpdate(id, "ACCEPTED")}
-        onReject={(id) => handleStatusUpdate(id, "REJECTED")}
+        onAccept={handleAccept}
+        onRequestReject={(p) => { setDetailProposal(null); setRejectTarget(p); }}
+        loading={actionLoading}
+      />
+
+      {/* Reject reason modal */}
+      <RejectReasonModal
+        open={!!rejectTarget}
+        creatorName={rejectTarget?.creator.name ?? null}
+        onConfirm={handleRejectConfirm}
+        onCancel={() => setRejectTarget(null)}
         loading={actionLoading}
       />
     </MainLayout>

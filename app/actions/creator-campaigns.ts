@@ -199,6 +199,7 @@ export async function applyToCampaignAction(input: {
   campaignId: string;
   proposedRate: number;
   coverLetter?: string;
+  selectedPlatform?: string;
 }): Promise<{ data: { id: string; status: string } | null; error: string | null }> {
   const creator = await getCreatorProfile();
   if (!creator) return { data: null, error: "Unauthorized" };
@@ -223,18 +224,19 @@ export async function applyToCampaignAction(input: {
       creatorProfileId: creator.profileId,
       proposedRate: input.proposedRate,
       coverLetter: input.coverLetter?.trim() || null,
+      selectedPlatform: input.selectedPlatform?.trim() || null,
       status: ApplicationStatus.PENDING,
     },
   });
 
-  // Notify the brand — link directly to the campaign detail page
+  const platformNote = input.selectedPlatform ? ` via ${input.selectedPlatform}` : "";
   await db.notification.create({
     data: {
       userId: campaign.brand.user.id,
-      type: "APPLICATION_UPDATE",
-      title: `New application for "${campaign.title}"`,
-      body: `${creator.name ?? "A creator"} applied with a rate of $${input.proposedRate}.`,
-      link: `/brand/campaigns/${input.campaignId}`,
+      type: "PROPOSAL_RECEIVED",
+      title: `New proposal for "${campaign.title}"`,
+      body: `${creator.name ?? "A creator"} sent a proposal${platformNote} at $${input.proposedRate}.`,
+      link: `/brand/proposals`,
     },
   });
 
@@ -413,6 +415,26 @@ export async function respondToCampaignAction(
   revalidatePath("/creator/campaigns");
 
   return { error: null };
+}
+
+export async function getCreatorConnectedPlatformsAction(): Promise<{
+  primaryPlatform: string | null;
+  connectedPlatforms: string[];
+  error: string | null;
+}> {
+  const creator = await getCreatorProfile();
+  if (!creator) return { primaryPlatform: null, connectedPlatforms: [], error: "Unauthorized" };
+
+  const profile = await db.creatorProfile.findUnique({
+    where: { id: creator.profileId },
+    select: { primaryPlatform: true, connectedPlatforms: true },
+  });
+
+  return {
+    primaryPlatform: profile?.primaryPlatform ?? null,
+    connectedPlatforms: profile?.connectedPlatforms ?? [],
+    error: null,
+  };
 }
 
 export async function withdrawApplicationAction(

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Users, Plus, Home, Search, MessageSquare, Heart, Sparkles,
-  Compass, FileText, FolderOpen, Megaphone, Radio,
+  Compass, FileText, FolderOpen, Megaphone, Radio, Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,6 +17,7 @@ import {
   type CommunityListWithCount,
 } from "@/app/actions/communities";
 import { getPendingApplicationsCountAction } from "@/app/actions/brand-applications";
+import { getPendingInvitationsCountAction } from "@/app/actions/invitations";
 import { cn } from "@/lib/utils";
 
 const GroupsPanel = () => {
@@ -30,15 +31,21 @@ const GroupsPanel = () => {
   const [showInput, setShowInput] = useState(false);
   const [creating, setCreating] = useState(false);
   const [pendingApplications, setPendingApplications] = useState(0);
+  const [pendingInvitations, setPendingInvitations] = useState(0);
 
   useEffect(() => {
-    if (!isBrand) return;
     getCommunityListsAction().then((res) => {
       if (!res.error) setCommunityLists(res.data);
     });
-    getPendingApplicationsCountAction()
-      .then((res) => setPendingApplications(res.count))
-      .catch(() => setPendingApplications(0));
+    if (isBrand) {
+      getPendingApplicationsCountAction()
+        .then((res) => setPendingApplications(res.count))
+        .catch(() => setPendingApplications(0));
+    } else {
+      getPendingInvitationsCountAction()
+        .then((res) => setPendingInvitations(res.count))
+        .catch(() => setPendingInvitations(0));
+    }
   }, [isBrand]);
 
   const handleCreate = async () => {
@@ -72,6 +79,7 @@ const GroupsPanel = () => {
         { icon: Compass, label: "Feed", path: "/feed" },
         { icon: Search, label: "Discover", path: "/creator/discover" },
         { icon: FileText, label: "My Applications", path: "/creator/applications" },
+        { icon: Mail, label: "Invitations", path: "/creator/invitations" },
         { icon: Heart, label: "Saved", path: "/creator/saved" },
         { icon: MessageSquare, label: "Messages", path: "/messages" },
         { icon: Users, label: "Community", path: "/community" },
@@ -86,10 +94,12 @@ const GroupsPanel = () => {
             const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
             const isMessages = item.label === "Messages";
             const isCampaigns = item.label === "Campaigns" && isBrand;
+            const isInvitations = item.label === "Invitations" && !isBrand;
             const hasUnreadMsg = isMessages && unreadCount > 0;
             const hasPendingApps = isCampaigns && pendingApplications > 0;
-            const hasBadge = hasUnreadMsg || hasPendingApps;
-            const badgeCount = isMessages ? unreadCount : pendingApplications;
+            const hasPendingInvites = isInvitations && pendingInvitations > 0;
+            const hasBadge = hasUnreadMsg || hasPendingApps || hasPendingInvites;
+            const badgeCount = isMessages ? unreadCount : isCampaigns ? pendingApplications : pendingInvitations;
             const activeClass = isBrand
               ? "bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/25 dark:border-cyan-500/20 shadow-sm shadow-cyan-500/10"
               : "gradient-primary text-white shadow-sm shadow-primary/30";

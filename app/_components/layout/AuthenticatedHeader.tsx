@@ -466,16 +466,25 @@ const AuthenticatedHeader = () => {
                       <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                     </div>
                   ) : notifications.length > 0 ? (
-                    <div className="max-h-[28rem] overflow-y-auto divide-y divide-border/40">
-                      {notifications.map((notif) => (
-                        <NotifItem
-                          key={notif.id}
-                          notif={notif}
-                          onClose={() => setShowNotifDropdown(false)}
-                          onUpdate={handleNotifUpdate}
-                        />
-                      ))}
-                    </div>
+                    <>
+                      <div className="max-h-[28rem] overflow-y-auto divide-y divide-border/40">
+                        {notifications.slice(0, 10).map((notif) => (
+                          <NotifItem
+                            key={notif.id}
+                            notif={notif}
+                            onClose={() => setShowNotifDropdown(false)}
+                            onUpdate={handleNotifUpdate}
+                          />
+                        ))}
+                      </div>
+                      {notifications.length > 10 && (
+                        <div className="border-t border-border px-4 py-2.5 text-center">
+                          <span className="text-xs text-muted-foreground">
+                            Showing 10 of {notifications.length} notifications
+                          </span>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="flex flex-col items-center py-10 px-4 text-center">
                       <Bell className="w-8 h-8 text-muted-foreground/40 mb-2" />

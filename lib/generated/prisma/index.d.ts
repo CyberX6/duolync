@@ -128,6 +128,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  * 
  */
 export type Application = $Result.DefaultSelection<Prisma.$ApplicationPayload>
+/**
+ * Model Invitation
+ * 
+ */
+export type Invitation = $Result.DefaultSelection<Prisma.$InvitationPayload>
 
 /**
  * Enums
@@ -246,6 +251,15 @@ export const NotificationType: {
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
 
+
+export const InvitationStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
+};
+
+export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -291,6 +305,10 @@ export const EventUpdateStatus: typeof $Enums.EventUpdateStatus
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
+
+export type InvitationStatus = $Enums.InvitationStatus
+
+export const InvitationStatus: typeof $Enums.InvitationStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -642,6 +660,16 @@ export class PrismaClient<
     * ```
     */
   get application(): Prisma.ApplicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.invitation`: Exposes CRUD operations for the **Invitation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Invitations
+    * const invitations = await prisma.invitation.findMany()
+    * ```
+    */
+  get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1098,7 +1126,8 @@ export namespace Prisma {
     CommunityList: 'CommunityList',
     CommunityListMember: 'CommunityListMember',
     Notification: 'Notification',
-    Application: 'Application'
+    Application: 'Application',
+    Invitation: 'Invitation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1114,7 +1143,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "brandProfile" | "creatorProfile" | "socialPost" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application"
+      modelProps: "user" | "brandProfile" | "creatorProfile" | "socialPost" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application" | "invitation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2820,6 +2849,80 @@ export namespace Prisma {
           }
         }
       }
+      Invitation: {
+        payload: Prisma.$InvitationPayload<ExtArgs>
+        fields: Prisma.InvitationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InvitationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InvitationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          findFirst: {
+            args: Prisma.InvitationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InvitationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          findMany: {
+            args: Prisma.InvitationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          create: {
+            args: Prisma.InvitationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          createMany: {
+            args: Prisma.InvitationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InvitationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          delete: {
+            args: Prisma.InvitationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          update: {
+            args: Prisma.InvitationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          deleteMany: {
+            args: Prisma.InvitationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InvitationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.InvitationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
+          }
+          upsert: {
+            args: Prisma.InvitationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>
+          }
+          aggregate: {
+            args: Prisma.InvitationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInvitation>
+          }
+          groupBy: {
+            args: Prisma.InvitationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InvitationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InvitationCountArgs<ExtArgs>
+            result: $Utils.Optional<InvitationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2951,6 +3054,7 @@ export namespace Prisma {
     communityListMember?: CommunityListMemberOmit
     notification?: NotificationOmit
     application?: ApplicationOmit
+    invitation?: InvitationOmit
   }
 
   /* Types for Logging */
@@ -3043,6 +3147,7 @@ export namespace Prisma {
     createdCampaignEvents: number
     requestedEventUpdates: number
     reviewedEventUpdates: number
+    receivedInvitations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3058,6 +3163,7 @@ export namespace Prisma {
     createdCampaignEvents?: boolean | UserCountOutputTypeCountCreatedCampaignEventsArgs
     requestedEventUpdates?: boolean | UserCountOutputTypeCountRequestedEventUpdatesArgs
     reviewedEventUpdates?: boolean | UserCountOutputTypeCountReviewedEventUpdatesArgs
+    receivedInvitations?: boolean | UserCountOutputTypeCountReceivedInvitationsArgs
   }
 
   // Custom InputTypes
@@ -3155,6 +3261,13 @@ export namespace Prisma {
     where?: CampaignEventUpdateWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReceivedInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
+  }
+
 
   /**
    * Count Type BrandProfileCountOutputType
@@ -3164,12 +3277,14 @@ export namespace Prisma {
     crmLeads: number
     campaigns: number
     communityLists: number
+    invitations: number
   }
 
   export type BrandProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     crmLeads?: boolean | BrandProfileCountOutputTypeCountCrmLeadsArgs
     campaigns?: boolean | BrandProfileCountOutputTypeCountCampaignsArgs
     communityLists?: boolean | BrandProfileCountOutputTypeCountCommunityListsArgs
+    invitations?: boolean | BrandProfileCountOutputTypeCountInvitationsArgs
   }
 
   // Custom InputTypes
@@ -3202,6 +3317,13 @@ export namespace Prisma {
    */
   export type BrandProfileCountOutputTypeCountCommunityListsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommunityListWhereInput
+  }
+
+  /**
+   * BrandProfileCountOutputType without action
+   */
+  export type BrandProfileCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
   }
 
 
@@ -3271,12 +3393,14 @@ export namespace Prisma {
     applications: number
     contracts: number
     events: number
+    invitations: number
   }
 
   export type CampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | CampaignCountOutputTypeCountApplicationsArgs
     contracts?: boolean | CampaignCountOutputTypeCountContractsArgs
     events?: boolean | CampaignCountOutputTypeCountEventsArgs
+    invitations?: boolean | CampaignCountOutputTypeCountInvitationsArgs
   }
 
   // Custom InputTypes
@@ -3309,6 +3433,13 @@ export namespace Prisma {
    */
   export type CampaignCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignEventWhereInput
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
   }
 
 
@@ -3628,6 +3759,7 @@ export namespace Prisma {
     createdCampaignEvents?: boolean | User$createdCampaignEventsArgs<ExtArgs>
     requestedEventUpdates?: boolean | User$requestedEventUpdatesArgs<ExtArgs>
     reviewedEventUpdates?: boolean | User$reviewedEventUpdatesArgs<ExtArgs>
+    receivedInvitations?: boolean | User$receivedInvitationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3683,6 +3815,7 @@ export namespace Prisma {
     createdCampaignEvents?: boolean | User$createdCampaignEventsArgs<ExtArgs>
     requestedEventUpdates?: boolean | User$requestedEventUpdatesArgs<ExtArgs>
     reviewedEventUpdates?: boolean | User$reviewedEventUpdatesArgs<ExtArgs>
+    receivedInvitations?: boolean | User$receivedInvitationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3705,6 +3838,7 @@ export namespace Prisma {
       createdCampaignEvents: Prisma.$CampaignEventPayload<ExtArgs>[]
       requestedEventUpdates: Prisma.$CampaignEventUpdatePayload<ExtArgs>[]
       reviewedEventUpdates: Prisma.$CampaignEventUpdatePayload<ExtArgs>[]
+      receivedInvitations: Prisma.$InvitationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4124,6 +4258,7 @@ export namespace Prisma {
     createdCampaignEvents<T extends User$createdCampaignEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCampaignEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     requestedEventUpdates<T extends User$requestedEventUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$requestedEventUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviewedEventUpdates<T extends User$reviewedEventUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedEventUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    receivedInvitations<T extends User$receivedInvitationsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4881,6 +5016,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.receivedInvitations
+   */
+  export type User$receivedInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5095,6 +5254,7 @@ export namespace Prisma {
     crmLeads?: boolean | BrandProfile$crmLeadsArgs<ExtArgs>
     campaigns?: boolean | BrandProfile$campaignsArgs<ExtArgs>
     communityLists?: boolean | BrandProfile$communityListsArgs<ExtArgs>
+    invitations?: boolean | BrandProfile$invitationsArgs<ExtArgs>
     _count?: boolean | BrandProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["brandProfile"]>
 
@@ -5142,6 +5302,7 @@ export namespace Prisma {
     crmLeads?: boolean | BrandProfile$crmLeadsArgs<ExtArgs>
     campaigns?: boolean | BrandProfile$campaignsArgs<ExtArgs>
     communityLists?: boolean | BrandProfile$communityListsArgs<ExtArgs>
+    invitations?: boolean | BrandProfile$invitationsArgs<ExtArgs>
     _count?: boolean | BrandProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BrandProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5158,6 +5319,7 @@ export namespace Prisma {
       crmLeads: Prisma.$CRMLeadPayload<ExtArgs>[]
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
       communityLists: Prisma.$CommunityListPayload<ExtArgs>[]
+      invitations: Prisma.$InvitationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5567,6 +5729,7 @@ export namespace Prisma {
     crmLeads<T extends BrandProfile$crmLeadsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$crmLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CRMLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaigns<T extends BrandProfile$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     communityLists<T extends BrandProfile$communityListsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$communityListsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunityListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invitations<T extends BrandProfile$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfile$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6075,6 +6238,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommunityListScalarFieldEnum | CommunityListScalarFieldEnum[]
+  }
+
+  /**
+   * BrandProfile.invitations
+   */
+  export type BrandProfile$invitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
   }
 
   /**
@@ -16569,6 +16756,7 @@ export namespace Prisma {
     brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
     contracts?: boolean | Campaign$contractsArgs<ExtArgs>
     events?: boolean | Campaign$eventsArgs<ExtArgs>
+    invitations?: boolean | Campaign$invitationsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
@@ -16640,6 +16828,7 @@ export namespace Prisma {
     brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
     contracts?: boolean | Campaign$contractsArgs<ExtArgs>
     events?: boolean | Campaign$eventsArgs<ExtArgs>
+    invitations?: boolean | Campaign$invitationsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16656,6 +16845,7 @@ export namespace Prisma {
       brand: Prisma.$BrandProfilePayload<ExtArgs>
       contracts: Prisma.$ContractPayload<ExtArgs>[]
       events: Prisma.$CampaignEventPayload<ExtArgs>[]
+      invitations: Prisma.$InvitationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17073,6 +17263,7 @@ export namespace Prisma {
     brand<T extends BrandProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfileDefaultArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     contracts<T extends Campaign$contractsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Campaign$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invitations<T extends Campaign$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17589,6 +17780,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CampaignEventScalarFieldEnum | CampaignEventScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign.invitations
+   */
+  export type Campaign$invitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
   }
 
   /**
@@ -28898,6 +29113,7 @@ export namespace Prisma {
     proposedRate: number | null
     negotiatedRate: number | null
     brandNote: string | null
+    selectedPlatform: string | null
     status: $Enums.ApplicationStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -28911,6 +29127,7 @@ export namespace Prisma {
     proposedRate: number | null
     negotiatedRate: number | null
     brandNote: string | null
+    selectedPlatform: string | null
     status: $Enums.ApplicationStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -28925,6 +29142,7 @@ export namespace Prisma {
     negotiatedRate: number
     contentFormats: number
     brandNote: number
+    selectedPlatform: number
     status: number
     createdAt: number
     updatedAt: number
@@ -28950,6 +29168,7 @@ export namespace Prisma {
     proposedRate?: true
     negotiatedRate?: true
     brandNote?: true
+    selectedPlatform?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -28963,6 +29182,7 @@ export namespace Prisma {
     proposedRate?: true
     negotiatedRate?: true
     brandNote?: true
+    selectedPlatform?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -28977,6 +29197,7 @@ export namespace Prisma {
     negotiatedRate?: true
     contentFormats?: true
     brandNote?: true
+    selectedPlatform?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -29078,6 +29299,7 @@ export namespace Prisma {
     negotiatedRate: number | null
     contentFormats: string[]
     brandNote: string | null
+    selectedPlatform: string | null
     status: $Enums.ApplicationStatus
     createdAt: Date
     updatedAt: Date
@@ -29111,6 +29333,7 @@ export namespace Prisma {
     negotiatedRate?: boolean
     contentFormats?: boolean
     brandNote?: boolean
+    selectedPlatform?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -29127,6 +29350,7 @@ export namespace Prisma {
     negotiatedRate?: boolean
     contentFormats?: boolean
     brandNote?: boolean
+    selectedPlatform?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -29143,6 +29367,7 @@ export namespace Prisma {
     negotiatedRate?: boolean
     contentFormats?: boolean
     brandNote?: boolean
+    selectedPlatform?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -29159,12 +29384,13 @@ export namespace Prisma {
     negotiatedRate?: boolean
     contentFormats?: boolean
     brandNote?: boolean
+    selectedPlatform?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorProfileId" | "coverLetter" | "proposedRate" | "negotiatedRate" | "contentFormats" | "brandNote" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "creatorProfileId" | "coverLetter" | "proposedRate" | "negotiatedRate" | "contentFormats" | "brandNote" | "selectedPlatform" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
     creator?: boolean | CreatorProfileDefaultArgs<ExtArgs>
@@ -29193,6 +29419,7 @@ export namespace Prisma {
       negotiatedRate: number | null
       contentFormats: string[]
       brandNote: string | null
+      selectedPlatform: string | null
       status: $Enums.ApplicationStatus
       createdAt: Date
       updatedAt: Date
@@ -29629,6 +29856,7 @@ export namespace Prisma {
     readonly negotiatedRate: FieldRef<"Application", 'Float'>
     readonly contentFormats: FieldRef<"Application", 'String[]'>
     readonly brandNote: FieldRef<"Application", 'String'>
+    readonly selectedPlatform: FieldRef<"Application", 'String'>
     readonly status: FieldRef<"Application", 'ApplicationStatus'>
     readonly createdAt: FieldRef<"Application", 'DateTime'>
     readonly updatedAt: FieldRef<"Application", 'DateTime'>
@@ -30052,6 +30280,1171 @@ export namespace Prisma {
 
 
   /**
+   * Model Invitation
+   */
+
+  export type AggregateInvitation = {
+    _count: InvitationCountAggregateOutputType | null
+    _avg: InvitationAvgAggregateOutputType | null
+    _sum: InvitationSumAggregateOutputType | null
+    _min: InvitationMinAggregateOutputType | null
+    _max: InvitationMaxAggregateOutputType | null
+  }
+
+  export type InvitationAvgAggregateOutputType = {
+    proposedBudget: number | null
+  }
+
+  export type InvitationSumAggregateOutputType = {
+    proposedBudget: number | null
+  }
+
+  export type InvitationMinAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    brandProfileId: string | null
+    creatorUserId: string | null
+    message: string | null
+    proposedBudget: number | null
+    status: $Enums.InvitationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InvitationMaxAggregateOutputType = {
+    id: string | null
+    campaignId: string | null
+    brandProfileId: string | null
+    creatorUserId: string | null
+    message: string | null
+    proposedBudget: number | null
+    status: $Enums.InvitationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InvitationCountAggregateOutputType = {
+    id: number
+    campaignId: number
+    brandProfileId: number
+    creatorUserId: number
+    message: number
+    proposedBudget: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type InvitationAvgAggregateInputType = {
+    proposedBudget?: true
+  }
+
+  export type InvitationSumAggregateInputType = {
+    proposedBudget?: true
+  }
+
+  export type InvitationMinAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorUserId?: true
+    message?: true
+    proposedBudget?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InvitationMaxAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorUserId?: true
+    message?: true
+    proposedBudget?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InvitationCountAggregateInputType = {
+    id?: true
+    campaignId?: true
+    brandProfileId?: true
+    creatorUserId?: true
+    message?: true
+    proposedBudget?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type InvitationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invitation to aggregate.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Invitations
+    **/
+    _count?: true | InvitationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InvitationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InvitationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InvitationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InvitationMaxAggregateInputType
+  }
+
+  export type GetInvitationAggregateType<T extends InvitationAggregateArgs> = {
+        [P in keyof T & keyof AggregateInvitation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInvitation[P]>
+      : GetScalarType<T[P], AggregateInvitation[P]>
+  }
+
+
+
+
+  export type InvitationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithAggregationInput | InvitationOrderByWithAggregationInput[]
+    by: InvitationScalarFieldEnum[] | InvitationScalarFieldEnum
+    having?: InvitationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InvitationCountAggregateInputType | true
+    _avg?: InvitationAvgAggregateInputType
+    _sum?: InvitationSumAggregateInputType
+    _min?: InvitationMinAggregateInputType
+    _max?: InvitationMaxAggregateInputType
+  }
+
+  export type InvitationGroupByOutputType = {
+    id: string
+    campaignId: string
+    brandProfileId: string
+    creatorUserId: string
+    message: string | null
+    proposedBudget: number | null
+    status: $Enums.InvitationStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: InvitationCountAggregateOutputType | null
+    _avg: InvitationAvgAggregateOutputType | null
+    _sum: InvitationSumAggregateOutputType | null
+    _min: InvitationMinAggregateOutputType | null
+    _max: InvitationMaxAggregateOutputType | null
+  }
+
+  type GetInvitationGroupByPayload<T extends InvitationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InvitationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InvitationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InvitationGroupByOutputType[P]>
+            : GetScalarType<T[P], InvitationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InvitationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorUserId?: boolean
+    message?: boolean
+    proposedBudget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorUserId?: boolean
+    message?: boolean
+    proposedBudget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorUserId?: boolean
+    message?: boolean
+    proposedBudget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["invitation"]>
+
+  export type InvitationSelectScalar = {
+    id?: boolean
+    campaignId?: boolean
+    brandProfileId?: boolean
+    creatorUserId?: boolean
+    message?: boolean
+    proposedBudget?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "brandProfileId" | "creatorUserId" | "message" | "proposedBudget" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
+  export type InvitationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InvitationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InvitationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | CampaignDefaultArgs<ExtArgs>
+    brand?: boolean | BrandProfileDefaultArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $InvitationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Invitation"
+    objects: {
+      campaign: Prisma.$CampaignPayload<ExtArgs>
+      brand: Prisma.$BrandProfilePayload<ExtArgs>
+      creator: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      campaignId: string
+      brandProfileId: string
+      creatorUserId: string
+      message: string | null
+      proposedBudget: number | null
+      status: $Enums.InvitationStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["invitation"]>
+    composites: {}
+  }
+
+  type InvitationGetPayload<S extends boolean | null | undefined | InvitationDefaultArgs> = $Result.GetResult<Prisma.$InvitationPayload, S>
+
+  type InvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InvitationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InvitationCountAggregateInputType | true
+    }
+
+  export interface InvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Invitation'], meta: { name: 'Invitation' } }
+    /**
+     * Find zero or one Invitation that matches the filter.
+     * @param {InvitationFindUniqueArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InvitationFindUniqueArgs>(args: SelectSubset<T, InvitationFindUniqueArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Invitation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {InvitationFindUniqueOrThrowArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, InvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invitation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindFirstArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InvitationFindFirstArgs>(args?: SelectSubset<T, InvitationFindFirstArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invitation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindFirstOrThrowArgs} args - Arguments to find a Invitation
+     * @example
+     * // Get one Invitation
+     * const invitation = await prisma.invitation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, InvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Invitations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Invitations
+     * const invitations = await prisma.invitation.findMany()
+     * 
+     * // Get first 10 Invitations
+     * const invitations = await prisma.invitation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const invitationWithIdOnly = await prisma.invitation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InvitationFindManyArgs>(args?: SelectSubset<T, InvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Invitation.
+     * @param {InvitationCreateArgs} args - Arguments to create a Invitation.
+     * @example
+     * // Create one Invitation
+     * const Invitation = await prisma.invitation.create({
+     *   data: {
+     *     // ... data to create a Invitation
+     *   }
+     * })
+     * 
+     */
+    create<T extends InvitationCreateArgs>(args: SelectSubset<T, InvitationCreateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Invitations.
+     * @param {InvitationCreateManyArgs} args - Arguments to create many Invitations.
+     * @example
+     * // Create many Invitations
+     * const invitation = await prisma.invitation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InvitationCreateManyArgs>(args?: SelectSubset<T, InvitationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Invitations and returns the data saved in the database.
+     * @param {InvitationCreateManyAndReturnArgs} args - Arguments to create many Invitations.
+     * @example
+     * // Create many Invitations
+     * const invitation = await prisma.invitation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Invitations and only return the `id`
+     * const invitationWithIdOnly = await prisma.invitation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, InvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Invitation.
+     * @param {InvitationDeleteArgs} args - Arguments to delete one Invitation.
+     * @example
+     * // Delete one Invitation
+     * const Invitation = await prisma.invitation.delete({
+     *   where: {
+     *     // ... filter to delete one Invitation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InvitationDeleteArgs>(args: SelectSubset<T, InvitationDeleteArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Invitation.
+     * @param {InvitationUpdateArgs} args - Arguments to update one Invitation.
+     * @example
+     * // Update one Invitation
+     * const invitation = await prisma.invitation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InvitationUpdateArgs>(args: SelectSubset<T, InvitationUpdateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Invitations.
+     * @param {InvitationDeleteManyArgs} args - Arguments to filter Invitations to delete.
+     * @example
+     * // Delete a few Invitations
+     * const { count } = await prisma.invitation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InvitationDeleteManyArgs>(args?: SelectSubset<T, InvitationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Invitations
+     * const invitation = await prisma.invitation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InvitationUpdateManyArgs>(args: SelectSubset<T, InvitationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invitations and returns the data updated in the database.
+     * @param {InvitationUpdateManyAndReturnArgs} args - Arguments to update many Invitations.
+     * @example
+     * // Update many Invitations
+     * const invitation = await prisma.invitation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Invitations and only return the `id`
+     * const invitationWithIdOnly = await prisma.invitation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InvitationUpdateManyAndReturnArgs>(args: SelectSubset<T, InvitationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Invitation.
+     * @param {InvitationUpsertArgs} args - Arguments to update or create a Invitation.
+     * @example
+     * // Update or create a Invitation
+     * const invitation = await prisma.invitation.upsert({
+     *   create: {
+     *     // ... data to create a Invitation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Invitation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InvitationUpsertArgs>(args: SelectSubset<T, InvitationUpsertArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Invitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationCountArgs} args - Arguments to filter Invitations to count.
+     * @example
+     * // Count the number of Invitations
+     * const count = await prisma.invitation.count({
+     *   where: {
+     *     // ... the filter for the Invitations we want to count
+     *   }
+     * })
+    **/
+    count<T extends InvitationCountArgs>(
+      args?: Subset<T, InvitationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InvitationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Invitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InvitationAggregateArgs>(args: Subset<T, InvitationAggregateArgs>): Prisma.PrismaPromise<GetInvitationAggregateType<T>>
+
+    /**
+     * Group by Invitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvitationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InvitationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InvitationGroupByArgs['orderBy'] }
+        : { orderBy?: InvitationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InvitationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInvitationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Invitation model
+   */
+  readonly fields: InvitationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Invitation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign<T extends CampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignDefaultArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    brand<T extends BrandProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandProfileDefaultArgs<ExtArgs>>): Prisma__BrandProfileClient<$Result.GetResult<Prisma.$BrandProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Invitation model
+   */
+  interface InvitationFieldRefs {
+    readonly id: FieldRef<"Invitation", 'String'>
+    readonly campaignId: FieldRef<"Invitation", 'String'>
+    readonly brandProfileId: FieldRef<"Invitation", 'String'>
+    readonly creatorUserId: FieldRef<"Invitation", 'String'>
+    readonly message: FieldRef<"Invitation", 'String'>
+    readonly proposedBudget: FieldRef<"Invitation", 'Float'>
+    readonly status: FieldRef<"Invitation", 'InvitationStatus'>
+    readonly createdAt: FieldRef<"Invitation", 'DateTime'>
+    readonly updatedAt: FieldRef<"Invitation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Invitation findUnique
+   */
+  export type InvitationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation findUniqueOrThrow
+   */
+  export type InvitationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation findFirst
+   */
+  export type InvitationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invitations.
+     */
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation findFirstOrThrow
+   */
+  export type InvitationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which Invitation to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invitations.
+     */
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation findMany
+   */
+  export type InvitationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which Invitations to fetch.
+     */
+    where?: InvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invitations to fetch.
+     */
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Invitations.
+     */
+    cursor?: InvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invitations.
+     */
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Invitation create
+   */
+  export type InvitationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Invitation.
+     */
+    data: XOR<InvitationCreateInput, InvitationUncheckedCreateInput>
+  }
+
+  /**
+   * Invitation createMany
+   */
+  export type InvitationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Invitations.
+     */
+    data: InvitationCreateManyInput | InvitationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Invitation createManyAndReturn
+   */
+  export type InvitationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Invitations.
+     */
+    data: InvitationCreateManyInput | InvitationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Invitation update
+   */
+  export type InvitationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Invitation.
+     */
+    data: XOR<InvitationUpdateInput, InvitationUncheckedUpdateInput>
+    /**
+     * Choose, which Invitation to update.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation updateMany
+   */
+  export type InvitationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Invitations.
+     */
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which Invitations to update
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Invitation updateManyAndReturn
+   */
+  export type InvitationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * The data used to update Invitations.
+     */
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which Invitations to update
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Invitation upsert
+   */
+  export type InvitationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Invitation to update in case it exists.
+     */
+    where: InvitationWhereUniqueInput
+    /**
+     * In case the Invitation found by the `where` argument doesn't exist, create a new Invitation with this data.
+     */
+    create: XOR<InvitationCreateInput, InvitationUncheckedCreateInput>
+    /**
+     * In case the Invitation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InvitationUpdateInput, InvitationUncheckedUpdateInput>
+  }
+
+  /**
+   * Invitation delete
+   */
+  export type InvitationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    /**
+     * Filter which Invitation to delete.
+     */
+    where: InvitationWhereUniqueInput
+  }
+
+  /**
+   * Invitation deleteMany
+   */
+  export type InvitationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invitations to delete
+     */
+    where?: InvitationWhereInput
+    /**
+     * Limit how many Invitations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Invitation without action
+   */
+  export type InvitationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -30397,12 +31790,28 @@ export namespace Prisma {
     negotiatedRate: 'negotiatedRate',
     contentFormats: 'contentFormats',
     brandNote: 'brandNote',
+    selectedPlatform: 'selectedPlatform',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[keyof typeof ApplicationScalarFieldEnum]
+
+
+  export const InvitationScalarFieldEnum: {
+    id: 'id',
+    campaignId: 'campaignId',
+    brandProfileId: 'brandProfileId',
+    creatorUserId: 'creatorUserId',
+    message: 'message',
+    proposedBudget: 'proposedBudget',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -30666,6 +32075,20 @@ export namespace Prisma {
    */
   export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus'
+   */
+  export type EnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus[]'
+   */
+  export type ListEnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -30698,6 +32121,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventListRelationFilter
     requestedEventUpdates?: CampaignEventUpdateListRelationFilter
     reviewedEventUpdates?: CampaignEventUpdateListRelationFilter
+    receivedInvitations?: InvitationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -30724,6 +32148,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventOrderByRelationAggregateInput
     requestedEventUpdates?: CampaignEventUpdateOrderByRelationAggregateInput
     reviewedEventUpdates?: CampaignEventUpdateOrderByRelationAggregateInput
+    receivedInvitations?: InvitationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -30753,6 +32178,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventListRelationFilter
     requestedEventUpdates?: CampaignEventUpdateListRelationFilter
     reviewedEventUpdates?: CampaignEventUpdateListRelationFilter
+    receivedInvitations?: InvitationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -30802,6 +32228,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadListRelationFilter
     campaigns?: CampaignListRelationFilter
     communityLists?: CommunityListListRelationFilter
+    invitations?: InvitationListRelationFilter
   }
 
   export type BrandProfileOrderByWithRelationInput = {
@@ -30818,6 +32245,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadOrderByRelationAggregateInput
     campaigns?: CampaignOrderByRelationAggregateInput
     communityLists?: CommunityListOrderByRelationAggregateInput
+    invitations?: InvitationOrderByRelationAggregateInput
   }
 
   export type BrandProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -30837,6 +32265,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadListRelationFilter
     campaigns?: CampaignListRelationFilter
     communityLists?: CommunityListListRelationFilter
+    invitations?: InvitationListRelationFilter
   }, "id" | "userId">
 
   export type BrandProfileOrderByWithAggregationInput = {
@@ -31596,6 +33025,7 @@ export namespace Prisma {
     brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
     contracts?: ContractListRelationFilter
     events?: CampaignEventListRelationFilter
+    invitations?: InvitationListRelationFilter
   }
 
   export type CampaignOrderByWithRelationInput = {
@@ -31620,6 +33050,7 @@ export namespace Prisma {
     brand?: BrandProfileOrderByWithRelationInput
     contracts?: ContractOrderByRelationAggregateInput
     events?: CampaignEventOrderByRelationAggregateInput
+    invitations?: InvitationOrderByRelationAggregateInput
   }
 
   export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -31647,6 +33078,7 @@ export namespace Prisma {
     brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
     contracts?: ContractListRelationFilter
     events?: CampaignEventListRelationFilter
+    invitations?: InvitationListRelationFilter
   }, "id">
 
   export type CampaignOrderByWithAggregationInput = {
@@ -32412,6 +33844,7 @@ export namespace Prisma {
     negotiatedRate?: FloatNullableFilter<"Application"> | number | null
     contentFormats?: StringNullableListFilter<"Application">
     brandNote?: StringNullableFilter<"Application"> | string | null
+    selectedPlatform?: StringNullableFilter<"Application"> | string | null
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
@@ -32428,6 +33861,7 @@ export namespace Prisma {
     negotiatedRate?: SortOrderInput | SortOrder
     contentFormats?: SortOrder
     brandNote?: SortOrderInput | SortOrder
+    selectedPlatform?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -32448,6 +33882,7 @@ export namespace Prisma {
     negotiatedRate?: FloatNullableFilter<"Application"> | number | null
     contentFormats?: StringNullableListFilter<"Application">
     brandNote?: StringNullableFilter<"Application"> | string | null
+    selectedPlatform?: StringNullableFilter<"Application"> | string | null
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
@@ -32464,6 +33899,7 @@ export namespace Prisma {
     negotiatedRate?: SortOrderInput | SortOrder
     contentFormats?: SortOrder
     brandNote?: SortOrderInput | SortOrder
+    selectedPlatform?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -32486,9 +33922,94 @@ export namespace Prisma {
     negotiatedRate?: FloatNullableWithAggregatesFilter<"Application"> | number | null
     contentFormats?: StringNullableListFilter<"Application">
     brandNote?: StringNullableWithAggregatesFilter<"Application"> | string | null
+    selectedPlatform?: StringNullableWithAggregatesFilter<"Application"> | string | null
     status?: EnumApplicationStatusWithAggregatesFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
+  }
+
+  export type InvitationWhereInput = {
+    AND?: InvitationWhereInput | InvitationWhereInput[]
+    OR?: InvitationWhereInput[]
+    NOT?: InvitationWhereInput | InvitationWhereInput[]
+    id?: StringFilter<"Invitation"> | string
+    campaignId?: StringFilter<"Invitation"> | string
+    brandProfileId?: StringFilter<"Invitation"> | string
+    creatorUserId?: StringFilter<"Invitation"> | string
+    message?: StringNullableFilter<"Invitation"> | string | null
+    proposedBudget?: FloatNullableFilter<"Invitation"> | number | null
+    status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+    updatedAt?: DateTimeFilter<"Invitation"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type InvitationOrderByWithRelationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorUserId?: SortOrder
+    message?: SortOrderInput | SortOrder
+    proposedBudget?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    campaign?: CampaignOrderByWithRelationInput
+    brand?: BrandProfileOrderByWithRelationInput
+    creator?: UserOrderByWithRelationInput
+  }
+
+  export type InvitationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    campaignId_creatorUserId?: InvitationCampaignIdCreatorUserIdCompoundUniqueInput
+    AND?: InvitationWhereInput | InvitationWhereInput[]
+    OR?: InvitationWhereInput[]
+    NOT?: InvitationWhereInput | InvitationWhereInput[]
+    campaignId?: StringFilter<"Invitation"> | string
+    brandProfileId?: StringFilter<"Invitation"> | string
+    creatorUserId?: StringFilter<"Invitation"> | string
+    message?: StringNullableFilter<"Invitation"> | string | null
+    proposedBudget?: FloatNullableFilter<"Invitation"> | number | null
+    status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+    updatedAt?: DateTimeFilter<"Invitation"> | Date | string
+    campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
+    brand?: XOR<BrandProfileScalarRelationFilter, BrandProfileWhereInput>
+    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "campaignId_creatorUserId">
+
+  export type InvitationOrderByWithAggregationInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorUserId?: SortOrder
+    message?: SortOrderInput | SortOrder
+    proposedBudget?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: InvitationCountOrderByAggregateInput
+    _avg?: InvitationAvgOrderByAggregateInput
+    _max?: InvitationMaxOrderByAggregateInput
+    _min?: InvitationMinOrderByAggregateInput
+    _sum?: InvitationSumOrderByAggregateInput
+  }
+
+  export type InvitationScalarWhereWithAggregatesInput = {
+    AND?: InvitationScalarWhereWithAggregatesInput | InvitationScalarWhereWithAggregatesInput[]
+    OR?: InvitationScalarWhereWithAggregatesInput[]
+    NOT?: InvitationScalarWhereWithAggregatesInput | InvitationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Invitation"> | string
+    campaignId?: StringWithAggregatesFilter<"Invitation"> | string
+    brandProfileId?: StringWithAggregatesFilter<"Invitation"> | string
+    creatorUserId?: StringWithAggregatesFilter<"Invitation"> | string
+    message?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
+    proposedBudget?: FloatNullableWithAggregatesFilter<"Invitation"> | number | null
+    status?: EnumInvitationStatusWithAggregatesFilter<"Invitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -32515,6 +34036,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -32541,6 +34063,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUpdateInput = {
@@ -32567,6 +34090,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -32593,6 +34117,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -32644,6 +34169,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
     campaigns?: CampaignCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListCreateNestedManyWithoutBrandInput
+    invitations?: InvitationCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUncheckedCreateInput = {
@@ -32659,6 +34185,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListUncheckedCreateNestedManyWithoutBrandInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUpdateInput = {
@@ -32674,6 +34201,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileUncheckedUpdateInput = {
@@ -32689,6 +34217,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUncheckedUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileCreateManyInput = {
@@ -33525,6 +35054,7 @@ export namespace Prisma {
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
     events?: CampaignEventCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateInput = {
@@ -33548,6 +35078,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
     events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUpdateInput = {
@@ -33571,6 +35102,7 @@ export namespace Prisma {
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateInput = {
@@ -33594,6 +35126,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignCreateManyInput = {
@@ -34383,6 +35916,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34399,6 +35933,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34411,6 +35946,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34427,6 +35963,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34441,6 +35978,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34453,6 +35991,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34467,7 +36006,89 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateInput = {
+    id?: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutInvitationsInput
+    brand: BrandProfileCreateNestedOneWithoutInvitationsInput
+    creator: UserCreateNestedOneWithoutReceivedInvitationsInput
+  }
+
+  export type InvitationUncheckedCreateInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutInvitationsNestedInput
+    brand?: BrandProfileUpdateOneRequiredWithoutInvitationsNestedInput
+    creator?: UserUpdateOneRequiredWithoutReceivedInvitationsNestedInput
+  }
+
+  export type InvitationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateManyInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34589,6 +36210,12 @@ export namespace Prisma {
     none?: CampaignEventUpdateWhereInput
   }
 
+  export type InvitationListRelationFilter = {
+    every?: InvitationWhereInput
+    some?: InvitationWhereInput
+    none?: InvitationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -34627,6 +36254,10 @@ export namespace Prisma {
   }
 
   export type CampaignEventUpdateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InvitationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -36035,6 +37666,7 @@ export namespace Prisma {
     negotiatedRate?: SortOrder
     contentFormats?: SortOrder
     brandNote?: SortOrder
+    selectedPlatform?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36053,6 +37685,7 @@ export namespace Prisma {
     proposedRate?: SortOrder
     negotiatedRate?: SortOrder
     brandNote?: SortOrder
+    selectedPlatform?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36066,6 +37699,7 @@ export namespace Prisma {
     proposedRate?: SortOrder
     negotiatedRate?: SortOrder
     brandNote?: SortOrder
+    selectedPlatform?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -36084,6 +37718,72 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
+  export type InvitationCampaignIdCreatorUserIdCompoundUniqueInput = {
+    campaignId: string
+    creatorUserId: string
+  }
+
+  export type InvitationCountOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorUserId?: SortOrder
+    message?: SortOrder
+    proposedBudget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InvitationAvgOrderByAggregateInput = {
+    proposedBudget?: SortOrder
+  }
+
+  export type InvitationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorUserId?: SortOrder
+    message?: SortOrder
+    proposedBudget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InvitationMinOrderByAggregateInput = {
+    id?: SortOrder
+    campaignId?: SortOrder
+    brandProfileId?: SortOrder
+    creatorUserId?: SortOrder
+    message?: SortOrder
+    proposedBudget?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InvitationSumOrderByAggregateInput = {
+    proposedBudget?: SortOrder
+  }
+
+  export type EnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
   export type AccountCreateNestedManyWithoutUserInput = {
@@ -36182,6 +37882,13 @@ export namespace Prisma {
     connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
   }
 
+  export type InvitationCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput> | InvitationCreateWithoutCreatorInput[] | InvitationUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCreatorInput | InvitationCreateOrConnectWithoutCreatorInput[]
+    createMany?: InvitationCreateManyCreatorInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -36276,6 +37983,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignEventUpdateCreateOrConnectWithoutReviewedByInput | CampaignEventUpdateCreateOrConnectWithoutReviewedByInput[]
     createMany?: CampaignEventUpdateCreateManyReviewedByInputEnvelope
     connect?: CampaignEventUpdateWhereUniqueInput | CampaignEventUpdateWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput> | InvitationCreateWithoutCreatorInput[] | InvitationUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCreatorInput | InvitationCreateOrConnectWithoutCreatorInput[]
+    createMany?: InvitationCreateManyCreatorInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -36486,6 +38200,20 @@ export namespace Prisma {
     deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
   }
 
+  export type InvitationUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput> | InvitationCreateWithoutCreatorInput[] | InvitationUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCreatorInput | InvitationCreateOrConnectWithoutCreatorInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCreatorInput | InvitationUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: InvitationCreateManyCreatorInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCreatorInput | InvitationUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCreatorInput | InvitationUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -36674,6 +38402,20 @@ export namespace Prisma {
     deleteMany?: CampaignEventUpdateScalarWhereInput | CampaignEventUpdateScalarWhereInput[]
   }
 
+  export type InvitationUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput> | InvitationCreateWithoutCreatorInput[] | InvitationUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCreatorInput | InvitationCreateOrConnectWithoutCreatorInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCreatorInput | InvitationUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: InvitationCreateManyCreatorInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCreatorInput | InvitationUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCreatorInput | InvitationUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutBrandProfileInput = {
     create?: XOR<UserCreateWithoutBrandProfileInput, UserUncheckedCreateWithoutBrandProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutBrandProfileInput
@@ -36701,6 +38443,13 @@ export namespace Prisma {
     connect?: CommunityListWhereUniqueInput | CommunityListWhereUniqueInput[]
   }
 
+  export type InvitationCreateNestedManyWithoutBrandInput = {
+    create?: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput> | InvitationCreateWithoutBrandInput[] | InvitationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutBrandInput | InvitationCreateOrConnectWithoutBrandInput[]
+    createMany?: InvitationCreateManyBrandInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
   export type CRMLeadUncheckedCreateNestedManyWithoutBrandInput = {
     create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
     connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
@@ -36720,6 +38469,13 @@ export namespace Prisma {
     connectOrCreate?: CommunityListCreateOrConnectWithoutBrandInput | CommunityListCreateOrConnectWithoutBrandInput[]
     createMany?: CommunityListCreateManyBrandInputEnvelope
     connect?: CommunityListWhereUniqueInput | CommunityListWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutBrandInput = {
+    create?: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput> | InvitationCreateWithoutBrandInput[] | InvitationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutBrandInput | InvitationCreateOrConnectWithoutBrandInput[]
+    createMany?: InvitationCreateManyBrandInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutBrandProfileNestedInput = {
@@ -36772,6 +38528,20 @@ export namespace Prisma {
     deleteMany?: CommunityListScalarWhereInput | CommunityListScalarWhereInput[]
   }
 
+  export type InvitationUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput> | InvitationCreateWithoutBrandInput[] | InvitationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutBrandInput | InvitationCreateOrConnectWithoutBrandInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutBrandInput | InvitationUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: InvitationCreateManyBrandInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutBrandInput | InvitationUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutBrandInput | InvitationUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
   export type CRMLeadUncheckedUpdateManyWithoutBrandNestedInput = {
     create?: XOR<CRMLeadCreateWithoutBrandInput, CRMLeadUncheckedCreateWithoutBrandInput> | CRMLeadCreateWithoutBrandInput[] | CRMLeadUncheckedCreateWithoutBrandInput[]
     connectOrCreate?: CRMLeadCreateOrConnectWithoutBrandInput | CRMLeadCreateOrConnectWithoutBrandInput[]
@@ -36812,6 +38582,20 @@ export namespace Prisma {
     update?: CommunityListUpdateWithWhereUniqueWithoutBrandInput | CommunityListUpdateWithWhereUniqueWithoutBrandInput[]
     updateMany?: CommunityListUpdateManyWithWhereWithoutBrandInput | CommunityListUpdateManyWithWhereWithoutBrandInput[]
     deleteMany?: CommunityListScalarWhereInput | CommunityListScalarWhereInput[]
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutBrandNestedInput = {
+    create?: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput> | InvitationCreateWithoutBrandInput[] | InvitationUncheckedCreateWithoutBrandInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutBrandInput | InvitationCreateOrConnectWithoutBrandInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutBrandInput | InvitationUpsertWithWhereUniqueWithoutBrandInput[]
+    createMany?: InvitationCreateManyBrandInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutBrandInput | InvitationUpdateWithWhereUniqueWithoutBrandInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutBrandInput | InvitationUpdateManyWithWhereWithoutBrandInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
   export type CreatorProfileCreatetopNichesInput = {
@@ -37183,6 +38967,13 @@ export namespace Prisma {
     connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
   }
 
+  export type InvitationCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput> | InvitationCreateWithoutCampaignInput[] | InvitationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCampaignInput | InvitationCreateOrConnectWithoutCampaignInput[]
+    createMany?: InvitationCreateManyCampaignInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
   export type ApplicationUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<ApplicationCreateWithoutCampaignInput, ApplicationUncheckedCreateWithoutCampaignInput> | ApplicationCreateWithoutCampaignInput[] | ApplicationUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutCampaignInput | ApplicationCreateOrConnectWithoutCampaignInput[]
@@ -37202,6 +38993,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignEventCreateOrConnectWithoutCampaignInput | CampaignEventCreateOrConnectWithoutCampaignInput[]
     createMany?: CampaignEventCreateManyCampaignInputEnvelope
     connect?: CampaignEventWhereUniqueInput | CampaignEventWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput> | InvitationCreateWithoutCampaignInput[] | InvitationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCampaignInput | InvitationCreateOrConnectWithoutCampaignInput[]
+    createMany?: InvitationCreateManyCampaignInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -37268,6 +39066,20 @@ export namespace Prisma {
     deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
   }
 
+  export type InvitationUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput> | InvitationCreateWithoutCampaignInput[] | InvitationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCampaignInput | InvitationCreateOrConnectWithoutCampaignInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCampaignInput | InvitationUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: InvitationCreateManyCampaignInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCampaignInput | InvitationUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCampaignInput | InvitationUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
   export type ApplicationUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<ApplicationCreateWithoutCampaignInput, ApplicationUncheckedCreateWithoutCampaignInput> | ApplicationCreateWithoutCampaignInput[] | ApplicationUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutCampaignInput | ApplicationCreateOrConnectWithoutCampaignInput[]
@@ -37308,6 +39120,20 @@ export namespace Prisma {
     update?: CampaignEventUpdateWithWhereUniqueWithoutCampaignInput | CampaignEventUpdateWithWhereUniqueWithoutCampaignInput[]
     updateMany?: CampaignEventUpdateManyWithWhereWithoutCampaignInput | CampaignEventUpdateManyWithWhereWithoutCampaignInput[]
     deleteMany?: CampaignEventScalarWhereInput | CampaignEventScalarWhereInput[]
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput> | InvitationCreateWithoutCampaignInput[] | InvitationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCampaignInput | InvitationCreateOrConnectWithoutCampaignInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCampaignInput | InvitationUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: InvitationCreateManyCampaignInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCampaignInput | InvitationUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCampaignInput | InvitationUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
   export type CampaignCreateNestedOneWithoutEventsInput = {
@@ -37777,6 +39603,52 @@ export namespace Prisma {
     update?: XOR<XOR<CreatorProfileUpdateToOneWithWhereWithoutApplicationsInput, CreatorProfileUpdateWithoutApplicationsInput>, CreatorProfileUncheckedUpdateWithoutApplicationsInput>
   }
 
+  export type CampaignCreateNestedOneWithoutInvitationsInput = {
+    create?: XOR<CampaignCreateWithoutInvitationsInput, CampaignUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutInvitationsInput
+    connect?: CampaignWhereUniqueInput
+  }
+
+  export type BrandProfileCreateNestedOneWithoutInvitationsInput = {
+    create?: XOR<BrandProfileCreateWithoutInvitationsInput, BrandProfileUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutInvitationsInput
+    connect?: BrandProfileWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReceivedInvitationsInput = {
+    create?: XOR<UserCreateWithoutReceivedInvitationsInput, UserUncheckedCreateWithoutReceivedInvitationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedInvitationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumInvitationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InvitationStatus
+  }
+
+  export type CampaignUpdateOneRequiredWithoutInvitationsNestedInput = {
+    create?: XOR<CampaignCreateWithoutInvitationsInput, CampaignUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutInvitationsInput
+    upsert?: CampaignUpsertWithoutInvitationsInput
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutInvitationsInput, CampaignUpdateWithoutInvitationsInput>, CampaignUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type BrandProfileUpdateOneRequiredWithoutInvitationsNestedInput = {
+    create?: XOR<BrandProfileCreateWithoutInvitationsInput, BrandProfileUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: BrandProfileCreateOrConnectWithoutInvitationsInput
+    upsert?: BrandProfileUpsertWithoutInvitationsInput
+    connect?: BrandProfileWhereUniqueInput
+    update?: XOR<XOR<BrandProfileUpdateToOneWithWhereWithoutInvitationsInput, BrandProfileUpdateWithoutInvitationsInput>, BrandProfileUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReceivedInvitationsNestedInput = {
+    create?: XOR<UserCreateWithoutReceivedInvitationsInput, UserUncheckedCreateWithoutReceivedInvitationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedInvitationsInput
+    upsert?: UserUpsertWithoutReceivedInvitationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedInvitationsInput, UserUpdateWithoutReceivedInvitationsInput>, UserUncheckedUpdateWithoutReceivedInvitationsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -38203,6 +40075,23 @@ export namespace Prisma {
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
+  export type NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
+  }
+
   export type AccountCreateWithoutUserInput = {
     id?: string
     accountId: string
@@ -38255,6 +40144,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
     campaigns?: CampaignCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListCreateNestedManyWithoutBrandInput
+    invitations?: InvitationCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUncheckedCreateWithoutUserInput = {
@@ -38269,6 +40159,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListUncheckedCreateNestedManyWithoutBrandInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileCreateOrConnectWithoutUserInput = {
@@ -38661,6 +40552,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InvitationCreateWithoutCreatorInput = {
+    id?: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutInvitationsInput
+    brand: BrandProfileCreateNestedOneWithoutInvitationsInput
+  }
+
+  export type InvitationUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationCreateOrConnectWithoutCreatorInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type InvitationCreateManyCreatorInputEnvelope = {
+    data: InvitationCreateManyCreatorInput | InvitationCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -38719,6 +40642,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileUncheckedUpdateWithoutUserInput = {
@@ -38733,6 +40657,7 @@ export namespace Prisma {
     crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUncheckedUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type ConnectionUpsertWithWhereUniqueWithoutReceiverInput = {
@@ -39081,6 +41006,37 @@ export namespace Prisma {
     data: XOR<CampaignEventUpdateUpdateManyMutationInput, CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByInput>
   }
 
+  export type InvitationUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutCreatorInput, InvitationUncheckedUpdateWithoutCreatorInput>
+    create: XOR<InvitationCreateWithoutCreatorInput, InvitationUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutCreatorInput, InvitationUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutCreatorInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type InvitationScalarWhereInput = {
+    AND?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+    OR?: InvitationScalarWhereInput[]
+    NOT?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+    id?: StringFilter<"Invitation"> | string
+    campaignId?: StringFilter<"Invitation"> | string
+    brandProfileId?: StringFilter<"Invitation"> | string
+    creatorUserId?: StringFilter<"Invitation"> | string
+    message?: StringNullableFilter<"Invitation"> | string | null
+    proposedBudget?: FloatNullableFilter<"Invitation"> | number | null
+    status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+    updatedAt?: DateTimeFilter<"Invitation"> | Date | string
+  }
+
   export type UserCreateWithoutBrandProfileInput = {
     id?: string
     email: string
@@ -39104,6 +41060,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutBrandProfileInput = {
@@ -39129,6 +41086,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutBrandProfileInput = {
@@ -39188,6 +41146,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
     events?: CampaignEventCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutBrandInput = {
@@ -39210,6 +41169,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
     events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutBrandInput = {
@@ -39243,6 +41203,38 @@ export namespace Prisma {
 
   export type CommunityListCreateManyBrandInputEnvelope = {
     data: CommunityListCreateManyBrandInput | CommunityListCreateManyBrandInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InvitationCreateWithoutBrandInput = {
+    id?: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaign: CampaignCreateNestedOneWithoutInvitationsInput
+    creator: UserCreateNestedOneWithoutReceivedInvitationsInput
+  }
+
+  export type InvitationUncheckedCreateWithoutBrandInput = {
+    id?: string
+    campaignId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationCreateOrConnectWithoutBrandInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput>
+  }
+
+  export type InvitationCreateManyBrandInputEnvelope = {
+    data: InvitationCreateManyBrandInput | InvitationCreateManyBrandInput[]
     skipDuplicates?: boolean
   }
 
@@ -39280,6 +41272,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBrandProfileInput = {
@@ -39305,6 +41298,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CRMLeadUpsertWithWhereUniqueWithoutBrandInput = {
@@ -39403,6 +41397,22 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CommunityList"> | Date | string
   }
 
+  export type InvitationUpsertWithWhereUniqueWithoutBrandInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutBrandInput, InvitationUncheckedUpdateWithoutBrandInput>
+    create: XOR<InvitationCreateWithoutBrandInput, InvitationUncheckedCreateWithoutBrandInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutBrandInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutBrandInput, InvitationUncheckedUpdateWithoutBrandInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutBrandInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutBrandInput>
+  }
+
   export type ApplicationCreateWithoutCreatorInput = {
     id?: string
     coverLetter?: string | null
@@ -39410,6 +41420,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39424,6 +41435,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39570,6 +41582,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCreatorProfileInput = {
@@ -39595,6 +41608,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCreatorProfileInput = {
@@ -39630,6 +41644,7 @@ export namespace Prisma {
     negotiatedRate?: FloatNullableFilter<"Application"> | number | null
     contentFormats?: StringNullableListFilter<"Application">
     brandNote?: StringNullableFilter<"Application"> | string | null
+    selectedPlatform?: StringNullableFilter<"Application"> | string | null
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
@@ -39748,6 +41763,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatorProfileInput = {
@@ -39773,6 +41789,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CreatorProfileCreateWithoutSocialPostsInput = {
@@ -39898,6 +41915,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -39923,6 +41941,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -39964,6 +41983,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -39989,6 +42009,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -40014,6 +42035,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -40039,6 +42061,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -40080,6 +42103,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -40105,6 +42129,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutPlatformTokensInput = {
@@ -40130,6 +42155,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutPlatformTokensInput = {
@@ -40155,6 +42181,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutPlatformTokensInput = {
@@ -40196,6 +42223,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlatformTokensInput = {
@@ -40221,6 +42249,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutPlatformStatsInput = {
@@ -40246,6 +42275,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutPlatformStatsInput = {
@@ -40271,6 +42301,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutPlatformStatsInput = {
@@ -40312,6 +42343,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlatformStatsInput = {
@@ -40337,6 +42369,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutReceivedMessagesInput = {
@@ -40362,6 +42395,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutReceivedMessagesInput = {
@@ -40387,6 +42421,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutReceivedMessagesInput = {
@@ -40417,6 +42452,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -40442,6 +42478,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -40483,6 +42520,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
@@ -40508,6 +42546,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUpsertWithoutSentMessagesInput = {
@@ -40544,6 +42583,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -40569,6 +42609,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type ApplicationCreateWithoutCampaignInput = {
@@ -40578,6 +42619,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40592,6 +42634,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40619,6 +42662,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutBrandProfileInput
     crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListCreateNestedManyWithoutBrandInput
+    invitations?: InvitationCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUncheckedCreateWithoutCampaignsInput = {
@@ -40633,6 +42677,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListUncheckedCreateNestedManyWithoutBrandInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileCreateOrConnectWithoutCampaignsInput = {
@@ -40710,6 +42755,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InvitationCreateWithoutCampaignInput = {
+    id?: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    brand: BrandProfileCreateNestedOneWithoutInvitationsInput
+    creator: UserCreateNestedOneWithoutReceivedInvitationsInput
+  }
+
+  export type InvitationUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    brandProfileId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationCreateOrConnectWithoutCampaignInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type InvitationCreateManyCampaignInputEnvelope = {
+    data: InvitationCreateManyCampaignInput | InvitationCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApplicationUpsertWithWhereUniqueWithoutCampaignInput = {
     where: ApplicationWhereUniqueInput
     update: XOR<ApplicationUpdateWithoutCampaignInput, ApplicationUncheckedUpdateWithoutCampaignInput>
@@ -40749,6 +42826,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
     crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileUncheckedUpdateWithoutCampaignsInput = {
@@ -40763,6 +42841,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUncheckedUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type ContractUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -40797,6 +42876,22 @@ export namespace Prisma {
     data: XOR<CampaignEventUpdateManyMutationInput, CampaignEventUncheckedUpdateManyWithoutCampaignInput>
   }
 
+  export type InvitationUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutCampaignInput, InvitationUncheckedUpdateWithoutCampaignInput>
+    create: XOR<InvitationCreateWithoutCampaignInput, InvitationUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutCampaignInput, InvitationUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutCampaignInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutCampaignInput>
+  }
+
   export type CampaignCreateWithoutEventsInput = {
     id?: string
     title: string
@@ -40817,6 +42912,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutEventsInput = {
@@ -40839,6 +42935,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutEventsInput = {
@@ -40916,6 +43013,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCampaignEventsInput = {
@@ -40941,6 +43039,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCampaignEventsInput = {
@@ -41015,6 +43114,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutEventsInput = {
@@ -41037,6 +43137,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CreatorProfileUpsertWithoutCampaignEventsInput = {
@@ -41126,6 +43227,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCampaignEventsInput = {
@@ -41151,6 +43253,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CampaignEventUpdateUpsertWithWhereUniqueWithoutEventInput = {
@@ -41225,6 +43328,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutRequestedEventUpdatesInput = {
@@ -41250,6 +43354,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutRequestedEventUpdatesInput = {
@@ -41280,6 +43385,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutReviewedEventUpdatesInput = {
@@ -41305,6 +43411,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutReviewedEventUpdatesInput = {
@@ -41385,6 +43492,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestedEventUpdatesInput = {
@@ -41410,6 +43518,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUpsertWithoutReviewedEventUpdatesInput = {
@@ -41446,6 +43555,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewedEventUpdatesInput = {
@@ -41471,6 +43581,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CampaignCreateWithoutContractsInput = {
@@ -41493,6 +43604,7 @@ export namespace Prisma {
     applications?: ApplicationCreateNestedManyWithoutCampaignInput
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     events?: CampaignEventCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutContractsInput = {
@@ -41515,6 +43627,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
     events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutContractsInput = {
@@ -41654,6 +43767,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     events?: CampaignEventUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutContractsInput = {
@@ -41676,6 +43790,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CreatorProfileUpsertWithoutContractsInput = {
@@ -41860,6 +43975,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutBrandProfileInput
     campaigns?: CampaignCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListCreateNestedManyWithoutBrandInput
+    invitations?: InvitationCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUncheckedCreateWithoutCrmLeadsInput = {
@@ -41874,6 +43990,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
     communityLists?: CommunityListUncheckedCreateNestedManyWithoutBrandInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileCreateOrConnectWithoutCrmLeadsInput = {
@@ -41904,6 +44021,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
     campaigns?: CampaignUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileUncheckedUpdateWithoutCrmLeadsInput = {
@@ -41918,6 +44036,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
     communityLists?: CommunityListUncheckedUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type ContractCreateWithoutTasksInput = {
@@ -42003,6 +44122,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutReceivedConnectionsInput = {
@@ -42028,6 +44148,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutReceivedConnectionsInput = {
@@ -42058,6 +44179,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSentConnectionsInput = {
@@ -42083,6 +44205,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSentConnectionsInput = {
@@ -42124,6 +44247,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedConnectionsInput = {
@@ -42149,6 +44273,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUpsertWithoutSentConnectionsInput = {
@@ -42185,6 +44310,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentConnectionsInput = {
@@ -42210,6 +44336,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type BrandProfileCreateWithoutCommunityListsInput = {
@@ -42224,6 +44351,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutBrandProfileInput
     crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
     campaigns?: CampaignCreateNestedManyWithoutBrandInput
+    invitations?: InvitationCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileUncheckedCreateWithoutCommunityListsInput = {
@@ -42238,6 +44366,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutBrandInput
   }
 
   export type BrandProfileCreateOrConnectWithoutCommunityListsInput = {
@@ -42290,6 +44419,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
     crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUpdateManyWithoutBrandNestedInput
   }
 
   export type BrandProfileUncheckedUpdateWithoutCommunityListsInput = {
@@ -42304,6 +44434,7 @@ export namespace Prisma {
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutBrandNestedInput
   }
 
   export type CommunityListMemberUpsertWithWhereUniqueWithoutListInput = {
@@ -42399,6 +44530,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -42424,6 +44556,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+    receivedInvitations?: InvitationUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -42465,6 +44598,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -42490,6 +44624,7 @@ export namespace Prisma {
     createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
     requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
     reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
+    receivedInvitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CampaignCreateWithoutApplicationsInput = {
@@ -42512,6 +44647,7 @@ export namespace Prisma {
     brand: BrandProfileCreateNestedOneWithoutCampaignsInput
     contracts?: ContractCreateNestedManyWithoutCampaignInput
     events?: CampaignEventCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutApplicationsInput = {
@@ -42534,6 +44670,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
     events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutApplicationsInput = {
@@ -42619,6 +44756,7 @@ export namespace Prisma {
     brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutApplicationsInput = {
@@ -42641,6 +44779,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CreatorProfileUpsertWithoutApplicationsInput = {
@@ -42694,6 +44833,310 @@ export namespace Prisma {
     contracts?: ContractUncheckedUpdateManyWithoutCreatorNestedInput
     campaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatorNestedInput
     socialPosts?: SocialPostUncheckedUpdateManyWithoutCreatorProfileNestedInput
+  }
+
+  export type CampaignCreateWithoutInvitationsInput = {
+    id?: string
+    title: string
+    description: string
+    budget: number
+    status?: $Enums.CampaignStatus
+    imageUrl?: string | null
+    deadline?: Date | string | null
+    requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
+    platforms?: CampaignCreateplatformsInput | string[]
+    contentFormats?: CampaignCreatecontentFormatsInput | string[]
+    minFollowers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationCreateNestedManyWithoutCampaignInput
+    brand: BrandProfileCreateNestedOneWithoutCampaignsInput
+    contracts?: ContractCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutInvitationsInput = {
+    id?: string
+    brandProfileId: string
+    title: string
+    description: string
+    budget: number
+    status?: $Enums.CampaignStatus
+    imageUrl?: string | null
+    deadline?: Date | string | null
+    requirements?: string | null
+    briefDescription?: string | null
+    goal?: string | null
+    dosAndDonts?: string | null
+    platforms?: CampaignCreateplatformsInput | string[]
+    contentFormats?: CampaignCreatecontentFormatsInput | string[]
+    minFollowers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationUncheckedCreateNestedManyWithoutCampaignInput
+    contracts?: ContractUncheckedCreateNestedManyWithoutCampaignInput
+    events?: CampaignEventUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutInvitationsInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutInvitationsInput, CampaignUncheckedCreateWithoutInvitationsInput>
+  }
+
+  export type BrandProfileCreateWithoutInvitationsInput = {
+    id?: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    user: UserCreateNestedOneWithoutBrandProfileInput
+    crmLeads?: CRMLeadCreateNestedManyWithoutBrandInput
+    campaigns?: CampaignCreateNestedManyWithoutBrandInput
+    communityLists?: CommunityListCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileUncheckedCreateWithoutInvitationsInput = {
+    id?: string
+    userId: string
+    companyName: string
+    industry?: string | null
+    website?: string | null
+    brandAccountType?: string | null
+    bio?: string | null
+    location?: string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    crmLeads?: CRMLeadUncheckedCreateNestedManyWithoutBrandInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutBrandInput
+    communityLists?: CommunityListUncheckedCreateNestedManyWithoutBrandInput
+  }
+
+  export type BrandProfileCreateOrConnectWithoutInvitationsInput = {
+    where: BrandProfileWhereUniqueInput
+    create: XOR<BrandProfileCreateWithoutInvitationsInput, BrandProfileUncheckedCreateWithoutInvitationsInput>
+  }
+
+  export type UserCreateWithoutReceivedInvitationsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutReceivedInvitationsInput = {
+    id?: string
+    email: string
+    emailVerified?: boolean
+    name?: string | null
+    image?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hasCompletedOnboarding?: boolean
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    brandProfile?: BrandProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedConnections?: ConnectionUncheckedCreateNestedManyWithoutReceiverInput
+    sentConnections?: ConnectionUncheckedCreateNestedManyWithoutSenderInput
+    creatorProfile?: CreatorProfileUncheckedCreateNestedOneWithoutUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    platformStats?: PlatformStatsUncheckedCreateNestedManyWithoutUserInput
+    platformTokens?: PlatformTokenUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    createdCampaignEvents?: CampaignEventUncheckedCreateNestedManyWithoutCreatedByInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutRequestedByInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutReceivedInvitationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReceivedInvitationsInput, UserUncheckedCreateWithoutReceivedInvitationsInput>
+  }
+
+  export type CampaignUpsertWithoutInvitationsInput = {
+    update: XOR<CampaignUpdateWithoutInvitationsInput, CampaignUncheckedUpdateWithoutInvitationsInput>
+    create: XOR<CampaignCreateWithoutInvitationsInput, CampaignUncheckedCreateWithoutInvitationsInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutInvitationsInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutInvitationsInput, CampaignUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type CampaignUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
+    platforms?: CampaignUpdateplatformsInput | string[]
+    contentFormats?: CampaignUpdatecontentFormatsInput | string[]
+    minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUpdateManyWithoutCampaignNestedInput
+    brand?: BrandProfileUpdateOneRequiredWithoutCampaignsNestedInput
+    contracts?: ContractUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    budget?: FloatFieldUpdateOperationsInput | number
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    briefDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: NullableStringFieldUpdateOperationsInput | string | null
+    dosAndDonts?: NullableStringFieldUpdateOperationsInput | string | null
+    platforms?: CampaignUpdateplatformsInput | string[]
+    contentFormats?: CampaignUpdatecontentFormatsInput | string[]
+    minFollowers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
+    contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
+    events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type BrandProfileUpsertWithoutInvitationsInput = {
+    update: XOR<BrandProfileUpdateWithoutInvitationsInput, BrandProfileUncheckedUpdateWithoutInvitationsInput>
+    create: XOR<BrandProfileCreateWithoutInvitationsInput, BrandProfileUncheckedCreateWithoutInvitationsInput>
+    where?: BrandProfileWhereInput
+  }
+
+  export type BrandProfileUpdateToOneWithWhereWithoutInvitationsInput = {
+    where?: BrandProfileWhereInput
+    data: XOR<BrandProfileUpdateWithoutInvitationsInput, BrandProfileUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type BrandProfileUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    user?: UserUpdateOneRequiredWithoutBrandProfileNestedInput
+    crmLeads?: CRMLeadUpdateManyWithoutBrandNestedInput
+    campaigns?: CampaignUpdateManyWithoutBrandNestedInput
+    communityLists?: CommunityListUpdateManyWithoutBrandNestedInput
+  }
+
+  export type BrandProfileUncheckedUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    brandAccountType?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    socialLinks?: NullableJsonNullValueInput | InputJsonValue
+    crmLeads?: CRMLeadUncheckedUpdateManyWithoutBrandNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutBrandNestedInput
+    communityLists?: CommunityListUncheckedUpdateManyWithoutBrandNestedInput
+  }
+
+  export type UserUpsertWithoutReceivedInvitationsInput = {
+    update: XOR<UserUpdateWithoutReceivedInvitationsInput, UserUncheckedUpdateWithoutReceivedInvitationsInput>
+    create: XOR<UserCreateWithoutReceivedInvitationsInput, UserUncheckedCreateWithoutReceivedInvitationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReceivedInvitationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReceivedInvitationsInput, UserUncheckedUpdateWithoutReceivedInvitationsInput>
+  }
+
+  export type UserUpdateWithoutReceivedInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReceivedInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hasCompletedOnboarding?: BoolFieldUpdateOperationsInput | boolean
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    brandProfile?: BrandProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedConnections?: ConnectionUncheckedUpdateManyWithoutReceiverNestedInput
+    sentConnections?: ConnectionUncheckedUpdateManyWithoutSenderNestedInput
+    creatorProfile?: CreatorProfileUncheckedUpdateOneWithoutUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    platformStats?: PlatformStatsUncheckedUpdateManyWithoutUserNestedInput
+    platformTokens?: PlatformTokenUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    createdCampaignEvents?: CampaignEventUncheckedUpdateManyWithoutCreatedByNestedInput
+    requestedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutRequestedByNestedInput
+    reviewedEventUpdates?: CampaignEventUpdateUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -42822,6 +45265,17 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviewedAt?: Date | string | null
+  }
+
+  export type InvitationCreateManyCreatorInput = {
+    id?: string
+    campaignId: string
+    brandProfileId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -43210,6 +45664,39 @@ export namespace Prisma {
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type InvitationUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutInvitationsNestedInput
+    brand?: BrandProfileUpdateOneRequiredWithoutInvitationsNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CRMLeadCreateManyBrandInput = {
     id?: string
     handle: string
@@ -43244,6 +45731,17 @@ export namespace Prisma {
     id?: string
     name: string
     createdAt?: Date | string
+  }
+
+  export type InvitationCreateManyBrandInput = {
+    id?: string
+    campaignId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CRMLeadUpdateWithoutBrandInput = {
@@ -43299,6 +45797,7 @@ export namespace Prisma {
     applications?: ApplicationUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutBrandInput = {
@@ -43321,6 +45820,7 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutCampaignNestedInput
     contracts?: ContractUncheckedUpdateManyWithoutCampaignNestedInput
     events?: CampaignEventUncheckedUpdateManyWithoutCampaignNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutBrandInput = {
@@ -43362,6 +45862,39 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InvitationUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: CampaignUpdateOneRequiredWithoutInvitationsNestedInput
+    creator?: UserUpdateOneRequiredWithoutReceivedInvitationsNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutBrandInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationCreateManyCreatorInput = {
     id?: string
     campaignId: string
@@ -43370,6 +45903,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -43418,6 +45952,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43432,6 +45967,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43445,6 +45981,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43572,6 +46109,7 @@ export namespace Prisma {
     negotiatedRate?: number | null
     contentFormats?: ApplicationCreatecontentFormatsInput | string[]
     brandNote?: string | null
+    selectedPlatform?: string | null
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -43599,6 +46137,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type InvitationCreateManyCampaignInput = {
+    id?: string
+    brandProfileId: string
+    creatorUserId: string
+    message?: string | null
+    proposedBudget?: number | null
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ApplicationUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
     coverLetter?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43606,6 +46155,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43620,6 +46170,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43633,6 +46184,7 @@ export namespace Prisma {
     negotiatedRate?: NullableFloatFieldUpdateOperationsInput | number | null
     contentFormats?: ApplicationUpdatecontentFormatsInput | string[]
     brandNote?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedPlatform?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43706,6 +46258,39 @@ export namespace Prisma {
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumCampaignEventStatusFieldUpdateOperationsInput | $Enums.CampaignEventStatus
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: BrandProfileUpdateOneRequiredWithoutInvitationsNestedInput
+    creator?: UserUpdateOneRequiredWithoutReceivedInvitationsNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    brandProfileId?: StringFieldUpdateOperationsInput | string
+    creatorUserId?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
