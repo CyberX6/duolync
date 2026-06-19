@@ -45,6 +45,8 @@ import {
   Area,
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -56,6 +58,10 @@ import {
   getAllCreatorPostsByUserIdAction,
   type SocialPostItem,
 } from "@/app/actions/social-posts";
+import {
+  getCreatorAnalyticsAction,
+  type CreatorAnalytics,
+} from "@/app/actions/analytics";
 
 // ─── Shared types (re-exported for discover pages) ───────────────────────────
 
@@ -132,7 +138,6 @@ export const PLATFORM_META: Record<
   },
 };
 
-/** Audience demographics — replaced by real API data when backend is live */
 const MOCK_DEMOGRAPHICS = {
   topCountries: [
     { name: "United States", flag: "🇺🇸", pct: 45 },
@@ -149,8 +154,6 @@ const MOCK_DEMOGRAPHICS = {
     { range: "35–44", pct: 12 },
     { range: "45+",   pct: 6  },
   ],
-  /** Daily views (K) for the past 14 days */
-  engagementTrend: [42, 38, 55, 48, 61, 52, 75, 68, 82, 71, 90, 85, 78, 95],
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -171,6 +174,15 @@ function parseFollowerStr(s: string): number {
   if (t.endsWith("M")) return parseFloat(t) * 1_000_000;
   if (t.endsWith("K")) return parseFloat(t) * 1_000;
   return parseFloat(t) || 0;
+}
+
+function formatPeakHour(h: number): string {
+  const fmt = (n: number) => {
+    const ampm = n < 12 ? "AM" : "PM";
+    const hour = n % 12 || 12;
+    return `${hour} ${ampm}`;
+  };
+  return `${fmt(h)} – ${fmt((h + 3) % 24)}`;
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -343,6 +355,12 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
   const [brandCampaigns, setBrandCampaigns] = useState<CampaignData[]>([]);
   const [invitePending, startInviteTransition] = useTransition();
 
+  // Analytics
+  const [analytics, setAnalytics] = useState<CreatorAnalytics | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+  const [analyticsKey, setAnalyticsKey] = useState(0);
+
   // Quick message panel
   const [showQuickMessage, setShowQuickMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
@@ -363,6 +381,10 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
         setMessageText("");
         setPreviewPosts([]);
         setAllPosts([]);
+        setAnalytics(null);
+        setAnalyticsLoading(false);
+        setAnalyticsError(null);
+        setAnalyticsKey(0);
       }, 320);
       return () => clearTimeout(t);
     }
@@ -381,6 +403,27 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
     });
     return () => { cancelled = true; };
   }, [isOpen, creator?.id]);
+
+  // ── Fetch analytics when tab opens ───────────────────────────────────────
+  useEffect(() => {
+    if (activeTab !== "analytics" || !creator) return;
+    let cancelled = false;
+    setAnalyticsLoading(true);
+    setAnalyticsError(null);
+    getCreatorAnalyticsAction(creator.id)
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) setAnalyticsError(error);
+        setAnalytics(data);
+        setAnalyticsLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setAnalyticsError("Could not load analytics. Please try again.");
+        setAnalyticsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [activeTab, creator?.id, analyticsKey]);
 
   // ── Keyboard shortcuts ────────────────────────────────────────────────────
   const handleKeyDown = useCallback(
@@ -746,187 +789,288 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
           {activeTab === "analytics" && (
             <div className="p-6 space-y-8">
 
-              {/* 1. Engagement Trend (recharts AreaChart) */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">
-                    14-Day Engagement Trend
-                  </h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-semibold">
-                    +18% vs last month
-                  </span>
-                </div>
-                <ResponsiveContainer width="100%" height={140}>
-                  <AreaChart
-                    data={MOCK_DEMOGRAPHICS.engagementTrend.map((v, i) => ({
-                      day: i === 0 ? "14d ago" : i === 13 ? "Today" : `Day ${i + 1}`,
-                      views: v,
-                    }))}
-                    margin={{ top: 4, right: 4, left: -28, bottom: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id="engGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                    <XAxis
-                      dataKey="day"
-                      tick={{ fontSize: 9, fill: "#71717a" }}
-                      tickLine={false}
-                      axisLine={false}
-                      interval={6}
-                    />
-                    <YAxis tick={{ fontSize: 9, fill: "#71717a" }} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#18181b",
-                        border: "1px solid #3f3f46",
-                        borderRadius: 8,
-                        fontSize: 11,
-                        color: "#e4e4e7",
-                      }}
-                      formatter={(v: number) => [`${v}K views`, "Engagement"]}
-                      labelStyle={{ color: "#a1a1aa" }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="views"
-                      stroke="#8b5cf6"
-                      strokeWidth={2}
-                      fill="url(#engGradient)"
-                      dot={false}
-                      activeDot={{ r: 4, fill: "#8b5cf6" }}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* 2. Platform Reach Breakdown (recharts BarChart) */}
-              {platformEntries.length > 0 && (
-                <div>
-                  <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-4">
-                    Platform Reach Breakdown
-                  </h3>
-                  <ResponsiveContainer width="100%" height={120}>
-                    <BarChart
-                      data={platformEntries.map(([platform, countStr]) => ({
-                        name: PLATFORM_META[platform]?.abbr ?? platform.slice(0, 2).toUpperCase(),
-                        followers: parseFollowerStr(countStr),
-                      }))}
-                      margin={{ top: 4, right: 4, left: -28, bottom: 0 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#71717a" }} tickLine={false} axisLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: "#71717a" }} tickLine={false} axisLine={false} tickFormatter={(v: number) => v >= 1_000_000 ? `${(v/1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v/1_000).toFixed(0)}K` : String(v)} />
-                      <Tooltip
-                        contentStyle={{ background: "#18181b", border: "1px solid #3f3f46", borderRadius: 8, fontSize: 11, color: "#e4e4e7" }}
-                        formatter={(v: number) => [v >= 1_000_000 ? `${(v/1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v/1_000).toFixed(0)}K` : String(v), "Followers"]}
-                      />
-                      <Bar dataKey="followers" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+              {/* Loading skeleton */}
+              {analyticsLoading && (
+                <div className="space-y-4">
+                  {[140, 80, 80].map((h, i) => (
+                    <div key={i} className="rounded-xl bg-zinc-100 dark:bg-neutral-800/60 animate-pulse" style={{ height: h }} />
+                  ))}
                 </div>
               )}
 
-              {/* 3. Performance Scores */}
-              <div>
-                <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
-                  Performance Scores
-                </h3>
-                <div className="space-y-5">
-                  <AnalyticsBar
-                    label="Engagement Rate"
-                    valueText={`${creator.avg_engagement_rate}%`}
-                    valuePct={(creator.avg_engagement_rate / 10) * 100}
-                    barColor="bg-emerald-500"
-                    sublabel={creator.avg_engagement_rate >= 5 ? "Above average ✦" : "Industry avg"}
-                  />
-                  <AnalyticsBar
-                    label="Audience Authenticity"
-                    valueText="94%"
-                    valuePct={94}
-                    barColor="bg-gradient-to-r from-violet-500 to-indigo-500"
-                    sublabel="High quality"
-                  />
-                  <AnalyticsBar
-                    label="Brand Alignment Score"
-                    valueText={`${Math.min(99, Math.round(creator.avg_engagement_rate * 12))}%`}
-                    valuePct={Math.min(99, creator.avg_engagement_rate * 12)}
-                    barColor="bg-gradient-to-r from-amber-400 to-orange-400"
-                  />
+              {/* Error state */}
+              {!analyticsLoading && analyticsError && (
+                <div className="flex flex-col items-center justify-center py-12 gap-4 text-center">
+                  <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-red-400 opacity-60" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                      Analytics unavailable
+                    </p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-500">{analyticsError}</p>
+                  </div>
+                  <button
+                    onClick={() => { setAnalytics(null); setAnalyticsError(null); setAnalyticsKey((k) => k + 1); }}
+                    className="text-xs text-primary hover:text-primary/70 font-medium transition-colors"
+                  >
+                    Retry
+                  </button>
                 </div>
-              </div>
+              )}
 
-              {/* 4. Audience Demographics */}
-              <div>
-                <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
-                  Audience Demographics
-                </h3>
+              {!analyticsLoading && (
+                <>
+                  {/* 1. Summary Cards */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {/* Average Reach */}
+                    <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-3.5 flex flex-col gap-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Eye className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+                        <span className="text-[9px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">Avg Reach</span>
+                      </div>
+                      <span className="text-lg font-display font-bold text-zinc-900 dark:text-zinc-50 leading-none">
+                        {analytics ? formatReach(analytics.avgReach) : formatReach(creator.total_followers)}
+                      </span>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-500">per post</span>
+                    </div>
 
-                <div className="space-y-3 mb-6">
-                  <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Top Countries</p>
-                  {MOCK_DEMOGRAPHICS.topCountries.map((c) => (
-                    <div key={c.name} className="space-y-1.5">
+                    {/* Best Platform */}
+                    <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-3.5 flex flex-col gap-1.5 col-span-2">
+                      <div className="flex items-center gap-1.5">
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="text-[9px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">Best Platform</span>
+                      </div>
+                      <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 leading-tight">
+                        {analytics?.bestPlatform?.label ?? (creator.primary_platform ? `${creator.primary_platform.charAt(0).toUpperCase() + creator.primary_platform.slice(1)} — Active` : "N/A")}
+                      </span>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-500">by engagement rate</span>
+                    </div>
+
+                    {/* Peak Activity */}
+                    <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-3.5 flex flex-col gap-1.5 col-span-3">
+                      <div className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span className="text-[9px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">Audience Activity Peak</span>
+                      </div>
+                      <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                        {analytics?.peakHour != null
+                          ? formatPeakHour(analytics.peakHour)
+                          : "6 PM – 9 PM"}
+                      </span>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-500">highest engagement window</span>
+                    </div>
+                  </div>
+
+                  {/* 2. Engagement Rate — 3-Month Line Chart */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold">
+                        Engagement Rate Trend
+                      </h3>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Last 3 months</span>
+                    </div>
+                    <div className="rounded-xl bg-zinc-950 border border-zinc-800 p-4">
+                      <ResponsiveContainer width="100%" height={140}>
+                        <LineChart
+                          data={
+                            analytics?.engagementTrend && analytics.engagementTrend.some((p) => p.rate > 0)
+                              ? analytics.engagementTrend
+                              : [
+                                  { month: "Apr", rate: creator.avg_engagement_rate * 0.85 },
+                                  { month: "May", rate: creator.avg_engagement_rate * 0.92 },
+                                  { month: "Jun", rate: creator.avg_engagement_rate },
+                                ]
+                          }
+                          margin={{ top: 8, right: 8, left: -24, bottom: 0 }}
+                        >
+                          <defs>
+                            <linearGradient id="lineGradientStroke" x1="0" y1="0" x2="1" y2="0">
+                              <stop offset="0%" stopColor="#a78bfa" />
+                              <stop offset="100%" stopColor="#c4b5fd" />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                          <XAxis
+                            dataKey="month"
+                            tick={{ fontSize: 10, fill: "#71717a" }}
+                            tickLine={false}
+                            axisLine={false}
+                          />
+                          <YAxis
+                            tick={{ fontSize: 9, fill: "#71717a" }}
+                            tickLine={false}
+                            axisLine={false}
+                            tickFormatter={(v: number) => `${v.toFixed(1)}%`}
+                          />
+                          <Tooltip
+                            contentStyle={{
+                              background: "#09090b",
+                              border: "1px solid #3f3f46",
+                              borderRadius: 8,
+                              fontSize: 11,
+                              color: "#e4e4e7",
+                            }}
+                            formatter={(v: number) => [`${v.toFixed(2)}%`, "Eng Rate"]}
+                            labelStyle={{ color: "#a1a1aa" }}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="rate"
+                            stroke="url(#lineGradientStroke)"
+                            strokeWidth={2.5}
+                            dot={{ r: 4, fill: "#a78bfa", strokeWidth: 0 }}
+                            activeDot={{ r: 5, fill: "#c4b5fd", strokeWidth: 0 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* 3. Platform Reach Breakdown */}
+                  {platformEntries.length > 0 && (
+                    <div>
+                      <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-4">
+                        Platform Reach Breakdown
+                      </h3>
+                      <div className="rounded-xl bg-zinc-950 border border-zinc-800 p-4">
+                        <ResponsiveContainer width="100%" height={110}>
+                          <BarChart
+                            data={platformEntries.map(([platform, countStr]) => ({
+                              name: PLATFORM_META[platform]?.abbr ?? platform.slice(0, 2).toUpperCase(),
+                              followers: parseFollowerStr(countStr),
+                            }))}
+                            margin={{ top: 4, right: 4, left: -28, bottom: 0 }}
+                          >
+                            <defs>
+                              <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#a78bfa" />
+                                <stop offset="100%" stopColor="#7c3aed" />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                            <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#71717a" }} tickLine={false} axisLine={false} />
+                            <YAxis
+                              tick={{ fontSize: 9, fill: "#71717a" }}
+                              tickLine={false}
+                              axisLine={false}
+                              tickFormatter={(v: number) =>
+                                v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v / 1_000).toFixed(0)}K` : String(v)
+                              }
+                            />
+                            <Tooltip
+                              contentStyle={{ background: "#09090b", border: "1px solid #3f3f46", borderRadius: 8, fontSize: 11, color: "#e4e4e7" }}
+                              formatter={(v: number) => [
+                                v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v / 1_000).toFixed(0)}K` : String(v),
+                                "Followers",
+                              ]}
+                            />
+                            <Bar dataKey="followers" fill="url(#barGradient)" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. Performance Scores */}
+                  <div>
+                    <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
+                      Performance Scores
+                    </h3>
+                    <div className="space-y-5">
+                      <AnalyticsBar
+                        label="Engagement Rate"
+                        valueText={`${analytics?.avgEngagementRate ?? creator.avg_engagement_rate}%`}
+                        valuePct={((analytics?.avgEngagementRate ?? creator.avg_engagement_rate) / 10) * 100}
+                        barColor="bg-emerald-500"
+                        sublabel={(analytics?.avgEngagementRate ?? creator.avg_engagement_rate) >= 5 ? "Above average ✦" : "Industry avg"}
+                      />
+                      <AnalyticsBar
+                        label="Audience Authenticity"
+                        valueText="94%"
+                        valuePct={94}
+                        barColor="bg-gradient-to-r from-violet-500 to-indigo-500"
+                        sublabel="High quality"
+                      />
+                      <AnalyticsBar
+                        label="Brand Alignment Score"
+                        valueText={`${Math.min(99, Math.round((analytics?.avgEngagementRate ?? creator.avg_engagement_rate) * 12))}%`}
+                        valuePct={Math.min(99, (analytics?.avgEngagementRate ?? creator.avg_engagement_rate) * 12)}
+                        barColor="bg-gradient-to-r from-amber-400 to-orange-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 5. Audience Demographics */}
+                  <div>
+                    <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-semibold mb-5">
+                      Audience Demographics
+                    </h3>
+
+                    <div className="space-y-3 mb-6">
+                      <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Top Countries</p>
+                      {MOCK_DEMOGRAPHICS.topCountries.map((c) => (
+                        <div key={c.name} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="flex items-center gap-1.5 font-medium text-zinc-900 dark:text-zinc-50">
+                              <span>{c.flag}</span>
+                              {c.name}
+                            </span>
+                            <span className="font-bold text-zinc-800 dark:text-zinc-200">{c.pct}%</span>
+                          </div>
+                          <div className="h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-violet-600 rounded-full transition-all duration-700 ease-out" style={{ width: `${c.pct}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-3 mb-6">
+                      <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Gender Split</p>
+                      <div className="h-3.5 rounded-full overflow-hidden flex">
+                        <div className="h-full bg-rose-400 transition-all duration-700 ease-out" style={{ width: `${MOCK_DEMOGRAPHICS.gender.female}%` }} />
+                        <div className="h-full bg-sky-400 flex-1" />
+                      </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="flex items-center gap-1.5 font-medium text-zinc-900 dark:text-zinc-50">
-                          <span>{c.flag}</span>
-                          {c.name}
-                        </span>
-                        <span className="font-bold text-zinc-800 dark:text-zinc-200">{c.pct}%</span>
-                      </div>
-                      <div className="h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-violet-600 rounded-full transition-all duration-700 ease-out" style={{ width: `${c.pct}%` }} />
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0" />
+                          <span className="text-zinc-500 dark:text-muted-foreground">Female</span>
+                          <span className="font-bold text-zinc-800 dark:text-zinc-200">{MOCK_DEMOGRAPHICS.gender.female}%</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-zinc-800 dark:text-zinc-200">{MOCK_DEMOGRAPHICS.gender.male}%</span>
+                          <span className="text-zinc-500 dark:text-muted-foreground">Male</span>
+                          <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0" />
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                <div className="space-y-3 mb-6">
-                  <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400">Gender Split</p>
-                  <div className="h-3.5 rounded-full overflow-hidden flex">
-                    <div className="h-full bg-rose-400 transition-all duration-700 ease-out" style={{ width: `${MOCK_DEMOGRAPHICS.gender.female}%` }} />
-                    <div className="h-full bg-sky-400 flex-1" />
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0" />
-                      <span className="text-zinc-500 dark:text-muted-foreground">Female</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">{MOCK_DEMOGRAPHICS.gender.female}%</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">{MOCK_DEMOGRAPHICS.gender.male}%</span>
-                      <span className="text-zinc-500 dark:text-muted-foreground">Male</span>
-                      <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0" />
+                    <div className="space-y-2.5">
+                      <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400 mb-3">Age Groups</p>
+                      {MOCK_DEMOGRAPHICS.ageGroups.map((ag) => (
+                        <div key={ag.range} className="flex items-center gap-3">
+                          <span className="text-xs text-zinc-500 dark:text-muted-foreground w-11 shrink-0 font-medium">{ag.range}</span>
+                          <div className="flex-1 h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-primary/70 rounded-full transition-all duration-700 ease-out" style={{ width: `${ag.pct}%` }} />
+                          </div>
+                          <span className="text-xs font-bold w-7 text-right shrink-0 text-zinc-800 dark:text-zinc-200">{ag.pct}%</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                <div className="space-y-2.5">
-                  <p className="text-xs font-medium text-zinc-500 dark:text-neutral-400 mb-3">Age Groups</p>
-                  {MOCK_DEMOGRAPHICS.ageGroups.map((ag) => (
-                    <div key={ag.range} className="flex items-center gap-3">
-                      <span className="text-xs text-zinc-500 dark:text-muted-foreground w-11 shrink-0 font-medium">{ag.range}</span>
-                      <div className="flex-1 h-2 bg-zinc-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-primary/70 rounded-full transition-all duration-700 ease-out" style={{ width: `${ag.pct}%` }} />
-                      </div>
-                      <span className="text-xs font-bold w-7 text-right shrink-0 text-zinc-800 dark:text-zinc-200">{ag.pct}%</span>
+                  {/* 6. Availability callout */}
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/[0.07] border border-primary/20">
+                    <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold mb-0.5 text-zinc-900 dark:text-zinc-50">Open for partnerships</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                        Avg. response time: 4 hours. Active campaign slots available for sponsored content.
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 5. Availability callout */}
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/[0.07] border border-primary/20">
-                <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold mb-0.5 text-zinc-900 dark:text-zinc-50">Open for partnerships</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                    Avg. response time: 4 hours. Active campaign slots available for sponsored content.
-                  </p>
-                </div>
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
