@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, useInView, type Variants } from "framer-motion";
-import { ArrowRight, Sparkles, CheckCircle2, Zap, Lock, Bell, Loader2 } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Lock, Bell, Loader2 } from "lucide-react";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -26,35 +27,18 @@ const avatarGradients = [
 ];
 
 export function FinalCTASection() {
+  const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
     setIsLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, role: "brand" }),
-      });
-      const data = await res.json() as { error?: string };
-      if (!res.ok) {
-        setError(data.error ?? "Something went wrong. Please try again.");
-      } else {
-        setSubmitted(true);
-      }
-    } catch {
-      setError("Network error. Please check your connection.");
-    } finally {
-      setIsLoading(false);
-    }
+    const params = new URLSearchParams({ email, role: "brand" });
+    router.push(`/auth?${params.toString()}`);
   }
 
   return (
@@ -90,7 +74,7 @@ export function FinalCTASection() {
           {/* Badge */}
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}>
             <Sparkles size={13} />
-            Launching Soon · Limited Spots
+            Now Live · Sign Up Free
           </motion.div>
 
           {/* Headline */}
@@ -102,7 +86,7 @@ export function FinalCTASection() {
           </motion.h2>
 
           <motion.p variants={fadeUp} className="text-slate-400 text-xl leading-relaxed mb-10 max-w-xl mx-auto">
-            Join our exclusive waitlist to be the first to access the platform. Launching soon — spots are limited.
+            Create your Duolync account today and be the first brand to dominate with AI-powered creator marketing.
           </motion.p>
 
           {/* Perks grid */}
@@ -124,48 +108,28 @@ export function FinalCTASection() {
 
           {/* CTA form */}
           <motion.div variants={fadeUp}>
-            {!submitted ? (
-              <>
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-3">
-                <input
-                  type="email"
-                  placeholder="your@company.com"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value); setError(""); }}
-                  required
-                  className="flex-1 px-5 py-3.5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none transition-all text-sm"
-                  style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
-                />
-                <button
-                  type="submit"
-                  disabled={isLoading || !email}
-                  className="px-7 py-3.5 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 text-sm transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
-                >
-                  {isLoading ? <Loader2 size={15} className="animate-spin" /> : <ArrowRight size={16} />}
-                  {isLoading ? "Joining..." : "Join the Waitlist"}
-                </button>
-              </form>
-              {error && (
-                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2 max-w-md mx-auto mb-3">{error}</p>
-              )}
-              </>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center justify-center gap-3 max-w-md mx-auto mb-6 px-6 py-4 rounded-2xl"
-                style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)" }}
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-3">
+              <input
+                type="email"
+                placeholder="your@company.com"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); }}
+                required
+                className="flex-1 px-5 py-3.5 rounded-2xl text-white placeholder:text-slate-600 focus:outline-none transition-all text-sm"
+                style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(124,58,237,0.6)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !email}
+                className="px-7 py-3.5 rounded-2xl font-semibold text-white flex items-center justify-center gap-2 text-sm transition-all duration-300 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
               >
-                <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
-                <div className="text-left">
-                  <div className="text-white font-semibold text-sm">You're on the list!</div>
-                  <div className="text-emerald-400 text-xs">We'll reach out when we launch. Stay tuned.</div>
-                </div>
-              </motion.div>
-            )}
+                {isLoading ? <Loader2 size={15} className="animate-spin" /> : <ArrowRight size={16} />}
+                {isLoading ? "Redirecting..." : "Get Started"}
+              </button>
+            </form>
 
             {/* Social proof */}
             <div className="flex items-center justify-center gap-3 text-sm text-slate-600">
@@ -175,7 +139,7 @@ export function FinalCTASection() {
                 ))}
               </div>
               <span>
-                <strong className="text-slate-400">2,400+</strong> brands already joined
+                <strong className="text-slate-400">2,400+</strong> brands already on Duolync
               </span>
             </div>
           </motion.div>

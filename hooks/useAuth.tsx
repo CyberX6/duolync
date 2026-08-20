@@ -105,12 +105,18 @@ function toProfile(fp: FullProfile): Profile {
 
 // ── Provider ───────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending, error: sessionError } = useSession();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Log session errors for debugging but don't let them crash the app.
+  // Better Auth throws APIError (e.g. "Failed to get session") on transient DB blips.
+  if (sessionError) {
+    console.warn("[useAuth] session fetch failed:", sessionError);
+  }
 
   const sessionUser = session?.user ?? null;
 
@@ -142,7 +148,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // True while we're still waiting for either the session cookie OR the DB fetch.
   // `mounted` ensures server and client both start with loading=true, preventing hydration mismatch.
-  const loading = !mounted || isPending || profileLoading;
+  // If the session fetch errored (transient DB blip), treat it as loaded with no session.
+  const loading = !mounted || (isPending && !sessionError) || profileLoading;
 
   // ── Auth handlers ──────────────────────────────────────────────────────
   const handleSignUp = async (

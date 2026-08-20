@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
 import { ShieldCheck, BarChart3, Globe, BookOpen, Newspaper, FileText, ArrowRight, Sparkles } from "lucide-react";
-import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
+import Link from "next/link";
 
 const fadeUp: Variants = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0 } };
 const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
@@ -26,7 +26,6 @@ const resources = [
 export function ToolsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const { openWaitlist } = useWaitlist();
 
   return (
     <section className="py-28 relative overflow-hidden" style={{ background: "var(--bg-page)" }}>
@@ -110,9 +109,9 @@ export function ToolsSection() {
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-white mb-1">{r.title}</div>
                   <div className="text-[11px] text-slate-500 mb-2">{r.desc}</div>
-                  <button onClick={() => openWaitlist()} className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:gap-2.5" style={{ color: PURPLE }}>
+                  <Link href="/auth" className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:gap-2.5" style={{ color: PURPLE }}>
                     See more <ArrowRight size={12} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}

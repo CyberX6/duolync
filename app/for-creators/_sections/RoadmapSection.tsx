@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, useInView, AnimatePresence, type Variants } from "framer-motion";
 import {
   Map, Sparkles, ArrowRight, CheckCircle2, Lock,
@@ -45,13 +46,15 @@ const proStats = [
 ];
 
 function RoadmapModal({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim()) return;
-    setSubmitted(true);
+    const params = new URLSearchParams({ email: email.trim(), role: "creator" });
+    router.push(`/auth?${params.toString()}`);
+    onClose();
   }
 
   return (
@@ -98,7 +101,7 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
           </button>
 
           <AnimatePresence mode="wait">
-            {!submitted ? (
+            {true ? (
               <motion.div
                 key="form"
                 initial={{ opacity: 0 }}
@@ -118,12 +121,12 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
 
                 {/* Heading */}
                 <h3 className="font-display font-bold text-white text-2xl text-center leading-snug mb-3">
-                  Tailoring your AI engine... 🚀
+                  Start Your Creator Journey 🚀
                 </h3>
 
                 {/* Sub */}
                 <p className="text-slate-400 text-sm text-center leading-relaxed mb-6">
-                  Our roadmap engine is currently running advanced optimizations for top creator niches. Drop your email below to secure early beta access and receive your custom growth blueprint first.
+                  Enter your email to create your Duolync account and unlock your personalized AI-powered growth roadmap and brand deal pipeline.
                 </p>
 
                 {/* Proof bar */}
@@ -141,7 +144,7 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
                     ))}
                   </div>
                   <span className="text-[11px] text-slate-500">
-                    <strong className="text-slate-300">2,400+</strong> creators already joined
+                    <strong className="text-slate-300">2,400+</strong> creators already signed up
                   </span>
                   <div className="flex">
                     {"★★★★★".split("").map((s, i) => (
@@ -172,13 +175,13 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
                     className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.02] hover:opacity-95 active:scale-[0.98]"
                     style={{ background: "linear-gradient(135deg, #d97706, #db2777)" }}
                   >
-                    Join the Roadmap Waitlist
+                    Sign Up Free
                     <span className="ml-2">→</span>
                   </button>
                 </form>
 
                 <p className="text-center text-[10px] text-slate-700 mt-4">
-                  No spam, ever. Unsubscribe any time.
+                  No credit card required. Cancel any time.
                 </p>
               </motion.div>
             ) : (

@@ -12,7 +12,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useWaitlist } from "@/app/_components/waitlist/WaitlistContext";
 
 const trust = [
   { icon: Star, value: "10K+", label: "Creators" },
@@ -30,8 +29,6 @@ const avatarGradients = [
 ];
 
 export function HeroSection() {
-  const { openWaitlist } = useWaitlist();
-
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
@@ -145,8 +142,8 @@ export function HeroSection() {
             transition={{ delay: 0.45, duration: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
           >
-            <button
-              onClick={() => openWaitlist("brand")}
+            <Link
+              href="/auth?role=brand"
               className="group flex items-center gap-2.5 px-7 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.03] hover:opacity-95 active:scale-[0.98]"
               style={{
                 background: "linear-gradient(135deg, #7c3aed, #0891b2)",
@@ -158,9 +155,9 @@ export function HeroSection() {
                 size={16}
                 className="transition-transform group-hover:translate-x-1"
               />
-            </button>
-            <button
-              onClick={() => openWaitlist("creator")}
+            </Link>
+            <Link
+              href="/auth?role=creator"
               className="group flex items-center gap-2.5 px-7 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
               style={{
                 background: "linear-gradient(135deg, #db2777, #9333ea)",
@@ -172,9 +169,9 @@ export function HeroSection() {
                 size={16}
                 className="transition-transform group-hover:translate-x-1"
               />
-            </button>
-            <button
-              onClick={() => openWaitlist()}
+            </Link>
+            <Link
+              href="/auth"
               className="flex items-center gap-2 px-6 py-4 rounded-2xl font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
               style={{
                 background: "var(--bg-card-hover)",
@@ -182,8 +179,8 @@ export function HeroSection() {
                 color: "#94a3b8",
               }}
             >
-              Join the Waitlist!
-            </button>
+              Get Started
+            </Link>
           </motion.div>
 
           {/* Social proof */}
@@ -205,7 +202,7 @@ export function HeroSection() {
               </div>
               <span className="text-slate-500">
                 <strong className="text-slate-300">12,000+</strong> brands &
-                creators joined
+                creators already using Duolync
               </span>
             </div>
             <div className="hidden sm:block w-px h-4 bg-slate-800" />

@@ -54,11 +54,12 @@ const Auth = () => {
   const router = useRouter();
 
   const initialMode = searchParams?.get("mode");
+  const initialEmail = searchParams?.get("email") ?? "";
 
   const [tab, setTab] = useState<AuthTab>(
     initialMode === "login" ? "login" : "signup"
   );
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);

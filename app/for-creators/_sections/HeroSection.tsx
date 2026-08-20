@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, TrendingUp, DollarSign, Shield, Star, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Zap, TrendingUp, DollarSign, Shield, Star, Loader2 } from "lucide-react";
 
 const avatarGradients = [
   "from-pink-500 to-rose-600",
@@ -20,33 +21,16 @@ const stats = [
 ];
 
 export function HeroSection() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
     setIsLoading(true);
-    setError("");
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, role: "creator" }),
-      });
-      const data = await res.json() as { error?: string };
-      if (!res.ok) {
-        setError(data.error ?? "Something went wrong. Please try again.");
-      } else {
-        setSubmitted(true);
-      }
-    } catch {
-      setError("Network error. Please check your connection.");
-    } finally {
-      setIsLoading(false);
-    }
+    const params = new URLSearchParams({ email, role: "creator" });
+    router.push(`/auth?${params.toString()}`);
   }
 
   return (
@@ -128,43 +112,28 @@ export function HeroSection() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="max-w-md mx-auto mb-8"
           >
-            {submitted ? (
-              <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)" }}>
-                <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
-                <div className="text-left">
-                  <div className="text-white font-semibold text-sm">You&apos;re on the list! 🎉</div>
-                  <div className="text-emerald-400 text-xs">We&apos;ll reach out as soon as we launch.</div>
-                </div>
-              </div>
-            ) : (
-              <>
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setError(""); }}
-                    required
-                    className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
-                    style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.5)"; }}
-                    onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
-                  />
-                  <button
-                    type="submit"
-                    disabled={isLoading || !email}
-                    className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-                    style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
-                  >
-                    {isLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
-                    {isLoading ? "Joining..." : "Join the Waitlist"}
-                  </button>
-                </form>
-                {error && (
-                  <p className="mt-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">{error}</p>
-                )}
-              </>
-            )}
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); }}
+                  required
+                  className="flex-1 px-4 py-3 rounded-xl text-white placeholder:text-slate-600 focus:outline-none transition-all"
+                  style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)" }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(236,72,153,0.5)"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-card-strong)"; }}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !email}
+                  className="px-6 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 shrink-0 transition-all duration-300 hover:opacity-90 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                  style={{ background: "linear-gradient(135deg, #db2777, #9333ea)" }}
+                >
+                  {isLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                  {isLoading ? "Redirecting..." : "Get Started"}
+                </button>
+              </form>
           </motion.div>
 
           {/* Social proof */}
@@ -180,7 +149,7 @@ export function HeroSection() {
               ))}
             </div>
             <span>
-              <strong className="text-slate-300">8,200+</strong> creators already joined
+              <strong className="text-slate-300">8,200+</strong> creators already on Duolync
             </span>
           </motion.div>
         </motion.div>
