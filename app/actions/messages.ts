@@ -66,34 +66,6 @@ export async function sendMessageAction(
 
   const senderId = session.user.id;
 
-  // Require an existing relationship: accepted connection OR accepted/under-review application
-  const [conn, app] = await Promise.all([
-    db.connection.findFirst({
-      where: {
-        status: "ACCEPTED",
-        OR: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
-        ],
-      },
-      select: { id: true },
-    }),
-    db.application.findFirst({
-      where: {
-        status: { in: ["ACCEPTED", "UNDER_REVIEW"] },
-        OR: [
-          { creator: { userId: senderId }, campaign: { brandProfile: { userId: receiverId } } },
-          { creator: { userId: receiverId }, campaign: { brandProfile: { userId: senderId } } },
-        ],
-      },
-      select: { id: true },
-    }),
-  ]);
-
-  if (!conn && !app) {
-    return { error: "You can only message users you are connected with or working with on a campaign." };
-  }
-
   // Rate limit: max 30 messages per minute per sender
   const { rateLimit } = await import("@/lib/rate-limit");
   const allowed = await rateLimit(`${senderId}:send-message`, 30, 60_000);

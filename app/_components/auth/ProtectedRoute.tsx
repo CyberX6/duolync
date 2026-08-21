@@ -49,9 +49,6 @@ const ProtectedRoute = ({ children, requiredType }: ProtectedRouteProps) => {
     );
   }
 
-  // Onboarding gate: redirect new users to /onboarding until they complete their profile
-  if (!profile.hasCompletedOnboarding) return <RedirectTo path="/onboarding" />;
-
   return <>{children}</>;
 };
 
