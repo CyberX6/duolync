@@ -10,6 +10,8 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 
 const AMBER = "#fcd34d";
 const PURPLE = "#a78bfa";
+const AMBER_T = "var(--accent-amber-text)";
+const PURPLE_T = "var(--accent-violet-text)";
 
 const tools = [
   { Icon: ShieldCheck, title: "Fake Follower Checker", desc: "Verify if a creator has real, authentic followers — or bots.", color: "#f87171", bg: "rgba(248,113,113,0.12)", border: "rgba(248,113,113,0.25)" },
@@ -39,7 +41,7 @@ export function ToolsSection() {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(252,211,77,0.12)", border: "1px solid rgba(252,211,77,0.3)", color: AMBER }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(252,211,77,0.12)", border: "1px solid rgba(252,211,77,0.3)", color: AMBER_T }}>
             <Sparkles size={11} />
             Free Resources
           </motion.div>
@@ -104,12 +106,12 @@ export function ToolsSection() {
                 style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}
               >
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.2)" }}>
-                  <r.Icon size={20} style={{ color: PURPLE }} />
+                  <r.Icon size={20} style={{ color: PURPLE_T }} />
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-white mb-1">{r.title}</div>
                   <div className="text-[11px] text-slate-500 mb-2">{r.desc}</div>
-                  <Link href="/auth" className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:gap-2.5" style={{ color: PURPLE }}>
+                  <Link href="/auth" className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:gap-2.5" style={{ color: PURPLE_T }}>
                     See more <ArrowRight size={12} />
                   </Link>
                 </div>

@@ -29,7 +29,7 @@ export function FinalCTASection() {
           variants={stagger}
           className="max-w-4xl mx-auto text-center"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "var(--accent-violet-text)" }}>
             <Sparkles size={11} />
             Now Live — Create Your Account
           </motion.div>
@@ -68,7 +68,7 @@ export function FinalCTASection() {
               <Link
                 href="/for-brands"
                 className="flex items-center gap-2 px-5 py-4 rounded-2xl font-medium text-sm transition-all hover:scale-[1.02]"
-                style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#a78bfa" }}
+                style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "var(--accent-violet-text)" }}
               >
                 <Building2 size={15} />
                 For Brands
@@ -76,7 +76,7 @@ export function FinalCTASection() {
               <Link
                 href="/for-creators"
                 className="flex items-center gap-2 px-5 py-4 rounded-2xl font-medium text-sm transition-all hover:scale-[1.02]"
-                style={{ background: "var(--glow-pink)", border: "1px solid rgba(236,72,153,0.3)", color: "#f472b6" }}
+                style={{ background: "var(--glow-pink)", border: "1px solid rgba(236,72,153,0.3)", color: "var(--accent-pink-text)" }}
               >
                 <Users size={15} />
                 For Creators
@@ -89,7 +89,7 @@ export function FinalCTASection() {
             <Link
               href="/auth"
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:scale-[1.02]"
-              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "#64748b" }}
+              style={{ background: "var(--bg-card-hover)", border: "1px solid var(--border-card-strong)", color: "var(--text-muted)" }}
             >
               <Globe size={15} />
               Or download our free Chrome Extension

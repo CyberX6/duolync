@@ -34,10 +34,10 @@ const creators = [
 ];
 
 const aiInsights = [
-  { label: "Audience-brand fit",     value: 94, color: "#a78bfa" },
-  { label: "Sales prediction score", value: 89, color: "#38bdf8" },
-  { label: "Engagement quality",     value: 97, color: "#34d399" },
-  { label: "Content authenticity",   value: 92, color: "#fcd34d" },
+  { label: "Audience-brand fit",     value: 94, color: "var(--accent-violet-text)" },
+  { label: "Sales prediction score", value: 89, color: "var(--accent-sky-text)" },
+  { label: "Engagement quality",     value: 97, color: "var(--accent-emerald-text)" },
+  { label: "Content authenticity",   value: 92, color: "var(--accent-amber-text)" },
 ];
 
 export function AIMatchSection() {
@@ -125,7 +125,7 @@ export function AIMatchSection() {
             <motion.div
               variants={fadeUp}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-              style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.35)", color: "#c4b5fd" }}
+              style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.35)", color: "var(--accent-violet-text)" }}
             >
               <Sparkles size={11} />
               AI Smart Search &amp; Matching
@@ -159,7 +159,7 @@ export function AIMatchSection() {
                     className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
                     style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)" }}
                   >
-                    <item.icon size={15} style={{ color: "#a78bfa" }} />
+                    <item.icon size={15} style={{ color: "var(--accent-violet-text)" }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">{item.text}</span>
                 </motion.li>
@@ -171,8 +171,8 @@ export function AIMatchSection() {
               variants={fadeUp}
               onClick={triggerDemo}
               disabled={demoPhase === "typing"}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{ background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              style={{ background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "var(--accent-violet-text)" }}
             >
               {demoPhase === "typing" ? (
                 <>
@@ -203,7 +203,7 @@ export function AIMatchSection() {
                 <Search size={15} className="text-slate-600 shrink-0" />
                 <span
                   className="text-sm flex-1 min-h-[1.25rem]"
-                  style={{ color: isDemo ? "#e2e8f0" : "#64748b" }}
+                  style={{ color: isDemo ? "#e2e8f0" : "var(--text-muted)" }}
                 >
                   {isDemo ? typedText : QUERY}
                   {showCursor && (
@@ -212,7 +212,7 @@ export function AIMatchSection() {
                 </span>
                 <span
                   className="text-[10px] px-2 py-0.5 rounded font-medium shrink-0"
-                  style={{ background: "rgba(124,58,237,0.25)", color: "#c4b5fd" }}
+                  style={{ background: "rgba(124,58,237,0.25)", color: "var(--accent-violet-text)" }}
                 >
                   AI
                 </span>
@@ -238,7 +238,7 @@ export function AIMatchSection() {
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.22, delay: i * 0.07 }}
                           className="text-[10px] px-2 py-0.5 rounded-full"
-                          style={{ background: "var(--bg-card-hover)", color: "#64748b", border: "1px solid var(--bg-card-hover)" }}
+                          style={{ background: "var(--bg-card-hover)", color: "var(--text-muted)", border: "1px solid var(--bg-card-hover)" }}
                         >
                           {f}
                         </motion.span>
@@ -286,7 +286,7 @@ export function AIMatchSection() {
                         <span
                           key={t}
                           className="px-1.5 py-0.5 rounded-full text-[9px]"
-                          style={{ background: "var(--bg-card-hover)", color: "#94a3b8" }}
+                          style={{ background: "var(--bg-card-hover)", color: "var(--text-muted)" }}
                         >
                           {t}
                         </span>
@@ -345,8 +345,8 @@ export function AIMatchSection() {
           <button
             onClick={triggerDemo}
             disabled={demoPhase === "typing"}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-            style={{ background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{ background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "var(--accent-violet-text)" }}
           >
             {demoPhase === "typing" ? (
               <>

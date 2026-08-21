@@ -34,6 +34,7 @@ const stagger: Variants = {
 };
 
 const CYAN = "#67e8f9";
+const CYAN_T = "var(--accent-cyan-text)";
 const NOTE_TEXT = "Hey, love your content!";
 
 type DemoPhase = "idle" | "running" | "done";
@@ -49,15 +50,15 @@ const initialItems: OutreachItem[] = [
   {
     name: "@nova.beauty",
     status: "Opened",
-    color: "#fcd34d",
+    color: "var(--accent-amber-text)",
     img: novaBeautyImg,
   },
-  { name: "@techguru", status: "Replied", color: "#34d399", img: techguruImg },
-  { name: "@fitlife.co", status: "Sent", color: CYAN, img: fitlifeImg },
+  { name: "@techguru", status: "Replied", color: "var(--accent-emerald-text)", img: techguruImg },
+  { name: "@fitlife.co", status: "Sent", color: CYAN_T, img: fitlifeImg },
   {
     name: "@style.world",
     status: "Pending",
-    color: "#475569",
+    color: "var(--text-muted)",
     img: styleWorldImg,
   },
 ];
@@ -66,12 +67,12 @@ const demoItems: OutreachItem[] = [
   {
     name: "@nova.beauty",
     status: "Replied",
-    color: "#34d399",
+    color: "var(--accent-emerald-text)",
     img: novaBeautyImg,
   },
-  { name: "@techguru", status: "Replied", color: "#34d399", img: techguruImg },
-  { name: "@fitlife.co", status: "Opened", color: "#fcd34d", img: fitlifeImg },
-  { name: "@style.world", status: "Sent", color: CYAN, img: styleWorldImg },
+  { name: "@techguru", status: "Replied", color: "var(--accent-emerald-text)", img: techguruImg },
+  { name: "@fitlife.co", status: "Opened", color: "var(--accent-amber-text)", img: fitlifeImg },
+  { name: "@style.world", status: "Sent", color: CYAN_T, img: styleWorldImg },
 ];
 
 export function OutreachSection() {
@@ -211,6 +212,8 @@ export function OutreachSection() {
             className="order-2 lg:order-1"
           >
             <div
+              role="img"
+              aria-label="Preview of the outreach inbox: a collaboration invite with accept and decline actions, above a bulk send queue"
               className="rounded-3xl overflow-hidden transition-all duration-500"
               style={{
                 background: "var(--bg-card)",
@@ -245,7 +248,7 @@ export function OutreachSection() {
                   className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold"
                   style={{
                     background: "rgba(52,211,153,0.3)",
-                    color: "#34d399",
+                    color: "var(--accent-emerald-text)",
                   }}
                 >
                   Sent ✓
@@ -286,6 +289,7 @@ export function OutreachSection() {
                 {/* Response buttons */}
                 <div className="flex gap-3 mb-5">
                   <motion.button
+                    tabIndex={-1}
                     animate={
                       acceptPulsing
                         ? { scale: [1, 0.92, 1.04, 1] }
@@ -327,11 +331,12 @@ export function OutreachSection() {
                     </AnimatePresence>
                   </motion.button>
                   <button
+                    tabIndex={-1}
                     className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
                     style={{
                       background: "var(--bg-card-hover)",
                       border: "1px solid var(--border-card-strong)",
-                      color: "#94a3b8",
+                      color: "var(--text-muted)",
                     }}
                   >
                     View Profile
@@ -384,7 +389,7 @@ export function OutreachSection() {
                               }}
                               className="flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded-full"
                               style={{
-                                background: `${display.color}15`,
+                                background: `color-mix(in srgb, ${display.color} 15%, transparent)`,
                                 color: display.color,
                               }}
                             >
@@ -410,6 +415,7 @@ export function OutreachSection() {
                     <input
                       value={noteValue}
                       readOnly
+                      tabIndex={-1}
                       placeholder="Add a note..."
                       className="flex-1 bg-transparent text-[11px] focus:outline-none placeholder:text-slate-700"
                       style={{ color: noteText ? "#e2e8f0" : undefined }}
@@ -439,7 +445,7 @@ export function OutreachSection() {
               style={{
                 background: "rgba(6,182,212,0.12)",
                 border: "1px solid rgba(6,182,212,0.35)",
-                color: CYAN,
+                color: CYAN_T,
               }}
             >
               <Mail size={11} />
@@ -504,7 +510,7 @@ export function OutreachSection() {
                       border: "1px solid rgba(6,182,212,0.25)",
                     }}
                   >
-                    <item.icon size={15} style={{ color: CYAN }} />
+                    <item.icon size={15} style={{ color: CYAN_T }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">
                     {item.text}
@@ -519,7 +525,7 @@ export function OutreachSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoLocked}
-              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoLocked
                   ? "rgba(6,182,212,0.25)"
@@ -527,7 +533,7 @@ export function OutreachSection() {
                 border: isDemoLocked
                   ? "1px solid rgba(6,182,212,0.5)"
                   : "1px solid rgba(6,182,212,0.35)",
-                color: CYAN,
+                color: CYAN_T,
                 opacity: isDemoLocked ? 0.6 : 1,
               }}
             >
@@ -551,7 +557,7 @@ export function OutreachSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoLocked}
-            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoLocked
                 ? "rgba(6,182,212,0.25)"
@@ -559,7 +565,7 @@ export function OutreachSection() {
               border: isDemoLocked
                 ? "1px solid rgba(6,182,212,0.5)"
                 : "1px solid rgba(6,182,212,0.35)",
-              color: CYAN,
+              color: CYAN_T,
               opacity: isDemoLocked ? 0.6 : 1,
             }}
           >

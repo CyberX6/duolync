@@ -15,34 +15,38 @@ const AMBER   = "#fcd34d";
 const PINK    = "#f472b6";
 const VIOLET  = "#c084fc";
 const EMERALD = "#34d399";
+const AMBER_T   = "var(--accent-amber-text)";
+const PINK_T    = "var(--accent-pink-text)";
+const VIOLET_T  = "var(--accent-purple-text)";
+const EMERALD_T = "var(--accent-emerald-text)";
 
 const roadmapSteps = [
   {
     phase: "Phase 1", title: "Foundation", milestone: "0 → 1K Followers",
-    color: PINK, bg: "rgba(244,114,182,0.1)", border: "rgba(244,114,182,0.25)", done: true,
+    color: PINK_T, bg: "rgba(244,114,182,0.1)", border: "rgba(244,114,182,0.25)", done: true,
     tasks: ["Profile audit & optimization", "Niche identification", "Content pillars defined", "First 10 posts published"],
   },
   {
     phase: "Phase 2", title: "Momentum", milestone: "1K → 10K Followers",
-    color: VIOLET, bg: "rgba(192,132,252,0.1)", border: "rgba(192,132,252,0.25)", done: false, active: true,
+    color: VIOLET_T, bg: "rgba(192,132,252,0.1)", border: "rgba(192,132,252,0.25)", done: false, active: true,
     tasks: ["Consistency streak: 3×/week", "Engagement strategy active", "First brand pitch sent", "Media kit created"],
   },
   {
     phase: "Phase 3", title: "Monetization", milestone: "First Paid Deal",
-    color: AMBER, bg: "rgba(252,211,77,0.1)", border: "rgba(252,211,77,0.25)", done: false,
+    color: AMBER_T, bg: "rgba(252,211,77,0.1)", border: "rgba(252,211,77,0.25)", done: false,
     tasks: ["Brand pitch templates", "Rate card established", "First $500+ deal signed", "CRM setup for follow-ups"],
   },
   {
     phase: "Phase 4", title: "Scale", milestone: "10K → 100K",
-    color: EMERALD, bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.25)", done: false,
+    color: EMERALD_T, bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.25)", done: false,
     tasks: ["Multi-platform expansion", "Premium brand deals $2K+", "Content team building", "Passive income streams"],
   },
 ];
 
 const proStats = [
-  { icon: Users,     value: "10K",   label: "avg. followers by month 4", color: PINK    },
-  { icon: DollarSign, value: "$1.2K", label: "first deal avg. value",     color: AMBER   },
-  { icon: TrendingUp, value: "89%",   label: "complete roadmap in 6mo",   color: EMERALD },
+  { icon: Users,     value: "10K",   label: "avg. followers by month 4", color: PINK_T    },
+  { icon: DollarSign, value: "$1.2K", label: "first deal avg. value",     color: AMBER_T   },
+  { icon: TrendingUp, value: "89%",   label: "complete roadmap in 6mo",   color: EMERALD_T },
 ];
 
 function RoadmapModal({ onClose }: { onClose: () => void }) {
@@ -115,7 +119,7 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
                     className="w-14 h-14 rounded-2xl flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, rgba(217,119,6,0.3), rgba(219,39,119,0.3))", border: "1px solid rgba(244,114,182,0.3)" }}
                   >
-                    <Sparkles size={22} style={{ color: AMBER }} />
+                    <Sparkles size={22} style={{ color: AMBER_T }} />
                   </div>
                 </div>
 
@@ -199,7 +203,7 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
                   className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
                   style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)" }}
                 >
-                  <CheckCircle2 size={28} style={{ color: EMERALD }} />
+                  <CheckCircle2 size={28} style={{ color: EMERALD_T }} />
                 </motion.div>
                 <h3 className="font-display font-bold text-white text-xl mb-2">
                   You&apos;re on the list! 🎉
@@ -208,7 +212,7 @@ function RoadmapModal({ onClose }: { onClose: () => void }) {
                   We&apos;ll send your personalized growth blueprint to{" "}
                   <strong className="text-white">{email}</strong> as soon as beta opens.
                 </p>
-                <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px]" style={{ color: EMERALD }}>
+                <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px]" style={{ color: EMERALD_T }}>
                   <Star size={10} fill={EMERALD} />
                   <span>Expected access: within 48 hours</span>
                 </div>
@@ -258,7 +262,7 @@ export function RoadmapSection() {
               style={{
                 background: "rgba(252,211,77,0.12)",
                 border: "1px solid rgba(252,211,77,0.35)",
-                color: AMBER,
+                color: AMBER_T,
               }}
             >
               <Map size={11} />
@@ -341,7 +345,7 @@ export function RoadmapSection() {
                 <div className="flex items-center justify-between mb-4">
                   <span
                     className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ background: `${step.color}18`, color: step.color }}
+                    style={{ background: `color-mix(in srgb, ${step.color} 9%, transparent)`, color: step.color }}
                   >
                     {step.phase}
                   </span>
@@ -350,7 +354,7 @@ export function RoadmapSection() {
                   ) : step.active ? (
                     <div
                       className="w-4 h-4 rounded-full flex items-center justify-center"
-                      style={{ background: `${step.color}30`, border: `1px solid ${step.color}` }}
+                      style={{ background: `color-mix(in srgb, ${step.color} 19%, transparent)`, border: `1px solid ${step.color}` }}
                     >
                       <div
                         className="w-1.5 h-1.5 rounded-full animate-pulse"
@@ -376,7 +380,7 @@ export function RoadmapSection() {
                     <li
                       key={j}
                       className="flex items-start gap-1.5 text-[11px]"
-                      style={{ color: step.done || step.active ? "#94a3b8" : "#475569" }}
+                      style={{ color: "var(--text-muted)" }}
                     >
                       <div
                         className="w-1 h-1 rounded-full shrink-0 mt-1.5"
@@ -412,8 +416,8 @@ export function RoadmapSection() {
             }}
           >
             <div className="flex items-center justify-center gap-2 mb-3">
-              <Sparkles size={16} style={{ color: AMBER }} />
-              <span className="text-sm font-semibold" style={{ color: AMBER }}>
+              <Sparkles size={16} style={{ color: AMBER_T }} />
+              <span className="text-sm font-semibold" style={{ color: AMBER_T }}>
                 AI-Personalized Roadmap
               </span>
             </div>

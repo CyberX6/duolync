@@ -21,11 +21,11 @@ type ChipPhase = "chip" | "flashing" | "real";
 type RowPhase  = "sending" | "sent";
 
 const creators = [
-  { name: "@nova.beauty", platform: "TikTok",    followers: "1.8M", status: "Active",      statusColor: "#34d399", deals: 3, img: novaBeautyImg },
-  { name: "@style.world", platform: "Instagram", followers: "2.1M", status: "Negotiating", statusColor: "#fcd34d", deals: 1, img: styleWorldImg },
-  { name: "@fitlife.co",  platform: "YouTube",   followers: "980K", status: "Pending",     statusColor: "#7dd3fc", deals: 0, img: fitlifeImg    },
-  { name: "@techguru",    platform: "TikTok",    followers: "560K", status: "Completed",   statusColor: "#a78bfa", deals: 5, img: techguruImg   },
-  { name: "@travel.joe",  platform: "Instagram", followers: "1.3M", status: "Active",      statusColor: "#34d399", deals: 2, img: marcusImg     },
+  { name: "@nova.beauty", platform: "TikTok",    followers: "1.8M", status: "Active",      statusColor: "var(--accent-emerald-text)", deals: 3, img: novaBeautyImg },
+  { name: "@style.world", platform: "Instagram", followers: "2.1M", status: "Negotiating", statusColor: "var(--accent-amber-text)", deals: 1, img: styleWorldImg },
+  { name: "@fitlife.co",  platform: "YouTube",   followers: "980K", status: "Pending",     statusColor: "var(--accent-sky-text)", deals: 0, img: fitlifeImg    },
+  { name: "@techguru",    platform: "TikTok",    followers: "560K", status: "Completed",   statusColor: "var(--accent-violet-text)", deals: 5, img: techguruImg   },
+  { name: "@travel.joe",  platform: "Instagram", followers: "1.3M", status: "Active",      statusColor: "var(--accent-emerald-text)", deals: 2, img: marcusImg     },
 ];
 
 const emailTemplate = {
@@ -116,7 +116,7 @@ export function CRMSection() {
           <motion.div
             variants={fadeUp}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-            style={{ background: "rgba(56,189,248,0.12)", border: "1px solid rgba(56,189,248,0.35)", color: "#7dd3fc" }}
+            style={{ background: "rgba(56,189,248,0.12)", border: "1px solid rgba(56,189,248,0.35)", color: "var(--accent-sky-text)" }}
           >
             <Database size={11} />
             Integrated CRM &amp; Bulk Mailing
@@ -151,11 +151,11 @@ export function CRMSection() {
                 <Search size={12} className="text-slate-600" />
                 <span className="text-slate-600">Search creators...</span>
               </div>
-              <button className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--bg-card-hover)", color: "#64748b" }}>
+              <button tabIndex={-1} className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl" style={{ background: "var(--bg-card-hover)", border: "1px solid var(--bg-card-hover)", color: "var(--text-muted)" }}>
                 <Filter size={11} />
                 Filters
               </button>
-              <button className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl font-semibold" style={{ background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.3)", color: "#7dd3fc" }}>
+              <button tabIndex={-1} className="flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-xl font-semibold" style={{ background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.3)", color: "var(--accent-sky-text)" }}>
                 <Mail size={11} />
                 Bulk Email
               </button>
@@ -206,7 +206,7 @@ export function CRMSection() {
                             exit={{ opacity: 0, scale: 0.7 }}
                             transition={{ type: "spring", stiffness: 500, damping: 22 }}
                             className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
-                            style={{ background: "rgba(52,211,153,0.15)", color: "#34d399" }}
+                            style={{ background: "rgba(52,211,153,0.15)", color: "var(--accent-emerald-text)" }}
                           >
                             <CheckCircle2 size={9} />
                             Sent ✓
@@ -219,7 +219,7 @@ export function CRMSection() {
                             exit={{ opacity: 0, scale: 0.8 }}
                             transition={{ duration: 0.18 }}
                             className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
-                            style={{ background: "rgba(124,58,237,0.18)", color: "#a78bfa" }}
+                            style={{ background: "rgba(124,58,237,0.18)", color: "var(--accent-violet-text)" }}
                           >
                             <span className="w-2 h-2 rounded-full border border-violet-400 border-t-transparent animate-spin shrink-0" />
                             Sending...
@@ -232,7 +232,7 @@ export function CRMSection() {
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.15 }}
                             className="text-[10px] font-medium px-2 py-0.5 rounded-full"
-                            style={{ background: `${c.statusColor}18`, color: c.statusColor }}
+                            style={{ background: `color-mix(in srgb, ${c.statusColor} 9%, transparent)`, color: c.statusColor }}
                           >
                             {c.status}
                           </motion.span>
@@ -275,7 +275,7 @@ export function CRMSection() {
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.25)" }}>
-                  <Send size={13} style={{ color: "#7dd3fc" }} />
+                  <Send size={13} style={{ color: "var(--accent-sky-text)" }} />
                 </div>
                 <span className="text-sm font-semibold text-white">Bulk Outreach</span>
               </div>
@@ -287,7 +287,7 @@ export function CRMSection() {
                   <span
                     key={tag}
                     className="text-[10px] px-2 py-0.5 rounded-full"
-                    style={{ background: "rgba(56,189,248,0.12)", color: "#7dd3fc", border: "1px solid rgba(56,189,248,0.2)" }}
+                    style={{ background: "rgba(56,189,248,0.12)", color: "var(--accent-sky-text)", border: "1px solid rgba(56,189,248,0.2)" }}
                   >
                     {tag}
                   </span>
@@ -336,7 +336,7 @@ export function CRMSection() {
                         className="text-[9px] px-1.5 py-0.5 rounded font-mono inline-block"
                         style={{
                           background: chipPhase === "flashing" ? "rgba(124,58,237,0.55)" : "rgba(124,58,237,0.15)",
-                          color: "#a78bfa",
+                          color: "var(--accent-violet-text)",
                           transition: "background 0.15s ease",
                         }}
                       >
@@ -351,7 +351,7 @@ export function CRMSection() {
                         className="text-[9px] px-1.5 py-0.5 rounded font-mono font-semibold inline-block"
                         style={{
                           background: "rgba(52,211,153,0.15)",
-                          color: "#34d399",
+                          color: "var(--accent-emerald-text)",
                           border: "1px solid rgba(52,211,153,0.3)",
                         }}
                       >
@@ -372,7 +372,7 @@ export function CRMSection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     transition={{ type: "spring", stiffness: 420, damping: 22 }}
-                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white"
+                    className="w-full flex items-center justify-center gap-1.5 py-2 min-h-11 rounded-xl text-xs font-semibold text-white"
                     style={{ background: "linear-gradient(135deg, #059669, #0d9488)" }}
                   >
                     <CheckCircle2 size={12} />
@@ -385,7 +385,7 @@ export function CRMSection() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     disabled
-                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-1.5 py-2 min-h-11 rounded-xl text-xs font-semibold text-white cursor-not-allowed"
                     style={{ background: "linear-gradient(135deg, #0891b2, #7c3aed)", opacity: 0.82 }}
                   >
                     <span className="w-3 h-3 rounded-full border-2 border-white/50 border-t-transparent animate-spin" />
@@ -398,7 +398,7 @@ export function CRMSection() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     onClick={triggerDemo}
-                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-1.5 py-2 min-h-11 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
                     style={{ background: "linear-gradient(135deg, #0891b2, #7c3aed)" }}
                   >
                     <Send size={12} />
@@ -411,10 +411,10 @@ export function CRMSection() {
             {/* Stats cards */}
             <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
               {[
-                { icon: Users,    value: "128",  label: "In database",   color: "#a78bfa" },
-                { icon: Mail,     value: "94%",  label: "Open rate",     color: "#34d399" },
-                { icon: BarChart3, value: "3.8×", label: "Avg. ROI",      color: "#38bdf8" },
-                { icon: Clock,    value: "2.1d", label: "Avg. response", color: "#fcd34d" },
+                { icon: Users,    value: "128",  label: "In database",   color: "var(--accent-violet-text)" },
+                { icon: Mail,     value: "94%",  label: "Open rate",     color: "var(--accent-emerald-text)" },
+                { icon: BarChart3, value: "3.8×", label: "Avg. ROI",      color: "var(--accent-sky-text)" },
+                { icon: Clock,    value: "2.1d", label: "Avg. response", color: "var(--accent-amber-text)" },
               ].map((stat, i) => (
                 <div
                   key={i}
@@ -453,7 +453,7 @@ export function CRMSection() {
                 className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
                 style={{ background: "rgba(56,189,248,0.12)", border: "1px solid rgba(56,189,248,0.2)" }}
               >
-                <f.icon size={16} style={{ color: "#7dd3fc" }} />
+                <f.icon size={16} style={{ color: "var(--accent-sky-text)" }} />
               </div>
               <div className="text-sm font-semibold text-white mb-1">{f.title}</div>
               <div className="text-xs text-slate-500 leading-relaxed">{f.desc}</div>

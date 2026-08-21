@@ -27,6 +27,7 @@ const fadeUp: Variants = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1,
 const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
 
 const EMERALD = "#34d399";
+const EMERALD_T = "var(--accent-emerald-text)";
 
 type DemoPhase = "idle" | "running" | "done";
 
@@ -36,7 +37,7 @@ const campaigns = [
     creators: 5,
     engagement: "6.2%",
     status: "In Progress",
-    statusColor: "#fcd34d",
+    statusColor: "var(--accent-amber-text)",
     img: techUnboxingImg,
   },
   {
@@ -44,7 +45,7 @@ const campaigns = [
     creators: 8,
     engagement: "4.8%",
     status: "Review",
-    statusColor: "#67e8f9",
+    statusColor: "var(--accent-cyan-text)",
     img: springCollectionImg,
   },
   {
@@ -52,16 +53,16 @@ const campaigns = [
     creators: 11,
     engagement: "5.9%",
     status: "Completed",
-    statusColor: "#34d399",
+    statusColor: "var(--accent-emerald-text)",
     img: videographyImg,
   },
 ];
 
 // [raw target, format fn]
 const metrics: { label: string; color: string; target: number; format: (v: number) => string }[] = [
-  { label: "Creators", color: "#a78bfa", target: 24, format: (v) => Math.round(v).toString() },
-  { label: "Budget",   color: "#34d399", target: 45, format: (v) => `$${Math.round(v)}K` },
-  { label: "Reach",    color: "#67e8f9", target: 28, format: (v) => `${(v / 10).toFixed(1)}M` },
+  { label: "Creators", color: "var(--accent-violet-text)",  target: 24, format: (v) => Math.round(v).toString() },
+  { label: "Budget",   color: "var(--accent-emerald-text)", target: 45, format: (v) => `$${Math.round(v)}K` },
+  { label: "Reach",    color: "var(--accent-cyan-text)",    target: 28, format: (v) => `${(v / 10).toFixed(1)}M` },
 ];
 
 export function CRMSection() {
@@ -166,7 +167,7 @@ export function CRMSection() {
               style={{
                 background: "rgba(52,211,153,0.12)",
                 border: "1px solid rgba(52,211,153,0.35)",
-                color: EMERALD,
+                color: EMERALD_T,
               }}
             >
               <Database size={11} />
@@ -219,7 +220,7 @@ export function CRMSection() {
                       border: "1px solid rgba(52,211,153,0.25)",
                     }}
                   >
-                    <item.icon size={15} style={{ color: EMERALD }} />
+                    <item.icon size={15} style={{ color: EMERALD_T }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">
                     {item.text}
@@ -234,7 +235,7 @@ export function CRMSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoActive
                   ? "rgba(52,211,153,0.25)"
@@ -242,7 +243,7 @@ export function CRMSection() {
                 border: isDemoActive
                   ? "1px solid rgba(52,211,153,0.5)"
                   : "1px solid rgba(52,211,153,0.35)",
-                color: EMERALD,
+                color: EMERALD_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -263,6 +264,8 @@ export function CRMSection() {
           {/* Right: CRM Dashboard */}
           <motion.div variants={fadeUp} transition={{ duration: 0.65 }}>
             <div
+              role="img"
+              aria-label="Preview of the campaign CRM dashboard tracking creators through each pipeline stage"
               className="rounded-3xl overflow-hidden transition-all duration-500"
               style={{
                 background: "var(--bg-card)",
@@ -283,7 +286,7 @@ export function CRMSection() {
                 <div className="flex gap-2">
                   <span
                     className="px-2.5 py-0.5 rounded-full text-[10px] font-medium"
-                    style={{ background: "rgba(52,211,153,0.2)", color: "#34d399" }}
+                    style={{ background: "rgba(52,211,153,0.2)", color: "var(--accent-emerald-text)" }}
                   >
                     Active
                   </span>
@@ -365,7 +368,7 @@ export function CRMSection() {
                       <span
                         className="text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0"
                         style={{
-                          background: `${c.statusColor}18`,
+                          background: `color-mix(in srgb, ${c.statusColor} 18%, transparent)`,
                           color: c.statusColor,
                         }}
                       >
@@ -396,12 +399,12 @@ export function CRMSection() {
                     transition: "background 0.5s ease, border-color 0.5s ease",
                   }}
                 >
-                  <BarChart3 size={14} style={{ color: EMERALD }} />
+                  <BarChart3 size={14} style={{ color: EMERALD_T }} />
                   <span className="text-xs text-slate-400 flex-1">
                     Campaign performance up{" "}
-                    <strong style={{ color: EMERALD }}>+23%</strong> this month
+                    <strong style={{ color: EMERALD_T }}>+23%</strong> this month
                   </span>
-                  <CheckCircle2 size={13} style={{ color: EMERALD }} />
+                  <CheckCircle2 size={13} style={{ color: EMERALD_T }} />
                 </motion.div>
               </div>
             </div>
@@ -413,7 +416,7 @@ export function CRMSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoActive
                 ? "rgba(52,211,153,0.25)"
@@ -421,7 +424,7 @@ export function CRMSection() {
               border: isDemoActive
                 ? "1px solid rgba(52,211,153,0.5)"
                 : "1px solid rgba(52,211,153,0.35)",
-              color: EMERALD,
+              color: EMERALD_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

@@ -59,12 +59,20 @@ export async function sendMessageAction(
 ): Promise<{ error: string | null }> {
   const trimmed = text.trim();
   if (!trimmed) return { error: "Message cannot be empty" };
+  if (trimmed.length > 5000) return { error: "Message too long (max 5000 characters)." };
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return { error: "Unauthorized" };
 
+  const senderId = session.user.id;
+
+  // Rate limit: max 30 messages per minute per sender
+  const { rateLimit } = await import("@/lib/rate-limit");
+  const allowed = await rateLimit(`${senderId}:send-message`, 30, 60_000);
+  if (!allowed) return { error: "You're sending messages too quickly. Please wait a moment." };
+
   await db.message.create({
-    data: { senderId: session.user.id, receiverId, text: trimmed },
+    data: { senderId, receiverId, text: trimmed },
   });
 
   return { error: null };

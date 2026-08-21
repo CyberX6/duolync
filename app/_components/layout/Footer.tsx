@@ -46,7 +46,7 @@ const Footer = () => {
 
         {/* Left — brand, description, socials */}
         <div className="flex flex-col gap-4 max-w-md">
-          <Link href="/" className="inline-flex items-center">
+          <Link href="/" className="inline-flex items-center min-h-11">
             <span
               className="font-display font-bold text-2xl tracking-tight"
               style={{
@@ -60,7 +60,7 @@ const Footer = () => {
             </span>
           </Link>
 
-          <p className="text-sm text-zinc-500 leading-relaxed">
+          <p className="text-sm text-zinc-400 leading-relaxed">
             The AI-powered marketplace connecting brands with authentic content
             creators for impactful, data-driven collaborations.
           </p>
@@ -71,7 +71,7 @@ const Footer = () => {
                 key={s.name}
                 href={s.href}
                 aria-label={s.name}
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-zinc-600 bg-zinc-900 border border-zinc-800 transition-all duration-200 hover:text-white hover:border-zinc-600 hover:scale-[1.08]"
+                className="relative w-8 h-8 rounded-xl flex items-center justify-center text-zinc-400 bg-zinc-900 border border-zinc-800 transition-all duration-200 hover:text-white hover:border-zinc-600 hover:scale-[1.08] before:absolute before:-inset-1.5 before:content-['']"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -93,7 +93,7 @@ const Footer = () => {
               <span key={link.href} className="flex items-center gap-3">
                 <Link
                   href={link.href}
-                  className="transition-colors duration-200 hover:brightness-125"
+                  className="inline-flex items-center min-h-11 transition-colors duration-200 hover:brightness-125"
                   style={{ color: link.color }}
                 >
                   {link.label}
@@ -104,7 +104,7 @@ const Footer = () => {
               </span>
             ))}
           </div>
-          <p className="text-zinc-600 text-xs">
+          <p className="text-zinc-400 text-xs">
             © {new Date().getFullYear()} Duolync. All rights reserved.
           </p>
         </div>

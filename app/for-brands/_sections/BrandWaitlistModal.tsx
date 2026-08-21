@@ -74,7 +74,7 @@ export function BrandWaitlistModal({ onClose }: { onClose: () => void }) {
                   border: "1px solid rgba(6,182,212,0.35)",
                 }}
               >
-                <Sparkles size={22} style={{ color: "#67e8f9" }} />
+                <Sparkles size={22} style={{ color: "var(--accent-cyan-text)" }} />
               </div>
             </div>
 

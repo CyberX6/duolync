@@ -20,11 +20,13 @@ export function ThemeToggle() {
     );
   }
 
+  // The 36px box is the visual chrome; the ::before overlay widens the hit area
+  // to the 44px touch minimum without changing how the control looks.
   return (
     <button
       onClick={toggleTheme}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-[1.08] active:scale-95 shrink-0"
+      className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-[1.08] active:scale-95 shrink-0 before:absolute before:-inset-1 before:content-['']"
       style={{
         background: "var(--bg-card)",
         border: "1px solid var(--border-card)",

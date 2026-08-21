@@ -19,6 +19,12 @@ const CYAN = "#67e8f9";
 const AMBER = "#fcd34d";
 const EMERALD = "#34d399";
 
+const PINK_T = "var(--accent-pink-text)";
+const VIOLET_T = "var(--accent-purple-text)";
+const CYAN_T = "var(--accent-cyan-text)";
+const AMBER_T = "var(--accent-amber-text)";
+const EMERALD_T = "var(--accent-emerald-text)";
+
 function GlassCard({
   children,
   className = "",
@@ -51,7 +57,7 @@ function GlassCard({
 
 function Badge({ color, Icon, label }: { color: string; Icon: React.ElementType; label: string }) {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3" style={{ background: `${color}18`, color, border: `1px solid ${color}30` }}>
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3" style={{ background: `color-mix(in srgb, ${color} 9%, transparent)`, color, border: `1px solid color-mix(in srgb, ${color} 19%, transparent)` }}>
       <Icon size={11} />
       {label}
     </div>
@@ -77,7 +83,7 @@ export function BentoSection() {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(236,72,153,0.12)", border: "1px solid rgba(236,72,153,0.3)", color: "#f9a8d4" }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "rgba(236,72,153,0.12)", border: "1px solid rgba(236,72,153,0.3)", color: "var(--accent-pink-text)" }}>
             <Sparkles size={11} />
             Platform Overview
           </motion.div>
@@ -102,7 +108,7 @@ export function BentoSection() {
         >
           {/* 1 — Smart Filters: wide */}
           <GlassCard className="lg:col-span-2" borderColor={`${PINK}30`} glowColor={`${PINK}08`}>
-            <Badge color={PINK} Icon={Filter} label="Smart Filters" />
+            <Badge color={PINK_T} Icon={Filter} label="Smart Filters" />
             <h3 className="font-display font-bold text-white text-xl mb-1">You set the rules. We bring the deals.</h3>
             <p className="text-slate-500 text-sm mb-4">Filter brand opportunities by niche, minimum budget, location, and audience size — so you only see offers worth your time.</p>
 
@@ -115,7 +121,7 @@ export function BentoSection() {
                   style={{
                     background: i < 3 ? `${PINK}20` : "var(--bg-card-hover)",
                     border: `1px solid ${i < 3 ? `${PINK}40` : "var(--border-card-strong)"}`,
-                    color: i < 3 ? PINK : "#64748b",
+                    color: i < 3 ? PINK_T : "var(--text-muted)",
                   }}
                 >
                   {i < 3 && <span className="mr-1">✓</span>}{niche}
@@ -151,18 +157,18 @@ export function BentoSection() {
 
           {/* 2 — Omni Dashboard */}
           <GlassCard borderColor={`${VIOLET}30`} glowColor={`${VIOLET}08`}>
-            <Badge color={VIOLET} Icon={LayoutDashboard} label="Omni Dashboard" />
+            <Badge color={VIOLET_T} Icon={LayoutDashboard} label="Omni Dashboard" />
             <h3 className="font-display font-bold text-white text-lg mb-1">All platforms, one screen</h3>
             <p className="text-slate-500 text-xs mb-3">TikTok, Instagram, YouTube — plan, schedule, and track from one unified calendar.</p>
 
             {/* Platform icons + calendar mini */}
             <div className="flex gap-2 mb-3">
               {[
-                { label: "TikTok", color: "#f472b6", bg: "rgba(244,114,182,0.15)" },
-                { label: "Instagram", color: "#c084fc", bg: "rgba(192,132,252,0.15)" },
-                { label: "YouTube", color: "#f87171", bg: "rgba(248,113,113,0.15)" },
+                { label: "TikTok", color: "var(--accent-pink-text)", bg: "rgba(244,114,182,0.15)" },
+                { label: "Instagram", color: "var(--accent-purple-text)", bg: "rgba(192,132,252,0.15)" },
+                { label: "YouTube", color: "var(--accent-red-text)", bg: "rgba(248,113,113,0.15)" },
               ].map((p) => (
-                <div key={p.label} className="flex-1 rounded-xl py-2 text-center text-[10px] font-medium" style={{ background: p.bg, color: p.color, border: `1px solid ${p.color}25` }}>
+                <div key={p.label} className="flex-1 rounded-xl py-2 text-center text-[10px] font-medium" style={{ background: p.bg, color: p.color, border: `1px solid color-mix(in srgb, ${p.color} 15%, transparent)` }}>
                   {p.label}
                 </div>
               ))}
@@ -178,7 +184,7 @@ export function BentoSection() {
                     className="text-[8px] text-center py-1 rounded"
                     style={{
                       background: [4, 8, 15, 22].includes(d) ? `${PINK}40` : [6, 13, 20].includes(d) ? `${VIOLET}35` : "transparent",
-                      color: [4,8,15,22,6,13,20].includes(d) ? "var(--text-base)" : "rgba(100,116,139,0.7)",
+                      color: [4,8,15,22,6,13,20].includes(d) ? "var(--text-base)" : "var(--text-muted)",
                     }}
                   >
                     {d}
@@ -190,7 +196,7 @@ export function BentoSection() {
 
           {/* 3 — Mail & CRM */}
           <GlassCard borderColor={`${CYAN}28`} glowColor={`${CYAN}06`}>
-            <Badge color={CYAN} Icon={Mail} label="Mail & CRM" />
+            <Badge color={CYAN_T} Icon={Mail} label="Mail & CRM" />
             <h3 className="font-display font-bold text-white text-lg mb-1">One inbox. Zero chaos.</h3>
             <p className="text-slate-500 text-xs mb-3">Every brand communication, deal negotiation, and follow-up — all in one place.</p>
 
@@ -222,16 +228,16 @@ export function BentoSection() {
 
           {/* 4 — AI Growth: wide */}
           <GlassCard className="lg:col-span-2" borderColor={`${EMERALD}28`} glowColor={`${EMERALD}06`}>
-            <Badge color={EMERALD} Icon={Brain} label="AI Growth Mentor" />
+            <Badge color={EMERALD_T} Icon={Brain} label="AI Growth Mentor" />
             <h3 className="font-display font-bold text-white text-xl mb-1">Your personal AI content strategist</h3>
             <p className="text-slate-500 text-sm mb-4">Whether you're just starting or already viral — the AI analyzes your stats and gives personalized growth tips.</p>
 
             {/* Stats + AI suggestion */}
             <div className="flex gap-3 mb-3 flex-wrap">
               {[
-                { label: "Avg. Engagement", value: "4.2%", trend: "+0.8%", color: EMERALD },
-                { label: "Best Post Time", value: "7–9 PM", trend: "Tue & Thu", color: CYAN },
-                { label: "Growth Rate", value: "+12%", trend: "vs last month", color: VIOLET },
+                { label: "Avg. Engagement", value: "4.2%", trend: "+0.8%", color: EMERALD_T },
+                { label: "Best Post Time", value: "7–9 PM", trend: "Tue & Thu", color: CYAN_T },
+                { label: "Growth Rate", value: "+12%", trend: "vs last month", color: VIOLET_T },
               ].map((s, i) => (
                 <div key={i} className="flex-1 min-w-[100px] rounded-xl p-3" style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)" }}>
                   <div className="text-[9px] text-slate-600 mb-1">{s.label}</div>
@@ -251,7 +257,7 @@ export function BentoSection() {
 
           {/* 5 — Roadmap */}
           <GlassCard borderColor={`${AMBER}28`} glowColor={`${AMBER}06`}>
-            <Badge color={AMBER} Icon={Map} label="Creator Roadmap" />
+            <Badge color={AMBER_T} Icon={Map} label="Creator Roadmap" />
             <h3 className="font-display font-bold text-white text-lg mb-1">Newbie to Pro path</h3>
             <p className="text-slate-500 text-xs mb-3">AI-guided steps from 0 to your first 10K followers and first paid deal.</p>
 
@@ -270,14 +276,14 @@ export function BentoSection() {
                     style={{
                       background: s.done ? `${AMBER}30` : s.active ? `${AMBER}20` : "var(--bg-card-hover)",
                       border: `1px solid ${s.done ? `${AMBER}50` : s.active ? `${AMBER}40` : "var(--border-card-strong)"}`,
-                      color: s.done ? AMBER : s.active ? AMBER : "#475569",
+                      color: s.done ? AMBER_T : s.active ? AMBER_T : "var(--text-muted)",
                     }}
                   >
                     {s.done ? "✓" : i + 1}
                   </div>
-                  <span className="text-[11px]" style={{ color: s.done ? "var(--text-faint)" : s.active ? "var(--text-base)" : "#475569" }}>{s.step}</span>
+                  <span className="text-[11px]" style={{ color: s.done ? "var(--text-muted)" : s.active ? "var(--text-base)" : "var(--text-muted)" }}>{s.step}</span>
                   {s.active && (
-                    <div className="ml-auto px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: `${AMBER}20`, color: AMBER }}>NOW</div>
+                    <div className="ml-auto px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: `${AMBER}20`, color: AMBER_T }}>NOW</div>
                   )}
                 </div>
               ))}
