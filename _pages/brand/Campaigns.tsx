@@ -17,10 +17,20 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import MainLayout from "@/components/layout/MainLayout";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   getBrandCampaignsAction,
@@ -390,7 +400,6 @@ const EMPTY_FORM: FormState = {
 };
 
 function CampaignFormModal({ open, editing, onClose, onSaved }: CampaignFormModalProps) {
-  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
 
@@ -420,7 +429,7 @@ function CampaignFormModal({ open, editing, onClose, onSaved }: CampaignFormModa
     e.preventDefault();
     const budget = parseFloat(form.budget);
     if (!form.title.trim() || !form.description.trim() || isNaN(budget) || budget <= 0) {
-      toast({ variant: "destructive", title: "Please fill in all required fields correctly." });
+      toast.error("Please fill in all required fields correctly.");
       return;
     }
 
@@ -441,10 +450,10 @@ function CampaignFormModal({ open, editing, onClose, onSaved }: CampaignFormModa
         : await createCampaignAction(payload);
 
       if (result.error || !result.data) {
-        toast({ variant: "destructive", title: result.error ?? "Something went wrong." });
+        toast.error(result.error ?? "Something went wrong.");
         return;
       }
-      toast({ title: editing ? "Campaign updated!" : "Campaign created!" });
+      toast.success(editing ? "Campaign updated!" : "Campaign created!");
       onSaved(result.data, !editing);
       onClose();
     });
@@ -846,10 +855,10 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewConnections, deleting 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 const Campaigns = () => {
-  const { toast } = useToast();
   const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState<CampaignData | null>(null);
@@ -884,15 +893,21 @@ const Campaigns = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this campaign? This cannot be undone.")) return;
+    setConfirmDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = confirmDeleteId;
+    if (!id) return;
+    setConfirmDeleteId(null);
     setDeletingId(id);
     setCampaigns((prev) => prev.filter((c) => c.id !== id));
     const result = await deleteCampaignAction(id);
     if (result.error) {
-      toast({ variant: "destructive", title: result.error });
+      toast.error(result.error);
       load();
     } else {
-      toast({ title: "Campaign deleted." });
+      toast.success("Campaign deleted.");
     }
     setDeletingId(null);
   };
@@ -1054,6 +1069,27 @@ const Campaigns = () => {
         loading={connectionsLoading}
         onClose={() => { setConnectionsOpen(false); setSelectedCampaign(null); }}
       />
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={confirmDeleteId !== null} onOpenChange={(open) => { if (!open) setConfirmDeleteId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete campaign?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the campaign and all associated data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700 text-white focus-visible:ring-red-600"
+            >
+              Delete Campaign
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

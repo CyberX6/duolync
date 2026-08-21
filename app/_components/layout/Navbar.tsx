@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href="/" className="flex items-center min-h-11 shrink-0">
             <span
               className="font-display font-bold text-2xl tracking-tight"
               style={{
@@ -77,7 +77,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             <button
-              className="p-2 rounded-xl transition-colors dark:text-slate-400 text-slate-600"
+              className="inline-flex items-center justify-center min-w-11 min-h-11 rounded-xl transition-colors dark:text-slate-400 text-slate-600"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
             >

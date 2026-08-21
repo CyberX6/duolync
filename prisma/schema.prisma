@@ -484,3 +484,13 @@ enum InvitationStatus {
   ACCEPTED
   DECLINED
 }
+
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+
+model RateLimitEvent {
+  id         String   @id @default(cuid())
+  identifier String
+  createdAt  DateTime @default(now())
+
+  @@index([identifier, createdAt])
+}

@@ -26,43 +26,46 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 const EMERALD = "#34d399";
 const VIOLET  = "#c084fc";
 const CYAN    = "#67e8f9";
+const EMERALD_T = "var(--accent-emerald-text)";
+const VIOLET_T  = "var(--accent-purple-text)";
+const CYAN_T    = "var(--accent-cyan-text)";
 
 const tipCategories = [
   {
-    label: "Engagement", color: EMERALD, bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", icon: TrendingUp,
+    label: "Engagement", color: EMERALD_T, bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", icon: TrendingUp,
     tip: "Your Reels posted on Tuesday at 7 PM get 2.4× more saves. Schedule your next brand collab then for max reach.", stat: "+2.4× saves",
   },
   {
-    label: "Content Mix", color: VIOLET, bg: "rgba(192,132,252,0.12)", border: "rgba(192,132,252,0.3)", icon: BarChart3,
+    label: "Content Mix", color: VIOLET_T, bg: "rgba(192,132,252,0.12)", border: "rgba(192,132,252,0.3)", icon: BarChart3,
     tip: "You're over-indexing on product showcases (68%). Add more educational content — your audience responds 3× better to tutorials.", stat: "3× better CTR",
   },
   {
-    label: "Best Time", color: CYAN, bg: "rgba(103,232,249,0.12)", border: "rgba(103,232,249,0.3)", icon: Clock,
+    label: "Best Time", color: CYAN_T, bg: "rgba(103,232,249,0.12)", border: "rgba(103,232,249,0.3)", icon: Clock,
     tip: "Your YouTube Shorts get 40% more views when published on Friday between 3–5 PM. Your current timing is off by 2 hours.", stat: "+40% views",
   },
   {
-    label: "Growth", color: "#fcd34d", bg: "rgba(252,211,77,0.12)", border: "rgba(252,211,77,0.3)", icon: Target,
+    label: "Growth", color: "var(--accent-amber-text)", bg: "rgba(252,211,77,0.12)", border: "rgba(252,211,77,0.3)", icon: Target,
     tip: "Creators with your profile score hit 50K in avg. 4.2 months. Your current pace puts you there in 6.1 months — here's how to close the gap.", stat: "On track",
   },
 ];
 
 const audienceStats = [
-  { label: "Avg. Engagement", value: "4.2%",   change: "+0.8%",       positive: true, color: EMERALD, numeric: 4.2,  format: (v: number) => `${v.toFixed(1)}%`    },
-  { label: "Follower Growth",  value: "+12%",   change: "vs last month", positive: true, color: VIOLET,  numeric: 12,   format: (v: number) => `+${Math.round(v)}%`  },
-  { label: "Profile Score",    value: "78/100", change: "Top 15%",       positive: true, color: CYAN,    numeric: 78,   format: (v: number) => `${Math.round(v)}/100` },
+  { label: "Avg. Engagement", value: "4.2%",   change: "+0.8%",       positive: true, color: EMERALD_T, numeric: 4.2,  format: (v: number) => `${v.toFixed(1)}%`    },
+  { label: "Follower Growth",  value: "+12%",   change: "vs last month", positive: true, color: VIOLET_T,  numeric: 12,   format: (v: number) => `+${Math.round(v)}%`  },
+  { label: "Profile Score",    value: "78/100", change: "Top 15%",       positive: true, color: CYAN_T,    numeric: 78,   format: (v: number) => `${Math.round(v)}/100` },
 ];
 
 const chartBars = [
-  { label: "Tutorial / Educational", value: 78, color: EMERALD },
-  { label: "Brand Collaboration",    value: 62, color: VIOLET  },
-  { label: "Behind the Scenes",      value: 54, color: CYAN    },
-  { label: "Product Showcase",       value: 41, color: "#fcd34d" },
+  { label: "Tutorial / Educational", value: 78, color: EMERALD_T },
+  { label: "Brand Collaboration",    value: 62, color: VIOLET_T  },
+  { label: "Behind the Scenes",      value: 54, color: CYAN_T    },
+  { label: "Product Showcase",       value: 41, color: "var(--accent-amber-text)" },
 ];
 
 const demoInsight = {
   stat: "↑ Priority Action",
   tip: "Your engagement spikes 3× on Friday evenings. Scheduling your next brand collab on Friday at 7PM could lift campaign ROI by an estimated +40%.",
-  color: EMERALD,
+  color: EMERALD_T,
   border: "rgba(52,211,153,0.3)",
 };
 
@@ -198,7 +201,7 @@ export function AIGrowthSection() {
               style={{
                 background: "rgba(52,211,153,0.12)",
                 border: "1px solid rgba(52,211,153,0.35)",
-                color: EMERALD,
+                color: EMERALD_T,
               }}
             >
               <Brain size={11} />
@@ -243,11 +246,11 @@ export function AIGrowthSection() {
                 <button
                   key={i}
                   onClick={() => { setActiveTab(i); setShowDemoInsight(false); }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200"
+                  className="flex items-center gap-1.5 px-3 py-1.5 min-h-11 rounded-xl text-xs font-medium transition-all duration-200"
                   style={{
                     background: activeTab === i ? cat.bg : "var(--bg-card-hover)",
                     border: `1px solid ${activeTab === i ? cat.border : "var(--border-card)"}`,
-                    color: activeTab === i ? cat.color : "#64748b",
+                    color: activeTab === i ? cat.color : "var(--text-muted)",
                   }}
                 >
                   <cat.icon size={11} />
@@ -266,7 +269,7 @@ export function AIGrowthSection() {
                 transition={{ duration: 0.28 }}
                 className="rounded-2xl p-4 mb-8"
                 style={{
-                  background: `${activeInsight.color}10`,
+                  background: `color-mix(in srgb, ${activeInsight.color} 6%, transparent)`,
                   border: `1px solid ${activeInsight.border}`,
                 }}
               >
@@ -293,7 +296,7 @@ export function AIGrowthSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoLocked
                   ? "rgba(52,211,153,0.25)"
@@ -301,7 +304,7 @@ export function AIGrowthSection() {
                 border: isDemoLocked
                   ? "1px solid rgba(52,211,153,0.5)"
                   : "1px solid rgba(52,211,153,0.35)",
-                color: EMERALD,
+                color: EMERALD_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -349,7 +352,7 @@ export function AIGrowthSection() {
                   <div className="text-sm font-semibold text-white">AI Growth Mentor</div>
                   <div
                     className="flex items-center gap-1.5 text-[10px]"
-                    style={{ color: EMERALD }}
+                    style={{ color: EMERALD_T }}
                   >
                     <div
                       className="w-1.5 h-1.5 rounded-full animate-pulse"
@@ -380,7 +383,7 @@ export function AIGrowthSection() {
                     <div className="text-[9px] text-slate-500 mb-0.5">{s.label}</div>
                     <div
                       className="text-[9px] font-medium"
-                      style={{ color: s.positive ? "#34d399" : "#f87171" }}
+                      style={{ color: s.positive ? "var(--accent-emerald-text)" : "var(--accent-red-text)" }}
                     >
                       {s.change}
                     </div>
@@ -473,7 +476,7 @@ export function AIGrowthSection() {
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           className="ml-auto text-[9px] font-semibold px-1.5 py-0.5 rounded-full"
-                          style={{ background: "rgba(52,211,153,0.2)", color: EMERALD }}
+                          style={{ background: "rgba(52,211,153,0.2)", color: EMERALD_T }}
                         >
                           ✦ Just generated
                         </motion.span>
@@ -495,7 +498,7 @@ export function AIGrowthSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoLocked
                 ? "rgba(52,211,153,0.25)"
@@ -503,7 +506,7 @@ export function AIGrowthSection() {
               border: isDemoLocked
                 ? "1px solid rgba(52,211,153,0.5)"
                 : "1px solid rgba(52,211,153,0.35)",
-              color: EMERALD,
+              color: EMERALD_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

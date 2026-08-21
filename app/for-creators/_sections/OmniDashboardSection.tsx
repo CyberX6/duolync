@@ -26,33 +26,39 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 
 const VIOLET = "#c084fc";
 const CYAN   = "#67e8f9";
+const VIOLET_T = "var(--accent-purple-text)";
 
 const platforms = [
-  { name: "TikTok",    color: "#f472b6", bg: "rgba(244,114,182,0.15)", border: "rgba(244,114,182,0.3)", posts: 8  },
-  { name: "Instagram", color: "#c084fc", bg: "rgba(192,132,252,0.15)", border: "rgba(192,132,252,0.3)", posts: 12 },
-  { name: "YouTube",   color: "#f87171", bg: "rgba(248,113,113,0.15)", border: "rgba(248,113,113,0.3)", posts: 3  },
+  { name: "TikTok",    color: "var(--accent-pink-text)",   bg: "rgba(244,114,182,0.15)", border: "rgba(244,114,182,0.3)", posts: 8  },
+  { name: "Instagram", color: "var(--accent-purple-text)", bg: "rgba(192,132,252,0.15)", border: "rgba(192,132,252,0.3)", posts: 12 },
+  { name: "YouTube",   color: "var(--accent-red-text)",    bg: "rgba(248,113,113,0.15)", border: "rgba(248,113,113,0.3)", posts: 3  },
 ];
 
 const scheduledPosts = [
-  { platform: "TikTok",    type: "Collab Reel",  brand: "Nike",     time: "Today 7PM", color: "#f472b6", icon: Play  },
-  { platform: "Instagram", type: "Story Set",     brand: "Glossier", time: "Thu 8PM",   color: "#c084fc", icon: Image },
-  { platform: "YouTube",   type: "Review Video",  brand: "Razer",    time: "Fri 3PM",   color: "#f87171", icon: Play  },
-  { platform: "TikTok",    type: "Organic",       brand: "Personal", time: "Sat 6PM",   color: "#f472b6", icon: Image },
+  { platform: "TikTok",    type: "Collab Reel",  brand: "Nike",     time: "Today 7PM", color: "var(--accent-pink-text)",   icon: Play  },
+  { platform: "Instagram", type: "Story Set",     brand: "Glossier", time: "Thu 8PM",   color: "var(--accent-purple-text)", icon: Image },
+  { platform: "YouTube",   type: "Review Video",  brand: "Razer",    time: "Fri 3PM",   color: "var(--accent-red-text)",    icon: Play  },
+  { platform: "TikTok",    type: "Organic",       brand: "Personal", time: "Sat 6PM",   color: "var(--accent-pink-text)",   icon: Image },
 ];
 
 const calendarEvents: Record<number, string> = {
-  3: "#f472b6", 7: "#c084fc", 11: "#f87171",
-  14: "#f472b6", 18: "#c084fc", 21: "#67e8f9", 25: "#f472b6",
+  3:  "var(--accent-pink-text)",
+  7:  "var(--accent-purple-text)",
+  11: "var(--accent-red-text)",
+  14: "var(--accent-pink-text)",
+  18: "var(--accent-purple-text)",
+  21: "var(--accent-cyan-text)",
+  25: "var(--accent-pink-text)",
 };
 const EVENT_DAYS = Object.keys(calendarEvents).map(Number);
 
 type StatusKey = "Scheduled" | "Going Live" | "Queued" | "Synced" | "Pending";
 const STATUS_STYLE: Record<StatusKey, { color: string; bg: string }> = {
-  "Scheduled":  { color: "#475569", bg: "rgba(71,85,105,0.2)"    },
-  "Going Live": { color: "#fcd34d", bg: "rgba(252,211,77,0.18)"  },
-  "Queued":     { color: "#67e8f9", bg: "rgba(103,232,249,0.18)" },
-  "Synced":     { color: "#34d399", bg: "rgba(52,211,153,0.18)"  },
-  "Pending":    { color: "#c084fc", bg: "rgba(192,132,252,0.18)" },
+  "Scheduled":  { color: "var(--text-muted)",           bg: "rgba(71,85,105,0.2)"    },
+  "Going Live": { color: "var(--accent-amber-text)",    bg: "rgba(252,211,77,0.18)"  },
+  "Queued":     { color: "var(--accent-cyan-text)",     bg: "rgba(103,232,249,0.18)" },
+  "Synced":     { color: "var(--accent-emerald-text)",  bg: "rgba(52,211,153,0.18)"  },
+  "Pending":    { color: "var(--accent-purple-text)",   bg: "rgba(192,132,252,0.18)" },
 };
 
 type DemoPhase = "idle" | "running" | "done";
@@ -190,7 +196,7 @@ export function OmniDashboardSection() {
               style={{
                 background: "rgba(192,132,252,0.12)",
                 border: "1px solid rgba(192,132,252,0.35)",
-                color: VIOLET,
+                color: VIOLET_T,
               }}
             >
               <LayoutDashboard size={11} />
@@ -245,7 +251,7 @@ export function OmniDashboardSection() {
                       border: "1px solid rgba(192,132,252,0.25)",
                     }}
                   >
-                    <item.icon size={15} style={{ color: VIOLET }} />
+                    <item.icon size={15} style={{ color: VIOLET_T }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">
                     {item.text}
@@ -260,7 +266,7 @@ export function OmniDashboardSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoLocked
                   ? "rgba(192,132,252,0.25)"
@@ -268,7 +274,7 @@ export function OmniDashboardSection() {
                 border: isDemoLocked
                   ? "1px solid rgba(192,132,252,0.5)"
                   : "1px solid rgba(192,132,252,0.4)",
-                color: VIOLET,
+                color: VIOLET_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -369,12 +375,12 @@ export function OmniDashboardSection() {
                         key={d}
                         className="text-center py-1.5 rounded-lg text-[9px] font-medium"
                         style={{
-                          background: eventColor ? `${eventColor}22` : "transparent",
+                          background: eventColor ? `color-mix(in srgb, ${eventColor} 13%, transparent)` : "transparent",
                           color: eventColor
                             ? eventColor
-                            : "rgba(100,116,139,0.7)",
+                            : "var(--text-muted)",
                           border: eventColor
-                            ? `1px solid ${eventColor}40`
+                            ? `1px solid color-mix(in srgb, ${eventColor} 25%, transparent)`
                             : "1px solid transparent",
                           transition: "background 0.3s ease, color 0.3s ease, border-color 0.3s ease",
                         }}
@@ -411,8 +417,8 @@ export function OmniDashboardSection() {
                           <div
                             className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
                             style={{
-                              background: `${post.color}20`,
-                              border: `1px solid ${post.color}35`,
+                              background: `color-mix(in srgb, ${post.color} 12%, transparent)`,
+                              border: `1px solid color-mix(in srgb, ${post.color} 21%, transparent)`,
                             }}
                           >
                             <post.icon size={12} style={{ color: post.color }} />
@@ -469,7 +475,7 @@ export function OmniDashboardSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoLocked
                 ? "rgba(192,132,252,0.25)"
@@ -477,7 +483,7 @@ export function OmniDashboardSection() {
               border: isDemoLocked
                 ? "1px solid rgba(192,132,252,0.5)"
                 : "1px solid rgba(192,132,252,0.4)",
-              color: VIOLET,
+              color: VIOLET_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

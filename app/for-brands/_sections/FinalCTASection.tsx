@@ -72,7 +72,7 @@ export function FinalCTASection() {
           className="max-w-3xl mx-auto"
         >
           {/* Badge */}
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.4)", color: "#c4b5fd" }}>
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.4)", color: "var(--accent-violet-text)" }}>
             <Sparkles size={13} />
             Now Live · Sign Up Free
           </motion.div>
@@ -99,7 +99,7 @@ export function FinalCTASection() {
                 style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
               >
                 <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)" }}>
-                  <perk.icon size={13} style={{ color: "#a78bfa" }} />
+                  <perk.icon size={13} style={{ color: "var(--accent-violet-text)" }} />
                 </div>
                 <span className="text-sm text-slate-300">{perk.text}</span>
               </motion.div>

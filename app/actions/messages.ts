@@ -59,12 +59,48 @@ export async function sendMessageAction(
 ): Promise<{ error: string | null }> {
   const trimmed = text.trim();
   if (!trimmed) return { error: "Message cannot be empty" };
+  if (trimmed.length > 5000) return { error: "Message too long (max 5000 characters)." };
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return { error: "Unauthorized" };
 
+  const senderId = session.user.id;
+
+  // Require an existing relationship: accepted connection OR accepted/under-review application
+  const [conn, app] = await Promise.all([
+    db.connection.findFirst({
+      where: {
+        status: "ACCEPTED",
+        OR: [
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
+        ],
+      },
+      select: { id: true },
+    }),
+    db.application.findFirst({
+      where: {
+        status: { in: ["ACCEPTED", "UNDER_REVIEW"] },
+        OR: [
+          { creator: { userId: senderId }, campaign: { brandProfile: { userId: receiverId } } },
+          { creator: { userId: receiverId }, campaign: { brandProfile: { userId: senderId } } },
+        ],
+      },
+      select: { id: true },
+    }),
+  ]);
+
+  if (!conn && !app) {
+    return { error: "You can only message users you are connected with or working with on a campaign." };
+  }
+
+  // Rate limit: max 30 messages per minute per sender
+  const { rateLimit } = await import("@/lib/rate-limit");
+  const allowed = await rateLimit(`${senderId}:send-message`, 30, 60_000);
+  if (!allowed) return { error: "You're sending messages too quickly. Please wait a moment." };
+
   await db.message.create({
-    data: { senderId: session.user.id, receiverId, text: trimmed },
+    data: { senderId, receiverId, text: trimmed },
   });
 
   return { error: null };

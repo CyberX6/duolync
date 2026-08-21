@@ -3,11 +3,12 @@ import { getMiddlewareSession } from "@/lib/middleware-session";
 
 const PROTECTED_PREFIXES = [
   "/dashboard",
-  "/analytics",
-  "/campaigns",
   "/messages",
-  "/brand/dashboard",
-  "/creator/dashboard",
+  "/feed",
+  "/community",
+  "/brand",
+  "/creator",
+  "/profile",
 ] as const;
 
 const SIGN_IN_PATH = "/sign-in";
@@ -70,11 +71,12 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/analytics/:path*",
-    "/campaigns/:path*",
     "/messages/:path*",
-    "/brand/dashboard/:path*",
-    "/creator/dashboard/:path*",
+    "/feed/:path*",
+    "/community/:path*",
+    "/brand/:path*",
+    "/creator/:path*",
+    "/profile/:path*",
     "/onboarding",
   ],
 };

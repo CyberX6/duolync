@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from "react";
 import type { Creator } from "@/app/_components/discovery/ProfileDrawer";
+import { useAuth } from "@/hooks/useAuth";
 import {
   getCreatorsAction,
   getBrandsAction,
@@ -199,6 +200,7 @@ const ProfilesContext = createContext<ProfilesContextValue>({
 });
 
 export function ProfilesProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [creators, setCreators] = useState<Creator[]>(SEED_CREATORS);
   const [brands, setBrands] = useState<BrandProfile[]>(SEED_BRANDS);
 
@@ -226,11 +228,13 @@ export function ProfilesProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Initial hydration from DB on first mount.
+  // Hydrate from DB once signed in. The directory actions are session-gated, so
+  // fetching while anonymous would only ever return empty.
   useEffect(() => {
+    if (!user) return;
     fetchFromDB();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const addCreator = (p: Creator) => {
     setCreators((prev) => (prev.some((c) => c.id === p.id) ? prev : [p, ...prev]));

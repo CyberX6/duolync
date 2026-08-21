@@ -8,6 +8,16 @@ import {
   Building2, MapPin, ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -442,6 +452,7 @@ const CreatorCampaigns = () => {
   const [platformFilter, setPlatformFilter] = useState<string>("ALL");
   const [applying, setApplying] = useState<PublicCampaign | null>(null);
   const [withdrawing, setWithdrawing] = useState<string | null>(null);
+  const [confirmWithdrawId, setConfirmWithdrawId] = useState<{ applicationId: string; campaignId: string } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -465,9 +476,14 @@ const CreatorCampaigns = () => {
 
   // Optimistic withdraw
   const handleWithdraw = async (applicationId: string, campaignId: string) => {
-    if (!confirm("Withdraw your application? You can re-apply later.")) return;
+    setConfirmWithdrawId({ applicationId, campaignId });
+  };
+
+  const confirmWithdraw = async () => {
+    if (!confirmWithdrawId) return;
+    const { applicationId, campaignId } = confirmWithdrawId;
+    setConfirmWithdrawId(null);
     setWithdrawing(applicationId);
-    // Optimistic
     setCampaigns((prev) =>
       prev.map((c) =>
         c.id === campaignId
@@ -478,7 +494,7 @@ const CreatorCampaigns = () => {
     const result = await withdrawApplicationAction(applicationId);
     if (result.error) {
       toast({ variant: "destructive", title: result.error });
-      load(); // revert
+      load();
     } else {
       toast({ title: "Application withdrawn." });
     }
@@ -624,6 +640,24 @@ const CreatorCampaigns = () => {
         onClose={() => setApplying(null)}
         onApplied={handleApplied}
       />
+
+      {/* Withdraw confirmation */}
+      <AlertDialog open={confirmWithdrawId !== null} onOpenChange={(open) => { if (!open) setConfirmWithdrawId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Withdraw application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your application will be marked as withdrawn. You can re-apply to this campaign later.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmWithdraw} className="bg-red-600 hover:bg-red-700 text-white">
+              Withdraw
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

@@ -77,7 +77,7 @@ export function HeroSection() {
             style={{
               borderColor: "rgba(124,58,237,0.4)",
               background: "var(--glow-purple)",
-              color: "#c4b5fd",
+              color: "var(--accent-violet-text)",
             }}
           >
             <Sparkles size={13} />

@@ -86,6 +86,9 @@ export async function getCreatorPostsByUserIdAction(
   creatorUserId: string,
   limit = 6
 ): Promise<{ data: SocialPostItem[]; error: string | null }> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return { data: [], error: "Unauthorized" };
+
   const creator = await db.creatorProfile.findUnique({
     where: { userId: creatorUserId },
     select: {

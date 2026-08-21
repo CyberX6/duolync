@@ -93,7 +93,7 @@ export function BentoSection() {
           variants={stagger}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "#c4b5fd" }}>
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: "var(--accent-violet-text)" }}>
             <Sparkles size={11} />
             Platform Overview
           </motion.div>
@@ -122,7 +122,7 @@ export function BentoSection() {
             borderColor="rgba(124,58,237,0.25)"
             glowColor="var(--glow-purple)"
           >
-            <FeatureBadge color="#a78bfa" Icon={Sparkles} label="AI Smart Matching" />
+            <FeatureBadge color="var(--accent-violet-text)" Icon={Sparkles} label="AI Smart Matching" />
             <h3 className="font-display font-bold text-white text-xl mb-1">Find your perfect creator in seconds</h3>
             <p className="text-slate-500 text-sm mb-5">AI analyzes 200+ data points — audience demographics, engagement quality, brand affinity — to predict sales success before you commit.</p>
 
@@ -214,14 +214,14 @@ export function BentoSection() {
               <Search size={14} className="text-slate-600 shrink-0" />
               <span className="text-slate-600 text-xs flex-1">Search creators by niche, audience, or platform...</span>
               <div className="flex items-center gap-1">
-                <span className="px-1.5 py-0.5 rounded text-[9px]" style={{ background: "rgba(124,58,237,0.2)", color: "#a78bfa" }}>AI</span>
+                <span className="px-1.5 py-0.5 rounded text-[9px]" style={{ background: "rgba(124,58,237,0.2)", color: "var(--accent-violet-text)" }}>AI</span>
               </div>
             </div>
           </GlassCard>
 
           {/* 2 — Campaign Calendar */}
           <GlassCard borderColor="rgba(6,182,212,0.25)" glowColor="rgba(6,182,212,0.06)">
-            <FeatureBadge color="#67e8f9" Icon={Calendar} label="Campaign Calendar" />
+            <FeatureBadge color="var(--accent-cyan-text)" Icon={Calendar} label="Campaign Calendar" />
             <h3 className="font-display font-bold text-white text-lg mb-1">Plan at scale</h3>
             <p className="text-slate-500 text-xs mb-3">Multi-creator scheduling, deadline tracking, and "What & When" for every post.</p>
 
@@ -241,7 +241,7 @@ export function BentoSection() {
                         : [5, 12, 19].includes(d)
                         ? "rgba(6,182,212,0.4)"
                         : "transparent",
-                      color: [3, 7, 14, 21, 5, 12, 19].includes(d) ? "var(--text-base)" : "rgba(100,116,139,0.8)",
+                      color: [3, 7, 14, 21, 5, 12, 19].includes(d) ? "var(--text-base)" : "var(--text-muted)",
                     }}
                   >
                     {d}
@@ -250,9 +250,9 @@ export function BentoSection() {
               </div>
               <div className="space-y-1.5 mt-2">
                 {[
-                  { color: "#a78bfa", text: "Unboxing — @nova.style" },
-                  { color: "#67e8f9", text: "Story collab — @fitlife.co" },
-                  { color: "#34d399", text: "Review post — @techguru" },
+                  { color: "var(--accent-violet-text)", text: "Unboxing — @nova.style" },
+                  { color: "var(--accent-cyan-text)", text: "Story collab — @fitlife.co" },
+                  { color: "var(--accent-emerald-text)", text: "Review post — @techguru" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-1.5 text-[10px] text-slate-400">
                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: item.color }} />
@@ -265,7 +265,7 @@ export function BentoSection() {
 
           {/* 3 — AI Ad Strategy */}
           <GlassCard borderColor="rgba(52,211,153,0.25)" glowColor="var(--glow-emerald)">
-            <FeatureBadge color="#6ee7b7" Icon={Brain} label="AI Ad Consultant" />
+            <FeatureBadge color="var(--accent-emerald-text)" Icon={Brain} label="AI Ad Consultant" />
             <h3 className="font-display font-bold text-white text-lg mb-1">AI-crafted ad strategies</h3>
             <p className="text-slate-500 text-xs mb-3">Receive recommendations on the best ad types for maximum ROI.</p>
 
@@ -289,7 +289,7 @@ export function BentoSection() {
               </div>
               <div
                 className="rounded-xl px-3 py-2 text-xs ml-auto max-w-[88%]"
-                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)", color: "#94a3b8" }}
+                style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--bg-card-hover)", color: "var(--text-muted)" }}
               >
                 <span className="text-amber-400 font-medium">Also try:</span> Comparison, Unboxing
               </div>
@@ -298,17 +298,17 @@ export function BentoSection() {
 
           {/* 4 — Chrome Extension */}
           <GlassCard borderColor="rgba(251,191,36,0.22)" glowColor="rgba(251,191,36,0.05)">
-            <FeatureBadge color="#fcd34d" Icon={Globe} label="Chrome Extension" />
+            <FeatureBadge color="var(--accent-amber-text)" Icon={Globe} label="Chrome Extension" />
             <h3 className="font-display font-bold text-white text-lg mb-1">Scout creators anywhere</h3>
             <p className="text-slate-500 text-xs mb-3">Save creators from TikTok, Instagram & YouTube with one click.</p>
 
             {/* Browser window mockup */}
             <div className="rounded-2xl overflow-hidden" style={{ background: "var(--bg-page-alt)", border: "1px solid var(--border-card-strong)" }}>
-              <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: "#080810", borderBottom: "1px solid var(--bg-card-hover)" }}>
+              <div data-fixed-dark className="flex items-center gap-1.5 px-3 py-2" style={{ background: "#080810", borderBottom: "1px solid var(--bg-card-hover)" }}>
                 <div className="w-2 h-2 rounded-full bg-red-500/70" />
                 <div className="w-2 h-2 rounded-full bg-yellow-500/70" />
                 <div className="w-2 h-2 rounded-full bg-green-500/70" />
-                <div className="flex-1 mx-2 rounded-md px-2 py-0.5 text-[8px] text-slate-600" style={{ background: "var(--bg-card-hover)" }}>
+                <div className="flex-1 mx-2 rounded-md px-2 py-0.5 text-[8px]" style={{ background: "rgba(255,255,255,0.08)", color: "#cbd5e1" }}>
                   tiktok.com/@nova.style
                 </div>
               </div>
@@ -319,6 +319,7 @@ export function BentoSection() {
                   <div className="text-[9px] text-slate-600">1.8M followers · Beauty</div>
                 </div>
                 <button
+                  tabIndex={-1}
                   className="ml-auto px-2.5 py-1 rounded-lg text-[10px] font-bold text-white"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
                 >
@@ -341,7 +342,7 @@ export function BentoSection() {
             borderColor="rgba(56,189,248,0.22)"
             glowColor="rgba(56,189,248,0.06)"
           >
-            <FeatureBadge color="#7dd3fc" Icon={Database} label="CRM & Bulk Outreach" />
+            <FeatureBadge color="var(--accent-sky-text)" Icon={Database} label="CRM & Bulk Outreach" />
             <h3 className="font-display font-bold text-white text-xl mb-1">Mass reach. Zero chaos.</h3>
             <p className="text-slate-500 text-sm mb-5">Centralized creator database with automated outreach, deal tracking, and full campaign history.</p>
 
@@ -355,10 +356,10 @@ export function BentoSection() {
                 <span>Last Contact</span>
               </div>
               {[
-                { name: "@nova.style", platform: "TikTok", status: "Active", statusColor: "#34d399", days: "Today", avatarBg: "rgba(244,114,182,0.18)", avatarColor: "#f472b6" },
-                { name: "@fitlife.co", platform: "Instagram", status: "Negotiating", statusColor: "#fcd34d", days: "2d ago", avatarBg: "rgba(251,191,36,0.18)", avatarColor: "#fbbf24" },
-                { name: "@techguru", platform: "YouTube", status: "Pending", statusColor: "#7dd3fc", days: "5d ago", avatarBg: "rgba(96,165,250,0.18)", avatarColor: "#60a5fa" },
-                { name: "@travel.joe", platform: "TikTok", status: "Completed", statusColor: "#a78bfa", days: "1w ago", avatarBg: "rgba(167,139,250,0.18)", avatarColor: "#a78bfa" },
+                { name: "@nova.style", platform: "TikTok", status: "Active", statusColor: "var(--accent-emerald-text)", days: "Today", avatarBg: "rgba(244,114,182,0.18)", avatarColor: "var(--accent-pink-text)" },
+                { name: "@fitlife.co", platform: "Instagram", status: "Negotiating", statusColor: "var(--accent-amber-text)", days: "2d ago", avatarBg: "rgba(251,191,36,0.18)", avatarColor: "var(--accent-amber-text)" },
+                { name: "@techguru", platform: "YouTube", status: "Pending", statusColor: "var(--accent-sky-text)", days: "5d ago", avatarBg: "rgba(96,165,250,0.18)", avatarColor: "var(--accent-sky-text)" },
+                { name: "@travel.joe", platform: "TikTok", status: "Completed", statusColor: "var(--accent-violet-text)", days: "1w ago", avatarBg: "rgba(167,139,250,0.18)", avatarColor: "var(--accent-violet-text)" },
               ].map((row, i) => (
                 <div
                   key={i}
@@ -377,7 +378,7 @@ export function BentoSection() {
                   <span className="text-[11px] text-slate-500">{row.platform}</span>
                   <span
                     className="text-[10px] font-medium px-2 py-0.5 rounded-full w-fit"
-                    style={{ background: `${row.statusColor}18`, color: row.statusColor }}
+                    style={{ background: `color-mix(in srgb, ${row.statusColor} 9%, transparent)`, color: row.statusColor }}
                   >
                     {row.status}
                   </span>
@@ -393,8 +394,9 @@ export function BentoSection() {
             <div className="flex items-center justify-between mt-3">
               <span className="text-[11px] text-slate-600">128 creators in database</span>
               <button
+                tabIndex={-1}
                 className="flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-lg transition-all hover:opacity-80"
-                style={{ background: "rgba(56,189,248,0.15)", color: "#7dd3fc", border: "1px solid rgba(56,189,248,0.25)" }}
+                style={{ background: "rgba(56,189,248,0.15)", color: "var(--accent-sky-text)", border: "1px solid rgba(56,189,248,0.25)" }}
               >
                 <Mail size={11} />
                 Bulk Email (128)

@@ -68,7 +68,7 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm font-medium mb-8 backdrop-blur-sm"
-            style={{ borderColor: "rgba(236,72,153,0.4)", background: "var(--glow-pink)", color: "#f9a8d4" }}
+            style={{ borderColor: "rgba(236,72,153,0.4)", background: "var(--glow-pink)", color: "var(--accent-pink-text)" }}
           >
             <Zap size={13} />
             Built for Creators, by Creators
@@ -192,11 +192,11 @@ export function HeroSection() {
         >
           {/* Before */}
           <div className="flex-1 rounded-2xl px-5 py-4 text-center" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
-            <div className="text-xs font-semibold text-red-500/70 uppercase tracking-widest mb-2">Before</div>
+            <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--accent-red-text)" }}>Before</div>
             <div className="space-y-1 text-xs text-slate-500">
-              <div className="flex items-center gap-2 justify-center"><span className="text-red-500">✕</span> Spam DMs from random brands</div>
-              <div className="flex items-center gap-2 justify-center"><span className="text-red-500">✕</span> Lost emails &amp; missed deals</div>
-              <div className="flex items-center gap-2 justify-center"><span className="text-red-500">✕</span> Manual follow-ups everywhere</div>
+              <div className="flex items-center gap-2 justify-center"><span style={{ color: "var(--accent-red-text)" }}>✕</span> Spam DMs from random brands</div>
+              <div className="flex items-center gap-2 justify-center"><span style={{ color: "var(--accent-red-text)" }}>✕</span> Lost emails &amp; missed deals</div>
+              <div className="flex items-center gap-2 justify-center"><span style={{ color: "var(--accent-red-text)" }}>✕</span> Manual follow-ups everywhere</div>
             </div>
           </div>
 
@@ -207,7 +207,7 @@ export function HeroSection() {
 
           {/* After */}
           <div className="flex-1 rounded-2xl px-5 py-4 text-center" style={{ background: "var(--glow-emerald)", border: "1px solid rgba(52,211,153,0.15)" }}>
-            <div className="text-xs font-semibold text-emerald-500/70 uppercase tracking-widest mb-2">After</div>
+            <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--accent-emerald-text)" }}>After</div>
             <div className="space-y-1 text-xs text-slate-400">
               <div className="flex items-center gap-2 justify-center"><span className="text-emerald-400">✓</span> Curated deals matching your niche</div>
               <div className="flex items-center gap-2 justify-center"><span className="text-emerald-400">✓</span> One inbox for everything</div>

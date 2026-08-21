@@ -83,6 +83,11 @@ export async function sendBrandInvitationAction(input: {
   const brand = await getBrandProfile();
   if (!brand) return { error: "Unauthorized" };
 
+  // Rate limit: max 20 invitations per hour per brand
+  const { rateLimit } = await import("@/lib/rate-limit");
+  const allowed = await rateLimit(`${brand.userId}:send-invitation`, 20, 60 * 60_000);
+  if (!allowed) return { error: "You're sending too many invitations. Please wait before sending more." };
+
   const campaign = await db.campaign.findFirst({
     where: { id: input.campaignId, brandProfileId: brand.profileId },
   });

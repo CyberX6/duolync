@@ -73,7 +73,7 @@ export function ChromeExtensionSection() {
               <motion.div
                 variants={fadeUp}
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-                style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.35)", color: "#fcd34d" }}
+                style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.35)", color: "var(--accent-amber-text)" }}
               >
                 <Globe size={11} />
                 Chrome Extension — The Scout
@@ -103,7 +103,7 @@ export function ChromeExtensionSection() {
                       className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
                       style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.25)" }}
                     >
-                      <item.icon size={15} style={{ color: "#fcd34d" }} />
+                      <item.icon size={15} style={{ color: "var(--accent-amber-text)" }} />
                     </div>
                     <span className="text-slate-300 text-sm leading-relaxed">{item.text}</span>
                   </motion.li>
@@ -114,8 +114,8 @@ export function ChromeExtensionSection() {
               <motion.div variants={fadeUp} className="hidden lg:flex items-center gap-3">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
-                  style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.35)", color: "#fcd34d" }}
+                  className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+                  style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.35)", color: "var(--accent-amber-text)" }}
                 >
                   <Globe size={14} />
                   Add to Chrome — Free
@@ -129,6 +129,7 @@ export function ChromeExtensionSection() {
 
               {/* Browser window */}
               <div
+                data-fixed-dark
                 className="rounded-2xl overflow-hidden shadow-2xl"
                 style={{ background: "#0d0d1a", border: "1px solid rgba(255,255,255,0.08)" }}
               >
@@ -256,7 +257,7 @@ export function ChromeExtensionSection() {
                     <button
                       onClick={handleSaveToCRM}
                       disabled={savePhase !== "idle"}
-                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-bold text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:hover:opacity-100"
+                      className="w-full flex items-center justify-center gap-1.5 py-2 min-h-11 rounded-xl text-[11px] font-bold text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:hover:opacity-100"
                       style={{
                         background: savePhase === "saved"
                           ? "linear-gradient(135deg, #059669, #0d9488)"
@@ -291,6 +292,7 @@ export function ChromeExtensionSection() {
                 initial={{ opacity: 0, y: 16, x: -8 }}
                 animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
                 transition={{ delay: 1.1, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                data-fixed-dark
                 className="absolute -bottom-5 left-4 rounded-2xl px-3.5 py-2.5 shadow-xl flex items-center gap-2.5"
                 style={{ background: "#0f0f1e", border: "1px solid rgba(52,211,153,0.35)", minWidth: 190 }}
               >
@@ -315,8 +317,8 @@ export function ChromeExtensionSection() {
           <div className="flex lg:hidden mt-6 items-center gap-3">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
-              style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.35)", color: "#fcd34d" }}
+              className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+              style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.35)", color: "var(--accent-amber-text)" }}
             >
               <Globe size={14} />
               Add to Chrome — Free
@@ -339,6 +341,7 @@ export function ChromeExtensionSection() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ type: "spring", stiffness: 420, damping: 26 }}
+            data-fixed-dark
             className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
             style={{
               background: "#0f0f1e",
@@ -350,7 +353,7 @@ export function ChromeExtensionSection() {
               className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
               style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)" }}
             >
-              <CheckCircle2 size={15} style={{ color: "#34d399" }} />
+              <CheckCircle2 size={15} style={{ color: "var(--accent-emerald-text)" }} />
             </div>
             <div>
               <div className="text-sm font-semibold text-white">Successfully saved!</div>
