@@ -28,11 +28,19 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+// Bright hues for tints (backgrounds, borders, glows) — legible in both themes.
 const PURPLE = "#a78bfa";
 const CYAN = "#67e8f9";
 const PINK = "#f472b6";
 const EMERALD = "#34d399";
 const AMBER = "#fcd34d";
+
+// Theme-aware equivalents for text, which needs to darken on a light page.
+const PURPLE_T = "var(--accent-violet-text)";
+const CYAN_T = "var(--accent-cyan-text)";
+const PINK_T = "var(--accent-pink-text)";
+const EMERALD_T = "var(--accent-emerald-text)";
+const AMBER_T = "var(--accent-amber-text)";
 
 function GlassCard({
   children,
@@ -99,6 +107,7 @@ export function BentoSection() {
             style={{
               background: "rgba(124,58,237,0.10)",
               border: "1px solid rgba(124,58,237,0.3)",
+              color: PURPLE_T,
             }}
           >
             <Sparkles size={11} />
@@ -151,7 +160,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: `${PURPLE}18`,
-                color: PURPLE,
+                color: PURPLE_T,
                 border: `1px solid ${PURPLE}30`,
               }}
             >
@@ -179,7 +188,7 @@ export function BentoSection() {
               </span>
               <span
                 className="text-[10px] px-2 py-0.5 rounded font-medium"
-                style={{ background: `${PURPLE}25`, color: PURPLE }}
+                style={{ background: `${PURPLE}25`, color: PURPLE_T }}
               >
                 AI
               </span>
@@ -295,7 +304,10 @@ export function BentoSection() {
                     <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
                       {c.label}
                     </span>
-                    <span className="text-xs font-bold text-emerald-400">
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: EMERALD_T }}
+                    >
                       {c.match}%
                     </span>
                   </div>
@@ -310,7 +322,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: `${CYAN}18`,
-                color: CYAN,
+                color: CYAN_T,
                 border: `1px solid ${CYAN}30`,
               }}
             >
@@ -332,9 +344,9 @@ export function BentoSection() {
               }}
             >
               {[
-                { brand: "Nike Collab", status: "Replied", color: EMERALD, avatarBg: "#111111", avatarColor: "#ffffff", initial: "N" },
-                { brand: "Glossier", status: "Sent", color: CYAN, avatarBg: "#f4c8d4", avatarColor: "#c25a7a", initial: "G" },
-                { brand: "Razer", status: "Pending", color: AMBER, avatarBg: "#00ff00", avatarColor: "#000000", initial: "R" },
+                { brand: "Nike Collab", status: "Replied", color: EMERALD_T, avatarBg: "#111111", avatarColor: "#ffffff", initial: "N" },
+                { brand: "Glossier", status: "Sent", color: CYAN_T, avatarBg: "#f4c8d4", avatarColor: "#8c2f4d", initial: "G" },
+                { brand: "Razer", status: "Pending", color: AMBER_T, avatarBg: "#00ff00", avatarColor: "#000000", initial: "R" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div
@@ -363,7 +375,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: `${EMERALD}18`,
-                color: EMERALD,
+                color: EMERALD_T,
                 border: `1px solid ${EMERALD}30`,
               }}
             >
@@ -382,19 +394,19 @@ export function BentoSection() {
                   name: "Summer Launch",
                   creators: 8,
                   status: "Active",
-                  color: EMERALD,
+                  color: EMERALD_T,
                 },
                 {
                   name: "Tech Unboxing",
                   creators: 5,
                   status: "Review",
-                  color: CYAN,
+                  color: CYAN_T,
                 },
                 {
                   name: "Spring Collab",
                   creators: 11,
                   status: "Done",
-                  color: PURPLE,
+                  color: PURPLE_T,
                 },
               ].map((c, i) => (
                 <div
@@ -436,7 +448,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: `${PINK}18`,
-                color: PINK,
+                color: PINK_T,
                 border: `1px solid ${PINK}30`,
               }}
             >
@@ -460,7 +472,7 @@ export function BentoSection() {
               >
                 <div
                   className="text-[10px] font-semibold mb-2"
-                  style={{ color: PURPLE }}
+                  style={{ color: PURPLE_T }}
                 >
                   FOR BRANDS
                 </div>
@@ -493,7 +505,7 @@ export function BentoSection() {
               >
                 <div
                   className="text-[10px] font-semibold mb-2"
-                  style={{ color: PINK }}
+                  style={{ color: PINK_T }}
                 >
                   FOR CREATORS
                 </div>
@@ -526,7 +538,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: `${AMBER}18`,
-                color: AMBER,
+                color: AMBER_T,
                 border: `1px solid ${AMBER}30`,
               }}
             >
@@ -542,6 +554,8 @@ export function BentoSection() {
             </p>
             {/* Browser mockup */}
             <div
+              role="img"
+              aria-label="Preview of the Chrome extension saving a TikTok creator profile straight to the CRM"
               className="rounded-xl overflow-hidden"
               style={{
                 background: "var(--bg-page-alt)",
@@ -593,6 +607,7 @@ export function BentoSection() {
                     <div className="text-[8px] text-slate-500 mt-0.5">@nova.beauty · 1.8M followers</div>
                   </div>
                   <button
+                    tabIndex={-1}
                     className="px-2.5 py-1 rounded-full text-[8px] font-bold text-white shrink-0"
                     style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
                   >
@@ -652,7 +667,7 @@ export function BentoSection() {
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
               style={{
                 background: "rgba(96,165,250,0.15)",
-                color: "#93c5fd",
+                color: "var(--accent-sky-text)",
                 border: "1px solid rgba(96,165,250,0.3)",
               }}
             >
@@ -668,9 +683,9 @@ export function BentoSection() {
             </p>
             <div className="space-y-2">
               {[
-                { label: "Campaign ROI", value: "3.8×", color: EMERALD },
-                { label: "Engagement Rate", value: "5.2%", color: "#93c5fd" },
-                { label: "Reach", value: "2.8M", color: PURPLE },
+                { label: "Campaign ROI", value: "3.8×", color: EMERALD_T },
+                { label: "Engagement Rate", value: "5.2%", color: "var(--accent-sky-text)" },
+                { label: "Reach", value: "2.8M", color: PURPLE_T },
               ].map((s) => (
                 <div
                   key={s.label}

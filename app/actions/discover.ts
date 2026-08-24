@@ -1,9 +1,15 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Role } from "@/lib/generated/prisma";
+import { headers } from "next/headers";
 import type { Creator } from "@/app/_components/discovery/ProfileDrawer";
 import type { BrandProfile } from "@/app/_components/discovery/ProfilesContext";
+
+async function getSession() {
+  return auth.api.getSession({ headers: await headers() });
+}
 
 function fmtFollowers(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
@@ -12,6 +18,9 @@ function fmtFollowers(n: number): string {
 }
 
 export async function getCreatorsAction(): Promise<Creator[]> {
+  const session = await getSession();
+  if (!session) return [];
+
   const users = await db.user.findMany({
     where: {
       role: Role.CREATOR,
@@ -100,6 +109,9 @@ export async function getCreatorsAction(): Promise<Creator[]> {
 }
 
 export async function getBrandsAction(): Promise<BrandProfile[]> {
+  const session = await getSession();
+  if (!session) return [];
+
   const users = await db.user.findMany({
     where: {
       role: Role.BRAND,

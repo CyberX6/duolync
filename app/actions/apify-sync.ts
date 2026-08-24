@@ -494,6 +494,11 @@ export async function startApifySyncAction(
   try { session = await requireSession(); } catch { return { error: "Unauthorized" }; }
   if (session.user.id !== creatorUserId) return { error: "You can only sync your own profile." };
 
+  // Rate limit: max 5 syncs per hour per user
+  const { rateLimit } = await import("@/lib/rate-limit");
+  const allowed = await rateLimit(`${creatorUserId}:apify-sync`, 5, 60 * 60_000);
+  if (!allowed) return { error: "Too many sync requests. Please wait before syncing again." };
+
   const handle = socialHandle.replace(/^@/, "").trim();
   if (!handle) return { error: "A social handle is required." };
 

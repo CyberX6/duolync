@@ -19,12 +19,13 @@ const fadeUp: Variants = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1,
 const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
 
 const CYAN = "#67e8f9";
+const CYAN_T = "var(--accent-cyan-text)";
 
 const emails = [
-  { id: "samsung",     brand: "Samsung",    subject: "Partnership Opportunity — Q3 Campaign", preview: "Hi! We'd love to collaborate on our upcoming tech...",          time: "2m ago", unread: true,  tag: "New Deal",  tagColor: "#34d399", avatarBg: "#1428a0", avatarColor: "#ffffff", initial: "S" },
-  { id: "asos",        brand: "ASOS",        subject: "✓ Contract Signed — Welcome aboard!",    preview: "Your partnership agreement has been confirmed. Here's...",   time: "1h ago", unread: true,  tag: "Active",    tagColor: "#67e8f9", avatarBg: "#2d2d2d", avatarColor: "#ffffff", initial: "A" },
-  { id: "levis",       brand: "Levi's",      subject: "Re: Content brief feedback",              preview: "Thanks for the revision! The brief looks great. We'll...",   time: "3h ago", unread: false, tag: "Follow-up", tagColor: "#fcd34d", avatarBg: "#c41230", avatarColor: "#ffffff", initial: "L" },
-  { id: "steelseries", brand: "SteelSeries", subject: "Payment processed — $2,100",              preview: "Your invoice for the peripheral review has been paid...",    time: "1d ago", unread: false, tag: "Paid",      tagColor: "#a78bfa", avatarBg: "#ff4500", avatarColor: "#ffffff", initial: "S" },
+  { id: "samsung",     brand: "Samsung",    subject: "Partnership Opportunity — Q3 Campaign", preview: "Hi! We'd love to collaborate on our upcoming tech...",          time: "2m ago", unread: true,  tag: "New Deal",  tagColor: "var(--accent-emerald-text)", avatarBg: "#1428a0", avatarColor: "#ffffff", initial: "S" },
+  { id: "asos",        brand: "ASOS",        subject: "✓ Contract Signed — Welcome aboard!",    preview: "Your partnership agreement has been confirmed. Here's...",   time: "1h ago", unread: true,  tag: "Active",    tagColor: "var(--accent-cyan-text)", avatarBg: "#2d2d2d", avatarColor: "#ffffff", initial: "A" },
+  { id: "levis",       brand: "Levi's",      subject: "Re: Content brief feedback",              preview: "Thanks for the revision! The brief looks great. We'll...",   time: "3h ago", unread: false, tag: "Follow-up", tagColor: "var(--accent-amber-text)", avatarBg: "#c41230", avatarColor: "#ffffff", initial: "L" },
+  { id: "steelseries", brand: "SteelSeries", subject: "Payment processed — $2,100",              preview: "Your invoice for the peripheral review has been paid...",    time: "1d ago", unread: false, tag: "Paid",      tagColor: "var(--accent-violet-text)", avatarBg: "#c93600", avatarColor: "#ffffff", initial: "S" },
 ];
 
 const nikeEmail = {
@@ -35,14 +36,14 @@ const nikeEmail = {
   avatarBg: "#111111",
   avatarColor: "#ffffff",
   initial: "N",
-  tagColor: "#34d399",
+  tagColor: "var(--accent-emerald-text)",
 };
 
 const dealPipeline = [
-  { label: "Negotiating", count: 3,  color: "#fcd34d" },
-  { label: "Contract",    count: 2,  color: "#67e8f9" },
-  { label: "In Progress", count: 4,  color: "#34d399" },
-  { label: "Completed",   count: 12, color: "#a78bfa" },
+  { label: "Negotiating", count: 3,  color: "var(--accent-amber-text)" },
+  { label: "Contract",    count: 2,  color: "var(--accent-cyan-text)" },
+  { label: "In Progress", count: 4,  color: "var(--accent-emerald-text)" },
+  { label: "Completed",   count: 12, color: "var(--accent-violet-text)" },
 ];
 
 type DemoPhase = "idle" | "running" | "done";
@@ -179,8 +180,9 @@ export function MailCRMSection() {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.4, opacity: 0 }}
                       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                      data-fixed-dark
                       className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-bold text-white"
-                      style={{ background: "#f472b6" }}
+                      style={{ background: "#be185d" }}
                     >
                       {bellCount}
                     </motion.div>
@@ -242,7 +244,7 @@ export function MailCRMSection() {
                             className="flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full font-medium"
                             style={{
                               background: "rgba(244,114,182,0.15)",
-                              color: "#f472b6",
+                              color: "var(--accent-pink-text)",
                             }}
                           >
                             <Instagram size={8} />
@@ -261,7 +263,7 @@ export function MailCRMSection() {
                                 }}
                                 className="flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full font-medium"
                                 style={{
-                                  background: `${nikeEmail.tagColor}18`,
+                                  background: `color-mix(in srgb, ${nikeEmail.tagColor} 9%, transparent)`,
                                   color: nikeEmail.tagColor,
                                 }}
                               >
@@ -296,7 +298,7 @@ export function MailCRMSection() {
                   const tagLabel =
                     isAsos && asosContractSigned ? "✓ Contract Signed" : email.tag;
                   const tagColor =
-                    isAsos && asosContractSigned ? "#34d399" : email.tagColor;
+                    isAsos && asosContractSigned ? "var(--accent-emerald-text)" : email.tagColor;
 
                   return (
                     <motion.div
@@ -334,7 +336,7 @@ export function MailCRMSection() {
                                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                                 className="text-[9px] px-1.5 py-0.5 rounded-full font-medium shrink-0"
                                 style={{
-                                  background: `${tagColor}18`,
+                                  background: `color-mix(in srgb, ${tagColor} 9%, transparent)`,
                                   color: tagColor,
                                 }}
                               >
@@ -363,7 +365,7 @@ export function MailCRMSection() {
                               }
                               className="text-[9px] px-1.5 py-0.5 rounded-full font-medium shrink-0"
                               style={{
-                                background: `${email.tagColor}18`,
+                                background: `color-mix(in srgb, ${email.tagColor} 9%, transparent)`,
                                 color: email.tagColor,
                               }}
                             >
@@ -374,7 +376,7 @@ export function MailCRMSection() {
                             <span
                               className="text-[9px] px-1.5 py-0.5 rounded-full font-medium shrink-0"
                               style={{
-                                background: `${email.tagColor}18`,
+                                background: `color-mix(in srgb, ${email.tagColor} 9%, transparent)`,
                                 color: email.tagColor,
                               }}
                             >
@@ -425,9 +427,11 @@ export function MailCRMSection() {
                     placeholder="Reply to Nike..."
                     className="flex-1 bg-transparent text-xs text-slate-400 placeholder:text-slate-600 focus:outline-none"
                     readOnly
+                    tabIndex={-1}
                   />
                   <Paperclip size={12} className="text-slate-600" />
                   <button
+                    tabIndex={-1}
                     className="w-6 h-6 rounded-lg flex items-center justify-center"
                     style={{
                       background: "linear-gradient(135deg, #db2777, #9333ea)",
@@ -449,7 +453,7 @@ export function MailCRMSection() {
               style={{
                 background: "rgba(103,232,249,0.12)",
                 border: "1px solid rgba(103,232,249,0.35)",
-                color: CYAN,
+                color: CYAN_T,
               }}
             >
               <Mail size={11} />
@@ -504,7 +508,7 @@ export function MailCRMSection() {
                       border: "1px solid rgba(103,232,249,0.25)",
                     }}
                   >
-                    <item.icon size={15} style={{ color: CYAN }} />
+                    <item.icon size={15} style={{ color: CYAN_T }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">
                     {item.text}
@@ -519,7 +523,7 @@ export function MailCRMSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoLocked
                   ? "rgba(103,232,249,0.25)"
@@ -527,7 +531,7 @@ export function MailCRMSection() {
                 border: isDemoLocked
                   ? "1px solid rgba(103,232,249,0.5)"
                   : "1px solid rgba(103,232,249,0.35)",
-                color: CYAN,
+                color: CYAN_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -551,7 +555,7 @@ export function MailCRMSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoLocked
                 ? "rgba(103,232,249,0.25)"
@@ -559,7 +563,7 @@ export function MailCRMSection() {
               border: isDemoLocked
                 ? "1px solid rgba(103,232,249,0.5)"
                 : "1px solid rgba(103,232,249,0.35)",
-              color: CYAN,
+              color: CYAN_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

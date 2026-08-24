@@ -1,6 +1,16 @@
 import { useState, useCallback } from "react";
 import { Plus, Link2, Trash2, Star, Zap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,6 +48,7 @@ const SocialAccounts = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [phylloLoading, setPhylloLoading] = useState(false);
   const [phylloSyncing, setPhylloSyncing] = useState(false);
+  const [confirmDeleteAccountId, setConfirmDeleteAccountId] = useState<string | null>(null);
 
   // New account form
   const [newPlatform, setNewPlatform] = useState("");
@@ -98,9 +109,14 @@ const SocialAccounts = () => {
   };
 
   const handleDelete = (accountId: string) => {
-    if (!confirm("Are you sure you want to remove this account?")) return;
-    setAccounts((prev) => prev.filter((a) => a.id !== accountId));
+    setConfirmDeleteAccountId(accountId);
+  };
+
+  const confirmDeleteAccount = () => {
+    if (!confirmDeleteAccountId) return;
+    setAccounts((prev) => prev.filter((a) => a.id !== confirmDeleteAccountId));
     toast({ title: "Account removed" });
+    setConfirmDeleteAccountId(null);
   };
 
   const resetForm = () => {
@@ -385,6 +401,24 @@ const SocialAccounts = () => {
           </p>
         </div>
       </div>
+
+      {/* Delete account confirmation */}
+      <AlertDialog open={confirmDeleteAccountId !== null} onOpenChange={(open) => { if (!open) setConfirmDeleteAccountId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove social account?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the account from your profile. You can add it again later.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white">
+              Remove Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

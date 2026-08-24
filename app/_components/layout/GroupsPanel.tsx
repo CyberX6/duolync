@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Users, Plus, Home, Search, MessageSquare, Heart, Sparkles,
-  CalendarDays, FileText, FolderOpen, Megaphone, Radio, Mail, BarChart3,
+  Users, Plus, FolderOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,6 +18,7 @@ import {
 import { getPendingApplicationsCountAction } from "@/app/actions/brand-applications";
 import { getPendingInvitationsCountAction } from "@/app/actions/invitations";
 import { cn } from "@/lib/utils";
+import { BRAND_NAV_ITEMS, CREATOR_NAV_ITEMS } from "./nav-config";
 
 const GroupsPanel = () => {
   const { profile } = useAuth();
@@ -60,31 +60,7 @@ const GroupsPanel = () => {
     }
   };
 
-  const mainNavItems = isBrand
-    ? [
-        { icon: Home, label: "Dashboard", path: "/brand/dashboard" },
-        { icon: Search, label: "Discover", path: "/brand/discover" },
-        { icon: Sparkles, label: "Smart Match", path: "/brand/smart-match" },
-        { icon: FileText, label: "Proposals", path: "/brand/proposals" },
-        { icon: Megaphone, label: "Campaigns", path: "/brand/campaigns" },
-        { icon: CalendarDays, label: "Smart Calendar", path: "/calendar" },
-        { icon: Heart, label: "Saved", path: "/brand/saved" },
-        { icon: MessageSquare, label: "Messages", path: "/messages" },
-        { icon: Users, label: "Community", path: "/community" },
-      ]
-    : [
-        { icon: Home, label: "Dashboard", path: "/creator/dashboard" },
-        { icon: Megaphone, label: "Campaigns", path: "/creator/campaigns" },
-        { icon: Radio, label: "Social Connections", path: "/creator/presence" },
-        { icon: Search, label: "Discover", path: "/creator/discover" },
-        { icon: FileText, label: "My Applications", path: "/creator/applications" },
-        { icon: Mail, label: "Invitations", path: "/creator/invitations" },
-        { icon: CalendarDays, label: "Smart Calendar", path: "/calendar" },
-        { icon: Heart, label: "Saved", path: "/creator/saved" },
-        { icon: BarChart3, label: "Analytics", path: "/creator/analytics" },
-        { icon: MessageSquare, label: "Messages", path: "/messages" },
-        { icon: Users, label: "Community", path: "/community" },
-      ];
+  const mainNavItems = isBrand ? BRAND_NAV_ITEMS : CREATOR_NAV_ITEMS;
 
   return (
     <aside className="hidden lg:flex w-64 shrink-0 sticky top-16 self-start h-[calc(100vh-4rem)] flex-col border-r border-zinc-200 dark:border-zinc-800/50 bg-white dark:bg-zinc-950 transition-colors duration-300">

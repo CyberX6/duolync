@@ -30,8 +30,8 @@ const ProtectedRoute = ({ children, requiredType }: ProtectedRouteProps) => {
 
   if (loading) return <Spinner />;
 
-  // Not authenticated → send to auth page
-  if (!user) return <RedirectTo path="/auth" />;
+  // Not authenticated → send to sign-in with callbackUrl preserved
+  if (!user) return <RedirectTo path="/sign-in" />;
 
   // Session exists but profile hasn't resolved yet
   if (!profile) return <Spinner />;
@@ -48,13 +48,6 @@ const ProtectedRoute = ({ children, requiredType }: ProtectedRouteProps) => {
       />
     );
   }
-
-  // TODO (Phase 2): Once DB profile columns (niche / industry) are returned
-  // by the session, re-enable the onboarding redirect:
-  //
-  // const onboardingComplete =
-  //   profile.user_type === "brand" ? !!profile.industry : !!profile.niche;
-  // if (!onboardingComplete) return <RedirectTo path="/onboarding" />;
 
   return <>{children}</>;
 };

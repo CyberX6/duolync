@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 .next/
 .env
-.envgit reset --mixed HEAD~1
+.env.local
+.env.production
 .pnpm-store/
 
 # Design review screenshots (local only)

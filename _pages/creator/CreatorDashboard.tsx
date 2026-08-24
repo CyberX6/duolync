@@ -14,13 +14,15 @@ import { AIGrowthMentor } from "@/app/_components/dashboard/AIGrowthMentor";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
-const VIOLET = "#c084fc";
-const CYAN = "#67e8f9";
+const VIOLET = "var(--accent-violet-text)";
+const VIOLET_T = "var(--accent-violet-text)";
+const CYAN = "var(--accent-cyan-text)";
+const CYAN_T = "var(--accent-cyan-text)";
 
 const PLATFORM_META: Record<string, { emoji: string; color: string }> = {
-  instagram: { emoji: "📷", color: "#e1306c" },
+  instagram: { emoji: "📷", color: "var(--brand-instagram-text)" },
   tiktok:    { emoji: "📱", color: "#ffffff" },
-  youtube:   { emoji: "▶️", color: "#ff0000" },
+  youtube:   { emoji: "▶️", color: "var(--brand-youtube-text)" },
   twitter:   { emoji: "🐦", color: "#1da1f2" },
   twitch:    { emoji: "🎮", color: "#9146ff" },
   linkedin:  { emoji: "💼", color: "#0a66c2" },
@@ -51,9 +53,9 @@ const CreatorDashboard = () => {
           <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4"
             style={{
-              background: "rgba(192,132,252,0.12)",
-              border: "1px solid rgba(192,132,252,0.35)",
-              color: VIOLET,
+              background: "color-mix(in srgb, var(--accent-violet-text) 12%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--accent-violet-text) 35%, transparent)",
+              color: VIOLET_T,
             }}
           >
             <LayoutDashboard size={11} />
@@ -142,10 +144,8 @@ const CreatorDashboard = () => {
             </Link>
           </div>
 
-          {profileLoading ? (
-            <SocialConnectionsSkeleton />
-          ) : hasConnections ? (
-            <div className="rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-6">
+          {hasConnections ? (
+            <div data-fixed-dark className="rounded-2xl bg-zinc-900 dark:bg-zinc-950 border border-zinc-800 p-6">
               <div className="flex items-start justify-between gap-6 flex-wrap">
                 {/* Aggregated stats */}
                 <div className="flex items-center gap-8">
@@ -191,7 +191,7 @@ const CreatorDashboard = () => {
             </div>
           ) : (
             /* Not connected CTA */
-            <div className="rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700 p-8 flex flex-col sm:flex-row items-center gap-6 bg-zinc-50 dark:bg-zinc-900/50">
+            <div data-fixed-dark className="rounded-2xl border border-dashed border-zinc-700 p-8 flex flex-col sm:flex-row items-center gap-6 bg-zinc-900/50">
               <div className="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
                 <Wifi className="w-7 h-7 text-violet-400" />
               </div>

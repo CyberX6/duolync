@@ -8,6 +8,7 @@ const fadeUp: Variants = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1,
 const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren: 0.07 } } };
 
 const PURPLE = "#a78bfa";
+const PURPLE_T = "var(--accent-violet-text)";
 
 const faqs = [
   { question: "What is Duolync?", answer: "Duolync is a dual-sided AI platform that connects content creators with brands for collaboration opportunities. Our platform uses AI-powered matching to help brands find perfect creators for their campaigns, while giving creators access to exclusive, curated partnership opportunities." },
@@ -40,7 +41,7 @@ export function FAQSection() {
             className="lg:col-span-4"
           >
             <div className="lg:sticky lg:top-28">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE }}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5" style={{ background: "var(--glow-purple)", border: "1px solid rgba(124,58,237,0.3)", color: PURPLE_T }}>
                 <Sparkles size={11} />
                 FAQ
               </div>
@@ -56,7 +57,7 @@ export function FAQSection() {
               <a
                 href="mailto:hello@duolync.com"
                 className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium transition-all"
-                style={{ color: PURPLE }}
+                style={{ color: PURPLE_T }}
               >
                 Contact support →
               </a>
@@ -93,7 +94,7 @@ export function FAQSection() {
                     style={{ background: open === i ? "rgba(124,58,237,0.25)" : "var(--bg-card-hover)", border: `1px solid ${open === i ? "rgba(124,58,237,0.4)" : "var(--border-card-strong)"}` }}
                   >
                     {open === i
-                      ? <Minus size={12} style={{ color: PURPLE }} />
+                      ? <Minus size={12} style={{ color: PURPLE_T }} />
                       : <Plus size={12} className="text-slate-500" />
                     }
                   </div>

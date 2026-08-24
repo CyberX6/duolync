@@ -25,6 +25,8 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 
 const PINK = "#f472b6";
 const VIOLET = "#c084fc";
+const PINK_T = "var(--accent-pink-text)";
+const VIOLET_T = "var(--accent-purple-text)";
 
 const allNiches = [
   { label: "Beauty",    icon: "💄" },
@@ -212,7 +214,7 @@ export function SmartFiltersSection() {
                     border: "1px solid rgba(244,114,182,0.3)",
                   }}
                 >
-                  <SlidersHorizontal size={15} style={{ color: PINK }} />
+                  <SlidersHorizontal size={15} style={{ color: PINK_T }} />
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-white">Deal Preferences</div>
@@ -236,11 +238,11 @@ export function SmartFiltersSection() {
                         <button
                           key={n.label}
                           onClick={() => toggle(n.label)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-250"
+                          className="flex items-center gap-1.5 px-3 py-1.5 min-h-11 rounded-xl text-xs font-medium transition-all duration-250"
                           style={{
                             background: active ? `${PINK}20` : "var(--bg-card-hover)",
                             border: `1px solid ${active ? `${PINK}45` : "var(--border-card)"}`,
-                            color: active ? PINK : "#64748b",
+                            color: active ? PINK_T : "var(--text-muted)",
                             cursor: isDemoLocked ? "default" : "pointer",
                           }}
                         >
@@ -277,7 +279,7 @@ export function SmartFiltersSection() {
                       </div>
                       <div
                         className="text-xs font-bold tabular-nums"
-                        style={{ color: PINK }}
+                        style={{ color: PINK_T }}
                       >
                         ${offerValue.toLocaleString()}
                       </div>
@@ -307,7 +309,7 @@ export function SmartFiltersSection() {
                         <Users size={11} />
                         Min. Followers
                       </div>
-                      <div className="text-xs font-bold" style={{ color: VIOLET }}>
+                      <div className="text-xs font-bold" style={{ color: VIOLET_T }}>
                         10K
                       </div>
                     </div>
@@ -341,7 +343,7 @@ export function SmartFiltersSection() {
                         style={{
                           background: i < 3 ? "rgba(103,232,249,0.12)" : "var(--bg-card-hover)",
                           border: `1px solid ${i < 3 ? "rgba(103,232,249,0.3)" : "var(--border-card)"}`,
-                          color: i < 3 ? "#67e8f9" : "#475569",
+                          color: i < 3 ? "var(--accent-cyan-text)" : "var(--text-muted)",
                         }}
                       >
                         {loc}
@@ -358,7 +360,7 @@ export function SmartFiltersSection() {
               <div className="p-5">
                 <div className="text-xs font-semibold text-slate-400 mb-3">
                   Matching deals right now —{" "}
-                  <span style={{ color: PINK }}>{dealsLabel}</span>
+                  <span style={{ color: PINK_T }}>{dealsLabel}</span>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -416,7 +418,7 @@ export function SmartFiltersSection() {
               style={{
                 background: "rgba(244,114,182,0.12)",
                 border: "1px solid rgba(244,114,182,0.35)",
-                color: PINK,
+                color: PINK_T,
               }}
             >
               <Filter size={11} />
@@ -471,7 +473,7 @@ export function SmartFiltersSection() {
                       border: "1px solid rgba(244,114,182,0.25)",
                     }}
                   >
-                    <item.icon size={15} style={{ color: PINK }} />
+                    <item.icon size={15} style={{ color: PINK_T }} />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">
                     {item.text}
@@ -486,7 +488,7 @@ export function SmartFiltersSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoLocked
                   ? "rgba(244,114,182,0.25)"
@@ -494,7 +496,7 @@ export function SmartFiltersSection() {
                 border: isDemoLocked
                   ? "1px solid rgba(244,114,182,0.5)"
                   : "1px solid rgba(244,114,182,0.4)",
-                color: PINK,
+                color: PINK_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -518,7 +520,7 @@ export function SmartFiltersSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoLocked
                 ? "rgba(244,114,182,0.25)"
@@ -526,7 +528,7 @@ export function SmartFiltersSection() {
               border: isDemoLocked
                 ? "1px solid rgba(244,114,182,0.5)"
                 : "1px solid rgba(244,114,182,0.4)",
-              color: PINK,
+              color: PINK_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

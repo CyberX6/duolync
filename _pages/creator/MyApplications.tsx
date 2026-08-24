@@ -8,6 +8,16 @@ import {
   FileText, TrendingUp, Megaphone, X, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import MainLayout from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -260,6 +270,7 @@ const MyApplications = () => {
   const [applications, setApplications] = useState<MyApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [withdrawingId, setWithdrawingId] = useState<string | null>(null);
+  const [confirmWithdrawId, setConfirmWithdrawId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState("ALL");
 
   const load = useCallback(async () => {
@@ -272,9 +283,14 @@ const MyApplications = () => {
   useEffect(() => { load(); }, [load]);
 
   const handleWithdraw = async (applicationId: string) => {
-    if (!confirm("Withdraw this application?")) return;
+    setConfirmWithdrawId(applicationId);
+  };
+
+  const confirmWithdraw = async () => {
+    const applicationId = confirmWithdrawId;
+    if (!applicationId) return;
+    setConfirmWithdrawId(null);
     setWithdrawingId(applicationId);
-    // Optimistic
     setApplications((prev) =>
       prev.map((a) => a.id === applicationId ? { ...a, status: "WITHDRAWN" } : a),
     );
@@ -405,6 +421,24 @@ const MyApplications = () => {
           </div>
         )}
       </div>
+
+      {/* Withdraw confirmation */}
+      <AlertDialog open={confirmWithdrawId !== null} onOpenChange={(open) => { if (!open) setConfirmWithdrawId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Withdraw application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your application will be marked as withdrawn. You can re-apply to this campaign later.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmWithdraw} className="bg-red-600 hover:bg-red-700 text-white">
+              Withdraw
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

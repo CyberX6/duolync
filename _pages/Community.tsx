@@ -7,6 +7,16 @@ import {
   ListPlus, UserPlus, FolderOpen, MoveRight, MapPin, TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -239,6 +249,7 @@ const Community = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [creating, setCreating] = useState(false);
+  const [confirmDeleteList, setConfirmDeleteList] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!isBrand) return;
@@ -280,7 +291,13 @@ const Community = () => {
   };
 
   const handleDeleteList = async (listId: string, listName: string) => {
-    if (!confirm(`Delete "${listName}"? This cannot be undone.`)) return;
+    setConfirmDeleteList({ id: listId, name: listName });
+  };
+
+  const confirmDeleteListAction = async () => {
+    if (!confirmDeleteList) return;
+    const { id: listId } = confirmDeleteList;
+    setConfirmDeleteList(null);
     const res = await deleteCommunityListAction(listId);
     if (res.error) {
       toast({ title: "Error", description: res.error, variant: "destructive" });
@@ -541,6 +558,24 @@ const Community = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete list confirmation */}
+      <AlertDialog open={confirmDeleteList !== null} onOpenChange={(open) => { if (!open) setConfirmDeleteList(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete &quot;{confirmDeleteList?.name}&quot;?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the list and all its members. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteListAction} className="bg-red-600 hover:bg-red-700 text-white">
+              Delete List
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

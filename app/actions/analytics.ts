@@ -1,8 +1,8 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { db } from "@/lib/db";
+import { headers } from "next/headers";
 
 export interface EngagementDataPoint {
   month: string;
@@ -22,6 +22,24 @@ export async function getCreatorAnalyticsAction(creatorUserId: string): Promise<
   data: CreatorAnalytics | null;
   error: string | null;
 }> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return { data: null, error: "Unauthorized" };
+
+  // Creators can always see their own analytics.
+  // Brands may only see analytics for creators they are working with (accepted/under-review application).
+  const isSelf = session.user.id === creatorUserId;
+  if (!isSelf) {
+    const isConnectedBrand = await db.application.findFirst({
+      where: {
+        status: { in: ["ACCEPTED", "UNDER_REVIEW"] },
+        creator: { userId: creatorUserId },
+        campaign: { brandProfile: { userId: session.user.id } },
+      },
+      select: { id: true },
+    });
+    if (!isConnectedBrand) return { data: null, error: "Unauthorized" };
+  }
+
   try {
     const profile = await db.creatorProfile.findUnique({
       where: { userId: creatorUserId },

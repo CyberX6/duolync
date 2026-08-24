@@ -22,11 +22,13 @@ export const auth = betterAuth({
 
   user: {
     additionalFields: {
+      // Not client-settable: role is assigned during onboarding via selectRole(),
+      // which runs server-side against the authenticated user.
       role: {
         type: "string" as const,
         required: false,
         defaultValue: "creator",
-        input: true,
+        input: false,
       },
       hasCompletedOnboarding: {
         type: "boolean" as const,

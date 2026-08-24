@@ -3,16 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  X, Home, Search, MessageSquare, Heart, Sparkles,
-  CalendarDays, FileText, Users, Megaphone, Mail, Radio, BarChart3,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useMessaging } from "@/app/_components/messaging/MessagingContext";
 import { getPendingApplicationsCountAction } from "@/app/actions/brand-applications";
 import { getPendingInvitationsCountAction } from "@/app/actions/invitations";
 import { cn } from "@/lib/utils";
+import { BRAND_NAV_ITEMS, CREATOR_NAV_ITEMS } from "./nav-config";
 
 interface MobileNavProps {
   open: boolean;
@@ -31,20 +28,13 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
     if (isBrand) {
       getPendingApplicationsCountAction()
         .then((res) => setPendingApplications(res.count))
-        .catch(() => {});
+        .catch(() => setPendingApplications(0));
       return;
     }
     getPendingInvitationsCountAction()
       .then((res) => setPendingInvitations(res.count))
       .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBrand]);
-
-  useEffect(() => {
-    if (!isBrand) return;
-    getPendingApplicationsCountAction()
-      .then((res) => setPendingApplications(res.count))
-      .catch(() => setPendingApplications(0));
   }, [isBrand]);
 
   // Lock body scroll when open
@@ -57,31 +47,7 @@ const MobileNav = ({ open, onClose }: MobileNavProps) => {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  const mainNavItems = isBrand
-    ? [
-        { icon: Home, label: "Dashboard", path: "/brand/dashboard" },
-        { icon: Search, label: "Discover", path: "/brand/discover" },
-        { icon: Sparkles, label: "Smart Match", path: "/brand/smart-match" },
-        { icon: FileText, label: "Proposals", path: "/brand/proposals" },
-        { icon: Megaphone, label: "Campaigns", path: "/brand/campaigns" },
-        { icon: CalendarDays, label: "Smart Calendar", path: "/calendar" },
-        { icon: Heart, label: "Saved", path: "/brand/saved" },
-        { icon: MessageSquare, label: "Messages", path: "/messages" },
-        { icon: Users, label: "Community", path: "/community" },
-      ]
-    : [
-        { icon: Home, label: "Dashboard", path: "/creator/dashboard" },
-        { icon: Megaphone, label: "Campaigns", path: "/creator/campaigns" },
-        { icon: Radio, label: "Social Connections", path: "/creator/presence" },
-        { icon: Search, label: "Discover", path: "/creator/discover" },
-        { icon: FileText, label: "My Applications", path: "/creator/applications" },
-        { icon: Mail, label: "Invitations", path: "/creator/invitations" },
-        { icon: CalendarDays, label: "Smart Calendar", path: "/calendar" },
-        { icon: Heart, label: "Saved", path: "/creator/saved" },
-        { icon: BarChart3, label: "Analytics", path: "/creator/analytics" },
-        { icon: MessageSquare, label: "Messages", path: "/messages" },
-        { icon: Users, label: "Community", path: "/community" },
-      ];
+  const mainNavItems = isBrand ? BRAND_NAV_ITEMS : CREATOR_NAV_ITEMS;
 
   return (
     <AnimatePresence>

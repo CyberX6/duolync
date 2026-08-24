@@ -76,8 +76,9 @@ export function HeroSection() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm text-violet-700 dark:text-violet-300"
             style={{
-              background: "rgba(124,58,237,0.10)",
-              border: "1px solid rgba(124,58,237,0.35)",
+              background: "var(--glow-purple)",
+              border: "1px solid rgba(124,58,237,0.4)",
+              color: "var(--accent-violet-text)",
             }}
           >
             <Sparkles size={13} />
@@ -169,6 +170,17 @@ export function HeroSection() {
                 className="transition-transform group-hover:translate-x-1"
               />
             </Link>
+            <Link
+              href="/auth"
+              className="flex items-center gap-2 px-6 py-4 rounded-2xl font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "var(--bg-card-hover)",
+                border: "1px solid var(--border-card-strong)",
+                color: "var(--text-muted)",
+              }}
+            >
+              Get Started
+            </Link>
           </motion.div>
 
           {/* Social proof */}
@@ -193,11 +205,15 @@ export function HeroSection() {
                 creators already using Duolync
               </span>
             </div>
-            <div className="hidden sm:block w-px h-4 bg-slate-300 dark:bg-slate-800" />
-            <div className="flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <div className="flex">
+            <div className="hidden sm:block w-px h-4 bg-slate-800" />
+            <div className="flex items-center gap-1.5 text-slate-500">
+              <div className="flex" aria-hidden="true">
                 {"★★★★★".split("").map((s, i) => (
-                  <span key={i} className="text-amber-400 text-sm">
+                  <span
+                    key={i}
+                    className="text-sm"
+                    style={{ color: "var(--accent-amber-text)" }}
+                  >
                     {s}
                   </span>
                 ))}
@@ -250,17 +266,17 @@ export function HeroSection() {
             {
               label: "For Brands",
               desc: "AI matching · Campaign tools · CRM",
-              color: "#a78bfa",
-              border: "rgba(124,58,237,0.35)",
-              shadow: "rgba(124,58,237,0.12)",
+              color: "var(--accent-violet-text)",
+              bg: "var(--glow-purple)",
+              border: "rgba(124,58,237,0.25)",
               href: "/for-brands",
             },
             {
               label: "For Creators",
               desc: "Curated deals · Growth AI · Dashboard",
-              color: "#ec4899",
-              border: "rgba(236,72,153,0.35)",
-              shadow: "rgba(236,72,153,0.12)",
+              color: "var(--accent-pink-text)",
+              bg: "var(--glow-pink)",
+              border: "rgba(236,72,153,0.25)",
               href: "/for-creators",
             },
           ].map((card) => (
@@ -283,7 +299,7 @@ export function HeroSection() {
                 <div className="text-sm font-semibold" style={{ color: "var(--text-base)" }}>
                   {card.label}
                 </div>
-                <div className="text-[11px]" style={{ color: "var(--text-muted)" }}>{card.desc}</div>
+                <div className="text-xs text-slate-500">{card.desc}</div>
               </div>
               <ArrowRight size={14} style={{ color: card.color }} />
             </Link>

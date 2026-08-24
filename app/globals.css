@@ -33,6 +33,27 @@
     --text-muted:       #475569;
     --text-faint:       #94a3b8;
 
+    /* Accent colours used as TEXT. The bright palette is tuned for dark
+       surfaces and drops to ~1.3:1 on a light page, so light mode needs
+       darker equivalents. Tints (backgrounds/borders) keep the bright hues. */
+    --accent-violet-text:  #6d28d9;
+    --accent-purple-text:  #7e22ce;
+    --accent-cyan-text:    #155e75;
+    --accent-pink-text:    #9d174d;
+    /* Amber, emerald and sky most often sit on a tint of their own hue, which
+       darkens the effective background, so these run a step deeper than the
+       others to clear AA in that case as well as on the plain page. */
+    --accent-amber-text:   #92400e;
+    --accent-emerald-text: #065f46;
+    --accent-sky-text:     #075985;
+    --accent-red-text:     #b91c1c;
+
+    /* Platform brand hues, darkened just enough to stay recognisable and pass AA. */
+    --brand-instagram-text: #c2185b;
+    --brand-youtube-text:   #c00000;
+    --brand-tiktok-text:    #be185d;
+    --brand-twitter-text:   #0369a1;
+
     /* Background & Surfaces */
     --background: 0 0% 100%;
     --foreground: 240 10% 10%;
@@ -132,6 +153,20 @@
     --text-base:        #ffffff;
     --text-muted:       #94a3b8;
     --text-faint:       #475569;
+
+    --accent-violet-text:  #a78bfa;
+    --accent-purple-text:  #c084fc;
+    --accent-cyan-text:    #67e8f9;
+    --accent-pink-text:    #f472b6;
+    --accent-amber-text:   #fcd34d;
+    --accent-emerald-text: #34d399;
+    --accent-sky-text:     #38bdf8;
+    --accent-red-text:     #f87171;
+
+    --brand-instagram-text: #f0568e;
+    --brand-youtube-text:   #ff0000;
+    --brand-tiktok-text:    #f472b6;
+    --brand-twitter-text:   #1da1f2;
 
     --background: 240 10% 6%;
     --foreground: 0 0% 98%;
@@ -577,10 +612,75 @@
   /* 5. Slate grays — darker equivalents for light backgrounds */
   html:not(.dark) .text-slate-200 { color: #334155; }
   html:not(.dark) .text-slate-300 { color: #475569; }
-  html:not(.dark) .text-slate-400 { color: #64748b; }
+  html:not(.dark) .text-slate-400 { color: #556274; }
   html:not(.dark) .text-slate-500 { color: #475569; }
   html:not(.dark) .text-slate-600 { color: #334155; }
   html:not(.dark) .text-slate-700 { color: #1e293b; }
+
+  /* 6. Gradient-clipped headlines. The brand gradient is tuned for a dark page
+        and lands at 1.4–3.5:1 on white. Because the gradient is clipped to the
+        glyphs, the element paints nothing but its own text, so darkening it
+        with a filter hits exactly the text and nothing else. Darkening alone
+        turns the hues muddy, so the saturation bump keeps them as jewel tones;
+        this pairing puts the weakest stop (cyan) at ~5:1. Applying it by
+        selector rather than per-gradient keeps future gradients covered too. */
+  html:not(.dark) [style*="-webkit-text-fill-color: transparent"] {
+    filter: saturate(1.5) brightness(0.5);
+  }
+
+  /* 7. Some panels are product mockups of a dark UI (the Chrome extension over
+        TikTok) and stay dark in both themes on purpose. Without an opt-out the
+        light-mode remaps above rewrite their text to near-black on near-black,
+        which measured 1.08:1 — invisible. Mark such a subtree with
+        data-fixed-dark to keep the dark-mode text colours inside it. */
+  html:not(.dark) [data-fixed-dark] .text-white,
+  html:not(.dark) [data-fixed-dark].text-white { color: #ffffff; }
+  html:not(.dark) [data-fixed-dark] .text-slate-200 { color: #e2e8f0; }
+  html:not(.dark) [data-fixed-dark] .text-slate-300 { color: #cbd5e1; }
+  html:not(.dark) [data-fixed-dark] .text-slate-400 { color: #94a3b8; }
+  html:not(.dark) [data-fixed-dark] .text-slate-500 { color: #8593a6; }
+  html:not(.dark) [data-fixed-dark] .text-slate-600 { color: #7d8b9f; }
+  html:not(.dark) [data-fixed-dark] {
+    --text-base:  #ffffff;
+    --text-muted: #94a3b8;
+    --text-faint: #7d8b9f;
+
+    --accent-violet-text:  #a78bfa;
+    --accent-purple-text:  #c084fc;
+    --accent-cyan-text:    #67e8f9;
+    --accent-pink-text:    #f472b6;
+    --accent-amber-text:   #fcd34d;
+    --accent-emerald-text: #34d399;
+    --accent-sky-text:     #38bdf8;
+    --accent-red-text:     #f87171;
+  }
+
+  /* Tailwind accent utilities carry the same dark-tuned palette as the inline
+     styles, so they need the same treatment. Routing them through the tokens
+     means a data-fixed-dark subtree keeps the bright values automatically. */
+  html:not(.dark) .text-violet-300,
+  html:not(.dark) .text-violet-400  { color: var(--accent-violet-text); }
+  html:not(.dark) .text-purple-300,
+  html:not(.dark) .text-purple-400  { color: var(--accent-purple-text); }
+  html:not(.dark) .text-cyan-300,
+  html:not(.dark) .text-cyan-400    { color: var(--accent-cyan-text); }
+  html:not(.dark) .text-sky-300,
+  html:not(.dark) .text-sky-400     { color: var(--accent-sky-text); }
+  html:not(.dark) .text-pink-300,
+  html:not(.dark) .text-pink-400    { color: var(--accent-pink-text); }
+  html:not(.dark) .text-amber-300,
+  html:not(.dark) .text-amber-400   { color: var(--accent-amber-text); }
+  html:not(.dark) .text-emerald-300,
+  html:not(.dark) .text-emerald-400 { color: var(--accent-emerald-text); }
+  html:not(.dark) .text-red-300,
+  html:not(.dark) .text-red-400     { color: var(--accent-red-text); }
+
+  /* 8. The mirror problem: slate-500/600 are the muted-text default across the
+        marketing pages, but on the near-black page they land at 2.6–4.2:1.
+        Lift them just enough to clear AA while keeping 600 dimmer than 500. */
+  html.dark .text-slate-500 { color: #8593a6; }
+  html.dark .text-slate-600 { color: #7d8b9f; }
+  html.dark .text-slate-700 { color: #74829a; }
 
   /* ── Auth ambient orb animations ───────────────────────────────── */
   @keyframes authOrb1 {
@@ -636,4 +736,17 @@
 }
 .chat-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.65);
+}
+
+/* Framer Motion is handled by <MotionConfig reducedMotion="user">; this covers the
+   CSS-driven animations (blur-glow loops, animate-spin, animate-pulse, transitions). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -16,45 +16,45 @@ const adFormats = [
   {
     name: "Storytelling", roi: "3.2×",
     desc: "Authentic narrative-driven content builds emotional connection. Ideal for lifestyle and beauty.",
-    color: "#a78bfa", bg: "var(--glow-purple)", border: "rgba(124,58,237,0.3)", icon: Play,
+    color: "var(--accent-violet-text)", bg: "var(--glow-purple)", border: "rgba(124,58,237,0.3)", icon: Play,
   },
   {
     name: "Unboxing", roi: "2.7×",
     desc: "High excitement format that drives impulse purchases. Works best for consumer products.",
-    color: "#38bdf8", bg: "rgba(56,189,248,0.12)", border: "rgba(56,189,248,0.3)", icon: Target,
+    color: "var(--accent-sky-text)", bg: "rgba(56,189,248,0.12)", border: "rgba(56,189,248,0.3)", icon: Target,
   },
   {
     name: "Comparison", roi: "2.4×",
     desc: "Trust-building format that positions your product favorably against alternatives.",
-    color: "#34d399", bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", icon: TrendingUp,
+    color: "var(--accent-emerald-text)", bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", icon: TrendingUp,
   },
 ];
 
 const strategyContent = [
   {
     userMsg: "We sell premium skincare. Target: women 25–34. TikTok. What ad format?",
-    accentColor: "#a78bfa", accentBg: "rgba(167,139,250,0.1)", accentBorder: "rgba(167,139,250,0.25)",
+    accentColor: "var(--accent-violet-text)", accentBg: "rgba(167,139,250,0.1)", accentBorder: "rgba(167,139,250,0.25)",
     recommendations: [
-      { rank: 1, format: "Storytelling (60s reel)",  roi: "3.2×", color: "#a78bfa" },
-      { rank: 2, format: "Unboxing short (15-30s)",  roi: "2.7×", color: "#38bdf8" },
+      { rank: 1, format: "Storytelling (60s reel)",  roi: "3.2×", color: "var(--accent-violet-text)" },
+      { rank: 2, format: "Unboxing short (15-30s)",  roi: "2.7×", color: "var(--accent-sky-text)" },
     ],
     analysis: "Based on 2,840 similar campaigns. Storytelling drives 68% higher purchase intent — emotional connection is key for this demographic.",
   },
   {
     userMsg: "New consumer electronics launch. What format converts fastest on TikTok?",
-    accentColor: "#38bdf8", accentBg: "rgba(56,189,248,0.1)", accentBorder: "rgba(56,189,248,0.25)",
+    accentColor: "var(--accent-sky-text)", accentBg: "rgba(56,189,248,0.1)", accentBorder: "rgba(56,189,248,0.25)",
     recommendations: [
-      { rank: 1, format: "Unboxing short (15-30s)",   roi: "2.7×", color: "#38bdf8" },
-      { rank: 2, format: "Comparison reel (30-45s)",  roi: "2.4×", color: "#34d399" },
+      { rank: 1, format: "Unboxing short (15-30s)",   roi: "2.7×", color: "var(--accent-sky-text)" },
+      { rank: 2, format: "Comparison reel (30-45s)",  roi: "2.4×", color: "var(--accent-emerald-text)" },
     ],
     analysis: "Short-form unboxing outperforms in impulse-buy categories. Generates 3.1× more shares — ideal for launch momentum and product discovery.",
   },
   {
     userMsg: "We're entering a crowded market. How do we differentiate our ad content?",
-    accentColor: "#34d399", accentBg: "rgba(52,211,153,0.1)", accentBorder: "rgba(52,211,153,0.25)",
+    accentColor: "var(--accent-emerald-text)", accentBg: "rgba(52,211,153,0.1)", accentBorder: "rgba(52,211,153,0.25)",
     recommendations: [
-      { rank: 1, format: "Comparison breakdown (45s)",    roi: "2.4×", color: "#34d399" },
-      { rank: 2, format: "Storytelling narrative (60s)",  roi: "2.1×", color: "#a78bfa" },
+      { rank: 1, format: "Comparison breakdown (45s)",    roi: "2.4×", color: "var(--accent-emerald-text)" },
+      { rank: 2, format: "Storytelling narrative (60s)",  roi: "2.1×", color: "var(--accent-violet-text)" },
     ],
     analysis: "Feature-to-feature comparisons build trust in competitive markets. 42% higher conversion rate vs. generic ads — viewers self-qualify before clicking.",
   },
@@ -63,16 +63,16 @@ const strategyContent = [
 // Creator profiles the AI recommends per format
 const creatorRecs = [
   [
-    { handle: "@nova.beauty",  followers: "2.4M", match: 97, platform: "TikTok",     color: "#a78bfa", initials: "NB" },
-    { handle: "@glow.withme",  followers: "890K", match: 93, platform: "Instagram",  color: "#f472b6", initials: "GW" },
+    { handle: "@nova.beauty",  followers: "2.4M", match: 97, platform: "TikTok",     color: "var(--accent-violet-text)", initials: "NB" },
+    { handle: "@glow.withme",  followers: "890K", match: 93, platform: "Instagram",  color: "var(--accent-pink-text)", initials: "GW" },
   ],
   [
-    { handle: "@techunboxed",  followers: "1.2M", match: 95, platform: "TikTok",     color: "#38bdf8", initials: "TU" },
-    { handle: "@gadget.drops", followers: "760K", match: 91, platform: "YouTube",    color: "#34d399", initials: "GD" },
+    { handle: "@techunboxed",  followers: "1.2M", match: 95, platform: "TikTok",     color: "var(--accent-sky-text)", initials: "TU" },
+    { handle: "@gadget.drops", followers: "760K", match: 91, platform: "YouTube",    color: "var(--accent-emerald-text)", initials: "GD" },
   ],
   [
-    { handle: "@fitlife.co",   followers: "980K", match: 94, platform: "YouTube",    color: "#34d399", initials: "FL" },
-    { handle: "@vs.reviews",   followers: "640K", match: 89, platform: "TikTok",     color: "#fcd34d", initials: "VR" },
+    { handle: "@fitlife.co",   followers: "980K", match: 94, platform: "YouTube",    color: "var(--accent-emerald-text)", initials: "FL" },
+    { handle: "@vs.reviews",   followers: "640K", match: 89, platform: "TikTok",     color: "var(--accent-amber-text)", initials: "VR" },
   ],
 ];
 
@@ -138,7 +138,7 @@ export function AIAdStrategySection() {
             <motion.div
               variants={fadeUp}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-              style={{ background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
+              style={{ background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.35)", color: "var(--accent-emerald-text)" }}
             >
               <Brain size={11} />
               AI Ad Strategy Consultant
@@ -206,8 +206,8 @@ export function AIAdStrategySection() {
               variants={fadeUp}
               onClick={triggerDemo}
               disabled={isRunning}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)", color: "var(--accent-emerald-text)" }}
             >
               {isRunning ? (
                 <>
@@ -296,7 +296,7 @@ export function AIAdStrategySection() {
                             <div key={item.rank} className="flex items-center gap-2">
                               <span
                                 className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center shrink-0"
-                                style={{ background: `${item.color}22`, color: item.color }}
+                                style={{ background: `color-mix(in srgb, ${item.color} 13%, transparent)`, color: item.color }}
                               >
                                 {item.rank}
                               </span>
@@ -418,8 +418,8 @@ export function AIAdStrategySection() {
                                   <div
                                     className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold text-white"
                                     style={{
-                                      background: `linear-gradient(135deg, ${c.color}90, ${c.color}30)`,
-                                      border: `1px solid ${c.color}55`,
+                                      background: `linear-gradient(135deg, color-mix(in srgb, ${c.color} 56%, transparent), color-mix(in srgb, ${c.color} 19%, transparent))`,
+                                      border: `1px solid color-mix(in srgb, ${c.color} 33%, transparent)`,
                                     }}
                                   >
                                     {c.initials}
@@ -460,10 +460,12 @@ export function AIAdStrategySection() {
                 >
                   <input
                     type="text"
+                    tabIndex={-1}
                     placeholder="Ask anything about your ad strategy..."
                     className="flex-1 bg-transparent text-xs text-slate-400 placeholder:text-slate-600 focus:outline-none"
                   />
                   <button
+                    tabIndex={-1}
                     className="w-7 h-7 rounded-lg flex items-center justify-center"
                     style={{ background: "linear-gradient(135deg, #7c3aed, #0891b2)" }}
                   >
@@ -480,8 +482,8 @@ export function AIAdStrategySection() {
           <button
             onClick={triggerDemo}
             disabled={isRunning}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-            style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{ background: "rgba(52,211,153,0.15)", border: "1px solid rgba(52,211,153,0.35)", color: "var(--accent-emerald-text)" }}
           >
             {isRunning ? (
               <>

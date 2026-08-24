@@ -12,18 +12,22 @@ const stagger: Variants = { hidden: {}, visible: { transition: { staggerChildren
 type DemoPhase = "idle" | "running" | "done";
 
 const tasks = [
-  { creator: "@nova.beauty", type: "Unboxing Reel",    date: "May 3",  platform: "TikTok",    color: "#a78bfa", done: true  },
-  { creator: "@style.world", type: "Story Series",     date: "May 7",  platform: "Instagram", color: "#38bdf8", done: true  },
-  { creator: "@fitlife.co",  type: "Review Post",      date: "May 14", platform: "YouTube",   color: "#34d399", done: false },
-  { creator: "@techguru",    type: "Comparison Video", date: "May 19", platform: "TikTok",    color: "#fcd34d", done: false },
-  { creator: "@travel.joe",  type: "Storytelling",     date: "May 21", platform: "Instagram", color: "#f87171", done: false },
+  { creator: "@nova.beauty", type: "Unboxing Reel",    date: "May 3",  platform: "TikTok",    color: "var(--accent-violet-text)", done: true  },
+  { creator: "@style.world", type: "Story Series",     date: "May 7",  platform: "Instagram", color: "var(--accent-sky-text)", done: true  },
+  { creator: "@fitlife.co",  type: "Review Post",      date: "May 14", platform: "YouTube",   color: "var(--accent-emerald-text)", done: false },
+  { creator: "@techguru",    type: "Comparison Video", date: "May 19", platform: "TikTok",    color: "var(--accent-amber-text)", done: false },
+  { creator: "@travel.joe",  type: "Storytelling",     date: "May 21", platform: "Instagram", color: "var(--accent-red-text)", done: false },
 ];
 
 const calendarDays = Array.from({ length: 31 }, (_, i) => i + 1);
 
 const eventDays: Record<number, string> = {
-  3: "#a78bfa", 7: "#38bdf8", 14: "#34d399",
-  19: "#fcd34d", 21: "#f87171", 28: "#a78bfa",
+  3:  "var(--accent-violet-text)",
+  7:  "var(--accent-sky-text)",
+  14: "var(--accent-emerald-text)",
+  19: "var(--accent-amber-text)",
+  21: "var(--accent-red-text)",
+  28: "var(--accent-violet-text)",
 };
 
 const eventDayToCreator: Record<number, string> = {
@@ -100,7 +104,7 @@ export function CampaignCalendarSection() {
                 style={{ borderBottom: "1px solid var(--bg-card-hover)" }}
               >
                 <div className="flex items-center gap-2">
-                  <Calendar size={16} style={{ color: "#67e8f9" }} />
+                  <Calendar size={16} style={{ color: "var(--accent-cyan-text)" }} />
                   <span className="text-white font-semibold text-sm">May 2026 — Campaign Timeline</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -152,7 +156,7 @@ export function CampaignCalendarSection() {
                             : d === 1 ? "var(--bg-card-hover)" : "transparent",
                           color: hasEvent
                             ? eventDays[d]
-                            : d === 1 ? "var(--text-base)" : "rgba(100,116,139,0.7)",
+                            : d === 1 ? "var(--text-base)" : "var(--text-muted)",
                           border: hasEvent
                             ? `1px solid ${eventDays[d]}50`
                             : "1px solid transparent",
@@ -195,8 +199,8 @@ export function CampaignCalendarSection() {
                           className="flex items-center gap-3 py-2 px-3 rounded-xl"
                           style={{
                             opacity:    isDimmedRow ? 0.2 : 1,
-                            background: isActive ? `${task.color}12` : "transparent",
-                            border:     isActive ? `1px solid ${task.color}30` : "1px solid transparent",
+                            background: isActive ? `color-mix(in srgb, ${task.color} 7%, transparent)` : "transparent",
+                            border:     isActive ? `1px solid color-mix(in srgb, ${task.color} 19%, transparent)` : "1px solid transparent",
                             transition: "opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease",
                           }}
                         >
@@ -257,7 +261,7 @@ export function CampaignCalendarSection() {
             <motion.div
               variants={fadeUp}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-              style={{ background: "rgba(6,182,212,0.12)", border: "1px solid rgba(6,182,212,0.35)", color: "#67e8f9" }}
+              style={{ background: "rgba(6,182,212,0.12)", border: "1px solid rgba(6,182,212,0.35)", color: "var(--accent-cyan-text)" }}
             >
               <Calendar size={11} />
               Campaign Planner &amp; Marketing Calendar
@@ -298,8 +302,8 @@ export function CampaignCalendarSection() {
               variants={fadeUp}
               onClick={triggerDemo}
               disabled={demoPhase === "running"}
-              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-              style={{ background: "rgba(6,182,212,0.15)", border: "1px solid rgba(6,182,212,0.35)", color: "#67e8f9" }}
+              className="hidden lg:flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              style={{ background: "rgba(6,182,212,0.15)", border: "1px solid rgba(6,182,212,0.35)", color: "var(--accent-cyan-text)" }}
             >
               {demoPhase === "running" ? (
                 <>
@@ -321,8 +325,8 @@ export function CampaignCalendarSection() {
           <button
             onClick={triggerDemo}
             disabled={demoPhase === "running"}
-            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-            style={{ background: "rgba(6,182,212,0.15)", border: "1px solid rgba(6,182,212,0.35)", color: "#67e8f9" }}
+            className="flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{ background: "rgba(6,182,212,0.15)", border: "1px solid rgba(6,182,212,0.35)", color: "var(--accent-cyan-text)" }}
           >
             {demoPhase === "running" ? (
               <>

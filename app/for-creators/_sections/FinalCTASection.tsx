@@ -12,6 +12,7 @@ const PINK = "#f472b6";
 const VIOLET = "#c084fc";
 const AMBER = "#fcd34d";
 const EMERALD = "#34d399";
+const PINK_T = "var(--accent-pink-text)";
 
 const perks = [
   { icon: Zap, text: "First access when we launch" },
@@ -76,7 +77,7 @@ export function FinalCTASection() {
           className="max-w-3xl mx-auto"
         >
           {/* Badge */}
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "rgba(236,72,153,0.12)", border: "1px solid rgba(236,72,153,0.4)", color: "#f9a8d4" }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm" style={{ background: "rgba(236,72,153,0.12)", border: "1px solid rgba(236,72,153,0.4)", color: "var(--accent-pink-text)" }}>
             <Sparkles size={13} />
             Now Live · Sign Up Free
           </motion.div>
@@ -114,7 +115,7 @@ export function FinalCTASection() {
                 style={{ background: "var(--bg-card-subtle)", border: "1px solid var(--border-card)" }}
               >
                 <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(236,72,153,0.15)", border: "1px solid rgba(236,72,153,0.25)" }}>
-                  <perk.icon size={13} style={{ color: PINK }} />
+                  <perk.icon size={13} style={{ color: PINK_T }} />
                 </div>
                 <span className="text-sm text-slate-300">{perk.text}</span>
               </motion.div>

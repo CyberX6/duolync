@@ -44,6 +44,7 @@ const stagger: Variants = {
 
 const PURPLE = "#a78bfa";
 const CYAN = "#67e8f9";
+const PURPLE_T = "var(--accent-violet-text)";
 const DEMO_QUERY = "Tech influencers in Europe";
 
 type DemoPhase = "idle" | "typing" | "loading" | "results";
@@ -104,10 +105,10 @@ const demoCreators: CreatorCard[] = [
 ];
 
 const platforms = [
-  { name: "Instagram", color: "#e1306c", bg: "rgba(225,48,108,0.15)" },
-  { name: "YouTube", color: "#ff0000", bg: "rgba(255,0,0,0.12)" },
-  { name: "TikTok", color: "#f472b6", bg: "rgba(244,114,182,0.15)" },
-  { name: "Twitter", color: "#1da1f2", bg: "rgba(29,161,242,0.15)" },
+  { name: "Instagram", color: "#e1306c", text: "var(--brand-instagram-text)", bg: "rgba(225,48,108,0.15)" },
+  { name: "YouTube", color: "#ff0000", text: "var(--brand-youtube-text)", bg: "rgba(255,0,0,0.12)" },
+  { name: "TikTok", color: "#f472b6", text: "var(--brand-tiktok-text)", bg: "rgba(244,114,182,0.15)" },
+  { name: "Twitter", color: "#1da1f2", text: "var(--brand-twitter-text)", bg: "rgba(29,161,242,0.15)" },
   { name: "Twitch", color: "#9146ff", bg: "rgba(145,70,255,0.15)" },
 ];
 
@@ -273,6 +274,7 @@ export function SearchSection() {
               style={{
                 background: "rgba(124,58,237,0.10)",
                 border: "1px solid rgba(124,58,237,0.35)",
+                color: PURPLE_T,
               }}
             >
               <Search size={11} />
@@ -319,7 +321,7 @@ export function SearchSection() {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium"
                   style={{
                     background: p.bg,
-                    color: p.color,
+                    color: p.text,
                     border: `1px solid ${p.color}25`,
                   }}
                 >
@@ -343,7 +345,7 @@ export function SearchSection() {
                 >
                   <CheckCircle2
                     size={16}
-                    style={{ color: PURPLE }}
+                    style={{ color: PURPLE_T }}
                     className="shrink-0 mt-0.5"
                   />
                   <span className="text-sm" style={{ color: "var(--text-muted)" }}>{text}</span>
@@ -357,7 +359,7 @@ export function SearchSection() {
               transition={{ duration: 0.5 }}
               onClick={triggerDemo}
               disabled={isDemoActive}
-              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
               style={{
                 background: isDemoActive
                   ? "rgba(124,58,237,0.25)"
@@ -365,7 +367,7 @@ export function SearchSection() {
                 border: isDemoActive
                   ? "1px solid rgba(124,58,237,0.5)"
                   : "1px solid rgba(124,58,237,0.4)",
-                color: PURPLE,
+                color: PURPLE_T,
                 opacity: isDemoActive ? 0.75 : 1,
               }}
             >
@@ -435,14 +437,13 @@ export function SearchSection() {
                     onChange={(e) => !isDemo && setQuery(e.target.value)}
                     readOnly={isDemo}
                     placeholder="Search by niche, hashtag, location..."
-                    className="flex-1 bg-transparent text-sm placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"
-                    style={{ color: "var(--text-base)" }}
+                    className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-600 focus:outline-none py-3 -my-3"
                   />
                   <span
                     className="text-[10px] px-2 py-0.5 rounded font-medium shrink-0 flex items-center gap-1 transition-all duration-300"
                     style={{
                       background: isDemoActive ? `${PURPLE}40` : `${PURPLE}25`,
-                      color: PURPLE,
+                      color: PURPLE_T,
                     }}
                   >
                     {isDemoActive && (
@@ -484,7 +485,7 @@ export function SearchSection() {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1.5 text-[11px] text-slate-500 transition-all duration-300">
-                    <Sparkles size={10} style={{ color: PURPLE }} />
+                    <Sparkles size={10} style={{ color: PURPLE_T }} />
                     {demoPhase === "loading"
                       ? "Scanning database..."
                       : "AI-ranked by brand fit"}
@@ -566,6 +567,7 @@ export function SearchSection() {
                                 </div>
                               )}
                               <div
+                                data-fixed-dark
                                 className="absolute top-2 right-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white transition-all duration-300"
                                 style={{
                                   background:
@@ -587,7 +589,7 @@ export function SearchSection() {
                               <div className="flex items-center justify-between mt-1">
                                 <span
                                   className="text-[9px]"
-                                  style={{ color: PURPLE }}
+                                  style={{ color: PURPLE_T }}
                                 >
                                   {c.niche}
                                 </span>
@@ -611,9 +613,9 @@ export function SearchSection() {
                   <div className="text-[10px] text-slate-600">Platforms</div>
                   <div className="flex gap-2">
                     {[
-                      { Icon: Instagram, color: "#e1306c" },
-                      { Icon: Youtube, color: "#ff0000" },
-                      { Icon: Twitter, color: "#1da1f2" },
+                      { Icon: Instagram, color: "var(--brand-instagram-text)" },
+                      { Icon: Youtube, color: "var(--brand-youtube-text)" },
+                      { Icon: Twitter, color: "var(--brand-twitter-text)" },
                     ].map(({ Icon, color }, i) => (
                       <div
                         key={i}
@@ -638,7 +640,7 @@ export function SearchSection() {
           <button
             onClick={triggerDemo}
             disabled={isDemoActive}
-            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 min-h-11 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed"
             style={{
               background: isDemoActive
                 ? "rgba(124,58,237,0.25)"
@@ -646,7 +648,7 @@ export function SearchSection() {
               border: isDemoActive
                 ? "1px solid rgba(124,58,237,0.5)"
                 : "1px solid rgba(124,58,237,0.4)",
-              color: PURPLE,
+              color: PURPLE_T,
               opacity: isDemoActive ? 0.75 : 1,
             }}
           >

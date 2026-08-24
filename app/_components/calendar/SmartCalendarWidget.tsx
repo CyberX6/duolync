@@ -33,11 +33,12 @@ import {
 import { EventDetailSheet } from "./EventDetailSheet";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const VIOLET = "#c084fc";
+const VIOLET = "var(--accent-violet-text)";
+const VIOLET_T = "var(--accent-violet-text)";
 const PLATFORM_COLORS: Record<string, string> = {
-  tiktok: "#f472b6",
-  instagram: "#c084fc",
-  youtube: "#f87171",
+  tiktok: "var(--accent-pink-text)",
+  instagram: "var(--accent-violet-text)",
+  youtube: "var(--accent-red-text)",
 };
 const DAY_LABELS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
@@ -253,7 +254,9 @@ export function SmartCalendarWidget({
             {(["tiktok", "instagram", "youtube"] as const).map((p) => (
               <div
                 key={p}
-                className="p-3 text-center bg-zinc-50 dark:bg-[#09090f]"
+                data-fixed-dark
+                className="p-3 text-center"
+                style={{ background: "rgba(9,9,15,0.95)" }}
               >
                 <div
                   className="text-lg font-bold font-display tabular-nums"
@@ -261,8 +264,8 @@ export function SmartCalendarWidget({
                 >
                   {platformCounts[p]}
                 </div>
-                <div className="text-[9px] text-zinc-400 dark:text-zinc-600">posts this month</div>
-                <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5 capitalize">
+                <div className="text-[9px] text-muted-foreground">posts this month</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5 capitalize">
                   {PLATFORM_LABELS[p]}
                 </div>
               </div>
@@ -327,7 +330,7 @@ export function SmartCalendarWidget({
                   {DAY_LABELS.map((d) => (
                     <div
                       key={d}
-                      className="text-[9px] sm:text-[10px] text-zinc-600 text-center py-0.5 font-medium"
+                      className="text-[9px] sm:text-[10px] text-muted-foreground text-center py-0.5 font-medium"
                     >
                       {d}
                     </div>
@@ -375,14 +378,14 @@ export function SmartCalendarWidget({
                           hasEvents
                             ? "cursor-pointer hover:scale-[1.03] hover:z-10"
                             : "cursor-default",
-                          !hasEvents && "text-zinc-400 dark:text-zinc-700",
+                          !hasEvents && "text-muted-foreground",
                         )}
                         style={{
-                          background: primaryColor ? `${primaryColor}12` : "transparent",
+                          background: primaryColor ? `color-mix(in srgb, ${primaryColor} 12%, transparent)` : "transparent",
                           border: todayCell
                             ? "1px solid rgba(234,179,8,0.6)"
                             : hasEvents
-                              ? `1px solid ${primaryColor}30`
+                              ? `1px solid color-mix(in srgb, ${primaryColor} 30%, transparent)`
                               : "1px solid transparent",
                           color: hasEvents ? primaryColor : undefined,
                           minHeight: 52,
@@ -398,9 +401,9 @@ export function SmartCalendarWidget({
                             <div
                               className="rounded-sm px-1 py-0.5 text-[7px] sm:text-[8px] font-semibold leading-tight truncate w-full"
                               style={{
-                                background: `${primaryColor}22`,
+                                background: `color-mix(in srgb, ${primaryColor} 22%, transparent)`,
                                 color: primaryColor,
-                                border: `1px solid ${primaryColor}30`,
+                                border: `1px solid color-mix(in srgb, ${primaryColor} 30%, transparent)`,
                               }}
                             >
                               {getEventLabel(primary)}
@@ -411,9 +414,9 @@ export function SmartCalendarWidget({
                               <div
                                 className="rounded-sm px-1 py-0.5 text-[7px] sm:text-[8px] font-bold leading-tight"
                                 style={{
-                                  background: `${VIOLET}18`,
-                                  color: VIOLET,
-                                  border: `1px solid ${VIOLET}28`,
+                                  background: `color-mix(in srgb, ${VIOLET_T} 18%, transparent)`,
+                                  color: VIOLET_T,
+                                  border: `1px solid color-mix(in srgb, ${VIOLET_T} 28%, transparent)`,
                                 }}
                               >
                                 +{dayEvents.length - 1} more
@@ -443,8 +446,8 @@ export function SmartCalendarWidget({
                   if (monthEvents.length === 0) {
                     return (
                       <div className="text-center py-8">
-                        <CalendarDays className="w-8 h-8 mx-auto mb-2 text-zinc-400 dark:text-zinc-700" />
-                        <p className="text-sm text-zinc-500 dark:text-zinc-600">No events this month</p>
+                        <CalendarDays className="w-8 h-8 mx-auto mb-2 text-zinc-700" />
+                        <p className="text-sm text-muted-foreground">No events this month</p>
                       </div>
                     );
                   }
@@ -470,7 +473,7 @@ export function SmartCalendarWidget({
                             <div className="flex flex-col items-center shrink-0 w-5">
                               <div
                                 className="w-3 h-3 rounded-full mt-3.5 ring-2 ring-offset-1 ring-offset-zinc-950 shrink-0 transition-transform group-hover:scale-110"
-                                style={{ background: color, boxShadow: `0 0 0 2px ${color}40` }}
+                                style={{ background: color, boxShadow: `0 0 0 2px color-mix(in srgb, ${color} 40%, transparent)` }}
                               />
                               {i < arr.length - 1 && (
                                 <div className="w-px flex-1 bg-zinc-200 dark:bg-zinc-800/80 mt-1 min-h-6" />
@@ -486,7 +489,7 @@ export function SmartCalendarWidget({
                                   <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                     {event.campaignTitle}
                                   </p>
-                                  <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
+                                  <p className="text-xs text-muted-foreground mt-0.5">
                                     {partnerName ? `${partnerName} · ` : ""}
                                     {event.title ?? EVENT_TYPE_LABELS[event.type as keyof typeof EVENT_TYPE_LABELS]}
                                     {event.platform ? ` · ${PLATFORM_LABELS[event.platform] ?? event.platform}` : ""}
@@ -499,7 +502,7 @@ export function SmartCalendarWidget({
                                   {statusStyle.label}
                                 </span>
                               </div>
-                              <p className="text-[10px] text-zinc-400 dark:text-zinc-600 mt-1.5 flex items-center gap-1">
+                              <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 {formatEventTime(event.scheduledAt)}
                               </p>
@@ -516,14 +519,14 @@ export function SmartCalendarWidget({
               <div className="border-t border-zinc-100 dark:border-white/[0.05] pt-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Zap className="w-3 h-3" style={{ color: VIOLET }} />
-                  <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+                  <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     Upcoming Posts
                   </span>
                 </div>
 
                 {upcomingEvents.length === 0 ? (
                   <div className="text-center py-6">
-                    <p className="text-sm text-zinc-400 dark:text-zinc-600">No upcoming events</p>
+                    <p className="text-sm text-muted-foreground">No upcoming events</p>
                   </div>
                 ) : (
                   <div className="space-y-1.5">
@@ -547,7 +550,7 @@ export function SmartCalendarWidget({
                           {event.partner ? (
                             <div
                               className="w-8 h-8 rounded-xl overflow-hidden shrink-0"
-                              style={{ boxShadow: `0 0 0 1px ${color}40` }}
+                              style={{ boxShadow: `0 0 0 1px color-mix(in srgb, ${color} 40%, transparent)` }}
                             >
                               {event.partner.image ? (
                                 <img
@@ -569,7 +572,7 @@ export function SmartCalendarWidget({
                           ) : (
                             <div
                               className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-                              style={{ background: `${color}18`, border: `1px solid ${color}35` }}
+                              style={{ background: `color-mix(in srgb, ${color} 18%, transparent)`, border: `1px solid color-mix(in srgb, ${color} 35%, transparent)` }}
                             >
                               <CalendarDays className="w-3.5 h-3.5" style={{ color }} />
                             </div>
@@ -588,16 +591,16 @@ export function SmartCalendarWidget({
                                 />
                               )}
                             </div>
-                            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
-                                {partnerName ? `${partnerName} · ` : ""}
-                                {event.title ?? EVENT_TYPE_LABELS[event.type as keyof typeof EVENT_TYPE_LABELS]}
-                                {event.platform ? ` · ${PLATFORM_LABELS[event.platform] ?? event.platform}` : ""}
-                              </p>
+                            <p className="text-[10px] text-muted-foreground truncate mt-0.5">
+                              {partnerName ? `${partnerName} · ` : ""}
+                              {event.title ?? EVENT_TYPE_LABELS[event.type as keyof typeof EVENT_TYPE_LABELS]}
+                              {event.platform ? ` · ${PLATFORM_LABELS[event.platform] ?? event.platform}` : ""}
+                            </p>
                           </div>
 
                           {/* Right side */}
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="hidden xs:flex items-center gap-1 text-[10px] text-zinc-400 dark:text-zinc-600">
+                            <span className="hidden xs:flex items-center gap-1 text-[10px] text-muted-foreground">
                               <Clock className="w-3 h-3" />
                               {formatEventTime(event.scheduledAt)}
                             </span>
@@ -626,7 +629,11 @@ export function SmartCalendarWidget({
 
         {/* ── Footer stats ─────────────────────────────────────────────── */}
         {!campaignId && !loading && (
-          <div className="grid grid-cols-3 border-t border-zinc-100 dark:border-white/[0.05] divide-x divide-zinc-100 dark:divide-white/[0.04]">
+          <div
+            data-fixed-dark
+            className="grid grid-cols-3"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+          >
             {[
               { icon: Users, label: `${campaignSet} Campaign${campaignSet !== 1 ? "s" : ""}` },
               { icon: CheckCircle2, label: `${doneCount}/${totalPosts || events.length} Posts done` },
@@ -634,7 +641,11 @@ export function SmartCalendarWidget({
             ].map(({ icon: Icon, label }, i) => (
               <div
                 key={i}
-                className="flex flex-col items-center gap-1 py-3 text-[10px] text-zinc-500 dark:text-zinc-600 bg-zinc-50 dark:bg-[rgba(9,9,15,0.6)]"
+                className="flex flex-col items-center gap-1 py-3 text-[10px] text-muted-foreground"
+                style={{
+                  background: "rgba(9,9,15,0.6)",
+                  borderRight: i < 2 ? "1px solid rgba(255,255,255,0.04)" : undefined,
+                }}
               >
                 <Icon className="w-3.5 h-3.5" style={{ color: VIOLET }} />
                 {label}
