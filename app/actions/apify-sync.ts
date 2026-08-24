@@ -123,10 +123,12 @@ function getApifyToken(): string {
 // ─── Image proxy ─────────────────────────────────────────────────────────────
 // CDN URLs from Instagram (fbcdn.net) and TikTok expire within hours.
 // Routing through wsrv.nl proxies the image, bypasses CORS/CSP, and caches
-// it on first load so subsequent views work even after the original URL expires.
+// it at the CDN layer so subsequent views work even after the original URL expires.
+// We omit the `n` (max-age) override so wsrv.nl uses its own default cache TTL
+// rather than forcing no-cache, which would re-hit the expired CDN URL every time.
 function proxyImage(url: string | null | undefined): string | null {
   if (!url) return null;
-  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&n=-1&output=jpg`;
+  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&output=jpg`;
 }
 
 function buildActorInput(platform: Platform, handle: string, full: boolean) {
@@ -370,11 +372,14 @@ export async function pollVerifyAction(
 /**
  * Called after user confirms their account preview.
  * Re-fetches the already-completed dataset (no new Apify run) and saves to DB.
+ * `handle` is optional — when provided it is persisted in PlatformStats.raw so
+ * future one-click re-syncs can trigger a new run without asking again.
  */
 export async function confirmSyncAction(
   datasetId: string,
   creatorUserId: string,
   platform: Platform,
+  handle?: string,
 ): Promise<{ success: true; platformFollowers: number; platformEngagement: number } | { success: false; error: string }> {
   let session: Awaited<ReturnType<typeof requireSession>>;
   try { session = await requireSession(); } catch { return { success: false, error: "Unauthorized" }; }
@@ -423,10 +428,17 @@ export async function confirmSyncAction(
     });
     if (!creatorProfile) return { success: false, error: "Creator profile not found." };
 
-    // Per-platform upsert
+    // Per-platform upsert — persist handle in raw JSON for future one-click re-syncs
     await db.platformStats.deleteMany({ where: { userId: creatorUserId, platform } });
     await db.platformStats.create({
-      data: { userId: creatorUserId, platform, followerCount, engagementRate, fetchedAt: lastSyncedAt },
+      data: {
+        userId: creatorUserId,
+        platform,
+        followerCount,
+        engagementRate,
+        fetchedAt: lastSyncedAt,
+        ...(handle ? { raw: { handle } } : {}),
+      },
     });
 
     // Aggregate
@@ -543,6 +555,47 @@ export async function pollApifyRunAction(
       platformEngagement: result.platformEngagement,
     },
   };
+}
+
+// ─── Portfolio Re-sync ────────────────────────────────────────────────────────
+
+/**
+ * One-click portfolio re-sync.  Looks up the creator's stored handle for the
+ * given platform (saved in PlatformStats.raw during initial sync), then triggers
+ * a fresh Apify full-scrape run.  Returns the runId immediately so the caller
+ * can poll via `pollApifyRunAction`.
+ *
+ * If the handle has never been stored (accounts synced before this feature was
+ * added), returns `{ error: "no_handle" }` so the UI can fall back to the full
+ * connect modal.
+ */
+export async function startPortfolioResyncAction(
+  platform: Platform,
+): Promise<{ runId: string } | { error: string }> {
+  let session: Awaited<ReturnType<typeof requireSession>>;
+  try { session = await requireSession(); } catch { return { error: "Unauthorized" }; }
+
+  let token: string;
+  try { token = getApifyToken(); } catch (err) {
+    return { error: err instanceof Error ? err.message : "Config error" };
+  }
+
+  // Look up the handle we persisted during the last successful sync
+  const stats = await db.platformStats.findFirst({
+    where: { userId: session.user.id, platform },
+    select: { raw: true },
+  });
+
+  const rawData = stats?.raw as { handle?: string } | null;
+  const handle = rawData?.handle?.trim();
+
+  if (!handle) {
+    console.warn(`[apify] re-sync: no stored handle for ${platform} / user ${session.user.id}`);
+    return { error: "no_handle" };
+  }
+
+  console.info(`[apify] re-sync: starting full run for @${handle} on ${platform}`);
+  return triggerRun(platform, handle, true, token);
 }
 
 // ─── Legacy wrapper ───────────────────────────────────────────────────────────

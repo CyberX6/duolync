@@ -32,6 +32,7 @@ import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import MainLayout from "@/components/layout/MainLayout";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import {
   getBrandCampaignsAction,
   createCampaignAction,
@@ -925,6 +926,9 @@ const Campaigns = () => {
     ? campaigns
     : campaigns.filter((c) => c.status === statusFilter);
 
+  const countByStatus = (s: string) =>
+    s === "ALL" ? campaigns.length : campaigns.filter((c) => c.status === s).length;
+
   const counts = {
     total: campaigns.length,
     active: campaigns.filter((c) => c.status === "ACTIVE").length,
@@ -986,20 +990,35 @@ const Campaigns = () => {
             { value: "PAUSED", label: "Paused" },
             { value: "COMPLETED", label: "Completed" },
             { value: "CANCELLED", label: "Cancelled" },
-          ].map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setStatusFilter(tab.value)}
-              className={cn(
-                "shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all border",
-                statusFilter === tab.value
-                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                  : "bg-white dark:bg-zinc-900 text-muted-foreground border-zinc-200 dark:border-zinc-700 hover:border-primary/40 hover:text-foreground",
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
+          ].map((tab) => {
+            const count = countByStatus(tab.value);
+            return (
+              <button
+                key={tab.value}
+                onClick={() => setStatusFilter(tab.value)}
+                className={cn(
+                  "shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all border",
+                  statusFilter === tab.value
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-primary/40 hover:text-foreground",
+                )}
+              >
+                {tab.label}
+                {!loading && count > 0 && (
+                  <span
+                    className={cn(
+                      "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold",
+                      statusFilter === tab.value
+                        ? "bg-white/20 text-white"
+                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400",
+                    )}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Campaign grid */}
@@ -1018,25 +1037,39 @@ const Campaigns = () => {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-              <Megaphone className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">
-              {statusFilter === "ALL" ? "No campaigns yet" : `No ${statusFilter.toLowerCase()} campaigns`}
-            </h3>
-            <p className="text-muted-foreground text-sm max-w-xs mb-6">
-              {statusFilter === "ALL"
-                ? "Create your first campaign to start connecting with creators."
-                : "Switch the filter to see other campaigns."}
-            </p>
-            {statusFilter === "ALL" && (
-              <Button onClick={() => { setEditingCampaign(null); setModalOpen(true); }}>
-                <Plus className="w-4 h-4 mr-2" />
-                Create Campaign
+          statusFilter !== "ALL" ? (
+            <div className="flex flex-col items-center py-16 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mb-4">
+                <Megaphone className="w-6 h-6 text-zinc-400 dark:text-zinc-500" />
+              </div>
+              <p className="font-semibold text-sm mb-1">
+                No {statusFilter.toLowerCase()} campaigns
+              </p>
+              <p className="text-xs text-muted-foreground mb-4">
+                Switch the filter to see other campaigns.
+              </p>
+              <Button variant="outline" size="sm" onClick={() => setStatusFilter("ALL")}>
+                <X className="w-3.5 h-3.5 mr-1.5" />
+                Show all
               </Button>
-            )}
-          </div>
+            </div>
+          ) : (
+            <RichEmptyState
+              icon={<Megaphone className="w-8 h-8 text-violet-500 dark:text-violet-400" />}
+              headline="No campaigns yet"
+              sub="Create your first campaign to start connecting with creators and tracking your influencer partnerships."
+              primary={{
+                label: "Create Campaign",
+                onClick: () => { setEditingCampaign(null); setModalOpen(true); },
+                icon: <Plus className="w-4 h-4" />,
+              }}
+              tips={[
+                { icon: <Target className="w-3 h-3" />, label: "Set budget & platform" },
+                { icon: <Users className="w-3 h-3" />, label: "Reach 50K+ creators" },
+                { icon: <CheckCircle2 className="w-3 h-3" />, label: "Track collaborations" },
+              ]}
+            />
+          )
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {filtered.map((campaign) => (

@@ -11,7 +11,6 @@ import {
   Clock,
   LayoutGrid,
   List,
-  Loader2,
   Users,
   Zap,
 } from "lucide-react";
@@ -187,8 +186,7 @@ export function SmartCalendarWidget({
       >
         {/* ── Header ─────────────────────────────────────────────────── */}
         <div
-          className="flex items-center justify-between px-5 py-4"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+          className="flex items-center justify-between px-5 py-4 border-b border-zinc-100 dark:border-white/[0.05]"
         >
           <div className="flex items-center gap-2 min-w-0">
             <CalendarDays className="w-4 h-4 shrink-0" style={{ color: VIOLET }} />
@@ -252,7 +250,7 @@ export function SmartCalendarWidget({
 
         {/* ── Platform KPI strip ───────────────────────────────────────── */}
         {!campaignId && (
-          <div className="grid grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.04)" }}>
+          <div className="grid grid-cols-3 divide-x divide-zinc-100 dark:divide-white/[0.04] border-b border-zinc-100 dark:border-white/[0.04]">
             {(["tiktok", "instagram", "youtube"] as const).map((p) => (
               <div
                 key={p}
@@ -277,9 +275,52 @@ export function SmartCalendarWidget({
 
         <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-5 h-5 animate-spin" style={{ color: VIOLET }} />
-            </div>
+            <>
+              {/* Day labels */}
+              <div className="grid grid-cols-7 gap-0.5 mb-1">
+                {DAY_LABELS.map((d) => (
+                  <div
+                    key={d}
+                    className="text-[9px] sm:text-[10px] text-zinc-400 dark:text-zinc-600 text-center py-0.5 font-medium"
+                  >
+                    {d}
+                  </div>
+                ))}
+              </div>
+              {/* Skeleton day grid */}
+              <div className="grid grid-cols-7 gap-0.5 mb-6">
+                {Array.from({ length: 35 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl bg-zinc-100 dark:bg-zinc-800/50 animate-pulse"
+                    style={{
+                      minHeight: 52,
+                      animationDelay: `${(i % 7) * 40}ms`,
+                      opacity: 0.4 + (i % 3) * 0.2,
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Upcoming posts skeleton */}
+              <div className="border-t border-zinc-100 dark:border-white/[0.05] pt-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-sm bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                  <div className="h-3 w-28 rounded-md bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                </div>
+                <div className="space-y-2">
+                  {[0, 1, 2].map((i) => (
+                    <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl">
+                      <div className="w-8 h-8 shrink-0 rounded-xl bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                      <div className="flex-1 space-y-1.5">
+                        <div className="h-3 w-3/4 rounded-md bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                        <div className="h-2.5 w-1/2 rounded-sm bg-zinc-100 dark:bg-zinc-800/60 animate-pulse" />
+                      </div>
+                      <div className="h-4 w-14 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse shrink-0" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
           ) : (
             <>
               {/* ── Grid view ─────────────────────────────────────────── */}
@@ -435,18 +476,17 @@ export function SmartCalendarWidget({
                                 style={{ background: color, boxShadow: `0 0 0 2px color-mix(in srgb, ${color} 40%, transparent)` }}
                               />
                               {i < arr.length - 1 && (
-                                <div className="w-px flex-1 bg-zinc-800/80 mt-1 min-h-6" />
+                                <div className="w-px flex-1 bg-zinc-200 dark:bg-zinc-800/80 mt-1 min-h-6" />
                               )}
                             </div>
 
                             {/* Content */}
                             <div
-                              className="flex-1 min-w-0 py-3 border-b last:border-0"
-                              style={{ borderColor: "rgba(255,255,255,0.04)" }}
+                              className="flex-1 min-w-0 py-3 border-b border-zinc-100 dark:border-white/[0.04] last:border-0"
                             >
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0">
-                                  <p className="text-sm font-medium text-zinc-200 truncate">
+                                  <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                     {event.campaignTitle}
                                   </p>
                                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -476,7 +516,7 @@ export function SmartCalendarWidget({
               </div>
 
               {/* ── Upcoming posts ──────────────────────────────────────── */}
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1rem" }}>
+              <div className="border-t border-zinc-100 dark:border-white/[0.05] pt-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Zap className="w-3 h-3" style={{ color: VIOLET }} />
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
@@ -541,7 +581,7 @@ export function SmartCalendarWidget({
                           {/* Text */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <p className="text-xs font-medium text-zinc-200 truncate">
+                              <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate">
                                 {event.campaignTitle}
                               </p>
                               {event.hasPendingUpdate && (

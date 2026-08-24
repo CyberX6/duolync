@@ -6,6 +6,7 @@ import {
   Heart, MessageSquare, Trash2, FolderOpen,
   Plus, ChevronRight, Briefcase, Search,
 } from "lucide-react";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import MainLayout from "@/components/layout/MainLayout";
@@ -221,19 +222,18 @@ const SavedProfiles = () => {
         </div>
 
         {totalSaved === 0 ? (
-          /* ─── Empty state ─── */
-          <div className="flex flex-col items-center py-24 text-center">
-            <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6">
-              <Heart className="w-8 h-8 text-primary/50" />
-            </div>
-            <h3 className="font-display text-xl font-bold mb-2">No saved profiles yet</h3>
-            <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-6">
-              Click the heart icon on any creator or brand card to save them to a collection.
-            </p>
-            <Button className="btn-gradient rounded-xl" onClick={() => router.push(discoverLink)}>
-              Go to Discover
-            </Button>
-          </div>
+          <RichEmptyState
+            icon={<Heart className="w-8 h-8 text-pink-500" />}
+            headline="Your saved list is empty"
+            sub="Tap the heart on any creator or brand card to save them to a collection — your personal shortlist for outreach."
+            primary={{ label: "Go to Discover", onClick: () => router.push(discoverLink), icon: <Search className="w-4 h-4" /> }}
+            tips={[
+              { icon: <FolderOpen className="w-3 h-3" />, label: "Create named collections" },
+              { icon: <MessageSquare className="w-3 h-3" />, label: "Message saved profiles" },
+              { icon: <Briefcase className="w-3 h-3" />, label: "Track brands you love" },
+            ]}
+            ambient="pink"
+          />
         ) : (
           <div className="flex gap-6 items-start">
             {/* ─── Left: collections sidebar ─── */}
@@ -312,13 +312,17 @@ const SavedProfiles = () => {
               </div>
 
               {displayedItems.length === 0 ? (
-                <div className="flex flex-col items-center py-16 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 flex items-center justify-center mb-4">
-                    <FolderOpen className="w-6 h-6 text-zinc-400 dark:text-neutral-600" />
+                <div className="flex flex-col items-center py-16 text-center px-4">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center mb-3">
+                    <FolderOpen className="w-6 h-6 text-zinc-400 dark:text-zinc-600" />
                   </div>
-                  <p className="font-semibold mb-1 text-zinc-900 dark:text-zinc-50">This collection is empty</p>
-                  <p className="text-sm text-muted-foreground">
-                    {searchQuery ? "No results match your search." : "Save profiles from Discover to fill it."}
+                  <p className="font-semibold text-sm mb-1 text-zinc-900 dark:text-zinc-50">
+                    {searchQuery ? "No matches found" : "This collection is empty"}
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed max-w-[200px]">
+                    {searchQuery
+                      ? "Try a different search term."
+                      : "Go to Discover and tap the heart on any profile to add it here."}
                   </p>
                 </div>
               ) : (

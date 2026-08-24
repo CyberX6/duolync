@@ -33,7 +33,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="testimonials" className="py-24 md:py-32 bg-white relative overflow-hidden">
+    <section id="testimonials" className="py-24 md:py-32 bg-white dark:bg-zinc-950 relative overflow-hidden">
       <div className="container">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -57,7 +57,7 @@ const TestimonialsSection = () => {
         <StaggerContainer className="grid md:grid-cols-3 gap-8" staggerDelay={0.15}>
           {testimonials.map((testimonial, index) => (
             <StaggerItem key={index}>
-              <div className="card-interactive p-8 relative bg-white h-full">
+              <div className="card-interactive p-8 relative bg-white dark:bg-zinc-900/50 h-full">
                 {/* Quote Icon */}
                 <div className="absolute top-6 right-6 text-primary/10">
                   <Quote size={40} />

@@ -19,6 +19,8 @@ import {
   type FullProfile,
 } from "@/app/actions/profile";
 
+export type { FullProfile };
+
 // ── Public profile type (snake_case to match existing callers) ─────────────
 export interface Profile {
   id: string;
@@ -59,6 +61,7 @@ interface AuthUser {
 interface AuthContextType {
   user: AuthUser | null;
   profile: Profile | null;
+  fullProfile: FullProfile | null;
   loading: boolean;
   signUp: (
     email: string,
@@ -221,6 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         profile,
+        fullProfile: dbProfile,
         loading,
         signUp: handleSignUp,
         signIn: handleSignIn,

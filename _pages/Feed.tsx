@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, SlidersHorizontal, Heart, MessageSquare, ExternalLink, MapPin, Users, TrendingUp, ChevronDown, X, Verified } from "lucide-react";
+import { Search, SlidersHorizontal, Heart, MessageSquare, ExternalLink, MapPin, Users, TrendingUp, X, Verified, Sparkles, UserSearch, Filter, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,19 +11,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-
-interface Creator {
-  id: string;
-  full_name: string;
-  avatar_url: string | null;
-  bio: string | null;
-  niche: string | null;
-  total_followers: number;
-  avg_engagement_rate: number;
-  primary_platform: string | null;
-  location: string | null;
-  languages: string[];
-}
+import { useFavorites } from "@/app/_components/favorites/FavoritesContext";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
+import { getCreatorsAction } from "@/app/actions/discover";
+import type { Creator } from "@/app/_components/discovery/ProfileDrawer";
+import { useMessaging } from "@/app/_components/messaging/MessagingContext";
 
 const platforms = [
   { value: "all", label: "All Platforms" },
@@ -70,9 +62,11 @@ const platformColors: Record<string, string> = {
 const Feed = () => {
   const { profile } = useAuth();
   const { toast } = useToast();
+  const { isInAnyCollection, toggleInCollection } = useFavorites();
+  const { openChatWindow } = useMessaging();
+
   const [creators, setCreators] = useState<Creator[]>([]);
-  const [loading] = useState(false);
-  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Filters
@@ -81,26 +75,71 @@ const Feed = () => {
   const [niche, setNiche] = useState("All Niches");
   const [followerRange, setFollowerRange] = useState("all");
 
-  const toggleSave = (creatorId: string, e: React.MouseEvent) => {
+  // ── Fetch creators on mount ──────────────────────────────────────────────
+  useEffect(() => {
+    setLoading(true);
+    getCreatorsAction()
+      .then(setCreators)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const toggleSave = (creator: Creator, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (!profile) return;
-    if (savedIds.has(creatorId)) {
-      setSavedIds((prev) => { const next = new Set(prev); next.delete(creatorId); return next; });
-      toast({ title: "Removed from saved" });
-    } else {
-      setSavedIds((prev) => new Set(prev).add(creatorId));
-      toast({ title: "Saved to favorites!" });
-    }
+    const isSaved = isInAnyCollection(creator.id);
+    toggleInCollection("col-shortlist", {
+      profileId: creator.id,
+      profileType: "creator",
+      savedAt: new Date().toISOString(),
+      snapshot: {
+        displayName: creator.full_name ?? "Creator",
+        avatarUrl: creator.avatar_url,
+        subtitle: creator.niche,
+        primaryPlatform: creator.primary_platform,
+      },
+    });
+    toast({ title: isSaved ? "Removed from saved" : "Saved to Shortlist!" });
   };
 
-  const filteredCreators = creators.filter((c) =>
-    searchQuery
-      ? c.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.niche?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.bio?.toLowerCase().includes(searchQuery.toLowerCase())
-      : true
-  );
+  const handleMessage = (creator: Creator, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openChatWindow({
+      id: creator.id,
+      full_name: creator.full_name,
+      avatar_url: creator.avatar_url,
+      user_type: "creator",
+    });
+  };
+
+  const filteredCreators = creators.filter((c) => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const match =
+        (c.full_name ?? "").toLowerCase().includes(q) ||
+        (c.niche ?? "").toLowerCase().includes(q) ||
+        (c.bio ?? "").toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    if (platform !== "all") {
+      const hasPlatform = c.primary_platform === platform ||
+        (c.platforms && Object.keys(c.platforms).includes(platform));
+      if (!hasPlatform) return false;
+    }
+    if (niche !== "All Niches") {
+      if (!(c.niche ?? "").toLowerCase().includes(niche.toLowerCase())) return false;
+    }
+    if (followerRange !== "all") {
+      const n = c.total_followers;
+      if (followerRange === "nano" && !(n >= 1000 && n < 10000)) return false;
+      if (followerRange === "micro" && !(n >= 10000 && n < 100000)) return false;
+      if (followerRange === "mid" && !(n >= 100000 && n < 500000)) return false;
+      if (followerRange === "macro" && !(n >= 500000 && n < 1000000)) return false;
+      if (followerRange === "mega" && !(n >= 1000000)) return false;
+    }
+    return true;
+  });
 
   const formatFollowers = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -245,23 +284,49 @@ const Feed = () => {
 
         {/* Results Count */}
         {!loading && (
-          <p className="text-sm text-muted-foreground mb-4">
-            {filteredCreators.length} creator{filteredCreators.length !== 1 ? 's' : ''} found
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{filteredCreators.length}</span>
+              {" "}creator{filteredCreators.length !== 1 ? "s" : ""} found
+              {filteredCreators.length !== creators.length && (
+                <span className="ml-1">out of {creators.length}</span>
+              )}
+            </p>
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={clearFilters}
+                className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+              >
+                <X className="w-3 h-3" />
+                Clear filters
+              </button>
+            )}
+          </div>
         )}
 
         {/* Creator Cards - LinkedIn Style */}
         {loading ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
               <Card key={i} className="overflow-hidden animate-pulse">
                 <CardContent className="p-4">
                   <div className="flex gap-4">
-                    <div className="w-16 h-16 rounded-full bg-muted" />
-                    <div className="flex-1 space-y-3">
-                      <div className="h-5 bg-muted rounded w-1/3" />
-                      <div className="h-4 bg-muted rounded w-1/2" />
-                      <div className="h-4 bg-muted rounded w-full" />
+                    <div className="w-16 h-16 rounded-xl bg-muted shrink-0" />
+                    <div className="flex-1 space-y-3 py-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="h-4 bg-muted rounded w-1/4" />
+                        <div className="h-6 bg-muted rounded-full w-20" />
+                      </div>
+                      <div className="h-3.5 bg-muted rounded w-1/3" />
+                      <div className="h-3 bg-muted rounded w-4/5" />
+                      <div className="flex gap-6 mt-2">
+                        <div className="h-3 bg-muted rounded w-20" />
+                        <div className="h-3 bg-muted rounded w-16" />
+                      </div>
+                      <div className="flex gap-2 mt-2 pt-2 border-t border-border">
+                        <div className="h-8 bg-muted rounded-lg w-24" />
+                        <div className="h-8 bg-muted rounded-lg w-20" />
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -342,22 +407,29 @@ const Feed = () => {
 
                         {/* Action Buttons */}
                         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
-                          <Button variant="default" size="sm" className="h-8">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="h-8"
+                            onClick={(e) => handleMessage(creator, e)}
+                          >
                             <MessageSquare className="w-4 h-4 mr-1" />
                             Message
                           </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="h-8"
-                            onClick={(e) => toggleSave(creator.id, e)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`h-8 transition-colors ${isInAnyCollection(creator.id) ? "border-red-400 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10" : ""}`}
+                            onClick={(e) => toggleSave(creator, e)}
                           >
-                            <Heart className={`w-4 h-4 mr-1 ${savedIds.has(creator.id) ? 'fill-red-500 text-red-500' : ''}`} />
-                            {savedIds.has(creator.id) ? 'Saved' : 'Save'}
+                            <Heart className={`w-4 h-4 mr-1 transition-all ${isInAnyCollection(creator.id) ? "fill-red-500 text-red-500" : ""}`} />
+                            {isInAnyCollection(creator.id) ? "Saved" : "Save"}
                           </Button>
-                          <Button variant="ghost" size="sm" className="h-8 ml-auto">
-                            <ExternalLink className="w-4 h-4" />
-                          </Button>
+                          <Link href={`/profile/${creator.id}`} className="ml-auto">
+                            <Button variant="ghost" size="sm" className="h-8" onClick={(e) => e.stopPropagation()}>
+                              <ExternalLink className="w-4 h-4" />
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -366,15 +438,29 @@ const Feed = () => {
               </Link>
             ))}
           </div>
+        ) : searchQuery || platform !== "all" || niche !== "All Niches" || followerRange !== "all" ? (
+          <RichEmptyState
+            icon={<Filter className="w-8 h-8" />}
+            headline="No creators match your filters"
+            sub="Try broadening your search or adjusting the filters above."
+            primary={{ label: "Clear all filters", onClick: () => { clearFilters(); setSearchQuery(""); } }}
+            tips={[
+              { icon: <X className="w-3.5 h-3.5" />, label: "Try removing the audience size filter" },
+              { icon: <Search className="w-3.5 h-3.5" />, label: "Search by name or keyword" },
+              { icon: <Layers className="w-3.5 h-3.5" />, label: "Use a broader niche category" },
+            ]}
+          />
         ) : (
-          <Card className="p-12 text-center">
-            <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="font-display text-xl font-semibold mb-2">No creators found</h3>
-            <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
-            <Button variant="outline" onClick={clearFilters}>
-              Clear all filters
-            </Button>
-          </Card>
+          <RichEmptyState
+            icon={<UserSearch className="w-8 h-8" />}
+            headline="No creators yet"
+            sub="Once creators complete onboarding and connect their platforms, they'll appear here for you to discover."
+            primary={{ label: "Invite a creator", onClick: () => {} }}
+            tips={[
+              { icon: <Sparkles className="w-3.5 h-3.5" />, label: "Creators appear after connecting at least one platform" },
+              { icon: <Filter className="w-3.5 h-3.5" />, label: "Use filters to narrow by niche, audience size, or platform" },
+            ]}
+          />
         )}
       </div>
     </MainLayout>

@@ -80,7 +80,7 @@ const BecomeCreatorSection = () => {
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 gap-4">
                   <ParallaxElement speed={0.15} direction="up">
-                    <div className="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
                       <div className="text-4xl font-bold gradient-text mb-2">
                         50K+
                       </div>
@@ -90,7 +90,7 @@ const BecomeCreatorSection = () => {
                     </div>
                   </ParallaxElement>
                   <ParallaxElement speed={0.25} direction="down">
-                    <div className="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
                       <div className="text-4xl font-bold gradient-text mb-2">
                         $10K+
                       </div>
@@ -100,7 +100,7 @@ const BecomeCreatorSection = () => {
                     </div>
                   </ParallaxElement>
                   <ParallaxElement speed={0.2} direction="down">
-                    <div className="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
                       <div className="text-4xl font-bold gradient-text mb-2">
                         10K+
                       </div>
@@ -110,7 +110,7 @@ const BecomeCreatorSection = () => {
                     </div>
                   </ParallaxElement>
                   <ParallaxElement speed={0.3} direction="up">
-                    <div className="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform">
                       <div className="text-4xl font-bold gradient-text mb-2">
                         98%
                       </div>

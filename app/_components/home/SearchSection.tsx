@@ -270,9 +270,9 @@ export function SearchSection() {
             <motion.div
               variants={fadeUp}
               transition={{ duration: 0.65 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5 text-violet-700 dark:text-violet-300"
               style={{
-                background: "var(--glow-purple)",
+                background: "rgba(124,58,237,0.10)",
                 border: "1px solid rgba(124,58,237,0.35)",
                 color: PURPLE_T,
               }}
@@ -283,7 +283,8 @@ export function SearchSection() {
             <motion.h2
               variants={fadeUp}
               transition={{ duration: 0.65 }}
-              className="font-display font-bold text-white text-4xl md:text-5xl leading-tight mb-5"
+              className="font-display font-bold text-4xl md:text-5xl leading-tight mb-5"
+              style={{ color: "var(--text-base)" }}
             >
               Stop scrolling.{" "}
               <span
@@ -300,7 +301,8 @@ export function SearchSection() {
             <motion.p
               variants={fadeUp}
               transition={{ duration: 0.65 }}
-              className="text-slate-400 text-lg leading-relaxed mb-8"
+              className="text-lg leading-relaxed mb-8"
+              style={{ color: "var(--text-muted)" }}
             >
               Find the perfect creators for your campaign with AI-powered
               search. Filter by niche, engagement rate, location, platform, and
@@ -346,7 +348,7 @@ export function SearchSection() {
                     style={{ color: PURPLE_T }}
                     className="shrink-0 mt-0.5"
                   />
-                  <span className="text-slate-300 text-sm">{text}</span>
+                  <span className="text-sm" style={{ color: "var(--text-muted)" }}>{text}</span>
                 </motion.li>
               ))}
             </motion.ul>
@@ -578,10 +580,10 @@ export function SearchSection() {
                               </div>
                             </div>
                             <div className="p-2">
-                              <div className="text-[11px] font-bold text-white leading-tight">
+                              <div className="text-[11px] font-bold leading-tight" style={{ color: "var(--text-base)" }}>
                                 {c.name}
                               </div>
-                              <div className="text-[9px] text-slate-500">
+                              <div className="text-[9px]" style={{ color: "var(--text-faint)" }}>
                                 {c.handle}
                               </div>
                               <div className="flex items-center justify-between mt-1">
@@ -591,7 +593,7 @@ export function SearchSection() {
                                 >
                                   {c.niche}
                                 </span>
-                                <span className="text-[9px] text-slate-600">
+                                <span className="text-[9px]" style={{ color: "var(--text-faint)" }}>
                                   {c.followers}
                                 </span>
                               </div>

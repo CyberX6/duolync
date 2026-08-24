@@ -28,12 +28,12 @@ const AppCard = ({ title, bgColor, visual, appIcon, appName, appDescription }: A
       
       {/* App Info */}
       <div className="flex items-center gap-3 mt-4 px-1">
-        <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0">
           {appIcon}
         </div>
         <div className="min-w-0">
-          <p className="font-medium text-gray-900 text-sm truncate">{appName}</p>
-          <p className="text-gray-500 text-xs truncate">{appDescription}</p>
+          <p className="font-medium text-foreground text-sm truncate">{appName}</p>
+          <p className="text-muted-foreground text-xs truncate">{appDescription}</p>
         </div>
       </div>
     </div>
@@ -146,19 +146,19 @@ const AppsSliderSection = () => {
   };
 
   return (
-    <section className="py-24 md:py-32 bg-white overflow-hidden">
+    <section className="py-24 md:py-32 bg-white dark:bg-zinc-950 overflow-hidden">
       <div className="container">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
             Weave AI tools into your workflow
           </h2>
-          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Power up your creative process with the best AI-powered marketing and collaboration tools from our marketplace.
           </p>
           <Button
             variant="outline"
-            className="rounded-full px-8 py-3 h-auto text-base font-medium bg-white border-gray-300 hover:bg-gray-50"
+            className="rounded-full px-8 py-3 h-auto text-base font-medium"
           >
             Discover Apps Marketplace
           </Button>
@@ -170,22 +170,22 @@ const AppsSliderSection = () => {
         {/* Navigation Buttons */}
         <button
           onClick={() => scroll("left")}
-          className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
-            canScrollLeft ? "opacity-100 hover:bg-gray-50" : "opacity-0 pointer-events-none"
+          className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white dark:bg-zinc-800 shadow-lg flex items-center justify-center transition-opacity ${
+            canScrollLeft ? "opacity-100 hover:bg-zinc-50 dark:hover:bg-zinc-700" : "opacity-0 pointer-events-none"
           }`}
           aria-label="Scroll left"
         >
-          <ChevronLeft size={24} className="text-gray-700" />
+          <ChevronLeft size={24} className="text-zinc-700 dark:text-zinc-200" />
         </button>
 
         <button
           onClick={() => scroll("right")}
-          className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-opacity ${
-            canScrollRight ? "opacity-100 hover:bg-gray-50" : "opacity-0 pointer-events-none"
+          className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white dark:bg-zinc-800 shadow-lg flex items-center justify-center transition-opacity ${
+            canScrollRight ? "opacity-100 hover:bg-zinc-50 dark:hover:bg-zinc-700" : "opacity-0 pointer-events-none"
           }`}
           aria-label="Scroll right"
         >
-          <ChevronRight size={24} className="text-gray-700" />
+          <ChevronRight size={24} className="text-zinc-700 dark:text-zinc-200" />
         </button>
 
         {/* Scrollable Area */}
@@ -205,8 +205,8 @@ const AppsSliderSection = () => {
         </div>
 
         {/* Gradient Overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent pointer-events-none" />
       </div>
     </section>
   );

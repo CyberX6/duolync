@@ -23,6 +23,8 @@ import {
   updateProposalStatusAction,
   type ProposalWithDetails,
 } from "@/app/actions/proposals";
+import { sendMessageAction } from "@/app/actions/messages";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import { cn } from "@/lib/utils";
 
 // ── Platform helpers ──────────────────────────────────────────────────────────
@@ -122,6 +124,140 @@ function RejectReasonModal({ open, creatorName, onConfirm, onCancel, loading }: 
   );
 }
 
+// ── Negotiate / Counter-offer modal ──────────────────────────────────────────
+
+interface NegotiateModalProps {
+  open: boolean;
+  proposal: ProposalWithDetails | null;
+  onClose: () => void;
+  onSent: (proposalId: string) => void;
+}
+
+function NegotiateModal({ open, proposal, onClose, onSent }: NegotiateModalProps) {
+  const { toast } = useToast();
+  const { openChatWindow } = useMessaging();
+  const [counterRate, setCounterRate] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    if (open && proposal) {
+      setCounterRate(proposal.rate.toString());
+      setMessage("");
+    }
+  }, [open, proposal]);
+
+  if (!proposal) return null;
+
+  const handleSend = async () => {
+    const rate = parseFloat(counterRate);
+    if (isNaN(rate) || rate <= 0) {
+      toast({ variant: "destructive", title: "Please enter a valid counter-offer rate." });
+      return;
+    }
+
+    setSending(true);
+    const text = [
+      `Hi ${proposal.creator.name ?? "there"} — thanks for your proposal on "${proposal.campaign.title}".`,
+      message.trim() ? message.trim() : null,
+      `Counter-offer rate: $${rate.toLocaleString()}`,
+      "Let me know if this works for you!",
+    ].filter(Boolean).join("\n\n");
+
+    const [msgRes, statusRes] = await Promise.all([
+      sendMessageAction(proposal.creator.userId, text),
+      updateProposalStatusAction(proposal.id, "UNDER_REVIEW"),
+    ]);
+
+    setSending(false);
+
+    if (msgRes.error || statusRes.error) {
+      toast({ variant: "destructive", title: msgRes.error ?? statusRes.error ?? "Failed to send." });
+      return;
+    }
+
+    toast({ title: "Counter-offer sent! 📨", description: "The creator has been notified." });
+    onSent(proposal.id);
+    openChatWindow({
+      id: proposal.creator.userId,
+      full_name: proposal.creator.name,
+      avatar_url: proposal.creator.avatarUrl,
+      user_type: "creator",
+    });
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="sm:max-w-md w-[95vw]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <SlidersHorizontal className="w-5 h-5 text-primary" />
+            Send Counter Offer
+          </DialogTitle>
+          <DialogDescription>
+            Propose a different rate and message to {proposal.creator.name ?? "the creator"}.
+            They will receive a message and the proposal will move to &ldquo;In Review&rdquo;.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Campaign context */}
+        <div className="rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 px-4 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground">Campaign</p>
+            <p className="text-sm font-semibold truncate">{proposal.campaign.title}</p>
+          </div>
+          <div className="text-right shrink-0">
+            <p className="text-xs text-muted-foreground">Creator&apos;s ask</p>
+            <p className="text-sm font-bold text-foreground">${proposal.rate.toLocaleString()}</p>
+          </div>
+        </div>
+
+        <div className="space-y-4 py-1">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Your counter-offer rate (USD)</label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="number"
+                min={1}
+                step={1}
+                value={counterRate}
+                onChange={(e) => setCounterRate(e.target.value)}
+                className="w-full h-10 pl-9 pr-3 rounded-xl border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Message <span className="text-muted-foreground font-normal">(optional)</span></label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Explain your counter-offer, what you're looking for, content requirements…"
+              rows={3}
+              maxLength={600}
+              className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+            />
+            <p className="text-xs text-muted-foreground text-right">{message.length}/600</p>
+          </div>
+        </div>
+
+        <DialogFooter className="flex-col-reverse sm:flex-row gap-2">
+          <Button variant="outline" onClick={onClose} disabled={sending}>Cancel</Button>
+          <Button
+            onClick={handleSend}
+            disabled={sending || !counterRate}
+            className="gap-2 btn-gradient"
+          >
+            {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquare className="w-4 h-4" />}
+            {sending ? "Sending…" : "Send Counter Offer"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── Status badge ───────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
@@ -185,6 +321,75 @@ function getInitials(name: string | null) {
   return (name ?? "?").split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 }
 
+// ── Status Timeline ────────────────────────────────────────────────────────────
+
+function StatusTimeline({ status, createdAt }: { status: string; createdAt: string }) {
+  const isTerminal = status === "ACCEPTED" || status === "REJECTED" || status === "WITHDRAWN";
+  const isReviewed = status !== "PENDING";
+  const isDecided = isTerminal;
+
+  const Step = ({
+    done,
+    active,
+    label,
+    sub,
+    variant,
+  }: {
+    done: boolean;
+    active: boolean;
+    label: string;
+    sub?: string;
+    variant?: "success" | "danger" | "neutral";
+  }) => {
+    const dot = done
+      ? variant === "danger"
+        ? "bg-red-500 border-red-500"
+        : "bg-emerald-500 border-emerald-500"
+      : active
+        ? "bg-white dark:bg-zinc-900 border-primary"
+        : "bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700";
+
+    const ring = active ? "ring-2 ring-primary/30 ring-offset-1" : "";
+
+    return (
+      <div className="flex flex-col items-center gap-1 min-w-0">
+        <div className={cn("w-3.5 h-3.5 rounded-full border-2 shrink-0 transition-all", dot, ring)} />
+        <p className={cn(
+          "text-[11px] font-medium text-center leading-tight",
+          done ? (variant === "danger" ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400") :
+          active ? "text-primary" : "text-zinc-400 dark:text-zinc-600",
+        )}>
+          {label}
+        </p>
+        {sub && <p className="text-[10px] text-muted-foreground/60 text-center">{sub}</p>}
+      </div>
+    );
+  };
+
+  const Line = ({ done }: { done: boolean }) => (
+    <div className={cn("flex-1 h-0.5 mb-5 mx-1 transition-all", done ? "bg-emerald-400/70" : "bg-zinc-200 dark:bg-zinc-700")} />
+  );
+
+  return (
+    <div>
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Status Timeline</p>
+      <div className="flex items-start">
+        <Step done label="Submitted" sub={timeAgo(createdAt)} variant="success" active={false} />
+        <Line done={isReviewed} />
+        <Step done={isReviewed} active={!isReviewed} label="In Review" variant={status === "WITHDRAWN" ? "danger" : "success"} />
+        <Line done={isDecided} />
+        <Step
+          done={isDecided}
+          active={isReviewed && !isDecided}
+          label={status === "ACCEPTED" ? "Accepted" : status === "REJECTED" ? "Declined" : "Decision"}
+          sub={isDecided ? (status === "ACCEPTED" ? "🎉" : status === "REJECTED" ? "Closed" : "") : undefined}
+          variant={status === "REJECTED" ? "danger" : "success"}
+        />
+      </div>
+    </div>
+  );
+}
+
 // ── Application Detail Modal ──────────────────────────────────────────────────
 
 interface DetailModalProps {
@@ -192,15 +397,15 @@ interface DetailModalProps {
   onClose: () => void;
   onAccept: (id: string) => void;
   onRequestReject: (p: ProposalWithDetails) => void;
+  onNegotiate: (p: ProposalWithDetails) => void;
   loading: boolean;
 }
 
-function ApplicationDetailModal({ proposal, onClose, onAccept, onRequestReject, loading }: DetailModalProps) {
+function ApplicationDetailModal({ proposal, onClose, onAccept, onRequestReject, onNegotiate, loading }: DetailModalProps) {
   const { openChatWindow } = useMessaging();
 
   if (!proposal) return null;
   const { creator } = proposal;
-  const cfg = STATUS_CONFIG[proposal.status] ?? STATUS_CONFIG.PENDING;
 
   const handleMessage = () => {
     const recipient: ConversationRecipient = {
@@ -273,6 +478,11 @@ function ApplicationDetailModal({ proposal, onClose, onAccept, onRequestReject, 
           </div>
         </div>
 
+        {/* Status timeline */}
+        <div className="pb-4 border-b border-border">
+          <StatusTimeline status={proposal.status} createdAt={proposal.createdAt} />
+        </div>
+
         {/* Proposal details */}
         <div className="space-y-4 py-2">
           {/* Rate */}
@@ -329,11 +539,12 @@ function ApplicationDetailModal({ proposal, onClose, onAccept, onRequestReject, 
             </Button>
             <Button
               variant="outline"
-              className="flex-1 gap-1.5 text-muted-foreground hover:text-foreground"
-              onClick={() => onClose()}
+              className="flex-1 gap-1.5"
+              onClick={() => { onNegotiate(proposal); onClose(); }}
+              disabled={loading}
             >
               <SlidersHorizontal className="w-4 h-4" />
-              Negotiate
+              Counter Offer
             </Button>
             <Button
               variant="outline"
@@ -358,12 +569,14 @@ const ProposalCard = ({
   onAccept,
   onRequestReject,
   onOpenDetail,
+  onNegotiate,
   loading,
 }: {
   proposal: ProposalWithDetails;
   onAccept: (id: string) => void;
   onRequestReject: (p: ProposalWithDetails) => void;
   onOpenDetail: (p: ProposalWithDetails) => void;
+  onNegotiate: (p: ProposalWithDetails) => void;
   loading: boolean;
 }) => {
   const { openChatWindow } = useMessaging();
@@ -486,8 +699,8 @@ const ProposalCard = ({
         </div>
       )}
 
-      {/* Quick actions — only for pending, stop propagation */}
-      {proposal.status === "PENDING" && (
+      {/* Quick actions — only for pending/under-review, stop propagation */}
+      {(proposal.status === "PENDING" || proposal.status === "UNDER_REVIEW") && (
         <div className="flex gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
           <Button
             size="sm"
@@ -498,16 +711,18 @@ const ProposalCard = ({
             <Check className="w-3.5 h-3.5" />
             Accept
           </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={(e) => { e.stopPropagation(); onOpenDetail(proposal); }}
-            disabled={loading}
-            className="flex-1 gap-1.5"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            Negotiate
-          </Button>
+          {proposal.status === "PENDING" && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={(e) => { e.stopPropagation(); onNegotiate(proposal); }}
+              disabled={loading}
+              className="flex-1 gap-1.5"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Counter
+            </Button>
+          )}
           <Button
             size="sm"
             variant="outline"
@@ -536,8 +751,8 @@ const Proposals = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [detailProposal, setDetailProposal] = useState<ProposalWithDetails | null>(null);
-  // Reject reason modal
   const [rejectTarget, setRejectTarget] = useState<ProposalWithDetails | null>(null);
+  const [negotiateTarget, setNegotiateTarget] = useState<ProposalWithDetails | null>(null);
 
   const load = useCallback(async () => {
     const result = await getProposalsAction();
@@ -581,6 +796,13 @@ const Proposals = () => {
     setActionLoading(false);
   };
 
+  const handleNegotiateSent = (proposalId: string) => {
+    setProposals((prev) =>
+      prev.map((p) => (p.id === proposalId ? { ...p, status: "UNDER_REVIEW" } : p)),
+    );
+    setNegotiateTarget(null);
+  };
+
   const filtered = activeTab === "ALL" ? proposals : proposals.filter((p) => p.status === activeTab);
 
   const counts = {
@@ -617,11 +839,23 @@ const Proposals = () => {
               ACCEPTED: "text-green-700 dark:text-green-400",
               REJECTED: "text-red-700 dark:text-red-400",
             };
+            const isActive = activeTab === s;
             return (
-              <div key={s} className={cn("rounded-xl border p-4 text-center", colors[s])}>
+              <button
+                key={s}
+                onClick={() => setActiveTab(isActive ? "ALL" : s)}
+                className={cn(
+                  "rounded-xl border p-4 text-center w-full transition-all",
+                  colors[s],
+                  isActive ? "ring-2 ring-offset-1 ring-offset-background" : "hover:opacity-80",
+                  isActive && s === "PENDING" ? "ring-amber-400" : "",
+                  isActive && s === "ACCEPTED" ? "ring-green-400" : "",
+                  isActive && s === "REJECTED" ? "ring-red-400" : "",
+                )}
+              >
                 <div className={cn("text-2xl font-bold", textColors[s])}>{counts[s]}</div>
                 <div className="text-xs text-muted-foreground capitalize mt-0.5">{s.toLowerCase()}</div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -652,24 +886,26 @@ const Proposals = () => {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
-              <FileText className="w-7 h-7 text-primary/50" />
-            </div>
-            <h3 className="font-display text-xl font-bold mb-2">
-              {activeTab === "ALL" ? "No proposals yet" : `No ${activeTab.toLowerCase()} proposals`}
-            </h3>
-            <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-6">
-              {activeTab === "ALL"
-                ? "Create active campaigns to start receiving proposals from creators."
-                : "Switch to the All tab to see all proposals."}
-            </p>
-            {activeTab === "ALL" && (
-              <Button className="btn-gradient rounded-xl" onClick={() => router.push("/brand/campaigns")}>
-                Manage Campaigns
-              </Button>
-            )}
-          </div>
+          activeTab !== "ALL" ? (
+            <RichEmptyState
+              icon={<FileText className="w-8 h-8 text-primary" />}
+              headline={`No ${activeTab.toLowerCase()} proposals`}
+              sub="Nothing here yet — try a different filter or check the All tab."
+              secondary={{ label: "Show all proposals", onClick: () => setActiveTab("ALL") }}
+            />
+          ) : (
+            <RichEmptyState
+              icon={<FileText className="w-8 h-8 text-primary" />}
+              headline="No proposals yet"
+              sub="Once creators apply to your campaigns you'll review them right here."
+              primary={{ label: "Manage Campaigns", onClick: () => router.push("/brand/campaigns") }}
+              tips={[
+                { icon: "📢", label: "Make sure your campaigns are published" },
+                { icon: "📋", label: "A clear brief attracts better proposals" },
+                { icon: "🔗", label: "Share your campaign link on social" },
+              ]}
+            />
+          )
         ) : (
           <div className="space-y-4">
             {filtered.map((p) => (
@@ -679,6 +915,7 @@ const Proposals = () => {
                 onAccept={handleAccept}
                 onRequestReject={setRejectTarget}
                 onOpenDetail={setDetailProposal}
+                onNegotiate={setNegotiateTarget}
                 loading={actionLoading}
               />
             ))}
@@ -692,6 +929,7 @@ const Proposals = () => {
         onClose={() => setDetailProposal(null)}
         onAccept={handleAccept}
         onRequestReject={(p) => { setDetailProposal(null); setRejectTarget(p); }}
+        onNegotiate={(p) => { setDetailProposal(null); setNegotiateTarget(p); }}
         loading={actionLoading}
       />
 
@@ -702,6 +940,14 @@ const Proposals = () => {
         onConfirm={handleRejectConfirm}
         onCancel={() => setRejectTarget(null)}
         loading={actionLoading}
+      />
+
+      {/* Negotiate / counter-offer modal */}
+      <NegotiateModal
+        open={!!negotiateTarget}
+        proposal={negotiateTarget}
+        onClose={() => setNegotiateTarget(null)}
+        onSent={handleNegotiateSent}
       />
     </MainLayout>
   );

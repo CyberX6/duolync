@@ -27,4 +27,6 @@ dist-ssr
 .env.local
 .env.production
 .pnpm-store/
+
+# Design review screenshots (local only)
 .design-review/

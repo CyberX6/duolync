@@ -162,3 +162,12 @@ export async function getCreatorAnalyticsAction(creatorUserId: string): Promise<
     return { data: null, error: "Failed to load analytics" };
   }
 }
+
+export async function getMyAnalyticsAction(): Promise<{
+  data: CreatorAnalytics | null;
+  error: string | null;
+}> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return { data: null, error: "Unauthorized" };
+  return getCreatorAnalyticsAction(session.user.id);
+}

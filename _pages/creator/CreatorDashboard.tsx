@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Users, Eye, TrendingUp, ArrowRight, LayoutDashboard,
@@ -8,9 +8,11 @@ import {
 } from "lucide-react";
 import MainLayout from "@/components/layout/MainLayout";
 import { SmartCalendarWidget } from "@/components/calendar/SmartCalendarWidget";
+import { OnboardingChecklist } from "@/app/_components/dashboard/OnboardingChecklist";
+import { KpiCardsSkeleton, SocialConnectionsSkeleton } from "@/app/_components/dashboard/DashboardSkeletons";
+import { AIGrowthMentor } from "@/app/_components/dashboard/AIGrowthMentor";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { getMyProfileAction, type FullProfile } from "@/app/actions/profile";
 
 const VIOLET = "var(--accent-violet-text)";
 const VIOLET_T = "var(--accent-violet-text)";
@@ -33,13 +35,8 @@ const fmt = (n: number) => {
 };
 
 const CreatorDashboard = () => {
-  const { profile } = useAuth();
-  const [fullProfile, setFullProfile] = useState<FullProfile | null>(null);
+  const { profile, fullProfile, loading: profileLoading } = useAuth();
   const [stats] = useState({ totalViews: 0, savedBy: 0 });
-
-  useEffect(() => {
-    getMyProfileAction().then((p) => { if (p) setFullProfile(p); });
-  }, []);
 
   const firstName = profile?.full_name?.split(" ")[0] || "Creator";
 
@@ -82,29 +79,41 @@ const CreatorDashboard = () => {
           </p>
         </div>
 
+        {/* Onboarding checklist — hidden once all steps are done or dismissed */}
+        {profile?.id && (
+          <OnboardingChecklist
+            userId={profile.id}
+            hasConnectedPlatform={hasConnections}
+          />
+        )}
+
         {/* KPI cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="stat-card">
-            <Users className="w-6 h-6 text-primary mb-2" />
-            <div className="text-2xl font-display font-bold">{fmt(followerCount)}</div>
-            <div className="text-sm text-muted-foreground">Total Followers</div>
+        {profileLoading ? (
+          <KpiCardsSkeleton />
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="stat-card">
+              <Users className="w-6 h-6 text-primary mb-2" />
+              <div className="text-2xl font-display font-bold">{fmt(followerCount)}</div>
+              <div className="text-sm text-muted-foreground">Total Followers</div>
+            </div>
+            <div className="stat-card">
+              <Eye className="w-6 h-6 text-accent mb-2" />
+              <div className="text-2xl font-display font-bold">{fmt(stats.totalViews)}</div>
+              <div className="text-sm text-muted-foreground">Total Views</div>
+            </div>
+            <div className="stat-card">
+              <TrendingUp className="w-6 h-6 text-teal mb-2" />
+              <div className="text-2xl font-display font-bold">{engagementRate}%</div>
+              <div className="text-sm text-muted-foreground">Engagement Rate</div>
+            </div>
+            <div className="stat-card">
+              <Wifi className="w-6 h-6 text-violet-400 mb-2" />
+              <div className="text-2xl font-display font-bold">{connectedPlatforms.length}</div>
+              <div className="text-sm text-muted-foreground">Connected Platforms</div>
+            </div>
           </div>
-          <div className="stat-card">
-            <Eye className="w-6 h-6 text-accent mb-2" />
-            <div className="text-2xl font-display font-bold">{fmt(stats.totalViews)}</div>
-            <div className="text-sm text-muted-foreground">Total Views</div>
-          </div>
-          <div className="stat-card">
-            <TrendingUp className="w-6 h-6 text-teal mb-2" />
-            <div className="text-2xl font-display font-bold">{engagementRate}%</div>
-            <div className="text-sm text-muted-foreground">Engagement Rate</div>
-          </div>
-          <div className="stat-card">
-            <Wifi className="w-6 h-6 text-violet-400 mb-2" />
-            <div className="text-2xl font-display font-bold">{connectedPlatforms.length}</div>
-            <div className="text-sm text-muted-foreground">Connected Platforms</div>
-          </div>
-        </div>
+        )}
 
         {/* Smart Calendar */}
         <div className="mb-8">
@@ -141,13 +150,13 @@ const CreatorDashboard = () => {
                 {/* Aggregated stats */}
                 <div className="flex items-center gap-8">
                   <div>
-                    <p className="text-3xl font-display font-bold text-white">{fmt(followerCount)}</p>
-                    <p className="text-xs text-zinc-400 mt-0.5">Total Followers</p>
+                    <p className="text-3xl font-display font-bold text-zinc-900 dark:text-white">{fmt(followerCount)}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Total Followers</p>
                   </div>
                   {engagementRate > 0 && (
                     <div>
-                      <p className="text-3xl font-display font-bold text-emerald-400">{engagementRate}%</p>
-                      <p className="text-xs text-zinc-400 mt-0.5">Avg. Engagement</p>
+                      <p className="text-3xl font-display font-bold text-emerald-600 dark:text-emerald-400">{engagementRate}%</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Avg. Engagement</p>
                     </div>
                   )}
                 </div>
@@ -160,20 +169,20 @@ const CreatorDashboard = () => {
                     return (
                       <div
                         key={p}
-                        className="flex items-center justify-between gap-4 px-3 py-2 rounded-xl bg-zinc-800/60 border border-zinc-700/60"
+                        className="flex items-center justify-between gap-4 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700/60"
                       >
                         <div className="flex items-center gap-2">
                           <span className="text-base">{meta.emoji}</span>
-                          <span className="text-xs font-medium text-zinc-200 capitalize">{p}</span>
+                          <span className="text-xs font-medium text-zinc-700 dark:text-zinc-200 capitalize">{p}</span>
                         </div>
-                        <span className="text-xs font-semibold text-white tabular-nums">
+                        <span className="text-xs font-semibold text-zinc-900 dark:text-white tabular-nums">
                           {stat?.followerCount != null ? fmt(stat.followerCount) : "—"} followers
                         </span>
                       </div>
                     );
                   })}
                   <Link href="/creator/presence">
-                    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-xs font-medium text-violet-300 hover:bg-violet-500/20 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-xs font-medium text-violet-600 dark:text-violet-300 hover:bg-violet-500/20 transition-colors cursor-pointer">
                       + Add Platform
                     </div>
                   </Link>
@@ -199,6 +208,24 @@ const CreatorDashboard = () => {
               </Link>
             </div>
           )}
+        </div>
+        {/* AI Growth Mentor */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="font-display text-xl font-bold">AI Growth Mentor</h2>
+            <span
+              className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide"
+              style={{ background: "rgba(192,132,252,0.12)", color: "#c084fc", border: "1px solid rgba(192,132,252,0.25)" }}
+            >
+              AI
+            </span>
+          </div>
+          <AIGrowthMentor
+            followerCount={followerCount}
+            engagementRate={engagementRate}
+            niche={fullProfile?.niche ?? profile?.niche ?? null}
+            platforms={connectedPlatforms}
+          />
         </div>
       </div>
     </MainLayout>

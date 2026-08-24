@@ -3,13 +3,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LogOut, Bell, MessageSquare, CheckCheck, Menu, Check, X, UserCheck } from "lucide-react";
-import MobileNav from "@/app/_components/layout/MobileNav";
+import { LogOut, Bell, MessageSquare, CheckCheck, Check, X, UserCheck, Search } from "lucide-react";
 import {
-  getNotificationsAction,
   markNotificationsReadAction,
   type NotificationItem,
 } from "@/app/actions/notifications";
+import { useNotificationStream } from "@/hooks/useNotificationStream";
 import {
   acceptConnectionAction,
   rejectConnectionAction,
@@ -233,31 +232,18 @@ const AuthenticatedHeader = () => {
 
   const [showMsgDropdown, setShowMsgDropdown] = useState(false);
   const msgDropdownRef = useRef<HTMLDivElement>(null);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  // ── Notifications state ──────────────────────────────────────────────────
+  // ── Notifications via SSE (replaces 30 s polling) ────────────────────────
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const notifDropdownRef = useRef<HTMLDivElement>(null);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [notifUnread, setNotifUnread] = useState(0);
-  const [notifLoading, setNotifLoading] = useState(false);
-
-  const loadNotifications = useCallback(async () => {
-    setNotifLoading(true);
-    const result = await getNotificationsAction();
-    if (!result.error) {
-      setNotifications(result.data);
-      setNotifUnread(result.unreadCount);
-    }
-    setNotifLoading(false);
-  }, []);
-
-  // Poll every 30s
-  useEffect(() => {
-    loadNotifications();
-    const interval = setInterval(loadNotifications, 30_000);
-    return () => clearInterval(interval);
-  }, [loadNotifications]);
+  const {
+    notifications,
+    unreadCount: notifUnread,
+    loading: notifLoading,
+    refetch: refetchNotifications,
+    patchNotification,
+    markAllReadLocally,
+  } = useNotificationStream();
 
   // Close on outside click — notifications
   useEffect(() => {
@@ -274,18 +260,18 @@ const AuthenticatedHeader = () => {
   const handleOpenNotifDropdown = async () => {
     setShowNotifDropdown((v) => !v);
     if (!showNotifDropdown && notifUnread > 0) {
+      markAllReadLocally(); // instant optimistic update
       await markNotificationsReadAction();
-      setNotifUnread(0);
-      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      // SSE will confirm the DB change on next poll; no manual refetch needed
     }
   };
 
   // Optimistic patch for a single notification (called after Accept/Ignore)
   const handleNotifUpdate = useCallback(
     (id: string, patch: Partial<NotificationItem>) => {
-      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, ...patch } : n)));
+      patchNotification(id, patch);
     },
-    [],
+    [patchNotification],
   );
 
   // Close on outside click — messages
@@ -314,21 +300,8 @@ const AuthenticatedHeader = () => {
     : "D";
 
   return (
-    <>
-      <MobileNav open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
-      <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-zinc-950/60 transition-colors duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-zinc-950/60 transition-colors duration-300">
         <div className="container flex h-16 items-center justify-between">
-          {/* Hamburger (mobile only) */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden mr-1 shrink-0"
-            onClick={() => setMobileNavOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-
           {/* Logo */}
           <Link href={dashboardPath} className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shrink-0">
@@ -363,6 +336,19 @@ const AuthenticatedHeader = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* ⌘K search trigger — desktop only */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+              title="Search (⌘K)"
+              className="hidden md:flex items-center gap-1.5 h-8 px-2.5 rounded-xl text-xs font-medium text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-300 transition-all"
+            >
+              <Search className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden lg:inline">Search</span>
+              <kbd className="hidden lg:inline-flex items-center px-1 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-[9px] font-mono text-zinc-400 dark:text-zinc-500 ml-0.5">
+                ⌘K
+              </kbd>
+            </button>
             {/* Messages */}
             <div ref={msgDropdownRef} className="relative">
               <Button
@@ -423,8 +409,6 @@ const AuthenticatedHeader = () => {
               )}
             </div>
 
-            <ThemeToggle />
-
             {/* Notifications */}
             <div ref={notifDropdownRef} className="relative">
               <Button
@@ -449,9 +433,8 @@ const AuthenticatedHeader = () => {
                     {notifications.some((n) => !n.read) && (
                       <button
                         onClick={async () => {
+                          markAllReadLocally();
                           await markNotificationsReadAction();
-                          setNotifUnread(0);
-                          setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
                         }}
                         className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors"
                       >
@@ -494,6 +477,8 @@ const AuthenticatedHeader = () => {
                 </div>
               )}
             </div>
+
+            <ThemeToggle />
 
             {/* ── Profile Dropdown (LinkedIn-style) ── */}
             <DropdownMenu>
@@ -554,8 +539,7 @@ const AuthenticatedHeader = () => {
             </DropdownMenu>
           </div>
         </div>
-      </header>
-    </>
+    </header>
   );
 };
 

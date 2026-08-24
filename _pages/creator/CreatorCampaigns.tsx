@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback, useTransition } from "react";
 import Link from "next/link";
 import {
-  Search, DollarSign, Calendar, Clock, Target, Megaphone,
-  ChevronRight, X, CheckCircle2, Send, Loader2, Filter,
-  Building2, MapPin, ExternalLink,
+  Search, DollarSign, Clock, Target, Megaphone,
+  ChevronRight, X, CheckCircle2, Send, Loader2,
+  Building2, ArrowUpDown, Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +20,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
 import MainLayout from "@/components/layout/MainLayout";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import {
@@ -96,7 +100,7 @@ function formatDate(iso: string | null) {
   });
 }
 
-// ── Apply Modal ───────────────────────────────────────────────────────────────
+// ── Platform labels (shared) ──────────────────────────────────────────────────
 
 const PLATFORM_LABEL: Record<string, string> = {
   instagram: "Instagram",
@@ -108,6 +112,8 @@ const PLATFORM_LABEL: Record<string, string> = {
   twitch: "Twitch",
   snapchat: "Snapchat",
 };
+
+// ── Apply Modal ───────────────────────────────────────────────────────────────
 
 interface ApplyModalProps {
   campaign: PublicCampaign | null;
@@ -450,6 +456,7 @@ const CreatorCampaigns = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [platformFilter, setPlatformFilter] = useState<string>("ALL");
+  const [sortBy, setSortBy] = useState<"newest" | "budget_high" | "deadline_soon">("newest");
   const [applying, setApplying] = useState<PublicCampaign | null>(null);
   const [withdrawing, setWithdrawing] = useState<string | null>(null);
   const [confirmWithdrawId, setConfirmWithdrawId] = useState<{ applicationId: string; campaignId: string } | null>(null);
@@ -501,18 +508,29 @@ const CreatorCampaigns = () => {
     setWithdrawing(null);
   };
 
-  // Filtering
+  // Filtering + sorting
   const allPlatforms = Array.from(new Set(campaigns.flatMap((c) => c.platforms)));
-  const filtered = campaigns.filter((c) => {
-    const matchSearch =
-      !search ||
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.brand.companyName.toLowerCase().includes(search.toLowerCase()) ||
-      c.description.toLowerCase().includes(search.toLowerCase());
-    const matchPlatform =
-      platformFilter === "ALL" || c.platforms.includes(platformFilter);
-    return matchSearch && matchPlatform;
-  });
+  const filtered = [...campaigns]
+    .filter((c) => {
+      const matchSearch =
+        !search ||
+        c.title.toLowerCase().includes(search.toLowerCase()) ||
+        c.brand.companyName.toLowerCase().includes(search.toLowerCase()) ||
+        c.description.toLowerCase().includes(search.toLowerCase());
+      const matchPlatform =
+        platformFilter === "ALL" || c.platforms.includes(platformFilter);
+      return matchSearch && matchPlatform;
+    })
+    .sort((a, b) => {
+      if (sortBy === "budget_high") return b.budget - a.budget;
+      if (sortBy === "deadline_soon") {
+        if (!a.deadline && !b.deadline) return 0;
+        if (!a.deadline) return 1;
+        if (!b.deadline) return -1;
+        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+      }
+      return 0; // "newest" — preserve server order
+    });
 
   const appliedCount = campaigns.filter((c) => c.applicationStatus).length;
 
@@ -536,8 +554,8 @@ const CreatorCampaigns = () => {
           )}
         </div>
 
-        {/* Search + Platform filter */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        {/* Search + Sort */}
+        <div className="flex gap-3 mb-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -547,38 +565,50 @@ const CreatorCampaigns = () => {
               className="pl-9"
             />
           </div>
+          <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
+            <SelectTrigger className="w-[160px] shrink-0 gap-1.5 text-xs">
+              <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest first</SelectItem>
+              <SelectItem value="budget_high">Budget: High → Low</SelectItem>
+              <SelectItem value="deadline_soon">Deadline: Soonest</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-          {allPlatforms.length > 0 && (
-            <div className="flex gap-2 overflow-x-auto pb-0.5 sm:pb-0 shrink-0">
+        {/* Platform filter chips */}
+        {allPlatforms.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+            <button
+              onClick={() => setPlatformFilter("ALL")}
+              className={cn(
+                "shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                platformFilter === "ALL"
+                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                  : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-primary/40 hover:text-foreground",
+              )}
+            >
+              All platforms
+            </button>
+            {allPlatforms.map((pid) => (
               <button
-                onClick={() => setPlatformFilter("ALL")}
+                key={pid}
+                onClick={() => setPlatformFilter(pid)}
                 className={cn(
-                  "shrink-0 px-3 py-2 rounded-lg text-xs font-medium border transition-all",
-                  platformFilter === "ALL"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white dark:bg-zinc-900 text-muted-foreground border-zinc-200 dark:border-zinc-700 hover:border-zinc-300",
+                  "shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                  platformFilter === pid
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-primary/40 hover:text-foreground",
                 )}
               >
-                All
+                <span className="text-sm leading-none">{PLATFORM_EMOJI[pid] ?? "🌐"}</span>
+                <span>{PLATFORM_LABEL[pid] ?? pid}</span>
               </button>
-              {allPlatforms.slice(0, 6).map((pid) => (
-                <button
-                  key={pid}
-                  onClick={() => setPlatformFilter(pid)}
-                  className={cn(
-                    "shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium border transition-all",
-                    platformFilter === pid
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-white dark:bg-zinc-900 text-muted-foreground border-zinc-200 dark:border-zinc-700 hover:border-zinc-300",
-                  )}
-                >
-                  <span>{PLATFORM_EMOJI[pid] ?? "🌐"}</span>
-                  <span className="capitalize">{pid}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Grid */}
         {loading ? (
@@ -596,28 +626,41 @@ const CreatorCampaigns = () => {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center py-24 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-              <Megaphone className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">
-              {search || platformFilter !== "ALL" ? "No campaigns match your search" : "No active campaigns yet"}
-            </h3>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              {search || platformFilter !== "ALL"
-                ? "Try adjusting your search or filter."
-                : "Check back soon — brands are always launching new campaigns."}
-            </p>
-            {(search || platformFilter !== "ALL") && (
-              <Button variant="outline" className="mt-4" onClick={() => { setSearch(""); setPlatformFilter("ALL"); }}>
+          search || platformFilter !== "ALL" ? (
+            <div className="flex flex-col items-center py-16 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mb-4">
+                <Search className="w-6 h-6 text-zinc-400 dark:text-zinc-500" />
+              </div>
+              <p className="font-semibold text-sm mb-1">No campaigns match your filters</p>
+              <p className="text-xs text-muted-foreground mb-4 max-w-xs">
+                Try adjusting your search or selecting a different platform.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => { setSearch(""); setPlatformFilter("ALL"); }}
+              >
+                <X className="w-3.5 h-3.5 mr-1.5" />
                 Clear filters
               </Button>
-            )}
-          </div>
+            </div>
+          ) : (
+            <RichEmptyState
+              icon={<Megaphone className="w-8 h-8 text-violet-500 dark:text-violet-400" />}
+              headline="No active campaigns yet"
+              sub="Brands are always launching new campaigns. Check back soon — or set up your profile to get invited directly."
+              secondary={{ label: "Complete your creator profile →", href: "/creator/settings" }}
+              tips={[
+                { icon: <Sparkles className="w-3 h-3" />, label: "Connect your social accounts" },
+                { icon: <Target className="w-3 h-3" />, label: "Set your niche & rates" },
+                { icon: <Send className="w-3 h-3" />, label: "Accept direct invitations" },
+              ]}
+            />
+          )
         ) : (
           <>
             <p className="text-xs text-muted-foreground mb-3">
-              {filtered.length} campaign{filtered.length !== 1 ? "s" : ""} available
+              {filtered.length} campaign{filtered.length !== 1 ? "s" : ""} found
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map((campaign) => (

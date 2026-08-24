@@ -30,7 +30,7 @@ function formatTime(dateStr: string): string {
  * the CSS engine from ever doing a mid-word break inside the bubble.
  */
 function getBubbleColor(senderRole: "brand" | "creator", isOwn: boolean): string {
-  if (!isOwn) return "bg-neutral-800 text-neutral-100 rounded-bl-sm";
+  if (!isOwn) return "bg-zinc-200/90 dark:bg-neutral-800 text-zinc-800 dark:text-neutral-100 rounded-bl-sm";
   return senderRole === "brand"
     ? "bg-teal-600 text-white rounded-br-sm"
     : "bg-violet-600 text-white rounded-br-sm";
@@ -187,7 +187,8 @@ export default function ChatWindow({
         // Desktop widget
         "sm:w-[320px] sm:rounded-t-2xl",
         "border border-white/10 shadow-2xl shadow-black/50",
-        "bg-neutral-950 flex flex-col overflow-hidden",
+        "bg-neutral-950 flex flex-col",
+        "[overflow:clip]",
         "transition-[height] duration-200 ease-in-out",
         w.minimized
           ? "h-12 w-[320px] rounded-t-2xl"
@@ -252,74 +253,76 @@ export default function ChatWindow({
       {/* ── Body (hidden when minimized) ── */}
       {!w.minimized && (
         <>
-          {/* Message stream */}
-          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 scrollbar-thin scrollbar-thumb-neutral-800">
-            {loading ? (
-              <div className="flex items-center justify-center h-full">
-                <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-              </div>
-            ) : messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full gap-1 text-center px-4">
-                <MiniAvatar
-                  name={w.userName}
-                  avatarUrl={w.avatarUrl}
-                  type={w.userType}
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Say hi to{" "}
-                  <span className="font-medium text-neutral-300">{w.userName}</span>!
-                </p>
-              </div>
-            ) : (
-              messages.map((msg) => {
-                const isOwn = msg.senderId === profile?.id;
-                return (
-                  <div
-                    key={msg.id}
-                    className={cn(
-                      "flex gap-1.5",
-                      isOwn ? "justify-end" : "justify-start",
-                    )}
-                  >
-                    {!isOwn && (
-                      <MiniAvatar
-                        name={w.userName}
-                        avatarUrl={w.avatarUrl}
-                        type={w.userType}
-                      />
-                    )}
-                    {/* Wrapper controls max-width; bubble handles colour only */}
+          {/* Message stream — Messenger-style: content anchors to bottom */}
+          <div className="flex-1 overflow-y-auto chat-scroll">
+            {/* Inner wrapper: min-h-full + justify-end pins messages to bottom */}
+            <div className="flex flex-col justify-end min-h-full px-3 py-3 gap-2">
+              {loading ? (
+                <div className="flex items-center justify-center py-6">
+                  <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center gap-1 text-center px-4 py-6">
+                  <MiniAvatar
+                    name={w.userName}
+                    avatarUrl={w.avatarUrl}
+                    type={w.userType}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Say hi to{" "}
+                    <span className="font-medium text-neutral-300">{w.userName}</span>!
+                  </p>
+                </div>
+              ) : (
+                messages.map((msg) => {
+                  const isOwn = msg.senderId === profile?.id;
+                  return (
                     <div
+                      key={msg.id}
                       className={cn(
-                        "flex flex-col gap-0.5 min-w-0",
-                        "max-w-[78%]",
-                        isOwn ? "items-end" : "items-start",
+                        "flex gap-1.5",
+                        isOwn ? "justify-end" : "justify-start",
                       )}
                     >
+                      {!isOwn && (
+                        <MiniAvatar
+                          name={w.userName}
+                          avatarUrl={w.avatarUrl}
+                          type={w.userType}
+                        />
+                      )}
+                      {/* Wrapper controls max-width; bubble handles colour only */}
                       <div
                         className={cn(
-                          "rounded-2xl px-3 py-2 text-[13px] leading-relaxed",
-                          "break-words whitespace-pre-wrap",
-                          getBubbleColor(msg.senderRole, isOwn),
+                          "flex flex-col gap-0.5 min-w-0 max-w-[78%]",
+                          isOwn ? "items-end" : "items-start",
                         )}
                       >
-                        {msg.text}
+                        <div
+                          className={cn(
+                            "rounded-2xl px-3 py-2 text-[13px] leading-relaxed",
+                            "whitespace-pre-wrap",
+                            getBubbleColor(msg.senderRole, isOwn),
+                          )}
+                          style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                        >
+                          {msg.text}
+                        </div>
+                        <span
+                          className={cn(
+                            "text-[9px] text-neutral-500 px-1",
+                            isOwn ? "text-right" : "text-left",
+                          )}
+                        >
+                          {formatTime(msg.createdAt)}
+                        </span>
                       </div>
-                      <span
-                        className={cn(
-                          "text-[9px] text-neutral-600 px-1",
-                          isOwn ? "text-right" : "text-left",
-                        )}
-                      >
-                        {formatTime(msg.createdAt)}
-                      </span>
                     </div>
-                  </div>
-                );
-              })
-            )}
-
-            <div ref={scrollRef} />
+                  );
+                })
+              )}
+              <div ref={scrollRef} />
+            </div>
           </div>
 
           {/* Input bar */}

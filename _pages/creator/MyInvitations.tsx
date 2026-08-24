@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import { useMessaging, type ConversationRecipient } from "@/app/_components/messaging/MessagingContext";
 import { cn } from "@/lib/utils";
 import {
@@ -414,28 +415,35 @@ const MyInvitations = () => {
             ))}
           </div>
         ) : invitations.length === 0 ? (
-          <div className="flex flex-col items-center py-24 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-              <Mail className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">No invitations yet</h3>
-            <p className="text-muted-foreground text-sm max-w-xs mb-6">
-              When brands invite you to collaborate on their campaigns, they&apos;ll appear here.
-            </p>
-            <Link href="/creator/campaigns">
-              <Button>
-                <Megaphone className="w-4 h-4 mr-2" />
-                Browse Campaigns
-              </Button>
-            </Link>
-          </div>
+          <RichEmptyState
+            icon={<Mail className="w-8 h-8 text-violet-500" />}
+            headline="Your invite inbox is quiet"
+            sub="Brands discover and hand-pick creators with complete profiles. The more you fill in, the more invitations you'll attract."
+            primary={{ label: "Complete Profile", href: "/creator/settings", icon: <Sparkles className="w-4 h-4" /> }}
+            secondary={{ label: "Browse campaigns instead", href: "/creator/campaigns" }}
+            tips={[
+              { icon: <Building2 className="w-3 h-3" />, label: "Get chosen by top brands" },
+              { icon: <DollarSign className="w-3 h-3" />, label: "Review offered budgets" },
+              { icon: <Sparkles className="w-3 h-3" />, label: "Stand out with a great profile" },
+            ]}
+            ambient="purple"
+          />
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-sm">
-              No {statusFilter.toLowerCase()} invitations.
+          <div className="flex flex-col items-center py-14 text-center">
+            <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mb-3">
+              <Mail className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
+            </div>
+            <p className="font-medium text-sm mb-1">
+              No {statusFilter.toLowerCase()} invitations
             </p>
-            <button onClick={() => setStatusFilter("ALL")} className="mt-2 text-sm text-primary hover:underline">
-              Show all
+            <p className="text-xs text-muted-foreground mb-3">
+              Try a different filter to see more.
+            </p>
+            <button
+              onClick={() => setStatusFilter("ALL")}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              Show all invitations
             </button>
           </div>
         ) : (
