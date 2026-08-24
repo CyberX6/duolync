@@ -24,10 +24,11 @@ import {
   startVerifyAction,
   pollVerifyAction,
   confirmSyncAction,
+  startPortfolioResyncAction,
+  pollApifyRunAction,
   type Platform,
   type AccountPreview,
 } from "@/app/actions/apify-sync";
-import { getMyProfileAction, type FullProfile } from "@/app/actions/profile";
 import { getSocialPostsAction, deletePostAction, clearBrokenPostImagesAction, type SocialPostItem } from "@/app/actions/social-posts";
 import { removePlatformAction } from "@/app/actions/social-connections";
 
@@ -50,7 +51,7 @@ const PLATFORMS: PlatformConfig[] = [
   },
   {
     id: "tiktok", label: "TikTok", emoji: "📱",
-    bg: "bg-zinc-800 border-zinc-700",
+    bg: "bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700",
     syncable: true, placeholder: "your_handle",
   },
   {
@@ -145,7 +146,8 @@ function SyncModal({
     if (!datasetId) return;
     setPhase("confirming");
 
-    const result = await confirmSyncAction(datasetId, userId, platform);
+    // Pass preview.handle so it gets stored in PlatformStats.raw for future re-syncs
+    const result = await confirmSyncAction(datasetId, userId, platform, preview?.handle);
     if (result.success) {
       setPhase("done");
       toast({
@@ -332,6 +334,126 @@ function SyncModal({
   );
 }
 
+// ─── Resync Posts Button ──────────────────────────────────────────────────────
+
+/**
+ * One-click "Refresh Posts" button for a connected platform.
+ * Triggers a new Apify run using the stored handle and polls until done,
+ * then calls onSuccess() so the parent can reload the post list.
+ *
+ * If the handle was never persisted (accounts connected before this feature),
+ * it falls back to opening the full reconnect modal via onFallback().
+ */
+function ResyncPostsButton({
+  userId,
+  platform,
+  onSuccess,
+  onFallback,
+}: {
+  userId: string;
+  platform: Platform;
+  onSuccess: () => Promise<void>;
+  onFallback: () => void;
+}) {
+  const { toast } = useToast();
+  const [state, setState] = useState<"idle" | "running" | "done" | "error">("idle");
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stop = () => {
+    if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+  };
+  useEffect(() => () => stop(), []);
+
+  const handleClick = async () => {
+    setState("running");
+    const start = await startPortfolioResyncAction(platform);
+
+    if ("error" in start) {
+      stop();
+      if (start.error === "no_handle") {
+        // Handle was never persisted — fall back to the full connect modal
+        setState("idle");
+        toast({
+          title: "Re-connect required",
+          description: "Please reconnect your account to enable one-click re-sync.",
+        });
+        onFallback();
+        return;
+      }
+      setState("error");
+      toast({
+        variant: "destructive",
+        title: "Re-sync failed",
+        description: start.error,
+      });
+      return;
+    }
+
+    const { runId } = start;
+    pollRef.current = setInterval(async () => {
+      try {
+        const result = await pollApifyRunAction(runId, userId, platform);
+        if (result.state === "running") return;
+        stop();
+        if (result.state === "succeeded") {
+          setState("done");
+          toast({
+            title: "Posts refreshed! ✓",
+            description: "Your latest posts have been updated.",
+          });
+          await onSuccess();
+          setState("idle");
+        } else {
+          setState("error");
+          toast({
+            variant: "destructive",
+            title: "Re-sync failed",
+            description: result.error,
+          });
+        }
+      } catch (err) {
+        stop();
+        setState("error");
+        toast({
+          variant: "destructive",
+          title: "Re-sync failed",
+          description: err instanceof Error ? err.message : "Unexpected error",
+        });
+      }
+    }, 3_000);
+  };
+
+  const label =
+    state === "running" ? "Syncing…" :
+    state === "done"    ? "Refreshed!" :
+    state === "error"   ? "Retry" :
+    "Refresh Posts";
+
+  return (
+    <Button
+      size="sm"
+      variant="outline"
+      onClick={handleClick}
+      disabled={state === "running"}
+      className={cn(
+        "gap-1.5 h-7 px-2.5 text-xs font-medium rounded-lg transition-colors",
+        state === "done"
+          ? "border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10"
+          : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:text-foreground hover:border-zinc-300 dark:hover:border-zinc-600 bg-transparent"
+      )}
+    >
+      {state === "running" ? (
+        <Loader2 className="w-3 h-3 animate-spin" />
+      ) : state === "done" ? (
+        <CheckCircle2 className="w-3 h-3" />
+      ) : (
+        <RefreshCw className="w-3 h-3" />
+      )}
+      {label}
+    </Button>
+  );
+}
+
 // ─── Platform Card ────────────────────────────────────────────────────────────
 
 function PlatformCard({
@@ -353,7 +475,9 @@ function PlatformCard({
     <div
       className={cn(
         "rounded-2xl border p-5 flex items-center gap-4 transition-all",
-        isConnected ? "bg-zinc-900 border-zinc-800" : "bg-zinc-900/40 border-zinc-800/50",
+        isConnected
+          ? "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+          : "bg-zinc-50/80 dark:bg-zinc-900/40 border-zinc-200/60 dark:border-zinc-800/50",
       )}
     >
       {/* Icon */}
@@ -364,24 +488,24 @@ function PlatformCard({
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
-          <p className="font-semibold text-sm text-white">{platform.label}</p>
+          <p className="font-semibold text-sm text-foreground">{platform.label}</p>
           {isConnected ? (
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 px-1.5 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
               Connected
             </span>
           ) : (
-            <span className="text-[10px] font-medium text-zinc-500 bg-zinc-800 border border-zinc-700 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-medium text-muted-foreground bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-1.5 py-0.5 rounded-full">
               Not Connected
             </span>
           )}
         </div>
         {isConnected && followers != null ? (
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-muted-foreground">
             {fmt(followers)} followers{engagement ? ` · ${engagement}% eng` : ""}
           </p>
         ) : (
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-muted-foreground/60">
             {platform.syncable ? "Sync to import your stats" : "Coming soon"}
           </p>
         )}
@@ -396,7 +520,7 @@ function PlatformCard({
                 size="icon"
                 variant="ghost"
                 onClick={onSync}
-                className="w-8 h-8 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                className="w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 title={`Re-sync ${platform.label}`}
               >
                 <Pencil className="w-3.5 h-3.5" />
@@ -405,7 +529,7 @@ function PlatformCard({
                 size="icon"
                 variant="ghost"
                 onClick={onRemove}
-                className="w-8 h-8 text-zinc-500 hover:text-red-400 hover:bg-red-500/10"
+                className="w-8 h-8 text-muted-foreground/60 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
                 title={`Remove ${platform.label}`}
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -416,7 +540,7 @@ function PlatformCard({
             <Button
               size="sm"
               onClick={onSync}
-              className="gap-1.5 bg-violet-600/20 border border-violet-500/30 text-violet-300 hover:bg-violet-600/30 hover:text-violet-200"
+              className="gap-1.5 bg-violet-50 dark:bg-violet-600/20 border border-violet-200 dark:border-violet-500/30 text-violet-600 dark:text-violet-300 hover:bg-violet-100 dark:hover:bg-violet-600/30"
               variant="outline"
             >
               <Zap className="w-3.5 h-3.5" /> Connect
@@ -457,7 +581,7 @@ function PostCard({
   const emoji = post.platform === "instagram" ? "📷" : "📱";
 
   const inner = (
-    <div className="rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 group cursor-pointer relative">
+    <div className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 group cursor-pointer relative">
       {/* Delete button */}
       {onDelete && (
         <button
@@ -476,7 +600,7 @@ function PostCard({
 
       {/* Image or fallback */}
       {post.imageUrl && !imgError ? (
-        <div className="aspect-square w-full overflow-hidden bg-zinc-800">
+        <div className="aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
           <img
             src={post.imageUrl}
             alt={post.caption ?? "Post"}
@@ -486,16 +610,16 @@ function PostCard({
           />
         </div>
       ) : (
-        <div className="aspect-square w-full bg-zinc-800 flex items-center justify-center text-3xl">
+        <div className="aspect-square w-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-3xl">
           {emoji}
         </div>
       )}
 
       <div className="p-3 space-y-1.5">
         {post.caption && (
-          <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">{post.caption}</p>
+          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">{post.caption}</p>
         )}
-        <div className="flex items-center gap-3 text-[11px] text-zinc-600">
+        <div className="flex items-center gap-3 text-[11px] text-muted-foreground/60">
           {post.likes != null && (
             <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{fmt(post.likes)}</span>
           )}
@@ -523,9 +647,8 @@ function PostCard({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const PresencePage = () => {
-  const { profile } = useAuth();
+  const { profile, fullProfile, refreshProfile } = useAuth();
   const { toast } = useToast();
-  const [fullProfile, setFullProfile] = useState<FullProfile | null>(null);
   const [posts, setPosts] = useState<SocialPostItem[]>([]);
   const [syncTarget, setSyncTarget] = useState<Platform | null>(null);
   const [removeTarget, setRemoveTarget] = useState<string | null>(null);
@@ -533,8 +656,7 @@ const PresencePage = () => {
   const [loading, setLoading] = useState(true);
 
   const reload = async () => {
-    const [p, postsRes] = await Promise.all([getMyProfileAction(), getSocialPostsAction()]);
-    if (p) setFullProfile(p);
+    const [, postsRes] = await Promise.all([refreshProfile(), getSocialPostsAction()]);
     if (!postsRes.error) setPosts(postsRes.data);
   };
 
@@ -581,28 +703,64 @@ const PresencePage = () => {
         {/* ── Header ── */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-1.5">
-            <Wifi className="w-5 h-5 text-violet-400" />
+            <Wifi className="w-5 h-5 text-violet-500 dark:text-violet-400" />
             <h1 className="font-display text-2xl font-bold">Social Connections</h1>
           </div>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             Connect your platforms and track performance across all channels.
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-24">
-            <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+          <div className="space-y-8">
+            {/* Stats bar skeleton */}
+            <div className="grid grid-cols-3 gap-3">
+              {[0,1,2].map((i) => (
+                <div key={i} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 animate-pulse">
+                  <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-16 mb-2" />
+                  <div className="h-6 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="w-8 h-8 text-violet-500 dark:text-violet-400 animate-spin" />
+            </div>
           </div>
         ) : (
           <div className="space-y-10">
+            {/* ── Summary stats bar ── */}
+            {connectedPlatforms.length > 0 && (
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Connected</p>
+                  <p className="text-2xl font-bold font-display text-violet-600 dark:text-violet-400">
+                    {connectedPlatforms.length}
+                    <span className="text-sm font-normal text-muted-foreground ml-1">platforms</span>
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Followers</p>
+                  <p className="text-2xl font-bold font-display text-foreground">
+                    {totalFollowers != null ? fmt(totalFollowers) : "—"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Avg Eng.</p>
+                  <p className="text-2xl font-bold font-display text-emerald-600 dark:text-emerald-400">
+                    {avgEngagement != null ? `${avgEngagement}%` : "—"}
+                  </p>
+                </div>
+              </div>
+            )}
             {/* ── Connect Accounts ── */}
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">
+                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                   Connect Accounts
                 </h2>
                 {lastSynced && (
-                  <span className="text-xs text-zinc-600">
+                  <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2 py-0.5 rounded-full">
+                    <RefreshCw className="w-3 h-3" />
                     Last synced {new Date(lastSynced).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </span>
                 )}
@@ -627,61 +785,61 @@ const PresencePage = () => {
 
             {/* ── Performance Snapshot ── */}
             <section>
-              <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">
+              <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">
                 Performance Snapshot
               </h2>
 
               {connectedPlatforms.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-zinc-800 p-10 text-center">
-                  <Zap className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                  <p className="text-sm text-zinc-400 font-medium mb-1">No data yet</p>
-                  <p className="text-xs text-zinc-600">
+                <div className="rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 p-10 text-center">
+                  <Zap className="w-10 h-10 text-zinc-400 dark:text-zinc-700 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground font-medium mb-1">No data yet</p>
+                  <p className="text-xs text-muted-foreground/60">
                     Connect a platform above to pull your stats.
                   </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="rounded-2xl bg-zinc-900 border border-zinc-800 p-5">
+                  <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                      <Users className="w-4 h-4 text-violet-400" />
-                      <p className="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">Total Followers</p>
+                      <Users className="w-4 h-4 text-violet-500 dark:text-violet-400" />
+                      <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-medium">Followers</p>
                     </div>
                     {totalFollowers != null ? (
-                      <p className="text-3xl font-bold font-display text-white">{fmt(totalFollowers)}</p>
+                      <p className="text-3xl font-bold font-display text-foreground">{fmt(totalFollowers)}</p>
                     ) : (
-                      <p className="text-sm text-zinc-600 font-medium">Not Connected</p>
+                      <p className="text-sm text-muted-foreground/60 font-medium">Not synced</p>
                     )}
                   </div>
 
-                  <div className="rounded-2xl bg-zinc-900 border border-zinc-800 p-5">
+                  <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                      <TrendingUp className="w-4 h-4 text-emerald-400" />
-                      <p className="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">Avg Engagement</p>
+                      <TrendingUp className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                      <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-medium">Engagement</p>
                     </div>
                     {avgEngagement != null ? (
-                      <p className="text-3xl font-bold font-display text-emerald-400">
+                      <p className="text-3xl font-bold font-display text-emerald-600 dark:text-emerald-400">
                         {avgEngagement.toFixed(1)}%
                       </p>
                     ) : (
-                      <p className="text-sm text-zinc-600 font-medium">Not Connected</p>
+                      <p className="text-sm text-muted-foreground/60 font-medium">Not synced</p>
                     )}
                   </div>
 
-                  <div className="rounded-2xl bg-zinc-900 border border-zinc-800 p-5">
+                  <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                      <BarChart3 className="w-4 h-4 text-cyan-400" />
-                      <p className="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">Niches</p>
+                      <BarChart3 className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+                      <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-medium">Niches</p>
                     </div>
                     {niches.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {niches.slice(0, 3).map((n) => (
-                          <span key={n} className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/20 font-medium">
+                          <span key={n} className="text-[10px] px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20 font-medium">
                             {n}
                           </span>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-zinc-600 font-medium">Not Connected</p>
+                      <p className="text-sm text-muted-foreground/60 font-medium">Not synced</p>
                     )}
                   </div>
                 </div>
@@ -704,14 +862,24 @@ const PresencePage = () => {
 
               return (
                 <section className="space-y-8">
-                  <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">
+                  <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                     Latest Posts
                   </h2>
                   {groups.map(({ key, meta, items }) => (
                     <div key={key}>
-                      <p className="text-sm font-semibold text-zinc-300 mb-3 flex items-center gap-2">
-                        <span>{meta.emoji}</span> {meta.label}
-                      </p>
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                          <span>{meta.emoji}</span> {meta.label}
+                        </p>
+                        {connectedPlatforms.includes(key) && (
+                          <ResyncPostsButton
+                            userId={profile?.id ?? ""}
+                            platform={key as Platform}
+                            onSuccess={reload}
+                            onFallback={() => setSyncTarget(key as Platform)}
+                          />
+                        )}
+                      </div>
                       <div className="grid grid-cols-3 gap-3">
                         {items.slice(0, 3).map((post) => (
                           <PostCard

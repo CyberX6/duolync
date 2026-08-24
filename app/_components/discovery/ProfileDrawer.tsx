@@ -285,9 +285,10 @@ function fmt(n: number): string {
 function PortfolioPostThumbnail({ post }: { post: SocialPostItem }) {
   const [imgErr, setImgErr] = useState(false);
   const emoji = post.platform === "instagram" ? "📷" : "📱";
+  const isClickable = Boolean(post.postUrl);
 
   const inner = (
-    <div className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-neutral-800 group cursor-pointer">
+    <div className={cn("relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-neutral-800 group", isClickable ? "cursor-pointer" : "cursor-default")}>
       {post.imageUrl && !imgErr ? (
         <img
           src={post.imageUrl}

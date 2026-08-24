@@ -26,3 +26,6 @@ dist-ssr
 .env
 .envgit reset --mixed HEAD~1
 .pnpm-store/
+
+# Design review screenshots (local only)
+.design-review/

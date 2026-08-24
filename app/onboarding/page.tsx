@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -38,6 +38,7 @@ import type {
   CreatorOnboardingInput,
 } from "@/app/actions/onboarding";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -478,16 +479,41 @@ function CreatorForm({ state, onChange }: CreatorFormProps) {
   );
 }
 
+// ─── Hold screen shown during auth check / redirect ──────────────────────────
+
+function HoldScreen() {
+  return (
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-violet-500 animate-spin" />
+    </div>
+  );
+}
+
 // ─── Main Onboarding Page ─────────────────────────────────────────────────────
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { user, profile, loading, refreshProfile } = useAuth();
   const [isPending, startTransition] = useTransition();
 
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedRole, setSelectedRole] = useState<"BRAND" | "CREATOR" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSettingRole, setIsSettingRole] = useState(false);
+
+  // Auth + onboarding guards
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      router.replace("/auth");
+      return;
+    }
+    if (profile?.hasCompletedOnboarding) {
+      router.replace(
+        profile.user_type === "brand" ? "/brand/dashboard" : "/creator/dashboard",
+      );
+    }
+  }, [loading, user, profile, router]);
 
   const [brandForm, setBrandForm] = useState<BrandFormState>({
     companyName: "",
@@ -546,10 +572,19 @@ export default function OnboardingPage() {
         setError(result.error);
         return;
       }
-      router.replace(
+      // Refresh the auth context so the cached profile picks up the new role
+      // before navigating. Use a hard redirect so the layout re-initialises
+      // cleanly with the correct user_type on arrival.
+      await refreshProfile();
+      window.location.replace(
         selectedRole === "BRAND" ? "/brand/dashboard" : "/creator/dashboard",
       );
     });
+  }
+
+  // Show hold screen while auth loads or a redirect is in-flight
+  if (loading || !user || profile?.hasCompletedOnboarding) {
+    return <HoldScreen />;
   }
 
   return (

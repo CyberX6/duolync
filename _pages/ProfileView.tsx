@@ -48,6 +48,18 @@ const formatNumber = (n: number) => {
   return n.toString();
 };
 
+const PLATFORM_EMOJIS: Record<string, string> = {
+  instagram: "📸",
+  tiktok: "🎵",
+  youtube: "▶️",
+  twitter: "🐦",
+  linkedin: "💼",
+  pinterest: "📌",
+  twitch: "🎮",
+  snapchat: "👻",
+  facebook: "📘",
+};
+
 const PLATFORM_OPTIONS = [
   "Instagram", "TikTok", "YouTube", "Twitter", "LinkedIn",
   "Twitch", "Facebook", "Pinterest", "Snapchat", "Other",
@@ -590,11 +602,12 @@ function PostThumbnail({
 
   const card = (
     <div className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 group relative cursor-pointer">
+      {/* Delete button (own profile) */}
       {isOwn && (
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-black/70 border border-zinc-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/80"
+          className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-black/70 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600/90"
           title="Remove post"
         >
           {deleting ? (
@@ -606,7 +619,7 @@ function PostThumbnail({
       )}
 
       {post.imageUrl && !imgError ? (
-        <div className="aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+        <div className="aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 relative">
           <img
             src={post.imageUrl}
             alt={post.caption ?? "Post"}
@@ -614,6 +627,13 @@ function PostThumbnail({
             loading="lazy"
             onError={() => setImgError(true)}
           />
+          {/* Stats overlay on hover */}
+          {(post.likes != null || post.comments != null) && (
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+              {post.likes != null && <span>❤️ {formatNumber(post.likes)}</span>}
+              {post.comments != null && <span>💬 {formatNumber(post.comments)}</span>}
+            </div>
+          )}
         </div>
       ) : (
         <div className="aspect-square w-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-3xl">
@@ -621,15 +641,16 @@ function PostThumbnail({
         </div>
       )}
 
-      <div className="p-2.5">
-        {post.caption && (
-          <p className="text-[11px] text-muted-foreground line-clamp-1 mb-1">{post.caption}</p>
-        )}
-        <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-          {post.likes != null && <span>❤️ {formatNumber(post.likes)}</span>}
-          {post.comments != null && <span>💬 {formatNumber(post.comments)}</span>}
+      {/* Caption — only show for image-less posts */}
+      {(!post.imageUrl || imgError) && post.caption && (
+        <div className="p-2.5">
+          <p className="text-[11px] text-muted-foreground line-clamp-2">{post.caption}</p>
+          <div className="flex items-center gap-2 mt-1 text-[11px] text-muted-foreground">
+            {post.likes != null && <span>❤️ {formatNumber(post.likes)}</span>}
+            {post.comments != null && <span>💬 {formatNumber(post.comments)}</span>}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 
@@ -652,7 +673,7 @@ function LatestPostsSection({
   const groups = Object.entries(PLATFORM_META_POSTS).map(([key, meta]) => ({
     key,
     meta,
-    items: posts.filter((p) => p.platform === key).slice(0, 3),
+    items: posts.filter((p) => p.platform === key).slice(0, 6),
   })).filter((g) => g.items.length > 0);
 
   return (
@@ -694,7 +715,7 @@ function LatestPostsSection({
       ) : (
         <div className="flex flex-col items-center py-8 text-center">
           <div className="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-3">
-            <Radio className="w-7 h-7 text-violet-400" />
+            <Radio className="w-7 h-7 text-violet-600 dark:text-violet-400" />
           </div>
           <p className="font-semibold text-sm mb-1">No posts yet</p>
           <p className="text-xs text-muted-foreground mb-4 max-w-xs">
@@ -813,8 +834,60 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
   if (loading) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+          {/* Back button placeholder */}
+          <div className="h-4 w-12 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse" />
+
+          {/* Profile card skeleton */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl overflow-hidden shadow-sm">
+            {/* Cover */}
+            <div className="h-36 bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
+            <div className="px-6 pb-6">
+              {/* Avatar row */}
+              <div className="flex items-end justify-between -mt-12 mb-4">
+                <div className="w-24 h-24 rounded-xl bg-zinc-300 dark:bg-zinc-600 ring-4 ring-white dark:ring-zinc-900 animate-pulse" />
+                <div className="flex gap-2 pb-1">
+                  <div className="h-8 w-24 bg-zinc-100 dark:bg-zinc-800 rounded-lg animate-pulse" />
+                  <div className="h-8 w-20 bg-zinc-100 dark:bg-zinc-800 rounded-lg animate-pulse" />
+                </div>
+              </div>
+              {/* Name + badges */}
+              <div className="space-y-2 mb-4">
+                <div className="h-7 w-44 bg-zinc-200 dark:bg-zinc-700 rounded-lg animate-pulse" />
+                <div className="flex gap-2">
+                  <div className="h-4 w-16 bg-zinc-100 dark:bg-zinc-800 rounded-full animate-pulse" />
+                  <div className="h-4 w-20 bg-zinc-100 dark:bg-zinc-800 rounded-full animate-pulse" />
+                </div>
+                <div className="h-3 w-28 bg-zinc-100 dark:bg-zinc-800 rounded animate-pulse" />
+              </div>
+              {/* Stats strip */}
+              <div className="grid grid-cols-3 gap-0 border border-zinc-200/60 dark:border-zinc-800/80 rounded-xl overflow-hidden mb-4">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex flex-col items-center gap-1.5 p-3">
+                    <div className="h-4 w-4 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse" />
+                    <div className="h-5 w-10 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse" />
+                    <div className="h-2.5 w-14 bg-zinc-100 dark:bg-zinc-800 rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+              {/* Bio lines */}
+              <div className="space-y-1.5">
+                <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-800 rounded animate-pulse" />
+                <div className="h-3 w-4/5 bg-zinc-100 dark:bg-zinc-800 rounded animate-pulse" />
+                <div className="h-3 w-3/5 bg-zinc-100 dark:bg-zinc-800 rounded animate-pulse" />
+              </div>
+            </div>
+          </div>
+
+          {/* Second card skeleton */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl p-6 shadow-sm space-y-3">
+            <div className="h-5 w-32 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse" />
+            <div className="grid grid-cols-2 gap-3">
+              {[0, 1].map((i) => (
+                <div key={i} className="h-20 bg-zinc-100 dark:bg-zinc-800 rounded-xl animate-pulse" />
+              ))}
+            </div>
+          </div>
         </div>
       </MainLayout>
     );
@@ -823,11 +896,17 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
   if (notFound || !profileData) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <h1 className="font-display text-2xl font-bold mb-2">Profile not found</h1>
-            <Button asChild><Link href="/">Go Home</Link></Button>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mx-auto mb-4">
+            <Users className="w-8 h-8 text-zinc-400 dark:text-zinc-500" />
           </div>
+          <h1 className="font-display text-2xl font-bold mb-2">Profile not found</h1>
+          <p className="text-muted-foreground text-sm mb-6 max-w-xs mx-auto">
+            This profile doesn&apos;t exist or may have been removed.
+          </p>
+          <Button asChild variant="outline">
+            <Link href="/">Go Home</Link>
+          </Button>
         </div>
       </MainLayout>
     );
@@ -853,22 +932,25 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
           {/* Cover */}
           <div
             className={cn(
-              "h-24 w-full",
+              "h-36 w-full relative overflow-hidden",
               isCreator
-                ? "bg-gradient-to-r from-violet-600/80 to-purple-600/80"
-                : "bg-gradient-to-r from-teal-600/80 to-cyan-600/80",
+                ? "bg-gradient-to-br from-violet-700 via-purple-600 to-fuchsia-600"
+                : "bg-gradient-to-br from-teal-700 via-cyan-600 to-sky-500",
             )}
-          />
+          >
+            {/* Subtle mesh overlay */}
+            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 40%)" }} />
+          </div>
 
           <div className="px-6 pb-6">
             {/* Avatar row */}
-            <div className="flex items-end justify-between -mt-10 mb-4">
-              <div className="w-20 h-20 rounded-xl ring-4 ring-white dark:ring-zinc-900 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shadow-lg">
+            <div className="flex items-end justify-between -mt-12 mb-4">
+              <div className="w-24 h-24 rounded-2xl ring-4 ring-white dark:ring-zinc-900 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shadow-lg shrink-0">
                 {profileData.avatar_url ? (
                   <img src={profileData.avatar_url} alt={profileData.full_name ?? ""} className="w-full h-full object-cover" />
                 ) : (
                   <div className={cn(
-                    "w-full h-full flex items-center justify-center text-2xl font-bold text-white",
+                    "w-full h-full flex items-center justify-center text-3xl font-bold text-white",
                     isCreator ? "bg-gradient-to-br from-violet-600 to-purple-600" : "bg-gradient-to-br from-teal-600 to-cyan-600",
                   )}>
                     {(profileData.full_name ?? "U")[0].toUpperCase()}
@@ -924,17 +1006,32 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
 
             {/* Name + badges */}
             <div className="mb-3">
-              <div className="flex items-center gap-2 flex-wrap mb-1">
+              <div className="flex items-center gap-2 flex-wrap mb-1.5">
                 <h1 className="font-display text-2xl font-bold">{profileData.full_name ?? "User"}</h1>
                 <Badge variant={isCreator ? "default" : "secondary"} className="capitalize text-xs">
                   {profileData.user_type}
                 </Badge>
+                {isCreator && profileData.primary_platform && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                    {PLATFORM_EMOJIS[profileData.primary_platform.toLowerCase()] ?? "🌐"}{" "}
+                    {profileData.primary_platform.charAt(0).toUpperCase() + profileData.primary_platform.slice(1)}
+                  </span>
+                )}
               </div>
 
               {isCreator ? (
                 <>
                   {profileData.niche && (
-                    <p className="text-muted-foreground text-sm mb-2">{profileData.niche}</p>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {profileData.niche.split(",").map((n) => n.trim()).filter(Boolean).map((n) => (
+                        <span
+                          key={n}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-200/60 dark:border-violet-500/20"
+                        >
+                          {n}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </>
               ) : (
@@ -1018,19 +1115,29 @@ const ProfileView = ({ profileId }: { profileId?: string }) => {
         {isCreator && profileData.platformStats.length > 0 && (
           <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 rounded-2xl p-6 shadow-sm">
             <h2 className="font-display font-bold mb-4">Platform Stats</h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {profileData.platformStats.map((s) => (
-                <div key={s.platform} className="flex items-center justify-between py-2 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
-                  <span className="text-sm font-medium capitalize">{s.platform}</span>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    {s.followerCount != null && (
-                      <span>{formatNumber(s.followerCount)} followers</span>
-                    )}
-                    {s.engagementRate != null && (
-                      <span className="text-emerald-600 dark:text-emerald-400 font-medium">
-                        {s.engagementRate}% eng
-                      </span>
-                    )}
+                <div
+                  key={s.platform}
+                  className="flex items-center gap-3 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50"
+                >
+                  <span className="text-2xl shrink-0 leading-none">
+                    {PLATFORM_EMOJIS[s.platform.toLowerCase()] ?? "🌐"}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold capitalize">{s.platform}</p>
+                    <div className="flex items-center gap-2.5 mt-0.5 flex-wrap">
+                      {s.followerCount != null && (
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                          {formatNumber(s.followerCount)} followers
+                        </span>
+                      )}
+                      {s.engagementRate != null && (
+                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                          {s.engagementRate}% eng
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

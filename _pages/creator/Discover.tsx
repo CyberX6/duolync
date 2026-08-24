@@ -5,6 +5,7 @@ import {
   MapPin, BadgeCheck, Users, TrendingUp, ChevronDown,
   Briefcase, Globe, Sparkles, UserPlus, UserCheck, Clock,
 } from "lucide-react";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -338,23 +339,57 @@ const CreatorSkeletonCard = () => (
   </div>
 );
 
-const EmptyState = ({ tab, isFiltered, onClear }: { tab: DiscoveryTab; isFiltered: boolean; onClear: () => void }) => (
-  <div className="col-span-full flex flex-col items-center py-20 px-6 text-center">
-    <div className="relative mb-6">
-      <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-        <Search className="w-8 h-8 text-primary/50" />
-      </div>
-      <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full gradient-primary" />
-    </div>
-    <h3 className="font-display text-xl font-bold mb-2">
-      {isFiltered ? `No ${tab === "brands" ? "brands" : "creators"} match your filters` : tab === "brands" ? "No brands yet" : "No creators yet"}
-    </h3>
-    <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-6">
-      {isFiltered ? "Try broadening your search or removing some filters." : tab === "brands" ? "Brands are joining Duolync every day — check back soon." : "Other creators are joining Duolync every day — check back soon."}
-    </p>
-    {isFiltered && <Button variant="outline" size="sm" className="gap-2 border-neutral-800 hover:border-neutral-600" onClick={onClear}><X className="w-3.5 h-3.5" />Clear all filters</Button>}
-  </div>
-);
+const EmptyState = ({ tab, isFiltered, onClear }: { tab: DiscoveryTab; isFiltered: boolean; onClear: () => void }) => {
+  if (isFiltered) {
+    return (
+      <RichEmptyState
+        className="col-span-full"
+        icon={<Search className="w-8 h-8 text-violet-500" />}
+        headline={`No ${tab === "brands" ? "brands" : "creators"} match these filters`}
+        sub="Try broadening your search, removing a filter, or switching to a different niche or platform."
+        secondary={{ label: "Clear all filters", onClick: onClear }}
+        tips={[
+          { icon: <Globe className="w-3 h-3" />, label: "Try a broader niche" },
+          { icon: <Users className="w-3 h-3" />, label: "Remove platform filters" },
+          { icon: <TrendingUp className="w-3 h-3" />, label: "Expand reach range" },
+        ]}
+        ambient="cyan"
+      />
+    );
+  }
+
+  if (tab === "brands") {
+    return (
+      <RichEmptyState
+        className="col-span-full"
+        icon={<Briefcase className="w-8 h-8 text-cyan-500" />}
+        headline="No brands listed yet"
+        sub="Brands are joining Duolync every day. Check back soon or update your profile so they can find you first."
+        tips={[
+          { icon: <Globe className="w-3 h-3" />, label: "Brands join daily" },
+          { icon: <Sparkles className="w-3 h-3" />, label: "Complete your profile" },
+          { icon: <Briefcase className="w-3 h-3" />, label: "Browse open campaigns" },
+        ]}
+        ambient="cyan"
+      />
+    );
+  }
+
+  return (
+    <RichEmptyState
+      className="col-span-full"
+      icon={<Users className="w-8 h-8 text-violet-500" />}
+      headline="No creators listed yet"
+      sub="The creator community is growing fast. Come back soon — or be one of the first to join and get discovered."
+      tips={[
+        { icon: <Users className="w-3 h-3" />, label: "Community growing daily" },
+        { icon: <TrendingUp className="w-3 h-3" />, label: "Connect your platforms" },
+        { icon: <MapPin className="w-3 h-3" />, label: "Set your niche & location" },
+      ]}
+      ambient="purple"
+    />
+  );
+};
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 

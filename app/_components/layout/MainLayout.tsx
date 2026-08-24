@@ -3,6 +3,9 @@
 import { ReactNode } from "react";
 import AuthenticatedHeader from "./AuthenticatedHeader";
 import GroupsPanel from "./GroupsPanel";
+import BottomTabBar from "./BottomTabBar";
+import { CommandPalette } from "@/app/_components/shared/CommandPalette";
+import { LyncWidget } from "@/app/_components/shared/LyncWidget";
 import { useAuth } from "@/hooks/useAuth";
 
 interface MainLayoutProps {
@@ -21,10 +24,13 @@ const MainLayout = ({ children, showGroupsPanel = true }: MainLayoutProps) => {
       <AuthenticatedHeader />
       <div className="flex flex-1 items-stretch min-h-0">
         {showGroupsPanel && <GroupsPanel />}
-        <main className="flex-1 min-w-0 overflow-y-auto">
+        <main className="flex-1 min-w-0 overflow-y-auto pb-16 lg:pb-0">
           {children}
         </main>
       </div>
+      <BottomTabBar />
+      <CommandPalette />
+      <LyncWidget />
     </div>
   );
 };

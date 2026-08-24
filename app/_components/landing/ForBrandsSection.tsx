@@ -31,7 +31,7 @@ const features = [
 
 const ForBrandsSection = () => {
   return (
-    <section id="for-brands" className="py-24 md:py-32 bg-white relative overflow-hidden">
+    <section id="for-brands" className="py-24 md:py-32 bg-white dark:bg-zinc-950 relative overflow-hidden">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
@@ -77,12 +77,12 @@ const ForBrandsSection = () => {
                 <div className="aspect-square bg-gradient-to-br from-primary/5 to-accent/5 p-8">
                   {/* Mock Dashboard */}
                   <ParallaxElement speed={0.2} direction="up">
-                    <div className="bg-white rounded-2xl shadow-lg p-6 mb-4 transform hover:scale-[1.02] transition-transform">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-lg p-6 mb-4 transform hover:scale-[1.02] transition-transform">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 rounded-full gradient-hero-canva" />
                         <div>
-                          <div className="h-3 bg-gray-200 rounded w-24 mb-2" />
-                          <div className="h-2 bg-gray-100 rounded w-16" />
+                          <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-24 mb-2" />
+                          <div className="h-2 bg-zinc-100 dark:bg-zinc-800 rounded w-16" />
                         </div>
                         <div className="ml-auto text-sm font-bold text-primary">98% Match</div>
                       </div>
@@ -94,12 +94,12 @@ const ForBrandsSection = () => {
                   </ParallaxElement>
 
                   <ParallaxElement speed={0.3} direction="down">
-                    <div className="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-[1.02] transition-transform ml-8">
+                    <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-lg p-6 transform hover:scale-[1.02] transition-transform ml-8">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-yellow-400" />
                         <div>
-                          <div className="h-3 bg-gray-200 rounded w-20 mb-2" />
-                          <div className="h-2 bg-gray-100 rounded w-14" />
+                          <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-20 mb-2" />
+                          <div className="h-2 bg-zinc-100 dark:bg-zinc-800 rounded w-14" />
                         </div>
                         <div className="ml-auto text-sm font-bold text-primary">95% Match</div>
                       </div>

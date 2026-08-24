@@ -30,6 +30,9 @@ import {
 } from "@/app/actions/proposals";
 import { cn } from "@/lib/utils";
 import { useMessaging, type ConversationRecipient } from "@/app/_components/messaging/MessagingContext";
+import { KpiCardsSkeleton } from "@/app/_components/dashboard/DashboardSkeletons";
+import { BrandOnboardingChecklist } from "@/app/_components/dashboard/BrandOnboardingChecklist";
+import { AIStrategyConsultant } from "@/app/_components/dashboard/AIStrategyConsultant";
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
 
@@ -133,6 +136,17 @@ const BrandDashboard = () => {
           </p>
         </div>
 
+        {/* ── Brand onboarding checklist ────────────────────────────────── */}
+        {profile?.id && (
+          <BrandOnboardingChecklist
+            userId={profile.id}
+            hasCompletedProfile={!!(profile.full_name && profile.avatar_url)}
+            hasCampaigns={stats.activeCampaigns > 0}
+            hasSavedCreators={stats.savedCreators > 0}
+            hasSentProposals={false}
+          />
+        )}
+
         {/* ── Quick actions ─────────────────────────────────────────────── */}
         <div className="grid sm:grid-cols-2 gap-3 mb-8">
           <Link
@@ -140,7 +154,7 @@ const BrandDashboard = () => {
             className="group relative overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 flex items-center gap-4 transition-all hover:border-violet-500/40 hover:shadow-lg hover:shadow-violet-500/5"
           >
             <div className="w-12 h-12 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
-              <Search className="w-5 h-5 text-violet-400" />
+              <Search className="w-5 h-5 text-violet-600 dark:text-violet-400" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm mb-0.5">Browse Creators</h3>
@@ -149,75 +163,80 @@ const BrandDashboard = () => {
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
           </Link>
 
-          <div className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 flex items-center gap-4 opacity-70 cursor-not-allowed select-none">
+          <Link
+            href="/brand/smart-match"
+            className="group relative overflow-hidden rounded-2xl border border-violet-500/30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-5 flex items-center gap-4 transition-all hover:border-violet-500/60 hover:shadow-lg hover:shadow-violet-500/10"
+          >
             <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                background:
-                  "radial-gradient(ellipse at left, rgba(139,92,246,0.12) 0%, transparent 60%)",
-              }}
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ background: "radial-gradient(ellipse at left, rgba(192,132,252,0.08) 0%, transparent 60%)" }}
             />
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600/50 to-purple-600/50 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5 text-white/60" />
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-purple-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <h3 className="font-semibold text-sm">Smart Match</h3>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide bg-violet-500/15 text-violet-400 border border-violet-500/25">
-                  COMING SOON
+                <h3 className="font-semibold text-sm">AI Smart Match</h3>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide bg-violet-500/15 text-violet-600 dark:text-violet-400 border border-violet-500/25">
+                  NEW
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground">AI-powered creator recommendations</p>
+              <p className="text-xs text-muted-foreground">Find creators with natural language search</p>
             </div>
-          </div>
+            <ArrowRight className="w-4 h-4 text-violet-500 dark:text-violet-400 shrink-0 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+          </Link>
         </div>
 
         {/* ── Metric cards ──────────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <StatCard
-            href="/brand/campaigns"
-            icon={Megaphone}
-            iconColor="#c084fc"
-            value={statsLoading ? "—" : stats.activeCampaigns}
-            label="Active Campaigns"
-            accent="#c084fc"
-          />
-          <StatCard
-            href="/brand/saved"
-            icon={Heart}
-            iconColor="#f472b6"
-            value={savedCreatorsCount}
-            label="Saved Creators"
-            accent="#f472b6"
-          />
-          <StatCard
-            href="/messages"
-            icon={MessageSquare}
-            iconColor="#34d399"
-            value={statsLoading ? "—" : stats.activeConversations}
-            label="Conversations"
-            accent="#34d399"
-          />
-          <StatCard
-            href="/brand/discover"
-            icon={TrendingUp}
-            iconColor="#60a5fa"
-            value={statsLoading ? "—" : stats.availableCreators.toLocaleString()}
-            label="Available Creators"
-            accent="#60a5fa"
-          />
-        </div>
+        {statsLoading ? (
+          <KpiCardsSkeleton />
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+            <StatCard
+              href="/brand/campaigns"
+              icon={Megaphone}
+              iconColor="#c084fc"
+              value={stats.activeCampaigns}
+              label="Active Campaigns"
+              accent="#c084fc"
+            />
+            <StatCard
+              href="/brand/saved"
+              icon={Heart}
+              iconColor="#f472b6"
+              value={savedCreatorsCount}
+              label="Saved Creators"
+              accent="#f472b6"
+            />
+            <StatCard
+              href="/messages"
+              icon={MessageSquare}
+              iconColor="#34d399"
+              value={stats.activeConversations}
+              label="Conversations"
+              accent="#34d399"
+            />
+            <StatCard
+              href="/brand/discover"
+              icon={TrendingUp}
+              iconColor="#60a5fa"
+              value={stats.availableCreators.toLocaleString()}
+              label="Available Creators"
+              accent="#60a5fa"
+            />
+          </div>
+        )}
 
         {/* ── Smart Content Calendar ─────────────────────────────────────── */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-violet-400" />
+              <BarChart3 className="w-4 h-4 text-violet-500 dark:text-violet-400" />
               <h2 className="font-display text-base font-semibold">Campaign Timeline</h2>
             </div>
             <Link
               href="/brand/campaigns"
-              className="text-xs text-violet-400 font-medium hover:underline flex items-center gap-1"
+              className="text-xs text-violet-600 dark:text-violet-400 font-medium hover:underline flex items-center gap-1"
             >
               View campaigns
               <ArrowRight className="w-3 h-3" />
@@ -230,7 +249,7 @@ const BrandDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-violet-400" />
+              <Users className="w-4 h-4 text-violet-500 dark:text-violet-400" />
               <h2 className="font-display text-base font-semibold">Quick Actions</h2>
             </div>
           </div>
@@ -283,17 +302,17 @@ const BrandDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <h2 className="font-display text-base font-semibold">Active Collaborations</h2>
               {collabs.length > 0 && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                   {collabs.length}
                 </span>
               )}
             </div>
             <Link
               href="/brand/proposals?tab=ACCEPTED"
-              className="text-xs text-violet-400 font-medium hover:underline flex items-center gap-1"
+              className="text-xs text-violet-600 dark:text-violet-400 font-medium hover:underline flex items-center gap-1"
             >
               View all
               <ArrowRight className="w-3 h-3" />
@@ -318,7 +337,7 @@ const BrandDashboard = () => {
             <div className="rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-6 text-center">
               <CheckCircle2 className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
               <p className="text-sm text-muted-foreground">No active collaborations yet.</p>
-              <Link href="/brand/proposals" className="mt-2 inline-block text-xs text-violet-400 hover:underline">
+              <Link href="/brand/proposals" className="mt-2 inline-block text-xs text-violet-600 dark:text-violet-400 hover:underline">
                 Review pending proposals →
               </Link>
             </div>
@@ -338,7 +357,7 @@ const BrandDashboard = () => {
                     className="group relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm p-4 transition-all hover:border-emerald-500/40 hover:shadow-md hover:shadow-emerald-500/5"
                   >
                     <div className="absolute top-3 right-3">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                         <CheckCircle2 className="w-2.5 h-2.5" />
                         Active
                       </span>
@@ -360,7 +379,7 @@ const BrandDashboard = () => {
                       <div className="flex-1 min-w-0 pr-10">
                         <Link
                           href={`/profile/${c.creator.userId}`}
-                          className="font-semibold text-sm leading-tight hover:text-violet-400 transition-colors truncate block"
+                          className="font-semibold text-sm leading-tight text-zinc-900 dark:text-zinc-100 hover:text-violet-600 dark:hover:text-violet-400 transition-colors truncate block"
                         >
                           {c.creator.name ?? "Creator"}
                         </Link>
@@ -390,14 +409,14 @@ const BrandDashboard = () => {
                           avatar_url: c.creator.avatarUrl,
                           user_type: "creator",
                         } as ConversationRecipient)}
-                        className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5" />
-                        Message
+            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Message
                       </button>
                       <Link
                         href={`/brand/campaigns/${c.campaignId}`}
-                        className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                        className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors py-1.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
                       >
                         <Megaphone className="w-3.5 h-3.5" />
                         Campaign
@@ -408,6 +427,18 @@ const BrandDashboard = () => {
               })}
             </div>
           )}
+        </div>
+
+        {/* ── AI Strategy Consultant ────────────────────────────────────── */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="font-display text-base font-semibold">AI Strategy Consultant</h2>
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+              AI
+            </span>
+          </div>
+          <AIStrategyConsultant industry={profile?.industry ?? null} />
         </div>
 
         {/* ── CTA Banner ────────────────────────────────────────────────── */}
@@ -436,15 +467,14 @@ const BrandDashboard = () => {
             <div className="flex items-center gap-3">
               <Button
                 size="sm"
-                disabled
-                className="bg-violet-600/50 text-white/60 font-semibold border-0 cursor-not-allowed"
+                asChild
+                className="bg-violet-600 hover:bg-violet-500 text-white font-semibold border-0"
               >
-                <Sparkles className="w-4 h-4 mr-2" />
-                Try Smart Match
+                <Link href="/brand/smart-match">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Try AI Smart Match
+                </Link>
               </Button>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-violet-500/15 text-violet-400 border border-violet-500/25">
-                COMING SOON
-              </span>
             </div>
           </div>
         </div>

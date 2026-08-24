@@ -1,23 +1,16 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Building2,
-  Shield,
-  Trash2,
-  X,
-  Save,
-  Loader2,
-  AlertTriangle,
-  LogOut,
-  ChevronLeft,
+  Building2, Shield, Trash2, X, Save, Loader2,
+  AlertTriangle, Bell, Check, Eye, EyeOff,
 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/app/_components/ui/button";
-import { Input } from "@/app/_components/ui/input";
-import { Textarea } from "@/app/_components/ui/textarea";
-import { Label } from "@/app/_components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -26,13 +19,13 @@ import { UploadButton } from "@/lib/uploadthing";
 import { updateAvatarAction, updateProfileAction } from "@/app/actions/profile";
 import { deleteAccount } from "@/app/actions/account";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
-type NavTab = "profile" | "security" | "danger";
+type NavTab = "profile" | "security" | "notifications" | "danger";
 
-// ─── Shared glass section ─────────────────────────────────────────────────────
+// ── Section card ──────────────────────────────────────────────────────────────
 
-function GlassSection({
+function Section({
   children,
   className,
 }: {
@@ -42,7 +35,7 @@ function GlassSection({
   return (
     <div
       className={cn(
-        "bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl p-6",
+        "bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm",
         className,
       )}
     >
@@ -51,7 +44,13 @@ function GlassSection({
   );
 }
 
-// ─── Avatar / Logo Section ────────────────────────────────────────────────────
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-4">{children}</p>
+  );
+}
+
+// ── Logo Section ──────────────────────────────────────────────────────────────
 
 function LogoSection({
   avatarUrl,
@@ -74,27 +73,23 @@ function LogoSection({
   async function handleRemove() {
     setIsUpdating(true);
     const { error } = await updateAvatarAction(null);
-    if (error) {
-      toast.error(error);
-    } else {
-      onAvatarChange(null);
-      toast.success("Logo removed");
-    }
+    if (error) toast.error(error);
+    else { onAvatarChange(null); toast.success("Logo removed"); }
     setIsUpdating(false);
   }
 
   return (
-    <GlassSection>
-      <h3 className="text-zinc-200 font-semibold text-sm mb-4">Brand Logo</h3>
+    <Section>
+      <SectionTitle>Brand Logo</SectionTitle>
       <div className="flex items-center gap-5">
-        <div className="relative group shrink-0">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-zinc-700">
+        <div className="relative shrink-0">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-zinc-200 dark:ring-zinc-700">
             {avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={avatarUrl} alt={name ?? ""} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-teal-600/20 flex items-center justify-center">
-                <span className="text-teal-300 font-bold text-lg">{initials}</span>
+              <div className="w-full h-full bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">{initials}</span>
               </div>
             )}
           </div>
@@ -113,21 +108,17 @@ function LogoSection({
               if (!url) return;
               setIsUpdating(true);
               const { error } = await updateAvatarAction(url);
-              if (error) {
-                toast.error(error);
-              } else {
-                onAvatarChange(url);
-                toast.success("Logo updated");
-              }
+              if (error) toast.error(error);
+              else { onAvatarChange(url); toast.success("Logo updated"); }
               setIsUpdating(false);
             }}
             onUploadError={(err) => {
-              console.error("[UploadThing] logo upload error:", err);
+              console.error("[UploadThing]", err);
               toast.error("Upload failed — please try again");
             }}
             appearance={{
               button:
-                "ut-uploading:cursor-not-allowed bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg hover:bg-zinc-700 transition-colors h-auto",
+                "ut-uploading:cursor-not-allowed bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs px-3 py-1.5 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors h-auto",
               allowedContent: "hidden",
             }}
             content={{ button: "Change logo" }}
@@ -137,7 +128,7 @@ function LogoSection({
               type="button"
               onClick={handleRemove}
               disabled={isUpdating}
-              className="flex items-center gap-1.5 text-zinc-500 hover:text-red-400 text-xs transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-red-500 text-xs transition-colors disabled:opacity-50"
             >
               <X className="w-3 h-3" />
               Remove logo
@@ -145,11 +136,11 @@ function LogoSection({
           )}
         </div>
       </div>
-    </GlassSection>
+    </Section>
   );
 }
 
-// ─── Profile Details Tab ──────────────────────────────────────────────────────
+// ── Profile Tab ───────────────────────────────────────────────────────────────
 
 function ProfileTab({
   avatarUrl,
@@ -180,22 +171,18 @@ function ProfileTab({
         website: form.website || null,
         location: form.location || null,
       });
-      if (error) {
-        toast.error(error);
-      } else {
-        await refreshProfile();
-        toast.success("Profile saved");
-      }
+      if (error) toast.error(error);
+      else { await refreshProfile(); toast.success("Profile saved"); }
     });
   }
 
   return (
     <motion.div
       key="profile"
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.22 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
       className="space-y-4"
     >
       <LogoSection
@@ -204,70 +191,70 @@ function ProfileTab({
         onAvatarChange={onAvatarChange}
       />
 
-      <GlassSection>
-        <h3 className="text-zinc-200 font-semibold text-sm mb-4">Brand Details</h3>
+      <Section>
+        <SectionTitle>Brand Details</SectionTitle>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-zinc-400 text-xs font-medium">Contact Name</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Contact Name</Label>
               <Input
                 value={form.name}
                 onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
                 placeholder="Jane Smith"
-                className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl"
+                className="rounded-xl"
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-zinc-400 text-xs font-medium">Company Name</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Company Name</Label>
               <Input
                 value={form.companyName}
                 onChange={(e) => setForm((s) => ({ ...s, companyName: e.target.value }))}
                 placeholder="Acme Corp"
-                className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl"
+                className="rounded-xl"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-zinc-400 text-xs font-medium">About</Label>
+            <Label className="text-xs font-medium text-muted-foreground">About</Label>
             <Textarea
               value={form.bio}
               onChange={(e) => setForm((s) => ({ ...s, bio: e.target.value }))}
               placeholder="Tell creators about your brand and campaigns..."
               rows={4}
-              className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl resize-none"
+              className="rounded-xl resize-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-zinc-400 text-xs font-medium">Industry</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Industry</Label>
               <Input
                 value={form.industry}
                 onChange={(e) => setForm((s) => ({ ...s, industry: e.target.value }))}
                 placeholder="e.g., Technology"
-                className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl"
+                className="rounded-xl"
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-zinc-400 text-xs font-medium">Location</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Location</Label>
               <Input
                 value={form.location}
                 onChange={(e) => setForm((s) => ({ ...s, location: e.target.value }))}
                 placeholder="City, Country"
-                className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl"
+                className="rounded-xl"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-zinc-400 text-xs font-medium">Website</Label>
+            <Label className="text-xs font-medium text-muted-foreground">Website</Label>
             <Input
               value={form.website}
               onChange={(e) => setForm((s) => ({ ...s, website: e.target.value }))}
               placeholder="https://acme.com"
               type="url"
-              className="bg-zinc-800/60 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-violet-500/30 rounded-xl"
+              className="rounded-xl"
             />
           </div>
         </div>
@@ -275,84 +262,304 @@ function ProfileTab({
         <Button
           onClick={handleSave}
           disabled={isPending}
-          className="mt-5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl px-5 h-9 text-sm font-medium transition-colors disabled:opacity-40"
+          className="mt-5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl px-5 h-9 text-sm font-medium gap-1.5"
         >
-          {isPending ? (
-            <><Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />Saving…</>
-          ) : (
-            <><Save className="w-3.5 h-3.5 mr-1.5" />Save Changes</>
-          )}
+          {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+          {isPending ? "Saving…" : "Save Changes"}
         </Button>
-      </GlassSection>
+      </Section>
     </motion.div>
   );
 }
 
-// ─── Security Tab ─────────────────────────────────────────────────────────────
+// ── Security Tab ──────────────────────────────────────────────────────────────
 
 function SecurityTab() {
   const { profile } = useAuth();
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [pwForm, setPwForm] = useState({ current: "", next: "", confirm: "" });
+  const [showPw, setShowPw] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  function handleChangePassword() {
+    if (pwForm.next !== pwForm.confirm) {
+      toast.error("New passwords don't match");
+      return;
+    }
+    if (pwForm.next.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+    startTransition(async () => {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: pwForm.current, newPassword: pwForm.next }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast.error((body as { message?: string }).message ?? "Failed to change password");
+        return;
+      }
+      toast.success("Password updated successfully");
+      setShowPasswordForm(false);
+      setPwForm({ current: "", next: "", confirm: "" });
+    });
+  }
 
   return (
     <motion.div
       key="security"
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.22 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
       className="space-y-4"
     >
-      <GlassSection>
+      <Section>
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-xl bg-zinc-800 flex items-center justify-center">
-            <Shield className="w-4 h-4 text-zinc-400" />
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+            <Shield className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
           </div>
           <div>
-            <h3 className="text-zinc-200 font-semibold text-sm">Account Security</h3>
-            <p className="text-zinc-500 text-xs">Manage your authentication settings</p>
+            <p className="font-semibold text-sm">Account Security</p>
+            <p className="text-muted-foreground text-xs">Manage your authentication settings</p>
           </div>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between py-3 border-b border-zinc-800">
+        <div className="space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+          <div className="flex items-center justify-between py-3.5">
             <div>
-              <p className="text-zinc-300 text-sm">Email Address</p>
-              <p className="text-zinc-500 text-xs mt-0.5">{profile?.email}</p>
+              <p className="text-sm font-medium">Email Address</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{profile?.email}</p>
             </div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 font-medium">
               Verified
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-3 border-b border-zinc-800">
-            <div>
-              <p className="text-zinc-300 text-sm">Password</p>
-              <p className="text-zinc-500 text-xs mt-0.5">Last changed: never</p>
+          <div className="py-3.5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Password</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {showPasswordForm ? "Enter your current and new password" : "Change your login password"}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPasswordForm((v) => !v)}
+                className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
+              >
+                {showPasswordForm ? "Cancel" : "Change"}
+              </button>
             </div>
-            <button
-              type="button"
-              className="text-xs text-violet-400 hover:text-violet-300 transition-colors"
-            >
-              Change
-            </button>
+
+            <AnimatePresence>
+              {showPasswordForm && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-4 space-y-3">
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-medium text-muted-foreground">Current Password</Label>
+                      <div className="relative">
+                        <Input
+                          type={showPw ? "text" : "password"}
+                          value={pwForm.current}
+                          onChange={(e) => setPwForm((s) => ({ ...s, current: e.target.value }))}
+                          className="rounded-xl pr-9"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPw((v) => !v)}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        >
+                          {showPw ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">New Password</Label>
+                        <Input
+                          type="password"
+                          value={pwForm.next}
+                          onChange={(e) => setPwForm((s) => ({ ...s, next: e.target.value }))}
+                          className="rounded-xl"
+                          placeholder="Min. 8 characters"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground">Confirm New Password</Label>
+                        <Input
+                          type="password"
+                          value={pwForm.confirm}
+                          onChange={(e) => setPwForm((s) => ({ ...s, confirm: e.target.value }))}
+                          className="rounded-xl"
+                          placeholder="Repeat password"
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      onClick={handleChangePassword}
+                      disabled={isPending || !pwForm.current || !pwForm.next || !pwForm.confirm}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl h-9 px-4 text-sm gap-1.5 disabled:opacity-40"
+                    >
+                      {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                      {isPending ? "Updating…" : "Update Password"}
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-3.5">
             <div>
-              <p className="text-zinc-300 text-sm">Two-Factor Authentication</p>
-              <p className="text-zinc-500 text-xs mt-0.5">Add an extra layer of security</p>
+              <p className="text-sm font-medium">Two-Factor Authentication</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Add an extra layer of security</p>
             </div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 border border-zinc-200 dark:border-zinc-700">
               Coming soon
             </span>
           </div>
         </div>
-      </GlassSection>
+      </Section>
     </motion.div>
   );
 }
 
-// ─── Danger Zone Tab ──────────────────────────────────────────────────────────
+// ── Notification Preferences ──────────────────────────────────────────────────
+
+const NOTIF_PREFS_KEY = "nexly:notif_prefs_brand";
+
+interface NotifPrefs {
+  newApplications: boolean;
+  proposalUpdates: boolean;
+  messages: boolean;
+  marketing: boolean;
+}
+
+const NOTIF_DEFAULTS: NotifPrefs = {
+  newApplications: true,
+  proposalUpdates: true,
+  messages: true,
+  marketing: false,
+};
+
+function Toggle({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className={cn(
+        "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        checked ? "bg-cyan-600" : "bg-zinc-200 dark:bg-zinc-700",
+      )}
+    >
+      <span
+        className={cn(
+          "pointer-events-none block h-4 w-4 rounded-full bg-white shadow-sm ring-0 transition-transform duration-200",
+          checked ? "translate-x-4" : "translate-x-0",
+        )}
+      />
+    </button>
+  );
+}
+
+function NotificationsTab() {
+  const [prefs, setPrefs] = useState<NotifPrefs>(NOTIF_DEFAULTS);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(NOTIF_PREFS_KEY);
+      if (saved) setPrefs({ ...NOTIF_DEFAULTS, ...JSON.parse(saved) as NotifPrefs });
+    } catch {
+      // use defaults
+    }
+  }, []);
+
+  function update(key: keyof NotifPrefs, value: boolean) {
+    const next = { ...prefs, [key]: value };
+    setPrefs(next);
+    localStorage.setItem(NOTIF_PREFS_KEY, JSON.stringify(next));
+    toast.success("Preference saved");
+  }
+
+  const rows: { key: keyof NotifPrefs; label: string; sub: string }[] = [
+    {
+      key: "newApplications",
+      label: "New Applications",
+      sub: "Get notified when a creator applies to one of your campaigns",
+    },
+    {
+      key: "proposalUpdates",
+      label: "Proposal Updates",
+      sub: "Reminders when proposals are awaiting your review",
+    },
+    {
+      key: "messages",
+      label: "New Messages",
+      sub: "Alerts when you receive a new direct message",
+    },
+    {
+      key: "marketing",
+      label: "Tips & Product Updates",
+      sub: "Platform news, feature releases, and brand tips",
+    },
+  ];
+
+  return (
+    <motion.div
+      key="notifications"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
+      className="space-y-4"
+    >
+      <Section>
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+            <Bell className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+          </div>
+          <div>
+            <p className="font-semibold text-sm">Notification Preferences</p>
+            <p className="text-muted-foreground text-xs">Choose what you want to be notified about</p>
+          </div>
+        </div>
+
+        <div className="space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+          {rows.map((row) => (
+            <div key={row.key} className="flex items-center justify-between py-4 gap-4">
+              <div className="min-w-0">
+                <p className="text-sm font-medium">{row.label}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{row.sub}</p>
+              </div>
+              <Toggle checked={prefs[row.key]} onChange={(v) => update(row.key, v)} />
+            </div>
+          ))}
+        </div>
+      </Section>
+    </motion.div>
+  );
+}
+
+// ── Danger Zone Tab ───────────────────────────────────────────────────────────
 
 function DangerTab() {
   const [confirmText, setConfirmText] = useState("");
@@ -375,52 +582,53 @@ function DangerTab() {
   return (
     <motion.div
       key="danger"
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.22 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.2 }}
       className="space-y-4"
     >
-      <div className="bg-red-950/30 backdrop-blur-md border border-red-900/40 rounded-2xl p-6">
+      <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-xl bg-red-900/40 flex items-center justify-center">
-            <AlertTriangle className="w-4 h-4 text-red-400" />
+          <div className="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-900/40 flex items-center justify-center">
+            <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400" />
           </div>
           <div>
-            <h3 className="text-red-200 font-semibold text-sm">Delete Account</h3>
-            <p className="text-red-400/70 text-xs">This action is permanent and cannot be undone</p>
+            <p className="font-semibold text-sm text-red-700 dark:text-red-200">Delete Account</p>
+            <p className="text-red-500/80 dark:text-red-400/70 text-xs">This action is permanent and cannot be undone</p>
           </div>
         </div>
 
-        <p className="text-zinc-400 text-sm leading-relaxed mb-5">
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-5">
           Deleting your account will permanently remove all your data, brand profile, campaigns,
-          and history from Nexly. This cannot be reversed.
+          proposals, and history from Duolync. This cannot be reversed.
         </p>
 
         {!showConfirm ? (
           <Button
             type="button"
             onClick={() => setShowConfirm(true)}
-            className="bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/30 hover:border-red-600/50 rounded-xl h-9 px-4 text-sm font-medium transition-all"
+            variant="outline"
+            className="border-red-300 dark:border-red-600/30 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-600/10 hover:border-red-400 dark:hover:border-red-600/50 rounded-xl h-9 px-4 text-sm font-medium gap-1.5"
           >
-            <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+            <Trash2 className="w-3.5 h-3.5" />
             Delete my account
           </Button>
         ) : (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="space-y-4"
+            className="space-y-4 overflow-hidden"
           >
             <div className="space-y-1.5">
-              <Label className="text-red-300/80 text-xs">
-                Type <span className="font-mono font-bold text-red-300">DELETE</span> to confirm
+              <Label className="text-xs font-medium text-red-600 dark:text-red-300/80">
+                Type <span className="font-mono font-bold">DELETE</span> to confirm
               </Label>
               <Input
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
                 placeholder="DELETE"
-                className="bg-red-950/30 border-red-900/50 text-red-200 placeholder:text-red-900 focus-visible:ring-red-500/30 rounded-xl font-mono"
+                className="border-red-200 dark:border-red-900/50 bg-white dark:bg-red-950/30 text-red-700 dark:text-red-200 placeholder:text-red-300 dark:placeholder:text-red-900 rounded-xl font-mono"
               />
             </div>
             <div className="flex gap-2">
@@ -428,18 +636,16 @@ function DangerTab() {
                 type="button"
                 onClick={handleDelete}
                 disabled={confirmText !== "DELETE" || isPending}
-                className="bg-red-600 hover:bg-red-700 text-white rounded-xl h-9 px-4 text-sm font-medium transition-colors disabled:opacity-40"
+                className="bg-red-600 hover:bg-red-700 text-white rounded-xl h-9 px-4 text-sm font-medium gap-1.5 disabled:opacity-40"
               >
-                {isPending ? (
-                  <><Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />Deleting…</>
-                ) : (
-                  <><Trash2 className="w-3.5 h-3.5 mr-1.5" />Confirm Delete</>
-                )}
+                {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                {isPending ? "Deleting…" : "Confirm Delete"}
               </Button>
               <Button
                 type="button"
+                variant="outline"
                 onClick={() => { setShowConfirm(false); setConfirmText(""); }}
-                className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-xl h-9 px-4 text-sm font-medium transition-colors"
+                className="rounded-xl h-9 px-4 text-sm"
               >
                 Cancel
               </Button>
@@ -451,62 +657,39 @@ function DangerTab() {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 
 const NAV_TABS: { id: NavTab; label: string; icon: React.ReactNode }[] = [
-  { id: "profile", label: "Profile Details", icon: <Building2 className="w-4 h-4" /> },
-  { id: "security", label: "Account Security", icon: <Shield className="w-4 h-4" /> },
-  { id: "danger", label: "Danger Zone", icon: <Trash2 className="w-4 h-4" /> },
+  { id: "profile",       label: "Profile",       icon: <Building2 className="w-4 h-4" /> },
+  { id: "security",      label: "Security",      icon: <Shield className="w-4 h-4" /> },
+  { id: "notifications", label: "Notifications", icon: <Bell className="w-4 h-4" /> },
+  { id: "danger",        label: "Danger Zone",   icon: <Trash2 className="w-4 h-4" /> },
 ];
 
 const BrandSettings = () => {
-  const { profile, signOut } = useAuth();
-  const router = useRouter();
+  const { profile, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<NavTab>("profile");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(profile?.avatar_url ?? null);
 
-  async function handleSignOut() {
-    await signOut();
-    router.push("/auth");
-  }
+  const handleAvatarChange = (url: string | null) => {
+    setAvatarUrl(url);
+    // Refresh auth context so avatar_url propagates to other pages immediately
+    refreshProfile();
+  };
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 sm:p-8">
-      {/* Ambient glow */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-60 right-1/3 w-[500px] h-[400px] rounded-full bg-teal-600/6 blur-[140px]" />
-      </div>
-
-      <div className="relative max-w-5xl mx-auto">
-        {/* Back link */}
-        <Link
-          href="/brand/dashboard"
-          className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm transition-opacity hover:opacity-80 mb-5"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back to Dashboard
-        </Link>
-
+    <MainLayout>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
-            <p className="text-zinc-500 text-sm mt-0.5">Manage your brand profile</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign out
-          </button>
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold mb-1">Settings</h1>
+          <p className="text-muted-foreground text-sm">Manage your brand account and preferences</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-5 items-start">
           {/* Left nav */}
-          <nav className="lg:sticky lg:top-8 self-start">
-            <div className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl p-2 space-y-1">
+          <nav className="lg:sticky lg:top-24 self-start">
+            <div className="bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-2 space-y-1 shadow-sm">
               {NAV_TABS.map((tab) => (
                 <button
                   key={tab.id}
@@ -516,11 +699,11 @@ const BrandSettings = () => {
                     "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                     activeTab === tab.id
                       ? tab.id === "danger"
-                        ? "bg-red-900/30 text-red-300"
-                        : "bg-violet-500/15 text-violet-300"
+                        ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300"
+                        : "bg-cyan-50 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-300"
                       : tab.id === "danger"
-                      ? "text-zinc-500 hover:text-red-400 hover:bg-red-900/10"
-                      : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60",
+                      ? "text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/60",
                   )}
                 >
                   {tab.icon}
@@ -531,18 +714,19 @@ const BrandSettings = () => {
           </nav>
 
           {/* Right content */}
-          <div>
+          <div className="min-w-0">
             <AnimatePresence mode="wait">
               {activeTab === "profile" && (
-                <ProfileTab avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
+                <ProfileTab avatarUrl={avatarUrl} onAvatarChange={handleAvatarChange} />
               )}
               {activeTab === "security" && <SecurityTab />}
+              {activeTab === "notifications" && <NotificationsTab />}
               {activeTab === "danger" && <DangerTab />}
             </AnimatePresence>
           </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

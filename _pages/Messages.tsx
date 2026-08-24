@@ -38,6 +38,25 @@ import {
 } from "@/app/actions/messages";
 import { useMessaging } from "@/app/_components/messaging/MessagingContext";
 
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
+
+const ConversationSkeleton = () => (
+  <div className="space-y-1 p-2">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <div key={i} className="flex items-center gap-3 px-3 py-3.5 rounded-xl animate-pulse">
+        <div className="w-11 h-11 rounded-xl bg-zinc-200 dark:bg-zinc-800 shrink-0" />
+        <div className="flex-1 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="h-3.5 bg-zinc-200 dark:bg-zinc-800 rounded w-24" />
+            <div className="h-2.5 bg-zinc-200 dark:bg-zinc-800 rounded w-10" />
+          </div>
+          <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-36" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatTime(dateStr: string): string {
@@ -62,8 +81,9 @@ function getBubbleClasses(
   isOwn: boolean,
 ): string {
   const base =
-    "rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap";
+    "rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap";
   const tail = isOwn ? "rounded-br-md" : "rounded-bl-md";
+  if (!isOwn) return cn(base, tail, "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100");
   if (senderRole === "brand") return cn(base, tail, "bg-teal-600 text-white");
   return cn(base, tail, "bg-purple-600 text-white");
 }
@@ -548,9 +568,7 @@ const Messages = () => {
                 )
               ) : convsLoading ? (
                 /* ── Loading existing conversations ── */
-                <div className="flex justify-center py-12">
-                  <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                </div>
+                <ConversationSkeleton />
               ) : conversations.length > 0 ? (
                 /* ── Existing conversations ── */
                 conversations.map((conv) => (
@@ -619,12 +637,18 @@ const Messages = () => {
                 </div>
               </div>
 
-              {/* Messages */}
-              <ScrollArea className="flex-1 px-5 py-4">
-                <div className="space-y-3 max-w-3xl mx-auto">
+              {/* Messages — Messenger-style: content anchors to bottom */}
+              <div className="flex-1 overflow-y-auto chat-scroll">
+                <div className="flex flex-col justify-end min-h-full px-5 py-4">
+                <div className="space-y-3 max-w-3xl mx-auto w-full">
                   {msgsLoading ? (
-                    <div className="flex justify-center py-16">
-                      <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                    <div className="space-y-4 py-6 max-w-3xl mx-auto">
+                      {[70, 50, 80, 45, 65].map((w, i) => (
+                        <div key={i} className={`flex gap-2.5 animate-pulse ${i % 2 === 0 ? "flex-row-reverse" : ""}`}>
+                          {i % 2 !== 0 && <div className="w-9 h-9 rounded-xl bg-zinc-200 dark:bg-zinc-800 shrink-0" />}
+                          <div className={`h-10 rounded-2xl bg-zinc-200 dark:bg-zinc-800`} style={{ width: `${w}%` }} />
+                        </div>
+                      ))}
                     </div>
                   ) : messages.length === 0 ? (
                     <div className="flex flex-col items-center py-16 text-center">
@@ -668,7 +692,10 @@ const Messages = () => {
                               isOwn ? "items-end" : "items-start",
                             )}
                           >
-                            <div className={getBubbleClasses(msg.senderRole, isOwn)}>
+                            <div
+                              className={getBubbleClasses(msg.senderRole, isOwn)}
+                              style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                            >
                               {msg.text}
                             </div>
                             <span className="text-[10px] text-zinc-400 dark:text-zinc-500 px-1">
@@ -682,7 +709,8 @@ const Messages = () => {
 
                   <div ref={messagesEndRef} />
                 </div>
-              </ScrollArea>
+                </div>
+              </div>
 
               {/* Input */}
               <div className="px-5 py-4 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
@@ -725,31 +753,47 @@ const Messages = () => {
             </>
           ) : (
             /* ── No conversation selected ── */
-            <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
-              <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6">
-                <MessageSquare className="w-8 h-8 text-primary/50" />
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-8 gap-0">
+              {/* Illustration */}
+              <div className="relative mb-6">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-200 dark:border-violet-500/20 flex items-center justify-center">
+                  <MessageSquare className="w-9 h-9 text-violet-500" />
+                </div>
+                <span className="absolute -top-2 -right-2 w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg">
+                  +
+                </span>
               </div>
+
               <h3 className="font-display text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-50">
-                Your messages
+                Start a conversation
               </h3>
-              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
-                Select a conversation or{" "}
+              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-5">
+                Select a conversation from the left or{" "}
                 <button
-                  className="underline text-primary hover:text-primary/80 transition-colors"
+                  className="underline text-primary hover:text-primary/80 transition-colors font-medium"
                   onClick={() => searchRef.current?.focus()}
                 >
                   search for a user
                 </button>{" "}
-                to start chatting.
+                to send your first message.
               </p>
-              <div className="flex gap-3 mt-4">
+
+              <button
+                onClick={() => searchRef.current?.focus()}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-sm font-semibold transition-colors border border-primary/20"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                New message
+              </button>
+
+              <div className="flex gap-3 mt-8">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400 border-teal-200 dark:border-teal-500/20">
-                  <span className="w-2.5 h-2.5 rounded-full bg-teal-500" />
-                  Brand bubbles
+                  <span className="w-2 h-2 rounded-full bg-teal-500" />
+                  Brand
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400 border-purple-200 dark:border-purple-500/20">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
-                  Creator bubbles
+                  <span className="w-2 h-2 rounded-full bg-purple-500" />
+                  Creator
                 </span>
               </div>
             </div>

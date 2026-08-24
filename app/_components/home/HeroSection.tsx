@@ -8,7 +8,6 @@ import {
   Users,
   Star,
   TrendingUp,
-  Zap,
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
@@ -17,7 +16,7 @@ const trust = [
   { icon: Star, value: "10K+", label: "Creators" },
   { icon: TrendingUp, value: "3.2×", label: "Avg. ROI" },
   { icon: ShieldCheck, value: "100%", label: "Verified" },
-  { icon: Zap, value: "SOON", label: "To launch" },
+  { icon: Building2, value: "2,400+", label: "Brands joined" },
 ];
 
 const avatarGradients = [
@@ -75,11 +74,10 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 backdrop-blur-sm text-violet-700 dark:text-violet-300"
             style={{
-              background: "var(--glow-purple)",
-              border: "1px solid rgba(124,58,237,0.4)",
-              color: "#c4b5fd",
+              background: "rgba(124,58,237,0.10)",
+              border: "1px solid rgba(124,58,237,0.35)",
             }}
           >
             <Sparkles size={13} />
@@ -95,8 +93,8 @@ export function HeroSection() {
               duration: 0.8,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="font-display font-bold text-white tracking-tight leading-[1.06] mb-6"
-            style={{ fontSize: "clamp(2.8rem, 6.5vw, 5rem)" }}
+            className="font-display font-bold tracking-tight leading-[1.06] mb-6"
+            style={{ fontSize: "clamp(2.8rem, 6.5vw, 5rem)", color: "var(--text-base)" }}
           >
             Where{" "}
             <span
@@ -129,7 +127,8 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.7 }}
-            className="text-slate-400 text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+            className="text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+            style={{ color: "var(--text-muted)" }}
           >
             Duolync uses AI to match brands with perfect creators, manage
             campaigns at scale, and help creators land the deals they deserve.
@@ -170,17 +169,6 @@ export function HeroSection() {
                 className="transition-transform group-hover:translate-x-1"
               />
             </Link>
-            <Link
-              href="/auth"
-              className="flex items-center gap-2 px-6 py-4 rounded-2xl font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "var(--bg-card-hover)",
-                border: "1px solid var(--border-card-strong)",
-                color: "#94a3b8",
-              }}
-            >
-              Get Started
-            </Link>
           </motion.div>
 
           {/* Social proof */}
@@ -200,13 +188,13 @@ export function HeroSection() {
                   />
                 ))}
               </div>
-              <span className="text-slate-500">
-                <strong className="text-slate-300">12,000+</strong> brands &
+              <span style={{ color: "var(--text-muted)" }}>
+                <strong className="text-slate-700 dark:text-slate-300">12,000+</strong> brands &
                 creators already using Duolync
               </span>
             </div>
-            <div className="hidden sm:block w-px h-4 bg-slate-800" />
-            <div className="flex items-center gap-1.5 text-slate-500">
+            <div className="hidden sm:block w-px h-4 bg-slate-300 dark:bg-slate-800" />
+            <div className="flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
               <div className="flex">
                 {"★★★★★".split("").map((s, i) => (
                   <span key={i} className="text-amber-400 text-sm">
@@ -245,7 +233,7 @@ export function HeroSection() {
                 >
                   {t.value}
                 </div>
-                <div className="text-xs text-slate-600">{t.label}</div>
+                <div className="text-xs" style={{ color: "var(--text-faint)" }}>{t.label}</div>
               </div>
             ))}
           </motion.div>
@@ -263,26 +251,26 @@ export function HeroSection() {
               label: "For Brands",
               desc: "AI matching · Campaign tools · CRM",
               color: "#a78bfa",
-              bg: "var(--glow-purple)",
-              border: "rgba(124,58,237,0.25)",
+              border: "rgba(124,58,237,0.35)",
+              shadow: "rgba(124,58,237,0.12)",
               href: "/for-brands",
             },
             {
               label: "For Creators",
               desc: "Curated deals · Growth AI · Dashboard",
-              color: "#f9a8d4",
-              bg: "var(--glow-pink)",
-              border: "rgba(236,72,153,0.25)",
+              color: "#ec4899",
+              border: "rgba(236,72,153,0.35)",
+              shadow: "rgba(236,72,153,0.12)",
               href: "/for-creators",
             },
           ].map((card) => (
             <Link
               key={card.label}
               href={card.href}
-              className="flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02]"
+              className="flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] bg-white dark:bg-zinc-900/70 backdrop-blur-sm"
               style={{
-                background: card.bg,
                 border: `1px solid ${card.border}`,
+                boxShadow: `0 4px 24px ${card.shadow}`,
               }}
             >
               <div
@@ -292,10 +280,10 @@ export function HeroSection() {
                 <Sparkles size={15} style={{ color: card.color }} />
               </div>
               <div className="text-left">
-                <div className="text-sm font-semibold text-white">
+                <div className="text-sm font-semibold" style={{ color: "var(--text-base)" }}>
                   {card.label}
                 </div>
-                <div className="text-[11px] text-slate-500">{card.desc}</div>
+                <div className="text-[11px]" style={{ color: "var(--text-muted)" }}>{card.desc}</div>
               </div>
               <ArrowRight size={14} style={{ color: card.color }} />
             </Link>

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import MainLayout from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { RichEmptyState } from "@/app/_components/shared/RichEmptyState";
 import {
   getMyApplicationsAction,
   withdrawApplicationAction,
@@ -361,28 +362,34 @@ const MyApplications = () => {
             ))}
           </div>
         ) : applications.length === 0 ? (
-          <div className="flex flex-col items-center py-24 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-              <Send className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="font-bold text-lg mb-2">No applications yet</h3>
-            <p className="text-muted-foreground text-sm max-w-xs mb-6">
-              You haven't applied to any campaigns. Find one that matches your niche!
-            </p>
-            <Link href="/creator/campaigns">
-              <Button>
-                <Megaphone className="w-4 h-4 mr-2" />
-                Browse Campaigns
-              </Button>
-            </Link>
-          </div>
+          <RichEmptyState
+            icon={<Send className="w-8 h-8 text-violet-500" />}
+            headline="No campaigns applied to yet"
+            sub="Browse open campaigns, find the right niche match, and pitch your best rate to land your first deal."
+            primary={{ label: "Browse Campaigns", href: "/creator/campaigns", icon: <Megaphone className="w-4 h-4" /> }}
+            tips={[
+              { icon: <Clock className="w-3 h-3" />, label: "Track status in real-time" },
+              { icon: <DollarSign className="w-3 h-3" />, label: "Set your own rate" },
+              { icon: <FileText className="w-3 h-3" />, label: "Add a cover letter" },
+            ]}
+            ambient="purple"
+          />
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-sm">
-              No {statusFilter.toLowerCase().replace("_", " ")} applications.
+          <div className="flex flex-col items-center py-14 text-center">
+            <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center mb-3">
+              <Layers className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
+            </div>
+            <p className="font-medium text-sm mb-1">
+              No {statusFilter.toLowerCase().replace("_", " ")} applications
             </p>
-            <button onClick={() => setStatusFilter("ALL")} className="mt-2 text-sm text-primary hover:underline">
-              Show all
+            <p className="text-xs text-muted-foreground mb-3">
+              Try a different filter to see more.
+            </p>
+            <button
+              onClick={() => setStatusFilter("ALL")}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              Show all applications
             </button>
           </div>
         ) : (

@@ -95,11 +95,10 @@ export function BentoSection() {
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 text-violet-700 dark:text-violet-300"
             style={{
-              background: "var(--glow-purple)",
+              background: "rgba(124,58,237,0.10)",
               border: "1px solid rgba(124,58,237,0.3)",
-              color: PURPLE,
             }}
           >
             <Sparkles size={11} />
@@ -108,7 +107,8 @@ export function BentoSection() {
           <motion.h2
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="font-display font-bold text-white text-4xl md:text-5xl mb-4"
+            className="font-display font-bold text-4xl md:text-5xl mb-4"
+            style={{ color: "var(--text-base)" }}
           >
             Everything under{" "}
             <span
@@ -125,7 +125,8 @@ export function BentoSection() {
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="text-slate-400 max-w-lg mx-auto"
+            className="max-w-lg mx-auto"
+            style={{ color: "var(--text-muted)" }}
           >
             AI-powered tools for brands and creators — from discovery to deal,
             all in one seamless platform.
@@ -157,10 +158,10 @@ export function BentoSection() {
               <Search size={11} />
               AI Influencer Search
             </div>
-            <h3 className="font-display font-bold text-white text-xl mb-1">
+            <h3 className="font-display font-bold text-xl mb-1" style={{ color: "var(--text-base)" }}>
               Find creators that actually convert
             </h3>
-            <p className="text-slate-500 text-sm mb-5">
+            <p className="text-sm mb-5" style={{ color: "var(--text-muted)" }}>
               {" "}
               verified creators by niche, platform, engagement rate, and
               audience demographics.
@@ -276,7 +277,7 @@ export function BentoSection() {
                   </div>
 
                   {/* Animated progress bar */}
-                  <div className="h-1.5 rounded-full mb-1 bg-white/5 overflow-hidden">
+                  <div className="h-1.5 rounded-full mb-1 overflow-hidden" style={{ background: "var(--bg-card-hover)" }}>
                     <div
                       className={`h-full rounded-full bg-gradient-to-r ${c.barGradient} transition-all duration-700 ease-out`}
                       style={{
@@ -287,11 +288,11 @@ export function BentoSection() {
                     />
                   </div>
 
-                  <div className="text-[10px] text-slate-500">
+                  <div className="text-[10px]" style={{ color: "var(--text-faint)" }}>
                     {c.followers}
                   </div>
                   <div className="mt-1 flex items-center justify-between">
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
                       {c.label}
                     </span>
                     <span className="text-xs font-bold text-emerald-400">
@@ -316,10 +317,10 @@ export function BentoSection() {
               <Mail size={11} />
               One-Click Outreach
             </div>
-            <h3 className="font-display font-bold text-white text-lg mb-1">
+            <h3 className="font-display font-bold text-lg mb-1" style={{ color: "var(--text-base)" }}>
               Contact at scale
             </h3>
-            <p className="text-slate-500 text-xs mb-4">
+            <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
               Personalized bulk emails with AI-generated templates.
               Auto-follow-up until you get a reply.
             </p>
@@ -342,7 +343,7 @@ export function BentoSection() {
                   >
                     {item.initial}
                   </div>
-                  <span className="text-[11px] text-slate-300 flex-1">
+                  <span className="text-[11px] flex-1" style={{ color: "var(--text-base)" }}>
                     {item.brand}
                   </span>
                   <span
@@ -369,10 +370,10 @@ export function BentoSection() {
               <Database size={11} />
               Campaign CRM
             </div>
-            <h3 className="font-display font-bold text-white text-lg mb-1">
+            <h3 className="font-display font-bold text-lg mb-1" style={{ color: "var(--text-base)" }}>
               Ditch the spreadsheet
             </h3>
-            <p className="text-slate-500 text-xs mb-3">
+            <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
               Track every deal, campaign, and payment in one place.
             </p>
             <div className="space-y-2">
@@ -408,10 +409,10 @@ export function BentoSection() {
                     className="w-1.5 h-1.5 rounded-full shrink-0"
                     style={{ background: c.color }}
                   />
-                  <span className="text-[11px] text-slate-300 flex-1 truncate">
+                  <span className="text-[11px] flex-1 truncate" style={{ color: "var(--text-base)" }}>
                     {c.name}
                   </span>
-                  <span className="text-[9px] text-slate-600">
+                  <span className="text-[9px]" style={{ color: "var(--text-faint)" }}>
                     {c.creators} creators
                   </span>
                   <span
@@ -442,10 +443,10 @@ export function BentoSection() {
               <Brain size={11} />
               AI Growth Tools
             </div>
-            <h3 className="font-display font-bold text-white text-xl mb-1">
+            <h3 className="font-display font-bold text-xl mb-1" style={{ color: "var(--text-base)" }}>
               AI that works for both sides
             </h3>
-            <p className="text-slate-500 text-sm mb-4">
+            <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
               Brands get AI campaign strategy. Creators get a personalized
               growth mentor. Everyone wins.
             </p>
@@ -471,7 +472,8 @@ export function BentoSection() {
                   ].map((t) => (
                     <div
                       key={t}
-                      className="flex items-start gap-1.5 text-[10px] text-slate-400"
+                      className="flex items-start gap-1.5 text-[10px]"
+                      style={{ color: "var(--text-muted)" }}
                     >
                       <CheckCircle2
                         size={9}
@@ -503,7 +505,8 @@ export function BentoSection() {
                   ].map((t) => (
                     <div
                       key={t}
-                      className="flex items-start gap-1.5 text-[10px] text-slate-400"
+                      className="flex items-start gap-1.5 text-[10px]"
+                      style={{ color: "var(--text-muted)" }}
                     >
                       <CheckCircle2
                         size={9}
@@ -530,10 +533,10 @@ export function BentoSection() {
               <Globe size={11} />
               Chrome Extension
             </div>
-            <h3 className="font-display font-bold text-white text-lg mb-1">
+            <h3 className="font-display font-bold text-lg mb-1" style={{ color: "var(--text-base)" }}>
               Scout from anywhere
             </h3>
-            <p className="text-slate-500 text-xs mb-3">
+            <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
               Save creators directly from TikTok, Instagram & YouTube — one
               click, instantly to CRM.
             </p>
@@ -582,7 +585,7 @@ export function BentoSection() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
-                      <span className="text-[10px] font-bold text-white leading-none">Nova Beauty</span>
+                      <span className="text-[10px] font-bold leading-none" style={{ color: "var(--text-base)" }}>Nova Beauty</span>
                       <svg viewBox="0 0 24 24" fill="#60a5fa" className="w-2.5 h-2.5 shrink-0">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -605,8 +608,8 @@ export function BentoSection() {
                     { label: "Likes", value: "42.1M" },
                   ].map((s) => (
                     <div key={s.label} className="text-center">
-                      <div className="text-[9px] font-bold text-slate-200">{s.value}</div>
-                      <div className="text-[7px] text-slate-600">{s.label}</div>
+                      <div className="text-[9px] font-bold" style={{ color: "var(--text-base)" }}>{s.value}</div>
+                      <div className="text-[7px]" style={{ color: "var(--text-faint)" }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
@@ -656,10 +659,10 @@ export function BentoSection() {
               <BarChart3 size={11} />
               Real-Time Analytics
             </div>
-            <h3 className="font-display font-bold text-white text-lg mb-1">
+            <h3 className="font-display font-bold text-lg mb-1" style={{ color: "var(--text-base)" }}>
               Performance at a glance
             </h3>
-            <p className="text-slate-500 text-xs mb-3">
+            <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
               Live campaign ROI, engagement tracking, and creator performance
               across all platforms.
             </p>
@@ -674,7 +677,7 @@ export function BentoSection() {
                   className="flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-[10px] text-slate-600">{s.label}</div>
+                    <div className="text-[10px]" style={{ color: "var(--text-faint)" }}>{s.label}</div>
                     <div
                       className="h-1.5 rounded-full mt-0.5"
                       style={{ background: "var(--bg-card-hover)", width: 100 }}

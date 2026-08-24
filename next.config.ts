@@ -40,13 +40,7 @@ const nextConfig: NextConfig = {
     ]);
   },
   async redirects() {
-    return [
-      {
-        source: "/dashboard",
-        destination: "/feed",
-        permanent: false,
-      },
-    ];
+    return [];
   },
   webpack(config) {
     // Allow mp4 and other media assets to be imported as URLs

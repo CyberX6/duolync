@@ -95,7 +95,7 @@ export async function getProposalsAction(): Promise<{
 // Brand: approve or reject an application
 export async function updateProposalStatusAction(
   proposalId: string,
-  status: "ACCEPTED" | "REJECTED",
+  status: "ACCEPTED" | "REJECTED" | "UNDER_REVIEW",
   rejectionReason?: string,
 ): Promise<{ error: string | null }> {
   const session = await getSession();

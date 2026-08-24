@@ -1,9 +1,10 @@
 "use client";
-import { useState, useMemo, useEffect, useCallback, useTransition } from "react";
+import { useState, useMemo, useEffect, useCallback, useTransition, useRef } from "react";
 import {
   Search, SlidersHorizontal, Heart, MessageSquare, X,
   MapPin, BadgeCheck, Users, TrendingUp, ChevronDown, ListPlus, Check, Plus,
   UserPlus, UserCheck, Clock, Send, DollarSign, Loader2, Megaphone, Mail,
+  Sparkles, Zap, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,8 +46,17 @@ import {
   type CampaignData,
 } from "@/app/actions/campaigns";
 import { sendBrandInvitationAction } from "@/app/actions/invitations";
+import { runAIMatchmakerAction, type MatchedCreator } from "@/app/actions/ai";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+
+const VIOLET = "#c084fc";
+
+const AI_EXAMPLE_QUERIES = [
+  "Skincare creators, women 25–40, high engagement on Instagram",
+  "Gaming TikTok creators 500K+, 5%+ ER",
+  "Eco-conscious fashion creators, US & Europe",
+];
 
 // Seed profiles have short IDs like "c1", "c3". Real cuid IDs are 25+ chars.
 function isRealProfile(id: string) {
@@ -670,6 +680,44 @@ const Discover = () => {
   const [loading] = useState(false);
   const [saveTarget, setSaveTarget] = useState<SaveTarget | null>(null);
 
+  // ── AI Search state ────────────────────────────────────────────────────────
+  const [aiQuery, setAiQuery] = useState("");
+  const [aiMode, setAiMode] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResults, setAiResults] = useState<MatchedCreator[] | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const unifiedInputRef = useRef<HTMLInputElement>(null);
+
+  const runAISearch = async (q?: string) => {
+    const query = (q ?? aiQuery).trim();
+    if (!query || aiLoading) return;
+    setAiLoading(true);
+    setAiError(null);
+    setAiResults(null);
+    const { data, error } = await runAIMatchmakerAction(query);
+    setAiLoading(false);
+    if (error) { setAiError(error); return; }
+    setAiResults(data);
+  };
+
+  function clearAISearch() {
+    setAiResults(null);
+    setAiError(null);
+    setAiQuery("");
+    setTimeout(() => unifiedInputRef.current?.focus(), 50);
+  }
+
+  function toggleAiMode() {
+    const next = !aiMode;
+    setAiMode(next);
+    if (!next) {
+      setAiResults(null);
+      setAiError(null);
+      setAiQuery("");
+    }
+    setTimeout(() => unifiedInputRef.current?.focus(), 100);
+  }
+
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
@@ -812,37 +860,234 @@ const Discover = () => {
       <SaveCollectionModal target={saveTarget} onClose={() => setSaveTarget(null)} />
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
-        <div className="mb-7">
+        {/* ── Page header ───────────────────────────────────────────────────── */}
+        <div className="mb-6">
           <h1 className="font-display text-3xl font-bold mb-1">Discover Creators</h1>
           <p className="text-muted-foreground text-sm">
             Find and connect with the perfect content creators for your brand
           </p>
         </div>
 
-        {/* Search + filter toggle */}
-        <div className="flex gap-3 mb-3">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-            <Input
-              placeholder="Search by name, niche, or location…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-primary/50"
+        {/* ── Unified search bar row ─────────────────────────────────────────── */}
+        <div className="flex gap-2.5 mb-0">
+          {/* Search / AI input */}
+          <div className="flex-1 relative group">
+            {/* Dynamic leading icon */}
+            {aiMode ? (
+              <Sparkles
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors"
+                style={{ color: VIOLET }}
+              />
+            ) : (
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none transition-colors" />
+            )}
+
+            {/* AI mode badge inside input (right side) */}
+            {aiMode && (
+              <span
+                className="absolute right-10 top-1/2 -translate-y-1/2 text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden sm:inline-flex items-center gap-1 select-none"
+                style={{
+                  background: "rgba(124,58,237,0.2)",
+                  color: VIOLET,
+                  border: "1px solid rgba(192,132,252,0.3)",
+                }}
+              >
+                AI
+              </span>
+            )}
+
+            {/* Clear button (AI mode only) */}
+            {aiMode && (aiQuery || aiResults) && (
+              <button
+                onClick={clearAISearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors z-10"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            <input
+              ref={unifiedInputRef}
+              value={aiMode ? aiQuery : searchQuery}
+              onChange={(e) =>
+                aiMode ? setAiQuery(e.target.value) : setSearchQuery(e.target.value)
+              }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && aiMode) runAISearch();
+              }}
+              placeholder={
+                aiMode
+                  ? "Describe who you're looking for… e.g. 'Skincare brand targeting 25-34F, 100K+ on Instagram'"
+                  : "Search by name, niche, or location…"
+              }
+              className={cn(
+                "w-full h-11 pl-10 pr-4 rounded-md text-sm outline-none transition-all duration-300 border",
+                aiMode
+                  ? "bg-zinc-950 dark:bg-[#0c0a12] border-violet-500/50 text-white placeholder:text-zinc-600 focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20"
+                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:border-primary/50 focus:ring-2 focus:ring-primary/10",
+                aiMode && aiQuery && "pr-24 sm:pr-28",
+              )}
+              style={
+                aiMode
+                  ? { boxShadow: "0 0 0 1px rgba(124,58,237,0.25), 0 4px 20px rgba(109,40,217,0.15)" }
+                  : undefined
+              }
             />
           </div>
-          <Button
-            variant="outline"
-            className={cn("h-11 gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:border-zinc-300 dark:hover:border-zinc-600 shrink-0 transition-colors", showFilters && "border-primary/60 text-primary bg-primary/5")}
-            onClick={() => setShowFilters((v) => !v)}
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="ml-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">{activeFilterCount}</span>
+
+          {/* AI mode toggle */}
+          <button
+            type="button"
+            onClick={toggleAiMode}
+            title={aiMode ? "Switch to normal search" : "Enable AI natural-language search"}
+            className={cn(
+              "h-11 shrink-0 flex items-center gap-2 px-3.5 rounded-xl text-sm font-semibold transition-all duration-200 border",
+              aiMode || aiResults
+                ? "text-violet-200 border-violet-500/50"
+                : "text-violet-400 border-violet-500/20 hover:border-violet-500/50 hover:text-violet-300",
             )}
-            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showFilters && "rotate-180")} />
-          </Button>
+            style={{
+              background:
+                aiMode || aiResults
+                  ? "rgba(124,58,237,0.22)"
+                  : "rgba(124,58,237,0.07)",
+              boxShadow:
+                aiMode || aiResults
+                  ? "0 0 0 1px rgba(192,132,252,0.25), 0 4px 16px rgba(109,40,217,0.2)"
+                  : undefined,
+            }}
+          >
+            <Sparkles className="w-4 h-4" />
+            <span className="hidden sm:inline">AI</span>
+          </button>
+
+          {/* Run AI search button — shown only in AI mode */}
+          {aiMode && (
+            <Button
+              size="sm"
+              onClick={() => runAISearch()}
+              disabled={!aiQuery.trim() || aiLoading}
+              className="h-11 px-4 shrink-0 gap-1.5 text-sm font-semibold border-none rounded-xl"
+              style={{
+                background:
+                  aiQuery.trim() && !aiLoading
+                    ? "linear-gradient(135deg, #7c3aed, #c084fc)"
+                    : "rgba(255,255,255,0.06)",
+                color: "#fff",
+                opacity: aiQuery.trim() && !aiLoading ? 1 : 0.45,
+              }}
+            >
+              {aiLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Zap className="w-4 h-4" />
+              )}
+              <span className="hidden sm:inline">{aiLoading ? "Matching…" : "Find"}</span>
+            </Button>
+          )}
+
+          {/* Filters button — hidden in AI mode */}
+          {!aiMode && (
+            <Button
+              variant="outline"
+              className={cn(
+                "h-11 gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:border-zinc-300 dark:hover:border-zinc-600 shrink-0 transition-colors rounded-xl",
+                showFilters && "border-primary/60 text-primary bg-primary/5",
+              )}
+              onClick={() => setShowFilters((v) => !v)}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              Filters
+              {activeFilterCount > 0 && (
+                <span className="ml-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
+              <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showFilters && "rotate-180")} />
+            </Button>
+          )}
         </div>
+
+        {/* ── AI inline panel (example chips, loading, results summary) ──────── */}
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-300 ease-in-out",
+            aiMode ? "max-h-[200px] opacity-100 mt-2 mb-2" : "max-h-0 opacity-0 pointer-events-none",
+          )}
+        >
+          <div
+            className="rounded-xl px-4 py-3"
+            style={{
+              background: "rgba(12,10,18,0.55)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(192,132,252,0.18)",
+            }}
+          >
+            {/* Example chips */}
+            {!aiResults && !aiLoading && (
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-[10px] text-zinc-600 font-medium self-center mr-1">Try:</span>
+                {AI_EXAMPLE_QUERIES.map((ex) => (
+                  <button
+                    key={ex}
+                    onClick={() => { setAiQuery(ex); runAISearch(ex); }}
+                    className="text-[11px] px-2.5 py-1 rounded-full transition-all hover:opacity-90"
+                    style={{
+                      background: "rgba(192,132,252,0.08)",
+                      border: "1px solid rgba(192,132,252,0.18)",
+                      color: VIOLET,
+                    }}
+                  >
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Loading */}
+            {aiLoading && (
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="w-1.5 h-1.5 rounded-full animate-bounce"
+                      style={{ background: VIOLET, animationDelay: `${i * 0.15}s` }}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-zinc-500">AI is analyzing creators…</span>
+              </div>
+            )}
+
+            {/* Error */}
+            {aiError && <p className="text-xs text-red-400">{aiError}</p>}
+
+            {/* Results summary */}
+            {aiResults && !aiLoading && (
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                  <Sparkles className="w-3.5 h-3.5" style={{ color: VIOLET }} />
+                  <span>
+                    <span className="font-semibold" style={{ color: VIOLET }}>{aiResults.length}</span>
+                    {" "}AI-ranked match{aiResults.length !== 1 ? "es" : ""} for &ldquo;{aiQuery}&rdquo;
+                  </span>
+                </div>
+                <button
+                  onClick={clearAISearch}
+                  className="flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Clear
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* mb-3 spacer when AI mode is off */}
+        {!aiMode && <div className="mb-3" />}
 
         {/* Filter panel */}
         <div className={cn("overflow-hidden transition-all duration-300 ease-in-out", showFilters ? "max-h-96 opacity-100 mb-4" : "max-h-0 opacity-0")}>
@@ -923,31 +1168,69 @@ const Discover = () => {
           )}
         </div>
 
-        {/* Grid */}
-        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {loading ? (
-            Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-          ) : filtered.length > 0 ? (
-            filtered.map((c) => (
-              <CreatorCard
-                key={c.id}
-                creator={c}
-                isSaved={isInAnyCollection(c.id)}
-                onSave={setSaveTarget}
-                onViewProfile={openProfile}
-                onMessage={handleMessage}
-                onInvite={setInviteTarget}
-                communityLists={communityLists}
-                onCreateCommunityList={() => setShowCreateListModal(true)}
-                onMemberToggled={(listId, added) => handleMemberToggled(listId, c.id, added)}
-                connectionInfo={connectionStatuses[c.id] ?? { status: "none", connectionId: null }}
-                onConnectionChange={handleConnectionChange}
-              />
-            ))
-          ) : (
-            <EmptyState isFiltered={isFiltered} onClear={clearFilters} />
-          )}
-        </div>
+        {/* Grid — AI results override normal filtered list */}
+        {aiResults && !aiLoading ? (
+          <>
+            {aiResults.length === 0 ? (
+              <div className="flex flex-col items-center py-16 gap-3">
+                <Users className="w-10 h-10 text-muted-foreground/30" />
+                <p className="font-medium">No creators matched your AI query</p>
+                <p className="text-sm text-muted-foreground">Try broadening your description or use the filters below.</p>
+                <Button variant="outline" size="sm" onClick={clearAISearch} className="gap-2 mt-1">
+                  <RotateCcw className="w-3.5 h-3.5" />Back to all creators
+                </Button>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {aiResults.map((aiCreator) => {
+                  const c = creators.find((cr) => cr.id === aiCreator.id);
+                  if (!c) return null;
+                  return (
+                    <CreatorCard
+                      key={c.id}
+                      creator={c}
+                      isSaved={isInAnyCollection(c.id)}
+                      onSave={setSaveTarget}
+                      onViewProfile={openProfile}
+                      onMessage={handleMessage}
+                      onInvite={setInviteTarget}
+                      communityLists={communityLists}
+                      onCreateCommunityList={() => setShowCreateListModal(true)}
+                      onMemberToggled={(listId, added) => handleMemberToggled(listId, c.id, added)}
+                      connectionInfo={connectionStatuses[c.id] ?? { status: "none", connectionId: null }}
+                      onConnectionChange={handleConnectionChange}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {loading ? (
+              Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+            ) : filtered.length > 0 ? (
+              filtered.map((c) => (
+                <CreatorCard
+                  key={c.id}
+                  creator={c}
+                  isSaved={isInAnyCollection(c.id)}
+                  onSave={setSaveTarget}
+                  onViewProfile={openProfile}
+                  onMessage={handleMessage}
+                  onInvite={setInviteTarget}
+                  communityLists={communityLists}
+                  onCreateCommunityList={() => setShowCreateListModal(true)}
+                  onMemberToggled={(listId, added) => handleMemberToggled(listId, c.id, added)}
+                  connectionInfo={connectionStatuses[c.id] ?? { status: "none", connectionId: null }}
+                  onConnectionChange={handleConnectionChange}
+                />
+              ))
+            ) : (
+              <EmptyState isFiltered={isFiltered} onClear={clearFilters} />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Invite to Campaign Modal */}

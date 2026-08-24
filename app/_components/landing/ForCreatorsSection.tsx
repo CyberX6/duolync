@@ -40,10 +40,10 @@ const ForCreatorsSection = () => {
               <div className="aspect-square bg-gradient-to-br from-accent/5 to-primary/5 p-8">
                 {/* Creator Profile Mock */}
                 <ParallaxElement speed={0.2} direction="up">
-                  <div className="bg-white rounded-2xl shadow-lg p-6 text-center transform hover:scale-[1.02] transition-transform">
+                  <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-lg p-6 text-center transform hover:scale-[1.02] transition-transform">
                     <div className="w-20 h-20 rounded-full gradient-hero-canva mx-auto mb-4" />
-                    <div className="h-4 bg-gray-200 rounded w-32 mx-auto mb-2" />
-                    <div className="h-3 bg-gray-100 rounded w-24 mx-auto mb-6" />
+                    <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-32 mx-auto mb-2" />
+                    <div className="h-3 bg-zinc-100 dark:bg-zinc-800 rounded w-24 mx-auto mb-6" />
                     
                     <div className="grid grid-cols-3 gap-4 mb-6">
                       <div>
@@ -70,7 +70,7 @@ const ForCreatorsSection = () => {
 
                 {/* Earnings Card */}
                 <ParallaxElement speed={0.4} direction="down" className="absolute bottom-12 right-4">
-                  <div className="bg-white rounded-xl shadow-lg p-4">
+                  <div className="bg-white dark:bg-zinc-900/80 border border-zinc-100 dark:border-zinc-800 rounded-xl shadow-lg p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                         <DollarSign className="w-5 h-5 text-green-600" />
