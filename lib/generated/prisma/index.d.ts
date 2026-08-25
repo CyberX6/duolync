@@ -133,6 +133,11 @@ export type Application = $Result.DefaultSelection<Prisma.$ApplicationPayload>
  * 
  */
 export type Invitation = $Result.DefaultSelection<Prisma.$InvitationPayload>
+/**
+ * Model RateLimitEvent
+ * 
+ */
+export type RateLimitEvent = $Result.DefaultSelection<Prisma.$RateLimitEventPayload>
 
 /**
  * Enums
@@ -670,6 +675,16 @@ export class PrismaClient<
     * ```
     */
   get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.rateLimitEvent`: Exposes CRUD operations for the **RateLimitEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RateLimitEvents
+    * const rateLimitEvents = await prisma.rateLimitEvent.findMany()
+    * ```
+    */
+  get rateLimitEvent(): Prisma.RateLimitEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1127,7 +1142,8 @@ export namespace Prisma {
     CommunityListMember: 'CommunityListMember',
     Notification: 'Notification',
     Application: 'Application',
-    Invitation: 'Invitation'
+    Invitation: 'Invitation',
+    RateLimitEvent: 'RateLimitEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1143,7 +1159,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "brandProfile" | "creatorProfile" | "socialPost" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application" | "invitation"
+      modelProps: "user" | "brandProfile" | "creatorProfile" | "socialPost" | "account" | "session" | "verification" | "platformToken" | "platformStats" | "waitlist" | "message" | "campaign" | "campaignEvent" | "campaignEventUpdate" | "contract" | "milestone" | "cRMLead" | "task" | "connection" | "communityList" | "communityListMember" | "notification" | "application" | "invitation" | "rateLimitEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2923,6 +2939,80 @@ export namespace Prisma {
           }
         }
       }
+      RateLimitEvent: {
+        payload: Prisma.$RateLimitEventPayload<ExtArgs>
+        fields: Prisma.RateLimitEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RateLimitEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RateLimitEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          findFirst: {
+            args: Prisma.RateLimitEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RateLimitEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          findMany: {
+            args: Prisma.RateLimitEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>[]
+          }
+          create: {
+            args: Prisma.RateLimitEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          createMany: {
+            args: Prisma.RateLimitEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RateLimitEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>[]
+          }
+          delete: {
+            args: Prisma.RateLimitEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          update: {
+            args: Prisma.RateLimitEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.RateLimitEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RateLimitEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RateLimitEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.RateLimitEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RateLimitEventPayload>
+          }
+          aggregate: {
+            args: Prisma.RateLimitEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRateLimitEvent>
+          }
+          groupBy: {
+            args: Prisma.RateLimitEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RateLimitEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RateLimitEventCountArgs<ExtArgs>
+            result: $Utils.Optional<RateLimitEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3055,6 +3145,7 @@ export namespace Prisma {
     notification?: NotificationOmit
     application?: ApplicationOmit
     invitation?: InvitationOmit
+    rateLimitEvent?: RateLimitEventOmit
   }
 
   /* Types for Logging */
@@ -31445,6 +31536,980 @@ export namespace Prisma {
 
 
   /**
+   * Model RateLimitEvent
+   */
+
+  export type AggregateRateLimitEvent = {
+    _count: RateLimitEventCountAggregateOutputType | null
+    _min: RateLimitEventMinAggregateOutputType | null
+    _max: RateLimitEventMaxAggregateOutputType | null
+  }
+
+  export type RateLimitEventMinAggregateOutputType = {
+    id: string | null
+    identifier: string | null
+    createdAt: Date | null
+  }
+
+  export type RateLimitEventMaxAggregateOutputType = {
+    id: string | null
+    identifier: string | null
+    createdAt: Date | null
+  }
+
+  export type RateLimitEventCountAggregateOutputType = {
+    id: number
+    identifier: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type RateLimitEventMinAggregateInputType = {
+    id?: true
+    identifier?: true
+    createdAt?: true
+  }
+
+  export type RateLimitEventMaxAggregateInputType = {
+    id?: true
+    identifier?: true
+    createdAt?: true
+  }
+
+  export type RateLimitEventCountAggregateInputType = {
+    id?: true
+    identifier?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type RateLimitEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RateLimitEvent to aggregate.
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RateLimitEvents to fetch.
+     */
+    orderBy?: RateLimitEventOrderByWithRelationInput | RateLimitEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RateLimitEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RateLimitEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RateLimitEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RateLimitEvents
+    **/
+    _count?: true | RateLimitEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RateLimitEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RateLimitEventMaxAggregateInputType
+  }
+
+  export type GetRateLimitEventAggregateType<T extends RateLimitEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateRateLimitEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRateLimitEvent[P]>
+      : GetScalarType<T[P], AggregateRateLimitEvent[P]>
+  }
+
+
+
+
+  export type RateLimitEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RateLimitEventWhereInput
+    orderBy?: RateLimitEventOrderByWithAggregationInput | RateLimitEventOrderByWithAggregationInput[]
+    by: RateLimitEventScalarFieldEnum[] | RateLimitEventScalarFieldEnum
+    having?: RateLimitEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RateLimitEventCountAggregateInputType | true
+    _min?: RateLimitEventMinAggregateInputType
+    _max?: RateLimitEventMaxAggregateInputType
+  }
+
+  export type RateLimitEventGroupByOutputType = {
+    id: string
+    identifier: string
+    createdAt: Date
+    _count: RateLimitEventCountAggregateOutputType | null
+    _min: RateLimitEventMinAggregateOutputType | null
+    _max: RateLimitEventMaxAggregateOutputType | null
+  }
+
+  type GetRateLimitEventGroupByPayload<T extends RateLimitEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RateLimitEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RateLimitEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RateLimitEventGroupByOutputType[P]>
+            : GetScalarType<T[P], RateLimitEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RateLimitEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    identifier?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["rateLimitEvent"]>
+
+  export type RateLimitEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    identifier?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["rateLimitEvent"]>
+
+  export type RateLimitEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    identifier?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["rateLimitEvent"]>
+
+  export type RateLimitEventSelectScalar = {
+    id?: boolean
+    identifier?: boolean
+    createdAt?: boolean
+  }
+
+  export type RateLimitEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "identifier" | "createdAt", ExtArgs["result"]["rateLimitEvent"]>
+
+  export type $RateLimitEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RateLimitEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      identifier: string
+      createdAt: Date
+    }, ExtArgs["result"]["rateLimitEvent"]>
+    composites: {}
+  }
+
+  type RateLimitEventGetPayload<S extends boolean | null | undefined | RateLimitEventDefaultArgs> = $Result.GetResult<Prisma.$RateLimitEventPayload, S>
+
+  type RateLimitEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RateLimitEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RateLimitEventCountAggregateInputType | true
+    }
+
+  export interface RateLimitEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RateLimitEvent'], meta: { name: 'RateLimitEvent' } }
+    /**
+     * Find zero or one RateLimitEvent that matches the filter.
+     * @param {RateLimitEventFindUniqueArgs} args - Arguments to find a RateLimitEvent
+     * @example
+     * // Get one RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RateLimitEventFindUniqueArgs>(args: SelectSubset<T, RateLimitEventFindUniqueArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RateLimitEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RateLimitEventFindUniqueOrThrowArgs} args - Arguments to find a RateLimitEvent
+     * @example
+     * // Get one RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RateLimitEventFindUniqueOrThrowArgs>(args: SelectSubset<T, RateLimitEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RateLimitEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventFindFirstArgs} args - Arguments to find a RateLimitEvent
+     * @example
+     * // Get one RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RateLimitEventFindFirstArgs>(args?: SelectSubset<T, RateLimitEventFindFirstArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RateLimitEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventFindFirstOrThrowArgs} args - Arguments to find a RateLimitEvent
+     * @example
+     * // Get one RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RateLimitEventFindFirstOrThrowArgs>(args?: SelectSubset<T, RateLimitEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RateLimitEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RateLimitEvents
+     * const rateLimitEvents = await prisma.rateLimitEvent.findMany()
+     * 
+     * // Get first 10 RateLimitEvents
+     * const rateLimitEvents = await prisma.rateLimitEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const rateLimitEventWithIdOnly = await prisma.rateLimitEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RateLimitEventFindManyArgs>(args?: SelectSubset<T, RateLimitEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RateLimitEvent.
+     * @param {RateLimitEventCreateArgs} args - Arguments to create a RateLimitEvent.
+     * @example
+     * // Create one RateLimitEvent
+     * const RateLimitEvent = await prisma.rateLimitEvent.create({
+     *   data: {
+     *     // ... data to create a RateLimitEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends RateLimitEventCreateArgs>(args: SelectSubset<T, RateLimitEventCreateArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RateLimitEvents.
+     * @param {RateLimitEventCreateManyArgs} args - Arguments to create many RateLimitEvents.
+     * @example
+     * // Create many RateLimitEvents
+     * const rateLimitEvent = await prisma.rateLimitEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RateLimitEventCreateManyArgs>(args?: SelectSubset<T, RateLimitEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RateLimitEvents and returns the data saved in the database.
+     * @param {RateLimitEventCreateManyAndReturnArgs} args - Arguments to create many RateLimitEvents.
+     * @example
+     * // Create many RateLimitEvents
+     * const rateLimitEvent = await prisma.rateLimitEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RateLimitEvents and only return the `id`
+     * const rateLimitEventWithIdOnly = await prisma.rateLimitEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RateLimitEventCreateManyAndReturnArgs>(args?: SelectSubset<T, RateLimitEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RateLimitEvent.
+     * @param {RateLimitEventDeleteArgs} args - Arguments to delete one RateLimitEvent.
+     * @example
+     * // Delete one RateLimitEvent
+     * const RateLimitEvent = await prisma.rateLimitEvent.delete({
+     *   where: {
+     *     // ... filter to delete one RateLimitEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RateLimitEventDeleteArgs>(args: SelectSubset<T, RateLimitEventDeleteArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RateLimitEvent.
+     * @param {RateLimitEventUpdateArgs} args - Arguments to update one RateLimitEvent.
+     * @example
+     * // Update one RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RateLimitEventUpdateArgs>(args: SelectSubset<T, RateLimitEventUpdateArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RateLimitEvents.
+     * @param {RateLimitEventDeleteManyArgs} args - Arguments to filter RateLimitEvents to delete.
+     * @example
+     * // Delete a few RateLimitEvents
+     * const { count } = await prisma.rateLimitEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RateLimitEventDeleteManyArgs>(args?: SelectSubset<T, RateLimitEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RateLimitEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RateLimitEvents
+     * const rateLimitEvent = await prisma.rateLimitEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RateLimitEventUpdateManyArgs>(args: SelectSubset<T, RateLimitEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RateLimitEvents and returns the data updated in the database.
+     * @param {RateLimitEventUpdateManyAndReturnArgs} args - Arguments to update many RateLimitEvents.
+     * @example
+     * // Update many RateLimitEvents
+     * const rateLimitEvent = await prisma.rateLimitEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RateLimitEvents and only return the `id`
+     * const rateLimitEventWithIdOnly = await prisma.rateLimitEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RateLimitEventUpdateManyAndReturnArgs>(args: SelectSubset<T, RateLimitEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RateLimitEvent.
+     * @param {RateLimitEventUpsertArgs} args - Arguments to update or create a RateLimitEvent.
+     * @example
+     * // Update or create a RateLimitEvent
+     * const rateLimitEvent = await prisma.rateLimitEvent.upsert({
+     *   create: {
+     *     // ... data to create a RateLimitEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RateLimitEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RateLimitEventUpsertArgs>(args: SelectSubset<T, RateLimitEventUpsertArgs<ExtArgs>>): Prisma__RateLimitEventClient<$Result.GetResult<Prisma.$RateLimitEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RateLimitEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventCountArgs} args - Arguments to filter RateLimitEvents to count.
+     * @example
+     * // Count the number of RateLimitEvents
+     * const count = await prisma.rateLimitEvent.count({
+     *   where: {
+     *     // ... the filter for the RateLimitEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends RateLimitEventCountArgs>(
+      args?: Subset<T, RateLimitEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RateLimitEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RateLimitEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RateLimitEventAggregateArgs>(args: Subset<T, RateLimitEventAggregateArgs>): Prisma.PrismaPromise<GetRateLimitEventAggregateType<T>>
+
+    /**
+     * Group by RateLimitEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RateLimitEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RateLimitEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RateLimitEventGroupByArgs['orderBy'] }
+        : { orderBy?: RateLimitEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RateLimitEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRateLimitEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RateLimitEvent model
+   */
+  readonly fields: RateLimitEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RateLimitEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RateLimitEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RateLimitEvent model
+   */
+  interface RateLimitEventFieldRefs {
+    readonly id: FieldRef<"RateLimitEvent", 'String'>
+    readonly identifier: FieldRef<"RateLimitEvent", 'String'>
+    readonly createdAt: FieldRef<"RateLimitEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RateLimitEvent findUnique
+   */
+  export type RateLimitEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter, which RateLimitEvent to fetch.
+     */
+    where: RateLimitEventWhereUniqueInput
+  }
+
+  /**
+   * RateLimitEvent findUniqueOrThrow
+   */
+  export type RateLimitEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter, which RateLimitEvent to fetch.
+     */
+    where: RateLimitEventWhereUniqueInput
+  }
+
+  /**
+   * RateLimitEvent findFirst
+   */
+  export type RateLimitEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter, which RateLimitEvent to fetch.
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RateLimitEvents to fetch.
+     */
+    orderBy?: RateLimitEventOrderByWithRelationInput | RateLimitEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RateLimitEvents.
+     */
+    cursor?: RateLimitEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RateLimitEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RateLimitEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RateLimitEvents.
+     */
+    distinct?: RateLimitEventScalarFieldEnum | RateLimitEventScalarFieldEnum[]
+  }
+
+  /**
+   * RateLimitEvent findFirstOrThrow
+   */
+  export type RateLimitEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter, which RateLimitEvent to fetch.
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RateLimitEvents to fetch.
+     */
+    orderBy?: RateLimitEventOrderByWithRelationInput | RateLimitEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RateLimitEvents.
+     */
+    cursor?: RateLimitEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RateLimitEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RateLimitEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RateLimitEvents.
+     */
+    distinct?: RateLimitEventScalarFieldEnum | RateLimitEventScalarFieldEnum[]
+  }
+
+  /**
+   * RateLimitEvent findMany
+   */
+  export type RateLimitEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter, which RateLimitEvents to fetch.
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RateLimitEvents to fetch.
+     */
+    orderBy?: RateLimitEventOrderByWithRelationInput | RateLimitEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RateLimitEvents.
+     */
+    cursor?: RateLimitEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RateLimitEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RateLimitEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RateLimitEvents.
+     */
+    distinct?: RateLimitEventScalarFieldEnum | RateLimitEventScalarFieldEnum[]
+  }
+
+  /**
+   * RateLimitEvent create
+   */
+  export type RateLimitEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * The data needed to create a RateLimitEvent.
+     */
+    data: XOR<RateLimitEventCreateInput, RateLimitEventUncheckedCreateInput>
+  }
+
+  /**
+   * RateLimitEvent createMany
+   */
+  export type RateLimitEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RateLimitEvents.
+     */
+    data: RateLimitEventCreateManyInput | RateLimitEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RateLimitEvent createManyAndReturn
+   */
+  export type RateLimitEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many RateLimitEvents.
+     */
+    data: RateLimitEventCreateManyInput | RateLimitEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RateLimitEvent update
+   */
+  export type RateLimitEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * The data needed to update a RateLimitEvent.
+     */
+    data: XOR<RateLimitEventUpdateInput, RateLimitEventUncheckedUpdateInput>
+    /**
+     * Choose, which RateLimitEvent to update.
+     */
+    where: RateLimitEventWhereUniqueInput
+  }
+
+  /**
+   * RateLimitEvent updateMany
+   */
+  export type RateLimitEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RateLimitEvents.
+     */
+    data: XOR<RateLimitEventUpdateManyMutationInput, RateLimitEventUncheckedUpdateManyInput>
+    /**
+     * Filter which RateLimitEvents to update
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * Limit how many RateLimitEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RateLimitEvent updateManyAndReturn
+   */
+  export type RateLimitEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * The data used to update RateLimitEvents.
+     */
+    data: XOR<RateLimitEventUpdateManyMutationInput, RateLimitEventUncheckedUpdateManyInput>
+    /**
+     * Filter which RateLimitEvents to update
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * Limit how many RateLimitEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RateLimitEvent upsert
+   */
+  export type RateLimitEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * The filter to search for the RateLimitEvent to update in case it exists.
+     */
+    where: RateLimitEventWhereUniqueInput
+    /**
+     * In case the RateLimitEvent found by the `where` argument doesn't exist, create a new RateLimitEvent with this data.
+     */
+    create: XOR<RateLimitEventCreateInput, RateLimitEventUncheckedCreateInput>
+    /**
+     * In case the RateLimitEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RateLimitEventUpdateInput, RateLimitEventUncheckedUpdateInput>
+  }
+
+  /**
+   * RateLimitEvent delete
+   */
+  export type RateLimitEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+    /**
+     * Filter which RateLimitEvent to delete.
+     */
+    where: RateLimitEventWhereUniqueInput
+  }
+
+  /**
+   * RateLimitEvent deleteMany
+   */
+  export type RateLimitEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RateLimitEvents to delete
+     */
+    where?: RateLimitEventWhereInput
+    /**
+     * Limit how many RateLimitEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RateLimitEvent without action
+   */
+  export type RateLimitEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RateLimitEvent
+     */
+    select?: RateLimitEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RateLimitEvent
+     */
+    omit?: RateLimitEventOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -31812,6 +32877,15 @@ export namespace Prisma {
   };
 
   export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+  export const RateLimitEventScalarFieldEnum: {
+    id: 'id',
+    identifier: 'identifier',
+    createdAt: 'createdAt'
+  };
+
+  export type RateLimitEventScalarFieldEnum = (typeof RateLimitEventScalarFieldEnum)[keyof typeof RateLimitEventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -34012,6 +35086,48 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
   }
 
+  export type RateLimitEventWhereInput = {
+    AND?: RateLimitEventWhereInput | RateLimitEventWhereInput[]
+    OR?: RateLimitEventWhereInput[]
+    NOT?: RateLimitEventWhereInput | RateLimitEventWhereInput[]
+    id?: StringFilter<"RateLimitEvent"> | string
+    identifier?: StringFilter<"RateLimitEvent"> | string
+    createdAt?: DateTimeFilter<"RateLimitEvent"> | Date | string
+  }
+
+  export type RateLimitEventOrderByWithRelationInput = {
+    id?: SortOrder
+    identifier?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RateLimitEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RateLimitEventWhereInput | RateLimitEventWhereInput[]
+    OR?: RateLimitEventWhereInput[]
+    NOT?: RateLimitEventWhereInput | RateLimitEventWhereInput[]
+    identifier?: StringFilter<"RateLimitEvent"> | string
+    createdAt?: DateTimeFilter<"RateLimitEvent"> | Date | string
+  }, "id">
+
+  export type RateLimitEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    identifier?: SortOrder
+    createdAt?: SortOrder
+    _count?: RateLimitEventCountOrderByAggregateInput
+    _max?: RateLimitEventMaxOrderByAggregateInput
+    _min?: RateLimitEventMinOrderByAggregateInput
+  }
+
+  export type RateLimitEventScalarWhereWithAggregatesInput = {
+    AND?: RateLimitEventScalarWhereWithAggregatesInput | RateLimitEventScalarWhereWithAggregatesInput[]
+    OR?: RateLimitEventScalarWhereWithAggregatesInput[]
+    NOT?: RateLimitEventScalarWhereWithAggregatesInput | RateLimitEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RateLimitEvent"> | string
+    identifier?: StringWithAggregatesFilter<"RateLimitEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"RateLimitEvent"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -36093,6 +37209,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RateLimitEventCreateInput = {
+    id?: string
+    identifier: string
+    createdAt?: Date | string
+  }
+
+  export type RateLimitEventUncheckedCreateInput = {
+    id?: string
+    identifier: string
+    createdAt?: Date | string
+  }
+
+  export type RateLimitEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    identifier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RateLimitEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    identifier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RateLimitEventCreateManyInput = {
+    id?: string
+    identifier: string
+    createdAt?: Date | string
+  }
+
+  export type RateLimitEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    identifier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RateLimitEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    identifier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -37784,6 +38942,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
+  }
+
+  export type RateLimitEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    identifier?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RateLimitEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    identifier?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RateLimitEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    identifier?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type AccountCreateNestedManyWithoutUserInput = {

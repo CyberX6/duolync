@@ -33,7 +33,7 @@ export async function getCreatorAnalyticsAction(creatorUserId: string): Promise<
       where: {
         status: { in: ["ACCEPTED", "UNDER_REVIEW"] },
         creator: { userId: creatorUserId },
-        campaign: { brandProfile: { userId: session.user.id } },
+        campaign: { brand: { userId: session.user.id } },
       },
       select: { id: true },
     });
