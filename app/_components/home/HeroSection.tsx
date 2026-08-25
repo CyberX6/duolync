@@ -269,6 +269,7 @@ export function HeroSection() {
               color: "var(--accent-violet-text)",
               bg: "var(--glow-purple)",
               border: "rgba(124,58,237,0.25)",
+              shadow: "rgba(124,58,237,0.15)",
               href: "/for-brands",
             },
             {
@@ -277,6 +278,7 @@ export function HeroSection() {
               color: "var(--accent-pink-text)",
               bg: "var(--glow-pink)",
               border: "rgba(236,72,153,0.25)",
+              shadow: "rgba(236,72,153,0.15)",
               href: "/for-creators",
             },
           ].map((card) => (
