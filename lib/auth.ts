@@ -85,6 +85,18 @@ export const auth = betterAuth({
     process.env.APP_URL ??
     process.env.NEXT_PUBLIC_APP_URL,
   secret: process.env.BETTER_AUTH_SECRET!,
+  trustedOrigins: [
+    ...new Set(
+      [
+        process.env.BETTER_AUTH_URL,
+        process.env.APP_URL,
+        process.env.NEXT_PUBLIC_APP_URL,
+        ...(process.env.ALLOWED_ORIGINS ?? "").split(","),
+      ]
+        .map((origin) => origin?.trim())
+        .filter((origin): origin is string => Boolean(origin)),
+    ),
+  ],
 });
 
 export type Auth = typeof auth;

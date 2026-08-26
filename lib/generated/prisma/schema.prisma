@@ -28,6 +28,7 @@ model User {
   platformStats          PlatformStats[]
   platformTokens         PlatformToken[]
   sessions               Session[]
+  communityMemberships   CommunityListMember[]
   createdCampaignEvents  CampaignEvent[]       @relation("EventCreatedBy")
   requestedEventUpdates  CampaignEventUpdate[] @relation("EventUpdateRequestedBy")
   reviewedEventUpdates   CampaignEventUpdate[] @relation("EventUpdateReviewedBy")
@@ -49,6 +50,7 @@ model BrandProfile {
   campaigns        Campaign[]
   communityLists   CommunityList[]
   invitations      Invitation[]
+  contracts        Contract[]
 }
 
 model CreatorProfile {
@@ -163,6 +165,7 @@ model PlatformStats {
   raw            Json?
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, platform])
   @@index([userId, platform])
 }
 
@@ -268,8 +271,13 @@ model Contract {
   createdAt        DateTime       @default(now())
   campaign         Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   creator          CreatorProfile @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+  brand            BrandProfile   @relation(fields: [brandProfileId], references: [id], onDelete: Cascade)
   milestones       Milestone[]
   tasks            Task[]
+
+  @@index([brandProfileId])
+  @@index([creatorProfileId])
+  @@index([campaignId])
 }
 
 model Milestone {
@@ -338,9 +346,11 @@ model CommunityListMember {
   creatorUserId String
   addedAt       DateTime      @default(now())
   list          CommunityList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  creator       User          @relation(fields: [creatorUserId], references: [id], onDelete: Cascade)
 
   @@unique([listId, creatorUserId])
   @@index([listId])
+  @@index([creatorUserId])
 }
 
 model Notification {

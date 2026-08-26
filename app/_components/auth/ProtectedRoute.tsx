@@ -33,15 +33,14 @@ const ProtectedRoute = ({ children, requiredType }: ProtectedRouteProps) => {
   // Not authenticated → send to sign-in with callbackUrl preserved
   if (!user) return <RedirectTo path="/sign-in" />;
 
-  // Session exists but profile hasn't resolved yet
-  if (!profile) return <Spinner />;
+  const userType = profile?.user_type;
 
   // Role-based route guard: wrong type → send to own dashboard
-  if (requiredType && profile.user_type !== requiredType) {
+  if (requiredType && userType && userType !== requiredType) {
     return (
       <RedirectTo
         path={
-          profile.user_type === "brand"
+          userType === "brand"
             ? "/brand/dashboard"
             : "/creator/dashboard"
         }

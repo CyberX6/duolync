@@ -106,22 +106,59 @@ function toProfile(fp: FullProfile): Profile {
   };
 }
 
+function userTypeFromRole(role: unknown): "brand" | "creator" {
+  return String(role ?? "").toLowerCase() === "brand" ? "brand" : "creator";
+}
+
+/** Minimal profile from the Better Auth session so the app can render if the DB profile action 500s. */
+function profileFromSession(sessionUser: {
+  id: string;
+  email: string;
+  name?: string | null;
+  image?: string | null;
+  role?: unknown;
+  hasCompletedOnboarding?: unknown;
+}): Profile {
+  return {
+    id: sessionUser.id,
+    user_id: sessionUser.id,
+    user_type: userTypeFromRole(sessionUser.role),
+    email: sessionUser.email,
+    full_name: sessionUser.name ?? null,
+    avatar_url: sessionUser.image ?? null,
+    bio: null,
+    brand_account_type: null,
+    company_name: null,
+    industry: null,
+    website: null,
+    niche: null,
+    primary_platform: null,
+    location: null,
+    languages: ["English"],
+    total_followers: 0,
+    avg_engagement_rate: 0,
+    hasCompletedOnboarding: Boolean(sessionUser.hasCompletedOnboarding),
+  };
+}
+
 // ── Provider ───────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { data: session, isPending, error: sessionError } = useSession();
   const [mounted, setMounted] = useState(false);
+  const [dbProfile, setDbProfile] = useState<FullProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Log session errors for debugging but don't let them crash the app.
-  // Better Auth throws APIError (e.g. "Failed to get session") on transient DB blips.
-  if (sessionError) {
-    console.warn("[useAuth] session fetch failed:", sessionError);
-  }
-
   const sessionUser = session?.user ?? null;
+
+  useEffect(() => {
+    if (sessionError) {
+      console.warn("[useAuth] session fetch failed:", sessionError);
+    }
+  }, [sessionError]);
 
   const user: AuthUser | null = sessionUser
     ? {
@@ -132,13 +169,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     : null;
 
-  // ── DB-sourced extended profile ─────────────────────────────────────────
-  const [dbProfile, setDbProfile] = useState<FullProfile | null>(null);
-  const [profileLoading, setProfileLoading] = useState(false);
-
   useEffect(() => {
     if (!sessionUser?.id) {
       setDbProfile(null);
+      setProfileLoading(false);
       return;
     }
     setProfileLoading(true);
@@ -151,12 +185,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setProfileLoading(false));
   }, [sessionUser?.id]);
 
-  const profile: Profile | null = dbProfile ? toProfile(dbProfile) : null;
+  const profile: Profile | null = dbProfile
+    ? toProfile(dbProfile)
+    : sessionUser
+      ? profileFromSession(sessionUser)
+      : null;
 
-  // True while we're still waiting for either the session cookie OR the DB fetch.
-  // `mounted` ensures server and client both start with loading=true, preventing hydration mismatch.
-  // If the session fetch errored (transient DB blip), treat it as loaded with no session.
-  const loading = !mounted || (isPending && !sessionError) || profileLoading;
+  // Wait for mount + session only. A failed/slow profile query must not block the UI —
+  // we already have a session-derived fallback profile above.
+  const loading = !mounted || (isPending && !sessionError);
 
   // ── Auth handlers ──────────────────────────────────────────────────────
   const handleSignUp = async (

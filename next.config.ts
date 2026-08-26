@@ -1,9 +1,30 @@
 import type { NextConfig } from "next";
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? "")
-  .split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
+const allowedOrigins = [
+  ...new Set(
+    [
+      ...(process.env.ALLOWED_ORIGINS ?? "").split(","),
+      process.env.NEXT_PUBLIC_APP_URL,
+      process.env.BETTER_AUTH_URL,
+      process.env.APP_URL,
+    ]
+      .map((o) => o?.trim())
+      .filter((o): o is string => Boolean(o)),
+  ),
+];
+
+function toHost(origin: string): string | null {
+  try {
+    if (/^https?:\/\//i.test(origin)) return new URL(origin).host;
+    return origin.replace(/\/$/, "") || null;
+  } catch {
+    return null;
+  }
+}
+
+const allowedActionOrigins = allowedOrigins
+  .map(toHost)
+  .filter((host): host is string => Boolean(host));
 
 const corsHeaders = (origin: string) => [
   { key: "Access-Control-Allow-Origin", value: origin },
@@ -16,6 +37,9 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "4mb",
+      // Cloudflare / reverse-proxy hosts must be listed or Next.js rejects
+      // server-action POSTs with a 500 ("Server Components render" digest).
+      allowedOrigins: allowedActionOrigins,
     },
   },
   serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
