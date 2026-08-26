@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  let session = null;
+  type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
+  let session: Session = null;
   try {
     session = await auth.api.getSession({ headers: await headers() });
   } catch (err) {
