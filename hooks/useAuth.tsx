@@ -187,7 +187,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const result = await baSignIn.social({
       provider,
       callbackURL:
-        callbackURL ?? process.env.NEXT_PUBLIC_APP_URL + "/onboarding",
+        callbackURL ??
+        (typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL) + "/onboarding",
     });
     return { error: result.error ? new Error(result.error.message) : null };
   };
