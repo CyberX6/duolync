@@ -385,138 +385,158 @@ export async function getCreatorCalendarEventsAction(
   month?: number,
   year?: number,
 ): Promise<{ data: CalendarEventData[]; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user || user.role !== Role.CREATOR || !user.creatorProfile) {
-    return { data: [], error: "Unauthorized" };
-  }
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== Role.CREATOR || !user.creatorProfile) {
+      return { data: [], error: "Unauthorized" };
+    }
 
-  const creatorId = user.creatorProfile.id;
+    const creatorId = user.creatorProfile.id;
 
-  const [applications, contracts] = await Promise.all([
-    db.application.findMany({
-      where: {
-        creatorProfileId: creatorId,
-        status: {
-          in: [ApplicationStatus.ACCEPTED, ApplicationStatus.UNDER_REVIEW, ApplicationStatus.PENDING],
+    const [applications, contracts] = await Promise.all([
+      db.application.findMany({
+        where: {
+          creatorProfileId: creatorId,
+          status: {
+            in: [ApplicationStatus.ACCEPTED, ApplicationStatus.UNDER_REVIEW, ApplicationStatus.PENDING],
+          },
         },
-      },
-      select: { campaignId: true },
-    }),
-    db.contract.findMany({
-      where: {
-        creatorProfileId: creatorId,
-        status: { in: [ContractStatus.PENDING, ContractStatus.ACTIVE] },
-      },
-      select: { campaignId: true },
-    }),
-  ]);
+        select: { campaignId: true },
+      }),
+      db.contract.findMany({
+        where: {
+          creatorProfileId: creatorId,
+          status: { in: [ContractStatus.PENDING, ContractStatus.ACTIVE] },
+        },
+        select: { campaignId: true },
+      }),
+    ]);
 
-  const campaignIds = [
-    ...new Set([
-      ...applications.map((a) => a.campaignId),
-      ...contracts.map((c) => c.campaignId),
-    ]),
-  ];
+    const campaignIds = [
+      ...new Set([
+        ...applications.map((a) => a.campaignId),
+        ...contracts.map((c) => c.campaignId),
+      ]),
+    ];
 
-  let rangeStart: Date | undefined;
-  let rangeEnd: Date | undefined;
-  if (month !== undefined && year !== undefined) {
-    rangeStart = new Date(year, month, 1);
-    rangeEnd = new Date(year, month + 1, 0, 23, 59, 59, 999);
+    let rangeStart: Date | undefined;
+    let rangeEnd: Date | undefined;
+    if (month !== undefined && year !== undefined) {
+      rangeStart = new Date(year, month, 1);
+      rangeEnd = new Date(year, month + 1, 0, 23, 59, 59, 999);
+    }
+
+    const data = await fetchEventsForCampaigns(campaignIds, user.id, rangeStart, rangeEnd);
+    return { data, error: null };
+  } catch (err) {
+    console.error("[getCreatorCalendarEventsAction]:", err);
+    return { data: [], error: "Failed to load calendar events" };
   }
-
-  const data = await fetchEventsForCampaigns(campaignIds, user.id, rangeStart, rangeEnd);
-  return { data, error: null };
 }
 
 export async function getBrandCalendarEventsAction(
   month?: number,
   year?: number,
 ): Promise<{ data: CalendarEventData[]; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user || user.role !== Role.BRAND || !user.brandProfile) {
-    return { data: [], error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== Role.BRAND || !user.brandProfile) {
+      return { data: [], error: "Unauthorized" };
+    }
+
+    const campaigns = await db.campaign.findMany({
+      where: { brandProfileId: user.brandProfile.id },
+      select: { id: true },
+    });
+
+    let rangeStart: Date | undefined;
+    let rangeEnd: Date | undefined;
+    if (month !== undefined && year !== undefined) {
+      rangeStart = new Date(year, month, 1);
+      rangeEnd = new Date(year, month + 1, 0, 23, 59, 59, 999);
+    }
+
+    const data = await fetchEventsForCampaigns(
+      campaigns.map((c) => c.id),
+      user.id,
+      rangeStart,
+      rangeEnd,
+    );
+    return { data, error: null };
+  } catch (err) {
+    console.error("[getBrandCalendarEventsAction]:", err);
+    return { data: [], error: "Failed to load calendar events" };
   }
-
-  const campaigns = await db.campaign.findMany({
-    where: { brandProfileId: user.brandProfile.id },
-    select: { id: true },
-  });
-
-  let rangeStart: Date | undefined;
-  let rangeEnd: Date | undefined;
-  if (month !== undefined && year !== undefined) {
-    rangeStart = new Date(year, month, 1);
-    rangeEnd = new Date(year, month + 1, 0, 23, 59, 59, 999);
-  }
-
-  const data = await fetchEventsForCampaigns(
-    campaigns.map((c) => c.id),
-    user.id,
-    rangeStart,
-    rangeEnd,
-  );
-  return { data, error: null };
 }
 
 export async function getCampaignEventsAction(
   campaignId: string,
 ): Promise<{ data: CalendarEventData[]; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: [], error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: [], error: "Unauthorized" };
 
-  if (user.role === Role.BRAND && user.brandProfile) {
-    const campaign = await assertBrandOwnsCampaign(user.brandProfile.id, campaignId);
-    if (!campaign) return { data: [], error: "Campaign not found" };
-  } else if (user.role === Role.CREATOR && user.creatorProfile) {
-    const canView = await assertCreatorCanViewCampaign(user.creatorProfile.id, campaignId);
-    if (!canView) return { data: [], error: "Unauthorized" };
-  } else {
-    return { data: [], error: "Unauthorized" };
+    if (user.role === Role.BRAND && user.brandProfile) {
+      const campaign = await assertBrandOwnsCampaign(user.brandProfile.id, campaignId);
+      if (!campaign) return { data: [], error: "Campaign not found" };
+    } else if (user.role === Role.CREATOR && user.creatorProfile) {
+      const canView = await assertCreatorCanViewCampaign(user.creatorProfile.id, campaignId);
+      if (!canView) return { data: [], error: "Unauthorized" };
+    } else {
+      return { data: [], error: "Unauthorized" };
+    }
+
+    const data = await fetchEventsForCampaigns([campaignId], user.id);
+    return { data, error: null };
+  } catch (err) {
+    console.error("[getCampaignEventsAction]:", err);
+    return { data: [], error: "Failed to load campaign events" };
   }
-
-  const data = await fetchEventsForCampaigns([campaignId], user.id);
-  return { data, error: null };
 }
 
 export async function getCalendarEventDetailAction(
   eventId: string,
 ): Promise<{ data: CalendarEventDetailData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: null, error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: null, error: "Unauthorized" };
 
-  const access = await getEventAccess(eventId, user);
-  if (!access) return { data: null, error: "Event not found" };
+    const access = await getEventAccess(eventId, user);
+    if (!access) return { data: null, error: "Event not found" };
 
-  const event = await db.campaignEvent.findUnique({
-    where: { id: eventId },
-    include: {
-      ...eventInclude,
-      updates: {
-        orderBy: { createdAt: "desc" },
-        take: 10,
-        include: updateInclude,
+    const event = await db.campaignEvent.findUnique({
+      where: { id: eventId },
+      include: {
+        ...eventInclude,
+        updates: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+          include: updateInclude,
+        },
       },
-    },
-  });
-  if (!event) return { data: null, error: "Event not found" };
+    });
+    if (!event) return { data: null, error: "Event not found" };
 
-  const pending = event.updates.find((u) => u.status === EventUpdateStatus.PENDING) ?? null;
-  const base = mapEvent(event as RawEvent, user.id);
+    const pending = event.updates.find((u) => u.status === EventUpdateStatus.PENDING) ?? null;
+    const base = mapEvent(event as RawEvent, user.id);
 
-  return {
-    data: {
-      ...base,
-      createdBy: mapPartner(event.createdBy),
-      pendingUpdate: pending ? mapEventUpdate(pending) : null,
-      updateHistory: event.updates
-        .filter((u) => u.status !== EventUpdateStatus.PENDING)
-        .map(mapEventUpdate),
-      campaignImageUrl: event.campaign.imageUrl ?? null,
-      campaignDescription: event.campaign.description ?? null,
-    },
-    error: null,
-  };
+    return {
+      data: {
+        ...base,
+        createdBy: mapPartner(event.createdBy),
+        pendingUpdate: pending ? mapEventUpdate(pending) : null,
+        updateHistory: event.updates
+          .filter((u) => u.status !== EventUpdateStatus.PENDING)
+          .map(mapEventUpdate),
+        campaignImageUrl: event.campaign.imageUrl ?? null,
+        campaignDescription: event.campaign.description ?? null,
+      },
+      error: null,
+    };
+  } catch (err) {
+    console.error("[getCalendarEventDetailAction]:", err);
+    return { data: null, error: "Failed to load event details" };
+  }
 }
 
 // ── Mutations ─────────────────────────────────────────────────────────────────
@@ -524,211 +544,236 @@ export async function getCalendarEventDetailAction(
 export async function createCampaignEventAction(
   input: CreateEventInput,
 ): Promise<{ data: CalendarEventData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user || user.role !== Role.BRAND || !user.brandProfile) {
-    return { data: null, error: "Unauthorized" };
-  }
-
-  const campaign = await assertBrandOwnsCampaign(user.brandProfile.id, input.campaignId);
-  if (!campaign) return { data: null, error: "Campaign not found" };
-
-  const scheduledAt = new Date(input.scheduledAt);
-  if (isNaN(scheduledAt.getTime())) {
-    return { data: null, error: "Invalid date" };
-  }
-
-  if (input.creatorProfileId) {
-    const app = await db.application.findFirst({
-      where: {
-        campaignId: input.campaignId,
-        creatorProfileId: input.creatorProfileId,
-        status: ApplicationStatus.ACCEPTED,
-      },
-    });
-    if (!app) {
-      return { data: null, error: "Creator must have an accepted application for this campaign" };
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== Role.BRAND || !user.brandProfile) {
+      return { data: null, error: "Unauthorized" };
     }
+
+    const campaign = await assertBrandOwnsCampaign(user.brandProfile.id, input.campaignId);
+    if (!campaign) return { data: null, error: "Campaign not found" };
+
+    const scheduledAt = new Date(input.scheduledAt);
+    if (isNaN(scheduledAt.getTime())) {
+      return { data: null, error: "Invalid date" };
+    }
+
+    if (input.creatorProfileId) {
+      const app = await db.application.findFirst({
+        where: {
+          campaignId: input.campaignId,
+          creatorProfileId: input.creatorProfileId,
+          status: ApplicationStatus.ACCEPTED,
+        },
+      });
+      if (!app) {
+        return { data: null, error: "Creator must have an accepted application for this campaign" };
+      }
+    }
+
+    const event = await db.campaignEvent.create({
+      data: {
+        campaignId: input.campaignId,
+        creatorProfileId: input.creatorProfileId ?? null,
+        type: input.type as CampaignEventType,
+        platform: input.platform ?? null,
+        title: input.title ?? null,
+        scheduledAt,
+        status: (input.status as CampaignEventStatus) ?? CampaignEventStatus.SCHEDULED,
+        createdById: user.id,
+      },
+      include: eventInclude,
+    });
+
+    revalidateCalendarPaths(input.campaignId);
+    return { data: mapEvent(event as RawEvent, user.id), error: null };
+  } catch (err) {
+    console.error("[createCampaignEventAction]:", err);
+    return { data: null, error: "Failed to create event" };
   }
-
-  const event = await db.campaignEvent.create({
-    data: {
-      campaignId: input.campaignId,
-      creatorProfileId: input.creatorProfileId ?? null,
-      type: input.type as CampaignEventType,
-      platform: input.platform ?? null,
-      title: input.title ?? null,
-      scheduledAt,
-      status: (input.status as CampaignEventStatus) ?? CampaignEventStatus.SCHEDULED,
-      createdById: user.id,
-    },
-    include: eventInclude,
-  });
-
-  revalidateCalendarPaths(input.campaignId);
-  return { data: mapEvent(event as RawEvent, user.id), error: null };
 }
 
 export async function requestEventUpdateAction(
   input: RequestEventUpdateInput,
 ): Promise<{ data: EventUpdateData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: null, error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: null, error: "Unauthorized" };
 
-  const access = await getEventAccess(input.eventId, user);
-  if (!access) return { data: null, error: "Event not found" };
+    const access = await getEventAccess(input.eventId, user);
+    if (!access) return { data: null, error: "Event not found" };
 
-  if (!input.title && !input.platform && !input.scheduledAt) {
-    return { data: null, error: "At least one field must be changed" };
-  }
-
-  const existingPending = await db.campaignEventUpdate.findFirst({
-    where: { eventId: input.eventId, status: EventUpdateStatus.PENDING },
-  });
-  if (existingPending) {
-    return { data: null, error: "A change request is already pending approval" };
-  }
-
-  let scheduledAt: Date | undefined;
-  if (input.scheduledAt) {
-    scheduledAt = new Date(input.scheduledAt);
-    if (isNaN(scheduledAt.getTime())) {
-      return { data: null, error: "Invalid date" };
+    if (!input.title && !input.platform && !input.scheduledAt) {
+      return { data: null, error: "At least one field must be changed" };
     }
+
+    const existingPending = await db.campaignEventUpdate.findFirst({
+      where: { eventId: input.eventId, status: EventUpdateStatus.PENDING },
+    });
+    if (existingPending) {
+      return { data: null, error: "A change request is already pending approval" };
+    }
+
+    let scheduledAt: Date | undefined;
+    if (input.scheduledAt) {
+      scheduledAt = new Date(input.scheduledAt);
+      if (isNaN(scheduledAt.getTime())) {
+        return { data: null, error: "Invalid date" };
+      }
+    }
+
+    const update = await db.campaignEventUpdate.create({
+      data: {
+        eventId: input.eventId,
+        requestedById: user.id,
+        title: input.title ?? null,
+        platform: input.platform ?? null,
+        scheduledAt: scheduledAt ?? null,
+      },
+      include: updateInclude,
+    });
+
+    revalidateCalendarPaths(access.event.campaignId);
+    return { data: mapEventUpdate(update), error: null };
+  } catch (err) {
+    console.error("[requestEventUpdateAction]:", err);
+    return { data: null, error: "Failed to submit change request" };
   }
-
-  const update = await db.campaignEventUpdate.create({
-    data: {
-      eventId: input.eventId,
-      requestedById: user.id,
-      title: input.title ?? null,
-      platform: input.platform ?? null,
-      scheduledAt: scheduledAt ?? null,
-    },
-    include: updateInclude,
-  });
-
-  revalidateCalendarPaths(access.event.campaignId);
-  return { data: mapEventUpdate(update), error: null };
 }
 
 export async function approveEventUpdateAction(
   updateId: string,
 ): Promise<{ data: CalendarEventDetailData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: null, error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: null, error: "Unauthorized" };
 
-  const update = await db.campaignEventUpdate.findUnique({
-    where: { id: updateId },
-    include: {
-      event: { include: { campaign: { select: { brandProfileId: true, id: true } } } },
-      requestedBy: { select: { id: true } },
-    },
-  });
-  if (!update || update.status !== EventUpdateStatus.PENDING) {
-    return { data: null, error: "Update request not found" };
-  }
-
-  if (update.requestedById === user.id) {
-    return { data: null, error: "You cannot approve your own change request" };
-  }
-
-  const access = await getEventAccess(update.eventId, user);
-  if (!access) return { data: null, error: "Unauthorized" };
-
-  const applyData: {
-    title?: string;
-    platform?: string | null;
-    scheduledAt?: Date;
-  } = {};
-  if (update.title !== null) applyData.title = update.title;
-  if (update.platform !== null) applyData.platform = update.platform;
-  if (update.scheduledAt !== null) applyData.scheduledAt = update.scheduledAt;
-
-  await db.$transaction([
-    db.campaignEvent.update({
-      where: { id: update.eventId },
-      data: applyData,
-    }),
-    db.campaignEventUpdate.update({
+    const update = await db.campaignEventUpdate.findUnique({
       where: { id: updateId },
-      data: {
-        status: EventUpdateStatus.APPROVED,
-        reviewedById: user.id,
-        reviewedAt: new Date(),
+      include: {
+        event: { include: { campaign: { select: { brandProfileId: true, id: true } } } },
+        requestedBy: { select: { id: true } },
       },
-    }),
-  ]);
+    });
+    if (!update || update.status !== EventUpdateStatus.PENDING) {
+      return { data: null, error: "Update request not found" };
+    }
 
-  revalidateCalendarPaths(update.event.campaign.id);
-  return getCalendarEventDetailAction(update.eventId);
+    if (update.requestedById === user.id) {
+      return { data: null, error: "You cannot approve your own change request" };
+    }
+
+    const access = await getEventAccess(update.eventId, user);
+    if (!access) return { data: null, error: "Unauthorized" };
+
+    const applyData: {
+      title?: string;
+      platform?: string | null;
+      scheduledAt?: Date;
+    } = {};
+    if (update.title !== null) applyData.title = update.title;
+    if (update.platform !== null) applyData.platform = update.platform;
+    if (update.scheduledAt !== null) applyData.scheduledAt = update.scheduledAt;
+
+    await db.$transaction([
+      db.campaignEvent.update({
+        where: { id: update.eventId },
+        data: applyData,
+      }),
+      db.campaignEventUpdate.update({
+        where: { id: updateId },
+        data: {
+          status: EventUpdateStatus.APPROVED,
+          reviewedById: user.id,
+          reviewedAt: new Date(),
+        },
+      }),
+    ]);
+
+    revalidateCalendarPaths(update.event.campaign.id);
+    return getCalendarEventDetailAction(update.eventId);
+  } catch (err) {
+    console.error("[approveEventUpdateAction]:", err);
+    return { data: null, error: "Failed to approve update" };
+  }
 }
 
 export async function rejectEventUpdateAction(
   updateId: string,
 ): Promise<{ data: CalendarEventDetailData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: null, error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: null, error: "Unauthorized" };
 
-  const update = await db.campaignEventUpdate.findUnique({
-    where: { id: updateId },
-    include: {
-      event: { include: { campaign: { select: { id: true } } } },
-      requestedBy: { select: { id: true } },
-    },
-  });
-  if (!update || update.status !== EventUpdateStatus.PENDING) {
-    return { data: null, error: "Update request not found" };
+    const update = await db.campaignEventUpdate.findUnique({
+      where: { id: updateId },
+      include: {
+        event: { include: { campaign: { select: { id: true } } } },
+        requestedBy: { select: { id: true } },
+      },
+    });
+    if (!update || update.status !== EventUpdateStatus.PENDING) {
+      return { data: null, error: "Update request not found" };
+    }
+
+    if (update.requestedById === user.id) {
+      return { data: null, error: "You cannot reject your own change request" };
+    }
+
+    const access = await getEventAccess(update.eventId, user);
+    if (!access) return { data: null, error: "Unauthorized" };
+
+    await db.campaignEventUpdate.update({
+      where: { id: updateId },
+      data: {
+        status: EventUpdateStatus.REJECTED,
+        reviewedById: user.id,
+        reviewedAt: new Date(),
+      },
+    });
+
+    revalidateCalendarPaths(update.event.campaign.id);
+    return getCalendarEventDetailAction(update.eventId);
+  } catch (err) {
+    console.error("[rejectEventUpdateAction]:", err);
+    return { data: null, error: "Failed to reject update" };
   }
-
-  if (update.requestedById === user.id) {
-    return { data: null, error: "You cannot reject your own change request" };
-  }
-
-  const access = await getEventAccess(update.eventId, user);
-  if (!access) return { data: null, error: "Unauthorized" };
-
-  await db.campaignEventUpdate.update({
-    where: { id: updateId },
-    data: {
-      status: EventUpdateStatus.REJECTED,
-      reviewedById: user.id,
-      reviewedAt: new Date(),
-    },
-  });
-
-  revalidateCalendarPaths(update.event.campaign.id);
-  return getCalendarEventDetailAction(update.eventId);
 }
 
 export async function updateCampaignEventAction(input: {
   id: string;
   status?: string;
 }): Promise<{ data: CalendarEventData | null; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user) return { data: null, error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user) return { data: null, error: "Unauthorized" };
 
-  const access = await getEventAccess(input.id, user);
-  if (!access) return { data: null, error: "Event not found" };
+    const access = await getEventAccess(input.id, user);
+    if (!access) return { data: null, error: "Event not found" };
 
-  if (!input.status) {
-    return {
-      data: null,
-      error: "Direct edits require approval — use requestEventUpdateAction for schedule or title changes",
-    };
+    if (!input.status) {
+      return {
+        data: null,
+        error: "Direct edits require approval — use requestEventUpdateAction for schedule or title changes",
+      };
+    }
+
+    if (input.status !== "DONE") {
+      return { data: null, error: "Only status can be updated directly" };
+    }
+
+    const event = await db.campaignEvent.update({
+      where: { id: input.id },
+      data: { status: input.status as CampaignEventStatus },
+      include: eventInclude,
+    });
+
+    revalidateCalendarPaths(access.event.campaignId);
+    return { data: mapEvent(event as RawEvent, user.id), error: null };
+  } catch (err) {
+    console.error("[updateCampaignEventAction]:", err);
+    return { data: null, error: "Failed to update event" };
   }
-
-  if (input.status !== "DONE") {
-    return { data: null, error: "Only status can be updated directly" };
-  }
-
-  const event = await db.campaignEvent.update({
-    where: { id: input.id },
-    data: { status: input.status as CampaignEventStatus },
-    include: eventInclude,
-  });
-
-  revalidateCalendarPaths(access.event.campaignId);
-  return { data: mapEvent(event as RawEvent, user.id), error: null };
 }
 
 // ── Campaign applicants for sidebar ───────────────────────────────────────────
@@ -745,66 +790,76 @@ export interface CampaignApplicant {
 export async function getCampaignApplicantsAction(
   campaignId: string,
 ): Promise<{ data: CampaignApplicant[]; error: string | null }> {
-  const user = await getSessionUser();
-  if (!user || user.role !== Role.BRAND || !user.brandProfile) {
-    return { data: [], error: "Unauthorized" };
-  }
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== Role.BRAND || !user.brandProfile) {
+      return { data: [], error: "Unauthorized" };
+    }
 
-  const campaign = await db.campaign.findFirst({
-    where: { id: campaignId, brandProfileId: user.brandProfile.id },
-    select: { id: true },
-  });
-  if (!campaign) return { data: [], error: "Campaign not found" };
+    const campaign = await db.campaign.findFirst({
+      where: { id: campaignId, brandProfileId: user.brandProfile.id },
+      select: { id: true },
+    });
+    if (!campaign) return { data: [], error: "Campaign not found" };
 
-  const applications = await db.application.findMany({
-    where: {
-      campaignId,
-      status: { in: [ApplicationStatus.ACCEPTED, ApplicationStatus.UNDER_REVIEW, ApplicationStatus.PENDING] },
-    },
-    include: {
-      creator: {
-        select: {
-          niche: true,
-          totalFollowers: true,
-          user: { select: { id: true, name: true, image: true } },
+    const applications = await db.application.findMany({
+      where: {
+        campaignId,
+        status: { in: [ApplicationStatus.ACCEPTED, ApplicationStatus.UNDER_REVIEW, ApplicationStatus.PENDING] },
+      },
+      include: {
+        creator: {
+          select: {
+            niche: true,
+            totalFollowers: true,
+            user: { select: { id: true, name: true, image: true } },
+          },
         },
       },
-    },
-    orderBy: { createdAt: "asc" },
-    take: 10,
-  });
+      orderBy: { createdAt: "asc" },
+      take: 10,
+    });
 
-  return {
-    data: applications.map((a) => ({
-      userId: a.creator.user.id,
-      name: a.creator.user.name ?? "Creator",
-      image: a.creator.user.image,
-      niche: a.creator.niche,
-      totalFollowers: a.creator.totalFollowers,
-      status: a.status,
-    })),
-    error: null,
-  };
+    return {
+      data: applications.map((a) => ({
+        userId: a.creator.user.id,
+        name: a.creator.user.name ?? "Creator",
+        image: a.creator.user.image,
+        niche: a.creator.niche,
+        totalFollowers: a.creator.totalFollowers,
+        status: a.status,
+      })),
+      error: null,
+    };
+  } catch (err) {
+    console.error("[getCampaignApplicantsAction]:", err);
+    return { data: [], error: "Failed to load applicants" };
+  }
 }
 
 export async function deleteCampaignEventAction(
   id: string,
 ): Promise<{ error: string | null }> {
-  const user = await getSessionUser();
-  if (!user || user.role !== Role.BRAND || !user.brandProfile) {
-    return { error: "Unauthorized" };
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== Role.BRAND || !user.brandProfile) {
+      return { error: "Unauthorized" };
+    }
+
+    const existing = await db.campaignEvent.findUnique({
+      where: { id },
+      include: { campaign: { select: { brandProfileId: true, id: true } } },
+    });
+    if (!existing || existing.campaign.brandProfileId !== user.brandProfile.id) {
+      return { error: "Event not found" };
+    }
+
+    await db.campaignEvent.delete({ where: { id } });
+
+    revalidateCalendarPaths(existing.campaign.id);
+    return { error: null };
+  } catch (err) {
+    console.error("[deleteCampaignEventAction]:", err);
+    return { error: "Failed to delete event" };
   }
-
-  const existing = await db.campaignEvent.findUnique({
-    where: { id },
-    include: { campaign: { select: { brandProfileId: true, id: true } } },
-  });
-  if (!existing || existing.campaign.brandProfileId !== user.brandProfile.id) {
-    return { error: "Event not found" };
-  }
-
-  await db.campaignEvent.delete({ where: { id } });
-
-  revalidateCalendarPaths(existing.campaign.id);
-  return { error: null };
 }
