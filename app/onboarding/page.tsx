@@ -88,7 +88,10 @@ const slideVariants = {
   exit: { opacity: 0, x: -40 },
 };
 
-const transition = { duration: 0.32, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] };
+const transition = {
+  duration: 0.32,
+  ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
+};
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -166,7 +169,9 @@ function AvatarUploader({ imageUrl, onUpload, onRemove }: AvatarUploaderProps) {
           }}
           content={{ button: imageUrl ? "Change photo" : "Upload photo" }}
         />
-        <p className="text-zinc-600 text-[11px]">Optional · JPEG, PNG up to 4 MB</p>
+        <p className="text-zinc-600 text-[11px]">
+          Optional · JPEG, PNG up to 4 MB
+        </p>
       </div>
     </div>
   );
@@ -275,7 +280,13 @@ interface RoleCardProps {
   onClick: () => void;
 }
 
-function RoleCard({ icon, title, description, selected, onClick }: RoleCardProps) {
+function RoleCard({
+  icon,
+  title,
+  description,
+  selected,
+  onClick,
+}: RoleCardProps) {
   return (
     <motion.button
       type="button"
@@ -300,12 +311,16 @@ function RoleCard({ icon, title, description, selected, onClick }: RoleCardProps
       )}
       <div
         className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 ${
-          selected ? "bg-violet-500/20 text-violet-400" : "bg-zinc-800 text-zinc-400"
+          selected
+            ? "bg-violet-500/20 text-violet-400"
+            : "bg-zinc-800 text-zinc-400"
         }`}
       >
         {icon}
       </div>
-      <p className={`font-semibold text-base mb-1 ${selected ? "text-white" : "text-zinc-200"}`}>
+      <p
+        className={`font-semibold text-base mb-1 ${selected ? "text-white" : "text-zinc-200"}`}
+      >
         {title}
       </p>
       <p className="text-zinc-500 text-sm leading-relaxed">{description}</p>
@@ -350,7 +365,9 @@ function BrandForm({ state, onChange }: BrandFormProps) {
 
       {/* Account type */}
       <div className="space-y-2">
-        <Label className="text-zinc-300 text-sm font-medium">Account Type</Label>
+        <Label className="text-zinc-300 text-sm font-medium">
+          Account Type
+        </Label>
         <RadioGroup
           value={state.brandAccountType}
           onValueChange={(v) =>
@@ -371,7 +388,10 @@ function BrandForm({ state, onChange }: BrandFormProps) {
                   : "border-zinc-700 bg-zinc-800/40 text-zinc-400 hover:border-zinc-600",
               )}
             >
-              <RadioGroupItem value={value} className="border-zinc-600 text-violet-400" />
+              <RadioGroupItem
+                value={value}
+                className="border-zinc-600 text-violet-400"
+              />
               {label}
             </label>
           ))}
@@ -379,7 +399,9 @@ function BrandForm({ state, onChange }: BrandFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-zinc-300 text-sm font-medium">Company Name *</Label>
+        <Label className="text-zinc-300 text-sm font-medium">
+          Company Name *
+        </Label>
         <Input
           value={state.companyName}
           onChange={(e) => onChange({ companyName: e.target.value })}
@@ -416,11 +438,16 @@ function BrandForm({ state, onChange }: BrandFormProps) {
           <Checkbox
             checked={state.noWebsite}
             onCheckedChange={(checked) =>
-              onChange({ noWebsite: !!checked, website: checked ? "" : state.website })
+              onChange({
+                noWebsite: !!checked,
+                website: checked ? "" : state.website,
+              })
             }
             className="border-zinc-600 data-[state=checked]:bg-violet-600 data-[state=checked]:border-violet-600"
           />
-          <span className="text-zinc-500 text-xs select-none">I don&apos;t have a website</span>
+          <span className="text-zinc-500 text-xs select-none">
+            I don&apos;t have a website
+          </span>
         </label>
       </div>
     </div>
@@ -445,7 +472,9 @@ function CreatorForm({ state, onChange }: CreatorFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-zinc-300 text-sm font-medium">Full Name / Handle *</Label>
+        <Label className="text-zinc-300 text-sm font-medium">
+          Full Name / Handle *
+        </Label>
         <Input
           value={state.fullName}
           onChange={(e) => onChange({ fullName: e.target.value })}
@@ -455,7 +484,9 @@ function CreatorForm({ state, onChange }: CreatorFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-zinc-300 text-sm font-medium">Primary Niche</Label>
+        <Label className="text-zinc-300 text-sm font-medium">
+          Primary Niche
+        </Label>
         <PopoverSelect
           value={state.niche}
           onValueChange={(v) => onChange({ niche: v })}
@@ -466,7 +497,9 @@ function CreatorForm({ state, onChange }: CreatorFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-zinc-300 text-sm font-medium">Main Social Platform</Label>
+        <Label className="text-zinc-300 text-sm font-medium">
+          Main Social Platform
+        </Label>
         <PopoverSelect
           value={state.primaryPlatform}
           onValueChange={(v) => onChange({ primaryPlatform: v })}
@@ -497,7 +530,9 @@ export default function OnboardingPage() {
   const [isPending, startTransition] = useTransition();
 
   const [step, setStep] = useState<1 | 2>(1);
-  const [selectedRole, setSelectedRole] = useState<"BRAND" | "CREATOR" | null>(null);
+  const [selectedRole, setSelectedRole] = useState<"BRAND" | "CREATOR" | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [isSettingRole, setIsSettingRole] = useState(false);
 
@@ -510,7 +545,9 @@ export default function OnboardingPage() {
     }
     if (profile?.hasCompletedOnboarding) {
       router.replace(
-        profile.user_type === "brand" ? "/brand/dashboard" : "/creator/dashboard",
+        profile.user_type === "brand"
+          ? "/brand/dashboard"
+          : "/creator/dashboard",
       );
     }
   }, [loading, user, profile, router]);
@@ -557,7 +594,9 @@ export default function OnboardingPage() {
             companyName: brandForm.companyName,
             industry: brandForm.industry || undefined,
             website: brandForm.noWebsite ? "" : brandForm.website || undefined,
-            brandAccountType: (brandForm.brandAccountType as "company" | "personal") || undefined,
+            brandAccountType:
+              (brandForm.brandAccountType as "company" | "personal") ||
+              undefined,
             imageUrl: brandForm.imageUrl ?? undefined,
           }
         : {
@@ -603,7 +642,8 @@ export default function OnboardingPage() {
               key={s}
               animate={{
                 width: s === step ? 24 : 8,
-                backgroundColor: s <= step ? "rgb(139 92 246)" : "rgb(63 63 70)",
+                backgroundColor:
+                  s <= step ? "rgb(139 92 246)" : "rgb(63 63 70)",
               }}
               transition={{ duration: 0.3 }}
               className="h-2 rounded-full"
@@ -624,7 +664,7 @@ export default function OnboardingPage() {
               >
                 <div className="mb-8 text-center">
                   <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">
-                    Welcome to Nexly
+                    Welcome to Duolync
                   </h1>
                   <p className="text-zinc-400 text-sm">
                     Tell us who you are so we can personalise your experience.
@@ -649,7 +689,9 @@ export default function OnboardingPage() {
                 </div>
 
                 {error && (
-                  <p className="text-red-400 text-sm mb-4 text-center">{error}</p>
+                  <p className="text-red-400 text-sm mb-4 text-center">
+                    {error}
+                  </p>
                 )}
 
                 <Button
@@ -675,13 +717,18 @@ export default function OnboardingPage() {
                 <div className="mb-7">
                   <button
                     type="button"
-                    onClick={() => { setStep(1); setError(null); }}
+                    onClick={() => {
+                      setStep(1);
+                      setError(null);
+                    }}
                     className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors mb-5 flex items-center gap-1"
                   >
                     ← Back
                   </button>
                   <h2 className="text-xl font-bold text-white mb-1 tracking-tight">
-                    {selectedRole === "BRAND" ? "Set up your brand" : "Set up your profile"}
+                    {selectedRole === "BRAND"
+                      ? "Set up your brand"
+                      : "Set up your profile"}
                   </h2>
                   <p className="text-zinc-400 text-sm">
                     {selectedRole === "BRAND"
@@ -693,18 +740,20 @@ export default function OnboardingPage() {
                 {selectedRole === "BRAND" ? (
                   <BrandForm
                     state={brandForm}
-                    onChange={(patch) => setBrandForm((s) => ({ ...s, ...patch }))}
+                    onChange={(patch) =>
+                      setBrandForm((s) => ({ ...s, ...patch }))
+                    }
                   />
                 ) : (
                   <CreatorForm
                     state={creatorForm}
-                    onChange={(patch) => setCreatorForm((s) => ({ ...s, ...patch }))}
+                    onChange={(patch) =>
+                      setCreatorForm((s) => ({ ...s, ...patch }))
+                    }
                   />
                 )}
 
-                {error && (
-                  <p className="text-red-400 text-sm mt-4">{error}</p>
-                )}
+                {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
 
                 <Button
                   onClick={handleSubmit}

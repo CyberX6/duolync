@@ -537,7 +537,7 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
           "fixed inset-y-0 right-0 z-50 flex flex-col",
           "bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800",
           "shadow-[-32px_0_80px_rgba(0,0,0,0.08)] dark:shadow-[-32px_0_80px_rgba(0,0,0,0.75)]",
-          "transition-all duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "transition-all duration-320 ease-spring",
           isOpen ? "translate-x-0" : "translate-x-full",
           drawerWidthCls
         )}
@@ -1116,7 +1116,7 @@ const ProfileDrawer = ({ creator, isOpen, onClose, onMessage }: ProfileDrawerPro
           "fixed bottom-0 right-0 z-[55]",
           "bg-[#09090e] border-t border-l border-neutral-800/60",
           "shadow-[0_-16px_48px_rgba(0,0,0,0.65)]",
-          "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "transition-all duration-300 ease-spring",
           drawerWidthCls,
           isOpen && showQuickMessage ? "translate-y-0" : "translate-y-full"
         )}

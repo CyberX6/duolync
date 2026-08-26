@@ -24,12 +24,19 @@ export async function getMiddlewareSession(
     url.searchParams.set("disableCookieCache", "true");
   }
 
-  const response = await fetch(url, {
-    headers: {
-      cookie: request.headers.get("cookie") ?? "",
-    },
-    cache: "no-store",
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: {
+        cookie: request.headers.get("cookie") ?? "",
+      },
+      cache: "no-store",
+    });
+  } catch {
+    // Internal fetch failed (e.g. ECONNREFUSED during cold start or TLS mismatch).
+    // Treat as unauthenticated so middleware can redirect to sign-in gracefully.
+    return null;
+  }
 
   if (!response.ok) return null;
 

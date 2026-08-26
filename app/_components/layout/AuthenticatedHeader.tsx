@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LogOut, Bell, MessageSquare, CheckCheck, Check, X, UserCheck, Search } from "lucide-react";
+import { LogOut, Bell, MessageSquare, CheckCheck, Check, X, UserCheck, Search, Sun, Moon } from "lucide-react";
 import {
   markNotificationsReadAction,
   type NotificationItem,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMessaging } from "@/app/_components/messaging/MessagingContext";
-import { ThemeToggle } from "@/app/_components/theme/ThemeToggle";
+import { useTheme } from "@/app/_components/theme/ThemeContext";
 import type { ConversationSummary } from "@/app/actions/messages";
 
 // ─── Mini avatar for conversation dropdown ────────────────────────────────────
@@ -229,6 +229,7 @@ const AuthenticatedHeader = () => {
   const { profile, signOut } = useAuth();
   const router = useRouter();
   const { unreadCount, recentConversations, isUnread, openChatWindow } = useMessaging();
+  const { theme, mounted, toggleTheme } = useTheme();
 
   const [showMsgDropdown, setShowMsgDropdown] = useState(false);
   const msgDropdownRef = useRef<HTMLDivElement>(null);
@@ -349,8 +350,8 @@ const AuthenticatedHeader = () => {
                 ⌘K
               </kbd>
             </button>
-            {/* Messages */}
-            <div ref={msgDropdownRef} className="relative">
+            {/* Messages — only shown when bottom nav is hidden (lg+) */}
+            <div ref={msgDropdownRef} className="relative hidden lg:flex">
               <Button
                 variant="ghost"
                 size="icon"
@@ -478,8 +479,6 @@ const AuthenticatedHeader = () => {
               )}
             </div>
 
-            <ThemeToggle />
-
             {/* ── Profile Dropdown (LinkedIn-style) ── */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -525,6 +524,35 @@ const AuthenticatedHeader = () => {
                     Settings
                   </Link>
                 </DropdownMenuItem>
+
+                {/* ── Theme toggle ── */}
+                {mounted && (
+                  <DropdownMenuItem
+                    onClick={(e) => { e.preventDefault(); toggleTheme(); }}
+                    className="flex items-center justify-between cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      {theme === "dark" ? (
+                        <Sun className="h-4 w-4 text-amber-400" />
+                      ) : (
+                        <Moon className="h-4 w-4 text-violet-400" />
+                      )}
+                      <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
+                    </div>
+                    <div className="relative w-8 h-4.5 shrink-0">
+                      <div className={cn(
+                        "w-8 h-4 rounded-full transition-colors duration-200",
+                        theme === "dark" ? "bg-violet-500/30" : "bg-zinc-200 dark:bg-zinc-700"
+                      )} />
+                      <div className={cn(
+                        "absolute top-0.5 w-3 h-3 rounded-full shadow-sm transition-all duration-200",
+                        theme === "dark"
+                          ? "translate-x-4 bg-violet-400"
+                          : "translate-x-0.5 bg-white border border-zinc-300"
+                      )} />
+                    </div>
+                  </DropdownMenuItem>
+                )}
 
                 <DropdownMenuSeparator />
 

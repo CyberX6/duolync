@@ -144,6 +144,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfileLoading(true);
     getMyProfileAction()
       .then((p) => setDbProfile(p))
+      .catch((err) => {
+        console.warn("[useAuth] getMyProfileAction failed:", err);
+        setDbProfile(null);
+      })
       .finally(() => setProfileLoading(false));
   }, [sessionUser?.id]);
 
@@ -196,8 +200,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // ── Profile mutations ─────────────────────────────────────────────────
   const refreshProfile = async () => {
     if (!sessionUser?.id) return;
-    const fresh = await getMyProfileAction();
-    setDbProfile(fresh);
+    try {
+      const fresh = await getMyProfileAction();
+      setDbProfile(fresh);
+    } catch (err) {
+      console.warn("[useAuth] refreshProfile failed:", err);
+    }
   };
 
   const updateProfile = async (

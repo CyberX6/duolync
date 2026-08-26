@@ -36,7 +36,7 @@ const DuolyncLogo = ({ size = "md" }: { size?: "sm" | "md" }) => (
   <span
     className={cn(
       "font-display font-bold tracking-tight",
-      size === "md" ? "text-2xl" : "text-xl"
+      size === "md" ? "text-2xl" : "text-xl",
     )}
     style={{
       background: "linear-gradient(135deg, #a78bfa 0%, #ec4899 100%)",
@@ -57,7 +57,7 @@ const Auth = () => {
   const initialEmail = searchParams?.get("email") ?? "";
 
   const [tab, setTab] = useState<AuthTab>(
-    initialMode === "login" ? "login" : "signup"
+    initialMode === "login" ? "login" : "signup",
   );
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
@@ -75,11 +75,20 @@ const Auth = () => {
           ? "/brand/dashboard"
           : "/creator/dashboard"
         : "/onboarding";
+      // Refresh the RSC cache so the server re-evaluates auth state,
+      // then replace the current history entry so back-button skips sign-in.
+      router.refresh();
       router.replace(target);
     }
   }, [user, profile, router]);
 
-  if (user && profile) return null;
+  if (user && profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   const switchTab = (newTab: AuthTab) => {
     setTab(newTab);
@@ -95,7 +104,10 @@ const Auth = () => {
       if (tab === "signup") {
         const { error } = await signUp(email, password, fullName);
         if (error) throw error;
-        toast({ title: "Account created!", description: "Welcome to Nexly!" });
+        toast({
+          title: "Account created!",
+          description: "Welcome to Duolync!",
+        });
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
@@ -104,7 +116,8 @@ const Auth = () => {
     } catch (err: unknown) {
       toast({
         title: "Authentication failed",
-        description: err instanceof Error ? err.message : "Something went wrong",
+        description:
+          err instanceof Error ? err.message : "Something went wrong",
         variant: "destructive",
       });
     } finally {
@@ -128,7 +141,8 @@ const Auth = () => {
   };
 
   const leftPanelHeadline = "Connect.\nCollaborate.\nGrow.";
-  const leftPanelSub = "The leading marketplace connecting brands with authentic content creators.";
+  const leftPanelSub =
+    "The leading marketplace connecting brands with authentic content creators.";
 
   return (
     <div className="min-h-screen gradient-hero flex relative overflow-hidden">
@@ -153,7 +167,9 @@ const Auth = () => {
         <div className="relative z-10">
           <a href="/" className="inline-flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <span className="text-white font-bold text-xl leading-none">D</span>
+              <span className="text-white font-bold text-xl leading-none">
+                D
+              </span>
             </div>
             <span className="font-display font-bold text-2xl text-white tracking-tight">
               Duolync
@@ -177,7 +193,9 @@ const Auth = () => {
             ["1M+", "Collabs"],
           ].map(([num, label]) => (
             <div key={label}>
-              <div className="text-3xl font-display font-bold text-white">{num}</div>
+              <div className="text-3xl font-display font-bold text-white">
+                {num}
+              </div>
               <div className="text-white/55 text-sm mt-0.5">{label}</div>
             </div>
           ))}
@@ -204,7 +222,7 @@ const Auth = () => {
                   "flex-1 py-2.5 text-sm font-semibold rounded-[9px] transition-all duration-200",
                   tab === t
                     ? "bg-primary text-primary-foreground shadow-sm shadow-primary/40"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {t === "signup" ? "Sign Up" : "Log In"}
@@ -219,8 +237,8 @@ const Auth = () => {
             </h2>
             <p className="text-muted-foreground text-sm mt-1">
               {tab === "login"
-                ? "Log in to your Nexly account"
-                : "Join Nexly to get started"}
+                ? "Log in to your Duolync account"
+                : "Join Duolync to get started"}
             </p>
           </div>
 
@@ -303,7 +321,11 @@ const Auth = () => {
               className="w-full h-11 btn-gradient font-semibold"
               disabled={isLoading}
             >
-              {isLoading ? "Loading…" : tab === "signup" ? "Create Account" : "Log In"}
+              {isLoading
+                ? "Loading…"
+                : tab === "signup"
+                  ? "Create Account"
+                  : "Log In"}
             </Button>
           </form>
 
@@ -313,7 +335,9 @@ const Auth = () => {
               <span className="w-full border-t border-white/[0.08]" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-transparent px-3 text-muted-foreground tracking-widest">or</span>
+              <span className="bg-transparent px-3 text-muted-foreground tracking-widest">
+                or
+              </span>
             </div>
           </div>
 
