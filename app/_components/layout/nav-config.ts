@@ -1,7 +1,7 @@
 import {
   Home, Search, MessageSquare, Heart, Sparkles,
   Compass, FileText, FolderOpen, Megaphone, Radio, Mail,
-  Users, BarChart3,
+  BarChart3,
 } from "lucide-react";
 
 export interface NavItem {
@@ -19,7 +19,6 @@ export const BRAND_NAV_ITEMS: NavItem[] = [
   { icon: Megaphone,    label: "Campaigns",    path: "/brand/campaigns" },
   { icon: Heart,        label: "Saved",        path: "/brand/saved" },
   { icon: MessageSquare,label: "Messages",     path: "/messages" },
-  { icon: Users,        label: "Community",    path: "/community" },
 ];
 
 export const CREATOR_NAV_ITEMS: NavItem[] = [
@@ -33,5 +32,4 @@ export const CREATOR_NAV_ITEMS: NavItem[] = [
   { icon: Mail,         label: "Invitations",         path: "/creator/invitations" },
   { icon: Heart,        label: "Saved",               path: "/creator/saved" },
   { icon: MessageSquare,label: "Messages",            path: "/messages" },
-  { icon: Users,        label: "Community",           path: "/community" },
 ];

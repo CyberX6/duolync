@@ -86,6 +86,7 @@ export async function getPublicCampaignsAction(): Promise<{
   data: PublicCampaign[];
   error: string | null;
 }> {
+  try {
   const creator = await getCreatorProfile();
   if (!creator) return { data: [], error: "Unauthorized" };
 
@@ -145,12 +146,17 @@ export async function getPublicCampaignsAction(): Promise<{
     }),
     error: null,
   };
+  } catch (e) {
+    console.error("[getPublicCampaignsAction]", e);
+    return { data: [], error: "Failed to load campaigns" };
+  }
 }
 
 export async function getMyApplicationsAction(): Promise<{
   data: MyApplication[];
   error: string | null;
 }> {
+  try {
   const creator = await getCreatorProfile();
   if (!creator) return { data: [], error: "Unauthorized" };
 
@@ -193,6 +199,10 @@ export async function getMyApplicationsAction(): Promise<{
     })),
     error: null,
   };
+  } catch (e) {
+    console.error("[getMyApplicationsAction]", e);
+    return { data: [], error: "Failed to load applications" };
+  }
 }
 
 export async function applyToCampaignAction(input: {
