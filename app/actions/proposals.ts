@@ -38,6 +38,7 @@ export async function getProposalsAction(): Promise<{
   data: ProposalWithDetails[];
   error: string | null;
 }> {
+  try {
   const session = await getSession();
   if (!session) return { data: [], error: "Unauthorized" };
 
@@ -90,6 +91,10 @@ export async function getProposalsAction(): Promise<{
   }));
 
   return { data, error: null };
+  } catch (e) {
+    console.error("[getProposalsAction]", e);
+    return { data: [], error: "Failed to load proposals" };
+  }
 }
 
 // Brand: approve or reject an application

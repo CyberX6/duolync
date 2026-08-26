@@ -51,32 +51,37 @@ export async function getBrandCampaignsAction(): Promise<{
   data: CampaignData[];
   error: string | null;
 }> {
-  const brand = await getBrandProfile();
-  if (!brand) return { data: [], error: "Unauthorized" };
+  try {
+    const brand = await getBrandProfile();
+    if (!brand) return { data: [], error: "Unauthorized" };
 
-  const campaigns = await db.campaign.findMany({
-    where: { brandProfileId: brand.profileId },
-    include: { _count: { select: { applications: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+    const campaigns = await db.campaign.findMany({
+      where: { brandProfileId: brand.profileId },
+      include: { _count: { select: { applications: true } } },
+      orderBy: { createdAt: "desc" },
+    });
 
-  return {
-    data: campaigns.map((c) => ({
-      id: c.id,
-      title: c.title,
-      description: c.description,
-      budget: c.budget,
-      status: c.status,
-      deadline: c.deadline?.toISOString() ?? null,
-      imageUrl: c.imageUrl ?? null,
-      contentFormats: c.contentFormats ?? [],
-      platforms: c.platforms ?? [],
-      createdAt: c.createdAt.toISOString(),
-      updatedAt: c.updatedAt.toISOString(),
-      proposalCount: c._count.applications,
-    })),
-    error: null,
-  };
+    return {
+      data: campaigns.map((c) => ({
+        id: c.id,
+        title: c.title,
+        description: c.description,
+        budget: c.budget,
+        status: c.status,
+        deadline: c.deadline?.toISOString() ?? null,
+        imageUrl: c.imageUrl ?? null,
+        contentFormats: c.contentFormats ?? [],
+        platforms: c.platforms ?? [],
+        createdAt: c.createdAt.toISOString(),
+        updatedAt: c.updatedAt.toISOString(),
+        proposalCount: c._count.applications,
+      })),
+      error: null,
+    };
+  } catch (e) {
+    console.error("[getBrandCampaignsAction]", e);
+    return { data: [], error: "Failed to load campaigns" };
+  }
 }
 
 export async function createCampaignAction(input: {
@@ -89,51 +94,56 @@ export async function createCampaignAction(input: {
   platforms?: string[];
   contentFormats?: string[];
 }): Promise<{ data: CampaignData | null; error: string | null }> {
-  const brand = await getBrandProfile();
-  if (!brand) return { data: null, error: "Unauthorized" };
+  try {
+    const brand = await getBrandProfile();
+    if (!brand) return { data: null, error: "Unauthorized" };
 
-  const title = input.title.trim();
-  const description = input.description.trim();
-  if (!title || title.length > 120) return { data: null, error: "Title must be 1–120 characters." };
-  if (!description) return { data: null, error: "Description is required." };
-  if (input.budget <= 0) return { data: null, error: "Budget must be positive." };
-  const validStatuses = Object.values(CampaignStatus) as string[];
-  if (!validStatuses.includes(input.status))
-    return { data: null, error: "Invalid status." };
+    const title = input.title.trim();
+    const description = input.description.trim();
+    if (!title || title.length > 120) return { data: null, error: "Title must be 1–120 characters." };
+    if (!description) return { data: null, error: "Description is required." };
+    if (input.budget <= 0) return { data: null, error: "Budget must be positive." };
+    const validStatuses = Object.values(CampaignStatus) as string[];
+    if (!validStatuses.includes(input.status))
+      return { data: null, error: "Invalid status." };
 
-  const campaign = await db.campaign.create({
-    data: {
-      brandProfileId: brand.profileId,
-      title,
-      description,
-      budget: input.budget,
-      status: input.status as CampaignStatus,
-      deadline: input.deadline ? new Date(input.deadline) : null,
-      imageUrl: input.imageUrl ?? null,
-      platforms: input.platforms ?? [],
-      contentFormats: input.contentFormats ?? [],
-    },
-    include: { _count: { select: { applications: true } } },
-  });
+    const campaign = await db.campaign.create({
+      data: {
+        brandProfileId: brand.profileId,
+        title,
+        description,
+        budget: input.budget,
+        status: input.status as CampaignStatus,
+        deadline: input.deadline ? new Date(input.deadline) : null,
+        imageUrl: input.imageUrl ?? null,
+        platforms: input.platforms ?? [],
+        contentFormats: input.contentFormats ?? [],
+      },
+      include: { _count: { select: { applications: true } } },
+    });
 
-  revalidatePath("/brand/campaigns");
-  return {
-    data: {
-      id: campaign.id,
-      title: campaign.title,
-      description: campaign.description,
-      budget: campaign.budget,
-      status: campaign.status,
-      deadline: campaign.deadline?.toISOString() ?? null,
-      imageUrl: campaign.imageUrl ?? null,
-      platforms: campaign.platforms ?? [],
-      contentFormats: campaign.contentFormats ?? [],
-      createdAt: campaign.createdAt.toISOString(),
-      updatedAt: campaign.updatedAt.toISOString(),
-      proposalCount: campaign._count.applications,
-    },
-    error: null,
-  };
+    revalidatePath("/brand/campaigns");
+    return {
+      data: {
+        id: campaign.id,
+        title: campaign.title,
+        description: campaign.description,
+        budget: campaign.budget,
+        status: campaign.status,
+        deadline: campaign.deadline?.toISOString() ?? null,
+        imageUrl: campaign.imageUrl ?? null,
+        platforms: campaign.platforms ?? [],
+        contentFormats: campaign.contentFormats ?? [],
+        createdAt: campaign.createdAt.toISOString(),
+        updatedAt: campaign.updatedAt.toISOString(),
+        proposalCount: campaign._count.applications,
+      },
+      error: null,
+    };
+  } catch (e) {
+    console.error("[createCampaignAction]", e);
+    return { data: null, error: "Failed to create campaign" };
+  }
 }
 
 export async function updateCampaignAction(
@@ -149,6 +159,7 @@ export async function updateCampaignAction(
     contentFormats?: string[];
   },
 ): Promise<{ data: CampaignData | null; error: string | null }> {
+  try {
   const brand = await getBrandProfile();
   if (!brand) return { data: null, error: "Unauthorized" };
 
@@ -201,6 +212,10 @@ export async function updateCampaignAction(
     },
     error: null,
   };
+  } catch (e) {
+    console.error("[updateCampaignAction]", e);
+    return { data: null, error: "Failed to update campaign" };
+  }
 }
 
 export async function deleteCampaignAction(
@@ -299,6 +314,7 @@ export async function getBrandDashboardStatsAction(): Promise<{
   data: BrandDashboardStats;
   error: string | null;
 }> {
+  try {
   const brand = await getBrandProfile();
   if (!brand) {
     return {
@@ -345,6 +361,13 @@ export async function getBrandDashboardStatsAction(): Promise<{
     data: { activeCampaigns, savedCreators, activeConversations, availableCreators },
     error: null,
   };
+  } catch (e) {
+    console.error("[getBrandDashboardStatsAction]", e);
+    return {
+      data: { activeCampaigns: 0, savedCreators: 0, activeConversations: 0, availableCreators: 0 },
+      error: "Failed to load stats",
+    };
+  }
 }
 
 export async function getCampaignConnectionsAction(): Promise<{

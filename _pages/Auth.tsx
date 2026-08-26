@@ -65,24 +65,31 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user, profile, signUp, signIn, signInWithProvider } = useAuth();
+  const { user, profile, loading, signUp, signIn, signInWithProvider } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user && profile) {
+    if (!user) return;
+
+    if (profile) {
+      // Full profile loaded — redirect to the right destination.
       const target = profile.hasCompletedOnboarding
         ? profile.user_type === "brand"
           ? "/brand/dashboard"
           : "/creator/dashboard"
         : "/onboarding";
-      // Refresh the RSC cache so the server re-evaluates auth state,
-      // then replace the current history entry so back-button skips sign-in.
       router.refresh();
       router.replace(target);
+    } else if (!loading) {
+      // Profile failed to load (e.g. DB migration pending) but the user IS
+      // authenticated. Fall back to /dashboard, which does its own server-side
+      // role/onboarding check and redirects correctly.
+      router.refresh();
+      router.replace("/dashboard");
     }
-  }, [user, profile, router]);
+  }, [user, profile, loading, router]);
 
-  if (user && profile) {
+  if (user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
