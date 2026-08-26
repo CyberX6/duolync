@@ -482,7 +482,7 @@ const Messages = () => {
 
   return (
     <MainLayout showGroupsPanel={false}>
-      <div className="h-[calc(100vh-4rem)] flex bg-zinc-50 dark:bg-[#09090b]">
+      <div className="h-[calc(100vh-8rem)] lg:h-[calc(100vh-4rem)] flex bg-zinc-50 dark:bg-[#09090b]">
 
         {/* ── Left: Sidebar ────────────────────────────────────── */}
         <div

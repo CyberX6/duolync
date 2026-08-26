@@ -109,9 +109,9 @@ export function MessagingProvider({ children }: { children: ReactNode }) {
       return;
     }
     const fetch = () => {
-      getConversationsAction().then((convs) =>
-        setRecentConversations(convs.slice(0, 8)),
-      );
+      getConversationsAction()
+        .then((convs) => setRecentConversations(convs.slice(0, 8)))
+        .catch((err) => console.warn("[MessagingContext] fetch conversations failed:", err));
     };
     fetch();
     const id = setInterval(fetch, 30_000);

@@ -45,6 +45,7 @@ async function getSessionOrNull() {
 }
 
 export async function getMyProfileAction(): Promise<FullProfile | null> {
+  try {
   const session = await getSessionOrNull();
   if (!session) return null;
 
@@ -128,6 +129,10 @@ export async function getMyProfileAction(): Promise<FullProfile | null> {
     })),
     hasCompletedOnboarding: user.hasCompletedOnboarding,
   };
+  } catch (e) {
+    console.error("[getMyProfileAction]", e);
+    return null;
+  }
 }
 
 // ── Public profile view (any authenticated user can look up another user) ─────

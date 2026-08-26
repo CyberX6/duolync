@@ -1,7 +1,10 @@
-"use client";
-
+import { Suspense } from "react";
 import Auth from "@/pages/Auth";
 
 export default function SignInPage() {
-  return <Auth />;
+  return (
+    <Suspense>
+      <Auth />
+    </Suspense>
+  );
 }
