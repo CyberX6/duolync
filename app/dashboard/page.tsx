@@ -3,13 +3,14 @@ import { fromPrismaRole } from "@/lib/roles";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
-  let session;
+  let session = null;
   try {
     session = await auth.api.getSession({ headers: await headers() });
   } catch (err) {
     console.error("[DashboardPage] getSession failed:", err);
-    redirect("/sign-in");
   }
 
   if (!session?.user) {
