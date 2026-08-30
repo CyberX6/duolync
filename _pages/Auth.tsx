@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { AuthHoldScreen } from "@/app/_components/auth/AuthHoldScreen";
 
 type AuthTab = "signup" | "login";
 
@@ -90,11 +91,7 @@ const Auth = () => {
   }, [user, profile, loading, router]);
 
   if (user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
+    return <AuthHoldScreen />;
   }
 
   const switchTab = (newTab: AuthTab) => {
