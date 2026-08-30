@@ -39,6 +39,7 @@ import type {
 } from "@/app/actions/onboarding";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { AuthHoldScreen } from "@/app/_components/auth/AuthHoldScreen";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -512,15 +513,6 @@ function CreatorForm({ state, onChange }: CreatorFormProps) {
   );
 }
 
-// ─── Hold screen shown during auth check / redirect ──────────────────────────
-
-function HoldScreen() {
-  return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-      <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-violet-500 animate-spin" />
-    </div>
-  );
-}
 
 // ─── Main Onboarding Page ─────────────────────────────────────────────────────
 
@@ -623,7 +615,7 @@ export default function OnboardingPage() {
 
   // Show hold screen while auth loads or a redirect is in-flight
   if (loading || !user || profile?.hasCompletedOnboarding) {
-    return <HoldScreen />;
+    return <AuthHoldScreen />;
   }
 
   return (

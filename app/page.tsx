@@ -14,6 +14,7 @@ import { FAQSection } from "@/app/_components/home/FAQSection";
 import { FinalCTASection } from "@/app/_components/home/FinalCTASection";
 import { useAuth } from "@/hooks/useAuth";
 import { hasCompletedOnboarding } from "@/lib/onboarding";
+import { AuthHoldScreen } from "@/app/_components/auth/AuthHoldScreen";
 
 export default function Page() {
   const { user, profile, loading } = useAuth();
@@ -42,17 +43,10 @@ export default function Page() {
     setIsCheckingAuth(false);
   }, [user, profile, loading, router]);
 
-  // Full-screen dark hold screen — matches the app's base background so
-  // there is no color pop between this screen and any subsequent page.
+  // Full-screen hold — never paint the landing tree until the session
+  // check finishes, so hook order stays stable across hydration.
   if (isCheckingAuth) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "#07080f" }}
-      >
-        <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-white/50 animate-spin" />
-      </div>
-    );
+    return <AuthHoldScreen />;
   }
 
   return (

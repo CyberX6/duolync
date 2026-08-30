@@ -2,6 +2,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { AuthHoldScreen } from "@/app/_components/auth/AuthHoldScreen";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -19,16 +20,10 @@ const RedirectTo = ({ path }: { path: string }) => {
   return null;
 };
 
-const Spinner = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-  </div>
-);
-
 const ProtectedRoute = ({ children, requiredType }: ProtectedRouteProps) => {
   const { user, profile, loading } = useAuth();
 
-  if (loading) return <Spinner />;
+  if (loading) return <AuthHoldScreen />;
 
   // Not authenticated → send to sign-in with callbackUrl preserved
   if (!user) return <RedirectTo path="/sign-in" />;
